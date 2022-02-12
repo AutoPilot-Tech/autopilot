@@ -45,5 +45,10 @@ export const useTasks = (selectedTrack) => {
       // Set all tasks that are archived
       setArchivedTasks(newTasks.filter(task => task.archived !== false));
     });
-  }, []);
+    // don't want to be checking for tracks all the time, only when there is a new
+    // track
+    return () => unsubscribe();
+  }, [selectedTrack]);
+
+  return { tasks, archivedTasks };
 };
