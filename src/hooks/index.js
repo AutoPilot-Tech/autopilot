@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { firebase } from '../firebase';
-import { collatedTasks } from '../helpers';
+import { db } from '../firebase';
+import { collatedTasksExist } from '../helpers';
 import moment from 'moment';
 
 // this is constantly getting new tracks
@@ -9,10 +9,7 @@ export const useTasks = (selectedTrack) => {
   const [archivedTasks, setArchivedTasks] = useState([]);
 
   useEffect(() => {
-    let unsubscribe = firebase
-      .firestore()
-      .collection('tasks')
-      .where('userId', '==', '1337');
+    let unsubscribe = db.collection('tasks').where('userId', '==', '1337');
 
     unsubscribe =
       selectedTrack && !collatedTasksExist(selectedTrack)
@@ -34,7 +31,7 @@ export const useTasks = (selectedTrack) => {
       }));
 
       setTasks(
-        selectedProject === 'NEXT_7'
+        selectedTrack === 'NEXT_7'
           ? newTasks.filter(
               (task) =>
                 moment(task.date, 'DD-MM-YYYY').diff(moment(), 'days') <= 7 &&
@@ -60,9 +57,7 @@ export const useTracks = () => {
   const [tracks, setTracks] = useState([]);
 
   useEffect(() => {
-    firebase
-      .firestore()
-      .collection('tracks')
+    db.collection('tracks')
       .where('userId', '==', '1337')
       .orderBy('trackId')
       .get()
