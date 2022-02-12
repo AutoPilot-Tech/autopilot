@@ -5,6 +5,7 @@ import moment from 'moment';
 
 export const useTasks = (selectedTrack) => {
   const [tasks, setTasks] = useState([]);
+  const [archivedTasks, setArchivedTasks] = useState([]);
 
   useEffect(() => {
     let unsubscribe = firebase
@@ -40,6 +41,9 @@ export const useTasks = (selectedTrack) => {
             )
           : newTasks.filter((task) => task.archived !== true)
       );
+      
+      // Set all tasks that are archived
+      setArchivedTasks(newTasks.filter(task => task.archived !== false));
     });
   }, []);
 };
