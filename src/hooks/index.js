@@ -41,9 +41,9 @@ export const useTasks = (selectedTrack) => {
             )
           : newTasks.filter((task) => task.archived !== true)
       );
-      
+
       // Set all tasks that are archived
-      setArchivedTasks(newTasks.filter(task => task.archived !== false));
+      setArchivedTasks(newTasks.filter((task) => task.archived !== false));
     });
     // don't want to be checking for tracks all the time, only when there is a new
     // track
@@ -51,4 +51,27 @@ export const useTasks = (selectedTrack) => {
   }, [selectedTrack]);
 
   return { tasks, archivedTasks };
+};
+
+export const useTracks = () => {
+  const [tracks, setTracks] = useState([]);
+
+  useEffect(() => {
+    firebase.firestore().collection('tracks').where('userId', '==', '1337')
+    .orderBy('trackId')
+    .get()
+    .then(snapshot => {
+        const allTracks = snapshot.docs.map(track => ({
+            ...track.data(),
+            docId: track.id
+        }));
+
+        // this keeps the useEffect from running infinitely.
+        if (JSON.stringify(allTracks) !== JSON.stringify(tracks)) {
+            setTracks(allTracks);
+        }
+    });
+  }, [tracks]);
+
+  return tracks;
 };
