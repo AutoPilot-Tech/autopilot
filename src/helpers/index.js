@@ -1,5 +1,5 @@
 export const collatedTasksExist = selectedTrack => {
-    collatedTasksExist.find(task => task.key === selectedTrack);
-    
+    collatedTasks.find(task => task.key === selectedTrack);
+
 
 }

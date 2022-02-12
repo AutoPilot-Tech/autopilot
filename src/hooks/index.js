@@ -3,6 +3,7 @@ import { firebase } from '../firebase';
 import { collatedTasks } from '../helpers';
 import moment from 'moment';
 
+// this is constantly getting new tracks
 export const useTasks = (selectedTrack) => {
   const [tasks, setTasks] = useState([]);
   const [archivedTasks, setArchivedTasks] = useState([]);
@@ -53,24 +54,29 @@ export const useTasks = (selectedTrack) => {
   return { tasks, archivedTasks };
 };
 
+// this one will be pulling tracks only once, and only changes
+// when there is new tracks
 export const useTracks = () => {
   const [tracks, setTracks] = useState([]);
 
   useEffect(() => {
-    firebase.firestore().collection('tracks').where('userId', '==', '1337')
-    .orderBy('trackId')
-    .get()
-    .then(snapshot => {
-        const allTracks = snapshot.docs.map(track => ({
-            ...track.data(),
-            docId: track.id
+    firebase
+      .firestore()
+      .collection('tracks')
+      .where('userId', '==', '1337')
+      .orderBy('trackId')
+      .get()
+      .then((snapshot) => {
+        const allTracks = snapshot.docs.map((track) => ({
+          ...track.data(),
+          docId: track.id,
         }));
 
         // this keeps the useEffect from running infinitely.
         if (JSON.stringify(allTracks) !== JSON.stringify(tracks)) {
-            setTracks(allTracks);
+          setTracks(allTracks);
         }
-    });
+      });
   }, [tracks]);
 
   return tracks;
