@@ -7,6 +7,7 @@ export const Header = () => {
       <nav>
         <div className="logo">
           <img src="../../images/logo.png" alt="Autopilot" />
+        </div>
           <div className="settings">
             <ul>
               <li>+</li>
@@ -15,7 +16,6 @@ export const Header = () => {
               </li>
             </ul>
           </div>
-        </div>
       </nav>
     </header>
   );
