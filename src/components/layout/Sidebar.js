@@ -58,9 +58,14 @@ export const Sidebar = () => {
           <span>Next 7 Days</span>
         </li>
       </ul>
-      <div className="sidebar__middle">
+      <div
+        className="sidebar__middle"
+        onClick={() => {
+          setShowTracks(!showTracks);
+        }}
+      >
         <span>
-          <FaChevronDown />
+          <FaChevronDown className={!showTracks ? 'hidden-projects' : undefined }/>
         </span>
         <h2>Tracks</h2>
       </div>
