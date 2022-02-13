@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaPizzaSlice } from 'react-icons/fa';
+import { FaMoon } from 'react-icons/fa'
 
 export const Header = () => {
   return (
@@ -10,9 +10,9 @@ export const Header = () => {
         </div>
           <div className="settings">
             <ul>
-              <li>+</li>
-              <li>
-                <FaPizzaSlice />
+              <li className="settings__add" data-testid="quick-add-task-action">+</li>
+              <li className="settings__darkmode" data-testid="dark-mode-action">
+                <FaMoon />
               </li>
             </ul>
           </div>

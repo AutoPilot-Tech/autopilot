@@ -32,9 +32,16 @@ ul {
 // Variables
 $generic-box-shadow: rgba(0,0,0,0.1) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 4px 11px;
 $generic-border: 1px solid #f1f1f1;
-$generic-bg: #db4c3f;
+$generic-bg: #006DAA;
 
 /* Mixins */
+
+/*
+1311A
+f61067
+597081
+fafafa
+*/
 
 @mixin box-overlay() {
     box-shadow: $generic-box-shadow;
@@ -138,7 +145,7 @@ $generic-bg: #db4c3f;
     ============================================ */
 
 header {
-    border-bottom: solid 1px #ca2100;
+    border-bottom: solid 1px #005A8F;
     background-color: $generic-bg;
     transition: height 200ms ease-in;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
@@ -209,8 +216,143 @@ header {
             }
         }
     }
-
-    
 }
 
+/* Sidebar
+=========================================== */
+.sidebar {
+    @include no-select();
+    width: 266px;
+    height: calc(100vh);
+    padding-top: 74px;
+    position: fixed;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    border-right: $generic-border;
+    background-color: #fafafa;
 
+    @include mq('900 px') {
+        display: none;
+    }
+
+    li {
+        padding-left: 10px;
+        padding-right: 15px;
+
+        &:hover .sidebar__track-delete {
+            display: block;
+        }
+    }
+
+    &__track {
+        padding: 5px 0;
+        cursor: pointer;
+
+        &-delete {
+            margin-left: auto;
+            display: none;
+
+            svg {
+                color: #cacaca;
+            }
+        }
+
+            &.active, &:hover {
+                font-weight: bold;
+                background-color: white;
+            }
+            &:nth-child(1) {
+                .sidebar__dot {
+                  color: #6accbc;
+                }
+              }
+              &:nth-child(2) {
+                .sidebar__dot {
+                  color: #fad003;
+                }
+              }
+              &:nth-child(3) {
+                .sidebar__dot {
+                  color: #ff8d85;
+                }
+              }
+              &:nth-child(4) {
+                .sidebar__dot {
+                  color: #ff9932;
+                }
+              }
+              &:nth-child(5) {
+                .sidebar__dot {
+                  color: #af38eb;
+                }
+        }
+    }
+
+    &__tracks {
+        padding-left: 3px;
+    }
+
+    &__track {
+        @include va('left')
+    }
+
+    &__dot {
+        margin-right: 10px;
+        font-size: 30px;
+    }
+
+    &__middle {
+        margin-top: 20px;
+        margin-bottom: 20px;
+        display: flex;
+        border-bottom: $generic-border;
+        padding-left: 10px;
+        cursor: pointer;
+
+        span {
+            color: #0000008a;
+            margin-right: 10px;
+
+            svg.hidden-projects {
+                transform: rotate(-90deg);
+            }
+        }
+
+        h2 {
+            margin: 0;
+            color: #333;
+            font-size: 15px;
+            font-weight: bold;
+            padding-bottom: 20px;
+        }
+    }
+
+&__generic {
+    li {
+        padding: 10px 0 10px 10px;
+        list-style-type: none;
+        color: #333;
+        display: flex;
+        cursor: pointer;
+        line-height: 1.50;
+        font-size: 15px;
+
+
+        span:first-of-type {
+            margin-right: 10px;
+
+            svg {
+                width: 18px;
+                height: 18px;
+                color: #555;
+            }
+        }
+        &.active, &:hover {
+            font-weight: bold;
+            background-color: white;
+        }
+    }
+
+  }
+
+}
