@@ -7,8 +7,9 @@ export const Tracks = ({ activeValue = null }) => {
   const { tracks } = useTracksValue();
   console.log(tracks)
   return (
-    tracks &&
-    tracks.map((track) => (
+    <div>
+        {tracks &&
+        tracks.map((track) => (
       <li
         key={track.trackId}
         data-doc-id={track.docId}
@@ -27,6 +28,10 @@ export const Tracks = ({ activeValue = null }) => {
       >
         I am a track
       </li>
-    ))
+    
+    
+    ))}
+    </div>
+
   );
 };

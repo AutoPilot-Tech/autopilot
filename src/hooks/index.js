@@ -62,10 +62,11 @@ export const useTracks = () => {
       .orderBy('trackId')
       .get()
       .then((snapshot) => {
-        const allTracks = snapshot.docs.map((track) => ({
+        const allTracks = snapshot.docs.map(track => ({
           ...track.data(),
           docId: track.id,
         }));
+
 
         // this keeps the useEffect from running infinitely.
         if (JSON.stringify(allTracks) !== JSON.stringify(tracks)) {
@@ -74,5 +75,5 @@ export const useTracks = () => {
       });
   }, [tracks]);
 
-  return tracks;
+  return { tracks, setTracks };
 };

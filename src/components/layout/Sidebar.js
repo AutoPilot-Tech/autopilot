@@ -41,7 +41,8 @@ export const Sidebar = () => {
         </span>
         <h2>Tracks</h2>
       </div>
-      <ul className="sidebar__tracks">Tracks will go here!</ul>
+      <ul className="sidebar__tracks">{showTracks && <Tracks />}</ul>
+      
     </div>
   );
 };
