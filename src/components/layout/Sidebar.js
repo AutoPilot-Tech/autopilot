@@ -7,6 +7,7 @@ import {
 } from 'react-icons/fa';
 import { Tracks } from '../Tracks';
 import { useSelectedTrackValue } from '../../context';
+import { IndividualTrack } from '../IndividualTrack';
 
 export const Sidebar = () => {
   const { setSelectedTrack } = useSelectedTrackValue;

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useSelectedTrackValue, useTracksValue } from '../context';
+import { IndividualTrack } from './IndividualTrack';
 
 export const Tracks = ({ activeValue = null }) => {
   const [active, setActive] = useState(activeValue);
@@ -26,7 +27,7 @@ export const Tracks = ({ activeValue = null }) => {
           setSelectedTrack(track.trackId);
         }}
       >
-        I am a track
+        <IndividualTrack track={track} />
       </li>
     
     
