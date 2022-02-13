@@ -8,7 +8,6 @@ export const TracksContext = createContext();
 // bottom level wherever maybe 6 levels deep
 export const TracksProvider = ({ children }) => {
     const { tracks, setTracks } = useTracks();
-    console.log('from inside tracks-context.js:', tracks);
 
     return (
         <TracksContext.Provider value={{ tracks, setTracks }}>

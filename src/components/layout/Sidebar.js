@@ -8,6 +8,7 @@ import {
 import { Tracks } from '../Tracks';
 import { useSelectedTrackValue } from '../../context';
 import { IndividualTrack } from '../IndividualTrack';
+import { AddTrack } from '../AddTrack';
 
 export const Sidebar = () => {
   const { setSelectedTrack } = useSelectedTrackValue;
@@ -43,7 +44,7 @@ export const Sidebar = () => {
         <h2>Tracks</h2>
       </div>
       <ul className="sidebar__tracks">{showTracks && <Tracks />}</ul>
-      
+      <AddTrack />
     </div>
   );
 };

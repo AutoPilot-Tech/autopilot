@@ -7,7 +7,7 @@ export const SelectedTrackContext = createContext();
 
 export const SelectedTrackProvider = ({ children }) => {
   // the default 'track' is inbox.
-  const { selectedTrack, setSelectedTrack } = useState('INBOX');
+  const [ selectedTrack, setSelectedTrack ] = useState('INBOX');
 
   return (
     <SelectedTrackContext.Provider value={{ selectedTrack, setSelectedTrack }}>

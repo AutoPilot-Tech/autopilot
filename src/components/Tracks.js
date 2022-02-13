@@ -6,7 +6,6 @@ export const Tracks = ({ activeValue = null }) => {
   const [active, setActive] = useState(activeValue);
   const { setSelectedTrack } = useSelectedTrackValue();
   const { tracks } = useTracksValue();
-  console.log(tracks)
   return (
     <div>
         {tracks &&
