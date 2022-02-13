@@ -11,7 +11,7 @@ import { IndividualTrack } from '../IndividualTrack';
 import { AddTrack } from '../AddTrack';
 
 export const Sidebar = () => {
-  const { setSelectedTrack } = useSelectedTrackValue;
+  const { setSelectedTrack } = useSelectedTrackValue();
   const [active, setActive] = useState('inbox');
   const [showTracks, setShowTracks] = useState(true);
 
@@ -46,7 +46,7 @@ export const Sidebar = () => {
         </li>
         <li
           data-testid="next_7"
-          className={active === 'today' ? 'active' : undefined}
+          className={active === 'next_7' ? 'active' : undefined}
           onClick={() => {
             setActive('next_7');
             setSelectedTrack('NEXT_7');
