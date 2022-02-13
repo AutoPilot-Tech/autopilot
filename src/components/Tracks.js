@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { useSelectedTrackValue, useTracksValue } from '../context';
 
-export const Tracks = ({ activeValue = true }) => {
+export const Tracks = ({ activeValue = null }) => {
   const [active, setActive] = useState(activeValue);
   const { setSelectedTrack } = useSelectedTrackValue();
   const { tracks } = useTracksValue();
+  console.log(tracks)
   return (
     tracks &&
     tracks.map((track) => (
@@ -12,10 +13,13 @@ export const Tracks = ({ activeValue = true }) => {
         key={track.trackId}
         data-doc-id={track.docId}
         data-testid="track-action"
-        role="button"
         className={
           active === track.trackId ? 'active sidebar__track' : 'sidebar__track'
         }
+        onKeyDown={() => {
+            setActive(track.trackId);
+            setSelectedTrack(track.trackId);
+        }}
         onClick={() => {
           setActive(track.trackId);
           setSelectedTrack(track.trackId);

@@ -5,6 +5,7 @@ import {
   FaRegCalendarAlt,
   FaRegCalendar,
 } from 'react-icons/fa';
+import { Tracks } from '../Tracks';
 import { useSelectedTrackValue } from '../../context';
 
 export const Sidebar = () => {
@@ -41,7 +42,6 @@ export const Sidebar = () => {
         <h2>Tracks</h2>
       </div>
       <ul className="sidebar__tracks">Tracks will go here!</ul>
-      Add Track component here!
     </div>
   );
 };

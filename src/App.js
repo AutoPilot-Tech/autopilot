@@ -15,7 +15,7 @@ export const App = () => {
           <Header />
           <Content />
         </div>
-      </TracksProvider>
+       </TracksProvider>
     </SelectedTrackProvider>
   );
 };

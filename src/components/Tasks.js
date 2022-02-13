@@ -6,7 +6,7 @@ import { useTasks } from '../hooks';
 
 // this just gets the tasks and renders them
 export const Tasks = () => {
-  const { tasks } = useTasks("1")
+  const { tasks, archivedTasks } = useTasks("1")
   console.log(tasks);
 
   let trackName = '';
