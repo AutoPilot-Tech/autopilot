@@ -13,24 +13,45 @@ import { AddTrack } from '../AddTrack';
 export const Sidebar = () => {
   const { setSelectedTrack } = useSelectedTrackValue;
   const [active, setActive] = useState('inbox');
-  const [ showTracks, setShowTracks ] = useState(true);
+  const [showTracks, setShowTracks] = useState(true);
 
   return (
     <div className="sidebar" data-testid="sidebar">
       <ul className="sidebar__generic">
-        <li data-testid="inbox" className="inbox">
+        <li
+          data-testid="inbox"
+          className={active === 'inbox' ? 'active' : undefined}
+          onClick={() => {
+            setActive('inbox');
+            setSelectedTrack('INBOX');
+          }}
+        >
           <span>
             <FaInbox />
           </span>
           <span>Inbox</span>
         </li>
-        <li data-testid="today" className="today">
+        <li
+          data-testid="today"
+          className={active === 'today' ? 'active' : undefined}
+          onClick={() => {
+            setActive('today');
+            setSelectedTrack('TODAY');
+          }}
+        >
           <span>
             <FaRegCalendar />
           </span>
           <span>Today's Schedule</span>
         </li>
-        <li data-testid="next_7" className="next_7">
+        <li
+          data-testid="next_7"
+          className={active === 'today' ? 'active' : undefined}
+          onClick={() => {
+            setActive('next_7');
+            setSelectedTrack('NEXT_7');
+          }}
+        >
           <span>
             <FaRegCalendarAlt />
           </span>

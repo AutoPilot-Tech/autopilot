@@ -14,20 +14,23 @@ export const Tasks = () => {
 
   let trackName = '';
 
-  if (tracks && selectedTrack && !collatedTasksExist(selectedTrack)) {
-      trackName = getTitle(tracks, selectedTrack).name;
-      console.log('track name 1: ', trackName);
+  if (collatedTasksExist(selectedTrack) && selectedTrack) {
+    trackName = getCollatedTitle(collatedTasks, selectedTrack);
   }
 
-  if (collatedTasksExist(selectedTrack) && selectedTrack) {
-      trackName = getCollatedTitle(collatedTasks, selectedTrack).name;
-        console.log('track name 2: ', trackName);
+  if (
+    tracks &&
+    tracks.length > 0 &&
+    selectedTrack &&
+    !collatedTasksExist(selectedTrack)
+  ) {
+    trackName = getTitle(tracks, selectedTrack);
   }
 
   useEffect(() => {
-      document.title = `${trackName}: Autopilot`
-  },[]);
-
+    document.title = `${trackName}: Autopilot`;
+  }, []);
+  console.log('tasks', tasks);
   return (
     <div className="tasks" data-testid="tasks">
       <h2 data-testid="track-name">{trackName}</h2>
