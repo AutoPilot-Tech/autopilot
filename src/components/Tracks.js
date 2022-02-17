@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { useSelectedTrackValue, useTracksValue } from '../context';
+import { useTracksValue } from '../context/tracks-context';
 import { IndividualTrack } from './IndividualTrack';
 
 export const Tracks = ({ activeValue = null }) => {
   const [active, setActive] = useState(activeValue);
-  const { setSelectedTrack } = useSelectedTrackValue();
-  const { tracks } = useTracksValue();
+  const { tracks, setSelectedTrack } = useTracksValue();
   return (
     <div>
         {tracks &&

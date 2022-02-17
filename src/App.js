@@ -1,7 +1,7 @@
 import React from 'react';
 import { Header } from './components/layout/Header';
 import { Content } from './components/layout/Content';
-import { TracksProvider, SelectedTrackProvider } from './context';
+import { TracksProvider } from './context/tracks-context';
 import './App.scss';
 
 // note: see src/context. Since we want to use tracksprovider at the
@@ -9,13 +9,11 @@ import './App.scss';
 // with Redux, later.
 export const App = () => {
   return (
-    <SelectedTrackProvider>
       <TracksProvider>
         <div className="App">
           <Header />
           <Content />
         </div>
        </TracksProvider>
-    </SelectedTrackProvider>
   );
 };

@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import { FaTrashAlt } from 'react-icons/fa';
 import { useTracksValue } from '../context/tracks-context';
-import { useSelectedTrackValue } from '../context/selected-track-context';
 import { db } from '../firebase';
 
 export const IndividualTrack = ({ track }) => {
   const [showConfirm, setShowConfirm] = useState(false);
-  const { tracks, setTracks } = useTracksValue();
-  const { setSelectedTrack } = useSelectedTrackValue();
+  const { tracks, setTracks, setSelectedTrack } = useTracksValue();
 
   const deleteTrack = (docId) => {
+    console.log('Firebase doc delete, from IndividualTrack.js');
     db.collection('tracks')
       .doc(docId)
       .delete()
@@ -30,23 +29,24 @@ export const IndividualTrack = ({ track }) => {
       >
         <FaTrashAlt />
         {showConfirm && (
-            <div className="track-delete-modal">
-                <div className="track-delete-modal__inner">
-                    <p>Are you sure you want to delete this track? This cannot be undone.</p>
-                    <button
-                        type="button"
-                        onClick={() => {
-                            deleteTrack(track.docId);
-                        }}
-                        >
-                            Delete
-                            
-                        </button>
-                        <span onClick={() => setShowConfirm(!showConfirm)}>Cancel</span>
+          <div className="track-delete-modal">
+            <div className="track-delete-modal__inner">
+              <p>
+                Are you sure you want to delete this track? This cannot be
+                undone.
+              </p>
+              <button
+                type="button"
+                onClick={() => {
+                  deleteTrack(track.docId);
+                }}
+              >
+                Delete
+              </button>
+              <span onClick={() => setShowConfirm(!showConfirm)}>Cancel</span>
             </div>
-        </div>
+          </div>
         )}
-        
       </span>
     </>
   );

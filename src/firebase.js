@@ -4,13 +4,13 @@ import 'firebase/firestore';
 
 // Your web app's Firebase configuration
 firebase.initializeApp({
-  apiKey: 'AIzaSyCp2f89ZRvYtbaXyCGMuypRq5RJam4omMI',
-  authDomain: 'autopilot-335a7.firebaseapp.com',
-  projectId: 'autopilot-335a7',
-  storageBucket: 'autopilot-335a7.appspot.com',
-  messagingSenderId: '315356635877',
-  appId: '1:315356635877:web:5a148a4354768046652a0c',
-  measurementId: 'G-27631JPTLX',
+  apiKey: "AIzaSyByQ9uymQz0xR06INhjGTIQPFlYAaE-Rgg",
+  authDomain: "autopilot-7ab12.firebaseapp.com",
+  projectId: "autopilot-7ab12",
+  storageBucket: "autopilot-7ab12.appspot.com",
+  messagingSenderId: "39033041323",
+  appId: "1:39033041323:web:e9ab1b2b69a46ce91b62ee",
+  measurementId: "G-TG33L88W6V"
 });
 
 // Initialize Firebase

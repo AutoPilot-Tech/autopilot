@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import { useTracks } from '../hooks';
 
 // allows us to pass data down the component, without props.
@@ -8,9 +8,10 @@ export const TracksContext = createContext();
 // bottom level wherever maybe 6 levels deep
 export const TracksProvider = ({ children }) => {
     const { tracks, setTracks } = useTracks();
+    const [selectedTrack, setSelectedTrack] = useState('INBOX');
 
     return (
-        <TracksContext.Provider value={{ tracks, setTracks }}>
+        <TracksContext.Provider value={{ tracks, setTracks, selectedTrack, setSelectedTrack }}>
             {children}
         </TracksContext.Provider>
     );

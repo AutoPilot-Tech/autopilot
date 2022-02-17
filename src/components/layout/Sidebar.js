@@ -6,12 +6,12 @@ import {
   FaRegCalendar,
 } from 'react-icons/fa';
 import { Tracks } from '../Tracks';
-import { useSelectedTrackValue } from '../../context';
 import { IndividualTrack } from '../IndividualTrack';
 import { AddTrack } from '../AddTrack';
+import { useTracksValue } from '../../context/tracks-context';
 
 export const Sidebar = () => {
-  const { setSelectedTrack } = useSelectedTrackValue();
+  const { setSelectedTrack } = useTracksValue();
   const [active, setActive] = useState('inbox');
   const [showTracks, setShowTracks] = useState(true);
 
