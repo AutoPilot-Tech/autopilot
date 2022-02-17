@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { db } from '../firebase';
 import { collatedTasksExist } from '../helpers';
 import moment from 'moment';
+import { sortedObject } from '../helpers';
 
 // this is constantly getting new tracks
 export const useTasks = (selectedTrack) => {
@@ -58,11 +59,14 @@ export const useTasks = (selectedTrack) => {
 export const useTracks = () => {
   const [tracks, setTracks] = useState([]);
 
+  
+
   useEffect(() => {
     console.log('useTracks is firing');
     db.collection('tracks')
       .where('userId', '==', '1337')
       .orderBy('trackId')
+      // this required an index in firebase
       .get()
       .then((snapshot) => {
         const allTracks = snapshot.docs.map((track) => ({
@@ -70,12 +74,35 @@ export const useTracks = () => {
           docId: track.id,
         }));
 
+        // firebase is weird about giving us the same order fields in objects, so we 
+        // need to sort it first.
+
+        let sortedTracks = []
+        let sortedAllTracks = []
+
+        // go through allTracks and sort them 
+        for (let i = 0; i < allTracks.length; i++) {
+            sortedTracks.push(sortedObject(allTracks[i]));
+        }
+        console.log('sortedTracks', sortedTracks);
+
+        // go through tracks and sort them
+
+        for (let i = 0; i < tracks.length; i++) {
+            sortedAllTracks.push(sortedObject(tracks[i]));
+        }
+
+        console.log('sortedAllTracks', sortedAllTracks);
+        
+        
         // this keeps the useEffect from running infinitely.
-        if (JSON.stringify(allTracks) !== JSON.stringify(tracks)) {
+        if (JSON.stringify(sortedAllTracks) !== JSON.stringify(sortedTracks)) {
+          console.log('allTracks', sortedAllTracks);
+          console.log('tracks', sortedTracks);
           setTracks(allTracks);
         }
       });
-  }, []);
+  }, [tracks]);
 
   return { tracks, setTracks };
 };

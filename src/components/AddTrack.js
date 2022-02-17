@@ -25,8 +25,8 @@ export const AddTrack = ({ shouldShow = false }) => {
             name: trackName,
             userId: '1337',
           });
-          setTracks(tracks);
-          // setTrackName('');
+          setTracks([...tracks]);
+          setTrackName('');
           setShow(false);
         });
   };
