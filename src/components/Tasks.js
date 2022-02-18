@@ -5,6 +5,7 @@ import { useTasks } from '../hooks';
 import { collatedTasks } from '../constants';
 import { getTitle, getCollatedTitle, collatedTasksExist } from '../helpers';
 import { useTracksValue } from '../context/tracks-context';
+import { AddTask } from './AddTask';
 
 // this just gets the tasks and renders them
 export const Tasks = () => {
@@ -45,6 +46,7 @@ export const Tasks = () => {
           </li>
         ))}
       </ul>
+      <AddTask />
     </div>
   );
 };
