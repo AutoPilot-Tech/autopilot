@@ -19,7 +19,7 @@ body {
     font-family: 'Robot', sans-serif;
     color: white;
     font-smooth: always;
-    background-color: #13111a;
+    background-color: #1D1A27;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 
@@ -33,7 +33,7 @@ ul {
 // Variables
 $generic-box-shadow: rgba(0,0,0,0.1) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 4px 11px;
 $generic-border: 1px solid #5E5B71;
-$generic-bg: #006DAA;
+$generic-bg: #13111A;
 
 /* Mixins */
 
@@ -137,7 +137,7 @@ fafafa
     header {
       -webkit-box-shadow: 0 1px 3px 0 rgba(0,0,0,0.15);
       box-shadow: 0 1px 3px 0 rgba(0,0,0,0.15);
-      background-color: black;
+      background-image: linear-gradient(to right, #4F56FF, #FF4980);
       border-color: transparent;
     }
 
@@ -156,7 +156,7 @@ fafafa
     ============================================ */
 
 header {
-    border-bottom: solid 1px #005A8F;
+    border-bottom: solid 1px #242031;
     background-color: $generic-bg;
     transition: height 200ms ease-in;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
@@ -247,7 +247,7 @@ header {
     overflow-y: hidden;
     overflow-x: hidden;
     border-right: $generic-border;
-    background-color: #13111a;
+    background-color: #1D1A27;
 
     @include mq('900 px') {
         display: none;
@@ -388,7 +388,7 @@ header {
         padding: 10px;
         top: 10px;
         right: 0;
-        background-color: white;
+        background-color: #B7B4C7;
 
         p {
             margin-top: 5px;
