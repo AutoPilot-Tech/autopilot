@@ -19,7 +19,7 @@ body {
     font-family: 'Robot', sans-serif;
     color: white;
     font-smooth: always;
-    background-color: #1D1A27;
+    background-color: #13111A;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 
@@ -247,7 +247,7 @@ header {
     overflow-y: hidden;
     overflow-x: hidden;
     border-right: $generic-border;
-    background-color: #1D1A27;
+    background-color: #13111A;
 
     @include mq('900 px') {
         display: none;
