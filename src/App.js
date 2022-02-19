@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+
 import { Header } from './components/layout/Header';
 import { Content } from './components/layout/Content';
 import { TracksProvider } from './context/tracks-context';
