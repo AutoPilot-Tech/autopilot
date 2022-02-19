@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FaMoon } from 'react-icons/fa';
+import { FaMoon, FaUserAlt } from 'react-icons/fa';
 
 export const Header = ({ darkMode, setDarkMode }) => {
   const [shouldShowMain, setShouldShowMain] = useState(false);
@@ -25,8 +25,15 @@ export const Header = ({ darkMode, setDarkMode }) => {
             >
               <FaMoon />
             </li>
+            <li
+              className="settings__user"
+              data-testid="user-action"
+              >
+              <FaUserAlt />
+              </li>
           </ul>
         </div>
+        
       </nav>
     </header>
   );
