@@ -10,9 +10,7 @@ export const useTasks = (selectedTrack) => {
   const [archivedTasks, setArchivedTasks] = useState([]);
 
   useEffect(() => {
-    console.log('checking for new tasks.. useEffect is running');
     let unsubscribe = db.collection('tasks').where('userId', '==', '1337');
-    console.log('Firebase read of tasks from useTasks');
 
     unsubscribe =
       selectedTrack && !collatedTasksExist(selectedTrack)
@@ -62,7 +60,6 @@ export const useTracks = () => {
   
 
   useEffect(() => {
-    console.log('useTracks is firing');
     db.collection('tracks')
       .where('userId', '==', '1337')
       .orderBy('trackId')
@@ -84,7 +81,6 @@ export const useTracks = () => {
         for (let i = 0; i < allTracks.length; i++) {
             sortedTracks.push(sortedObject(allTracks[i]));
         }
-        console.log('sortedTracks', sortedTracks);
 
         // go through tracks and sort them
 
@@ -92,13 +88,10 @@ export const useTracks = () => {
             sortedAllTracks.push(sortedObject(tracks[i]));
         }
 
-        console.log('sortedAllTracks', sortedAllTracks);
         
         
         // this keeps the useEffect from running infinitely.
         if (JSON.stringify(sortedAllTracks) !== JSON.stringify(sortedTracks)) {
-          console.log('allTracks', sortedAllTracks);
-          console.log('tracks', sortedTracks);
           setTracks(allTracks);
         }
       });

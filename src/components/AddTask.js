@@ -3,6 +3,8 @@ import { FaRegListAlt, FaRegCalendarAlt } from 'react-icons/fa';
 import moment from 'moment';
 import { db } from '../firebase';
 import { useTracksValue } from '../context/tracks-context';
+import { TrackOverlay } from './TrackOverlay';
+import { TaskDate } from './TaskDate';
 
 export const AddTask = ({
   showAddTaskMain = true,
@@ -19,12 +21,7 @@ export const AddTask = ({
 
   const { selectedTrack } = useTracksValue();
 
-  const AddTask = ({
-    showAddTaskMain = true,
-    shouldShowMain = false,
-    showQuickAddTask,
-    setShowQuickAddTask,
-  }) => {
+  const addTask = () => {
     const trackId = track || selectedTrack;
     let collatedDate = '';
 
@@ -53,6 +50,7 @@ export const AddTask = ({
         })
     );
   };
+
   return (
     <div
       className={showQuickAddTask ? 'add-task add-task__overlay' : 'add-task'}
@@ -89,8 +87,16 @@ export const AddTask = ({
               </div>
             </>
           )}
-          <p>Track Overlay here</p>
-          <p>TaskDate here</p>
+          <TrackOverlay
+            setTrack={setTrack}
+            showTrackOverlay={showTrackOverlay}
+            setShowTrackOverlay={setShowTrackOverlay}
+          />
+          <TaskDate
+            setTaskDate={setTaskDate}
+            showTaskDate={showTaskDate}
+            setShowTaskDate={setShowTaskDate}
+          />
           <input
             className="add-task__content"
             data-testid="add-task-content"
@@ -102,7 +108,11 @@ export const AddTask = ({
             type="button"
             className="add-task__submit"
             data-testid="add-task"
-            onClick={() => AddTask()}
+            onClick={() =>
+              showQuickAddTask
+                ? addTask() && setShowQuickAddTask(false)
+                : addTask()
+            }
           >
             Add Task
           </button>
@@ -132,11 +142,10 @@ export const AddTask = ({
             data-testid="show-task-date-overlay"
             onClick={() => {
               setShowTaskDate(!showTaskDate);
-
             }}
-            >
-              <FaRegCalendarAlt />
-            </span>
+          >
+            <FaRegCalendarAlt />
+          </span>
         </div>
       )}
     </div>

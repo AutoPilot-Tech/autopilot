@@ -8,7 +8,6 @@ export const IndividualTrack = ({ track }) => {
   const { tracks, setTracks, setSelectedTrack } = useTracksValue();
 
   const deleteTrack = (docId) => {
-    console.log('Firebase doc delete, from IndividualTrack.js');
     db.collection('tracks')
       .doc(docId)
       .delete()

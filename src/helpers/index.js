@@ -1,20 +1,17 @@
 import { collatedTasks } from '../constants';
 
 export const getTitle = (tracks, selectedTrackId) => {
-  console.log('getTitle function just ran');
   let track = tracks.find((track) => track.trackId === selectedTrackId);
   return track.name;
 };
 
 export const getCollatedTitle = (tracks, key) => {
-  console.log('getCollatedTitle helper just ran');
 
   let track = tracks.find((track) => track.key === key);
   return track.name;
 };
 
 export const collatedTasksExist = (selectedTrack) => {
-  console.log('collatedTasksExist helper just ran');
   return collatedTasks.find((task) => task.key === selectedTrack);
 };
 
