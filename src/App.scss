@@ -137,8 +137,18 @@ fafafa
     header {
       -webkit-box-shadow: 0 1px 3px 0 rgba(0,0,0,0.15);
       box-shadow: 0 1px 3px 0 rgba(0,0,0,0.15);
-      background-color: #282828;
+      background-color: black;
       border-color: transparent;
+    }
+
+    .sidebar {
+        background-color: #1f2933
+    }
+    .tasks {
+        background-color: #616e7c
+    }
+    .content {
+        background-color: #1f2933
     }
   }
 
