@@ -17,9 +17,9 @@ body {
     padding: 0;
     line-height: 1;
     font-family: 'Robot', sans-serif;
-    color: #202020;
+    color: white;
     font-smooth: always;
-    background-color: #fafafa;
+    background-color: #13111a;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 
@@ -32,7 +32,7 @@ ul {
 
 // Variables
 $generic-box-shadow: rgba(0,0,0,0.1) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 4px 11px;
-$generic-border: 1px solid #f1f1f1;
+$generic-border: 1px solid #5E5B71;
 $generic-bg: #006DAA;
 
 /* Mixins */
@@ -220,8 +220,12 @@ header {
 
                         &.settings__add {
                             margin-right: 30px;
-                            padding-bottom: 5px;
+                            padding-bottom: 6px;
                             font-size: 30px;
+                        }
+                        &.settings__user {
+                            margin-left: 15px;
+                            
                         }
                         
                     }
@@ -243,7 +247,7 @@ header {
     overflow-y: hidden;
     overflow-x: hidden;
     border-right: $generic-border;
-    background-color: #fafafa;
+    background-color: #13111a;
 
     @include mq('900 px') {
         display: none;
@@ -273,7 +277,7 @@ header {
 
             &.active, &:hover {
                 font-weight: bold;
-                background-color: white;
+                background-color: #302C3F;
             }
             &:nth-child(1) {
                 .sidebar__dot {
@@ -324,7 +328,7 @@ header {
         cursor: pointer;
 
         span {
-            color: #0000008a;
+            color: #D9D7E6;
             margin-right: 10px;
 
             svg.hidden-projects {
@@ -334,7 +338,7 @@ header {
 
         h2 {
             margin: 0;
-            color: #333;
+            color: #F5F4FA;
             font-size: 15px;
             font-weight: bold;
             padding-bottom: 20px;
@@ -345,7 +349,7 @@ header {
     li {
         padding: 10px 0 10px 10px;
         list-style-type: none;
-        color: #333;
+        color: white;
         display: flex;
         cursor: pointer;
         line-height: 1.50;
@@ -358,12 +362,12 @@ header {
             svg {
                 width: 18px;
                 height: 18px;
-                color: #555;
+                color: white;
             }
         }
         &.active, &:hover {
             font-weight: bold;
-            background-color: white;
+            background-color: #302C3F;
         }
     }
 
@@ -421,7 +425,7 @@ header {
 =========================================== */
 .tasks {
     width: 656px;
-    background-color: white;
+    background-color: #302C3F;
     margin-left: 266px;
     border-right: $generic-border;
     min-height: calc(100vh);
@@ -449,7 +453,7 @@ header {
     &__list li {
         display: flex;
         line-height: 18px;
-        color: #333;
+        color: white;
         padding-top: 10px;
         padding-bottom: 10px;
         font-size: 14px;
@@ -470,7 +474,7 @@ header {
                 height: 16px;
                 width: 16px;
                 display: block;
-                border: 1px solid gray;
+                border: 1px solid white;
                 border-radius: 16px;
             }
         }
@@ -574,7 +578,7 @@ header {
 
 .add-task__text, .add-track__text {
     display: inline-block;
-    color: #545454;
+    color: #B7B4C7;
     font-size: 14px;
     margin-left: 15px;
 }
