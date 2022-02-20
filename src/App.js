@@ -1,23 +1,34 @@
 import React, { useState } from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
 
-import { Header } from './components/layout/Header';
-import { Content } from './components/layout/Content';
-import { TracksProvider } from './context/tracks-context';
+} from "react-router-dom";
+import { Dashboard } from './Dashboard';
+import { Landing } from './pages/Landing';
+import { Login } from './pages/Login';
+import { Signup } from './pages/Signup';
 import './App.scss';
+
+
+
 
 // note: see src/context. Since we want to use tracksprovider at the
 // top level, we are using it here in App. This can be replaced
 // with Redux, later.
-export const App = ({darkModeDefault = true }) => {
-  const [darkMode, setDarkMode] = useState(darkModeDefault);
+export const App = () => {
   return (
-      <TracksProvider>
-        <main data-testid="application"
-        className={darkMode ? 'darkmode' : undefined}>
-          <Header darkMode={darkMode} setDarkMode={setDarkMode} />
-          <Content />
-        </main>
-       </TracksProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Landing />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Routes>
+      
+      </Router>
+          
+       
   );
 };
