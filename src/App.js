@@ -5,7 +5,7 @@ import {
   Route,
 
 } from "react-router-dom";
-import { Dashboard } from './Dashboard';
+import { Dashboard } from './pages/Dashboard';
 import { Landing } from './pages/Landing';
 import { Login } from './pages/Login';
 import { Signup } from './pages/Signup';
@@ -14,9 +14,6 @@ import './App.scss';
 
 
 
-// note: see src/context. Since we want to use tracksprovider at the
-// top level, we are using it here in App. This can be replaced
-// with Redux, later.
 export const App = () => {
   return (
       <Router>

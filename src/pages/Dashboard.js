@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 
-import { Header } from './components/layout/Header';
-import { Content } from './components/layout/Content';
-import { TracksProvider } from './context/tracks-context';
+import { Header } from '../components/layout/Header';
+import { Content } from '../components/layout/Content';
+import { TracksProvider } from '../context/tracks-context';
 
 // note: see src/context. Since we want to use tracksprovider at the
 // top level, we are using it here in App. This can be replaced
