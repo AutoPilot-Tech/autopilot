@@ -1,6 +1,7 @@
 // Import the functions you need from the SDKs you need
 import firebase from 'firebase/app'; // Required for side-effects
 import 'firebase/firestore';
+import 'firebase/auth';
 
 // Your web app's Firebase configuration
 firebase.initializeApp({
@@ -16,4 +17,7 @@ firebase.initializeApp({
 // Initialize Firebase
 var db = firebase.firestore();
 
-export { db };
+// initialize auth
+var auth = firebase.auth();
+
+export { db, auth };
