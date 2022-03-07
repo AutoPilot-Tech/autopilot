@@ -4,7 +4,7 @@ export const collatedTasks = [
   { key: 'NEXT_7', name: 'Next 7 Days' },
 ];
 
-export const userMenuItems = [
+export const userSubmenu = [
   {
     title: 'Logout',
   },
