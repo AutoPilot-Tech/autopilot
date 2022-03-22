@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { db } from '../firebase';
+import { db, auth } from '../firebase';
 import { generatePushId } from '../helpers';
 import { useTracksValue } from '../context/tracks-context';
 
@@ -11,19 +11,20 @@ export const AddTrack = ({ shouldShow = false }) => {
   const { tracks, setTracks } = useTracksValue();
 
   const addTrack = () => {
+    let firebaseUserId = '1337';
     trackName &&
       db
         .collection('tracks')
         .add({
           trackId,
           name: trackName,
-          userId: '1337',
+          userId: firebaseUserId,
         })
         .then(() => {
           tracks.push({
             trackId,
             name: trackName,
-            userId: '1337',
+            userId: firebaseUserId,
           });
           setTracks([...tracks]);
           setTrackName('');

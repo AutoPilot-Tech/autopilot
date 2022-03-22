@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { db } from '../firebase';
+import { db, auth } from '../firebase';
 import { collatedTasksExist } from '../helpers';
 import moment from 'moment';
 import { sortedObject } from '../helpers';
@@ -10,6 +10,16 @@ export const useTasks = (selectedTrack) => {
   const [archivedTasks, setArchivedTasks] = useState([]);
 
   useEffect(() => {
+    // get user id when auth changes
+    // const unsubscribe = auth.onAuthStateChanged((authUser) => {
+    //   if (authUser) {
+    //     // get all tasks for user
+    //     db.collection('tasks')
+    //       .where('userId', '==', authUser.uid)
+    // display user id
+    console.log('user id', auth.uid);
+        
+          
     let unsubscribe = db.collection('tasks').where('userId', '==', '1337');
 
     unsubscribe =
@@ -57,11 +67,10 @@ export const useTasks = (selectedTrack) => {
 export const useTracks = () => {
   const [tracks, setTracks] = useState([]);
 
-  
-
   useEffect(() => {
+    let firebaseUserId = '1337';
     db.collection('tracks')
-      .where('userId', '==', '1337')
+      .where('userId', '==', firebaseUserId)
       .orderBy('trackId')
       // this required an index in firebase
       .get()
@@ -71,31 +80,31 @@ export const useTracks = () => {
           docId: track.id,
         }));
 
-        // firebase is weird about giving us the same order fields in objects, so we 
+        // firebase is weird about giving us the same order fields in objects, so we
         // need to sort it first.
 
-        let sortedTracks = []
-        let sortedAllTracks = []
+        let sortedTracks = [];
+        let sortedAllTracks = [];
 
-        // go through allTracks and sort them 
+        // go through allTracks and sort them
         for (let i = 0; i < allTracks.length; i++) {
-            sortedTracks.push(sortedObject(allTracks[i]));
+          sortedTracks.push(sortedObject(allTracks[i]));
         }
 
         // go through tracks and sort them
 
         for (let i = 0; i < tracks.length; i++) {
-            sortedAllTracks.push(sortedObject(tracks[i]));
+          sortedAllTracks.push(sortedObject(tracks[i]));
         }
 
-        
-        
         // this keeps the useEffect from running infinitely.
         if (JSON.stringify(sortedAllTracks) !== JSON.stringify(sortedTracks)) {
           setTracks(allTracks);
         }
       });
   }, [tracks]);
+
+  
 
   return { tracks, setTracks };
 };

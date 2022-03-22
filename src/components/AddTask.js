@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FaRegListAlt, FaRegCalendarAlt } from 'react-icons/fa';
 import moment from 'moment';
-import { db } from '../firebase';
+import { db, auth } from '../firebase';
 import { useTracksValue } from '../context/tracks-context';
 import { TrackOverlay } from './TrackOverlay';
 import { TaskDate } from './TaskDate';
