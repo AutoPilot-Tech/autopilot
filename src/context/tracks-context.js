@@ -9,9 +9,10 @@ export const TracksContext = createContext();
 export const TracksProvider = ({ children }) => {
     const { tracks, setTracks } = useTracks();
     const [selectedTrack, setSelectedTrack] = useState('INBOX');
+    const [ user, setUser ] = useState(null);
 
     return (
-        <TracksContext.Provider value={{ tracks, setTracks, selectedTrack, setSelectedTrack }}>
+        <TracksContext.Provider value={{ tracks, setTracks, selectedTrack, setSelectedTrack, user, setUser }}>
             {children}
         </TracksContext.Provider>
     );

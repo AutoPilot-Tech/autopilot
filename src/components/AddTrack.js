@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { db, auth } from '../firebase';
 import { generatePushId } from '../helpers';
 import { useTracksValue } from '../context/tracks-context';
@@ -6,25 +6,38 @@ import { useTracksValue } from '../context/tracks-context';
 export const AddTrack = ({ shouldShow = false }) => {
   const [show, setShow] = useState(shouldShow);
   const [trackName, setTrackName] = useState('');
+  const [user, setUser] = useState(null);
 
   const trackId = generatePushId();
   const { tracks, setTracks } = useTracksValue();
 
+  useEffect(() => {
+    let unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        // this is the user's id
+        setUser(user.uid);
+      } else {
+        setUser(null);
+      }
+    }
+    );
+    return unsubscribe;
+  }, []);
+
   const addTrack = () => {
-    let firebaseUserId = '1337';
     trackName &&
       db
         .collection('tracks')
         .add({
           trackId,
           name: trackName,
-          userId: firebaseUserId,
+          userId: user,
         })
         .then(() => {
           tracks.push({
             trackId,
             name: trackName,
-            userId: firebaseUserId,
+            userId: user,
           });
           setTracks([...tracks]);
           setTrackName('');

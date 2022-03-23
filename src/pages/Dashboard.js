@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import { Header } from '../components/layout/Header';
 import { Content } from '../components/layout/Content';
-import { TracksProvider } from '../context/tracks-context';
+import { TracksProvider, useTracksValue } from '../context/tracks-context';
 import { Loading } from './Loading';
 import { auth } from '../firebase';
 
@@ -12,13 +12,13 @@ import { auth } from '../firebase';
 export const Dashboard = ({darkModeDefault = true }) => {
   const [darkMode, setDarkMode] = useState(darkModeDefault);
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState(null);
+  // get user from context
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
       if (user) {
         console.log('user logged in', user)
-        setUser(user);
+        
         setLoading(false);
       }
     })

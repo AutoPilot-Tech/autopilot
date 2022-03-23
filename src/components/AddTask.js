@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaRegListAlt, FaRegCalendarAlt } from 'react-icons/fa';
 import moment from 'moment';
 import { db, auth } from '../firebase';
@@ -18,8 +18,22 @@ export const AddTask = ({
   const [showMain, setShowMain] = useState(shouldShowMain);
   const [showTrackOverlay, setShowTrackOverlay] = useState(false);
   const [showTaskDate, setShowTaskDate] = useState(false);
+  const [user, setUser] = useState(null);
 
   const { selectedTrack } = useTracksValue();
+
+  useEffect(() => {
+    let unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        // this is the user's id
+        setUser(user.uid);
+      } else {
+        setUser(null);
+      }
+    }
+    );
+    return unsubscribe;
+  }, []);
 
   const addTask = () => {
     const trackId = track || selectedTrack;
@@ -40,7 +54,7 @@ export const AddTask = ({
           trackId,
           task,
           date: collatedDate || taskDate,
-          userId: '1337',
+          userId: user,
         })
         .then(() => {
           setTask('');

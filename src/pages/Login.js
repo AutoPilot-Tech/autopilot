@@ -18,6 +18,7 @@ export const Login = () => {
     const unsubscribe = auth.onAuthStateChanged(user => {
       if (user) {
         console.log('user logged in', user)
+        window.location.href="/dashboard";
       }
     })
     return unsubscribe

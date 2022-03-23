@@ -3,24 +3,30 @@ import { db, auth } from '../firebase';
 import { collatedTasksExist } from '../helpers';
 import moment from 'moment';
 import { sortedObject } from '../helpers';
+import { useTracksValue } from '../context/tracks-context';
 
 // this is constantly getting new tracks
 export const useTasks = (selectedTrack) => {
   const [tasks, setTasks] = useState([]);
   const [archivedTasks, setArchivedTasks] = useState([]);
+  const [user, setUser] = useState(null);
+  useEffect(() => {
+    console.log('first useEffect in useTasks');
+    let unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        console.log('user verified in useTasks', user);
+        // this is the user's id
+        setUser(user.uid);
+      } else {
+        setUser(null);
+      }
+    });
+    return unsubscribe;
+  }, []);
 
   useEffect(() => {
-    // get user id when auth changes
-    // const unsubscribe = auth.onAuthStateChanged((authUser) => {
-    //   if (authUser) {
-    //     // get all tasks for user
-    //     db.collection('tasks')
-    //       .where('userId', '==', authUser.uid)
-    // display user id
-    console.log('user id', auth.uid);
-        
-          
-    let unsubscribe = db.collection('tasks').where('userId', '==', '1337');
+    console.log('second useEffect in useTasks');
+    let unsubscribe = db.collection('tasks').where('userId', '==', user);
 
     unsubscribe =
       selectedTrack && !collatedTasksExist(selectedTrack)
@@ -66,11 +72,26 @@ export const useTasks = (selectedTrack) => {
 // when there is new tracks
 export const useTracks = () => {
   const [tracks, setTracks] = useState([]);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    let firebaseUserId = '1337';
+    console.log('first useEffect in useTracks');
+    let unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        console.log('verified user from useTracks');
+        // this is the user's id
+        setUser(user.uid);
+      } else {
+        setUser(null);
+      }
+    });
+    return unsubscribe;
+  }, []);
+
+  useEffect(() => {
+    console.log('second useEffect in useTracks');
     db.collection('tracks')
-      .where('userId', '==', firebaseUserId)
+      .where('userId', '==', user)
       .orderBy('trackId')
       // this required an index in firebase
       .get()
@@ -103,8 +124,6 @@ export const useTracks = () => {
         }
       });
   }, [tracks]);
-
-  
 
   return { tracks, setTracks };
 };
