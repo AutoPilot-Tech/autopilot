@@ -7,21 +7,20 @@ export const TracksContext = createContext();
 // provider is at the top level, and a consumer is at the
 // bottom level wherever maybe 6 levels deep
 export const TracksProvider = ({ children }) => {
-    const { tracks, setTracks } = useTracks();
-    const [selectedTrack, setSelectedTrack] = useState('INBOX');
-    const [ user, setUser ] = useState(null);
+  const { tracks, setTracks } = useTracks();
+  const [selectedTrack, setSelectedTrack] = useState('INBOX');
 
-    return (
-        <TracksContext.Provider value={{ tracks, setTracks, selectedTrack, setSelectedTrack, user, setUser }}>
-            {children}
-        </TracksContext.Provider>
-    );
+  return (
+    <TracksContext.Provider
+      value={{ tracks, setTracks, selectedTrack, setSelectedTrack }}
+    >
+      {children}
+    </TracksContext.Provider>
+  );
 };
 
 // this will return the tracks
 export const useTracksValue = () => useContext(TracksContext);
-
-
 
 // example
 // const { tracks } = useProjectsValue();

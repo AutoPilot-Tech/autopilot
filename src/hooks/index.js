@@ -9,24 +9,10 @@ import { useTracksValue } from '../context/tracks-context';
 export const useTasks = (selectedTrack) => {
   const [tasks, setTasks] = useState([]);
   const [archivedTasks, setArchivedTasks] = useState([]);
-  const [user, setUser] = useState(null);
-  useEffect(() => {
-    console.log('first useEffect in useTasks');
-    let unsubscribe = auth.onAuthStateChanged((user) => {
-      if (user) {
-        console.log('user verified in useTasks', user);
-        // this is the user's id
-        setUser(user.uid);
-      } else {
-        setUser(null);
-      }
-    });
-    return unsubscribe;
-  }, []);
 
   useEffect(() => {
-    console.log('second useEffect in useTasks');
-    let unsubscribe = db.collection('tasks').where('userId', '==', user);
+    let userId = auth.currentUser.uid;
+    let unsubscribe = db.collection('tasks').where('userId', '==', userId);
 
     unsubscribe =
       selectedTrack && !collatedTasksExist(selectedTrack)
@@ -72,26 +58,11 @@ export const useTasks = (selectedTrack) => {
 // when there is new tracks
 export const useTracks = () => {
   const [tracks, setTracks] = useState([]);
-  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    console.log('first useEffect in useTracks');
-    let unsubscribe = auth.onAuthStateChanged((user) => {
-      if (user) {
-        console.log('verified user from useTracks');
-        // this is the user's id
-        setUser(user.uid);
-      } else {
-        setUser(null);
-      }
-    });
-    return unsubscribe;
-  }, []);
-
-  useEffect(() => {
-    console.log('second useEffect in useTracks');
+    let userId = auth.currentUser.uid;
     db.collection('tracks')
-      .where('userId', '==', user)
+      .where('userId', '==', userId)
       .orderBy('trackId')
       // this required an index in firebase
       .get()
