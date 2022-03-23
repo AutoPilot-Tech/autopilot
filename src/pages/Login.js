@@ -2,38 +2,26 @@ import React, { useState, useEffect } from 'react';
 import { auth, signInWithGoogle } from '../firebase';
 
 export const Login = () => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-
-  // useEffect(() => {
-  //   const unsubscribe = auth.onAuthStateChanged(user => {
-  //     if (user) {
-  //       window.location.href="/dashboard";
-  //     }
-  //   })
-  //   return unsubscribe
-  // }, [])
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(user => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
-        console.log('user logged in', user)
-        window.location.href="/dashboard";
+        window.location.href = '/dashboard';
       }
-    })
-    return unsubscribe
-  }, [])
+    });
+    return unsubscribe;
+  }, []);
 
   const handleLogin = () => {
     auth
       .signInWithEmailAndPassword(email, password)
-      .then(userCredentials => {
-        const user = userCredentials.user;
-        console.log('Logged in with:', user.email);
+      .then(() => {
+        console.log('success');
       })
-      .catch(error => alert(error.message))
-  }
-
+      .catch((error) => alert(error.message));
+  };
 
   return (
     <div className="login">
@@ -50,8 +38,12 @@ export const Login = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button type="submit" onClick={handleLogin}>Login</button>
-        <button type="button" onClick={signInWithGoogle}>Login with Google</button>
+        <button type="button" onClick={handleLogin}>
+          Login
+        </button>
+        <button type="button" onClick={signInWithGoogle}>
+          Login with Google
+        </button>
       </form>
     </div>
   );

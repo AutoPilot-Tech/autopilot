@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { auth, db, signInWithGoogle } from '../firebase';
 
 export const Signup = () => {
@@ -12,14 +12,10 @@ export const Signup = () => {
     console.log('password: ', password);
     console.log('firstName: ', firstName);
     console.log('lastName: ', lastName);
-    
-      auth
+
+    auth
       .createUserWithEmailAndPassword(email, password)
-      .then((userCredential) => {
-        // Signed in
-        var user = userCredential.user;
-        // ...
-      })
+      .then((userCredential) => {})
       .catch((error) => {
         var errorCode = error.code;
         var errorMessage = error.message;
@@ -53,7 +49,9 @@ export const Signup = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button type="submit" onClick={handleSignUp}>Sign Up</button>
+        <button type="submit" onClick={handleSignUp}>
+          Sign Up
+        </button>
       </form>
     </div>
   );
