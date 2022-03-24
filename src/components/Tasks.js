@@ -6,11 +6,12 @@ import { collatedTasks } from '../constants';
 import { getTitle, getCollatedTitle, collatedTasksExist } from '../helpers';
 import { useTracksValue } from '../context/tracks-context';
 import { AddTask } from './AddTask';
+import { auth } from '../firebase';
 
 // this just gets the tasks and renders them
 export const Tasks = () => {
   const { tracks, selectedTrack } = useTracksValue();
-  const { tasks } = useTasks(selectedTrack);
+  let { tasks } = useTasks(selectedTrack);
 
   let trackName = '';
 
@@ -33,6 +34,10 @@ export const Tasks = () => {
     // This shows the selected track in the tab on the browser
     document.title = `${trackName}: Autopilot`;
   }, []);
+
+  
+    
+  
 
   return (
     <div className="tasks" data-testid="tasks">

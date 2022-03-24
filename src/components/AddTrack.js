@@ -1,14 +1,28 @@
-import React, { useState } from 'react';
-import { db } from '../firebase';
+import React, { useState, useEffect } from 'react';
+import { db, auth } from '../firebase';
 import { generatePushId } from '../helpers';
 import { useTracksValue } from '../context/tracks-context';
 
 export const AddTrack = ({ shouldShow = false }) => {
   const [show, setShow] = useState(shouldShow);
   const [trackName, setTrackName] = useState('');
+  const [user, setUser] = useState(null);
 
   const trackId = generatePushId();
   const { tracks, setTracks } = useTracksValue();
+
+  useEffect(() => {
+    let unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        // this is the user's id
+        setUser(user.uid);
+      } else {
+        setUser(null);
+      }
+    }
+    );
+    return unsubscribe;
+  }, []);
 
   const addTrack = () => {
     trackName &&
@@ -17,13 +31,13 @@ export const AddTrack = ({ shouldShow = false }) => {
         .add({
           trackId,
           name: trackName,
-          userId: '1337',
+          userId: user,
         })
         .then(() => {
           tracks.push({
             trackId,
             name: trackName,
-            userId: '1337',
+            userId: user,
           });
           setTracks([...tracks]);
           setTrackName('');

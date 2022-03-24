@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import { FaMoon, FaUserAlt } from 'react-icons/fa';
+import { AddTask } from '../AddTask';
+import { DropDown } from '../DropDown';
+import { userSubmenu } from '../../constants/index';
 
 export const Header = ({ darkMode, setDarkMode }) => {
   const [shouldShowMain, setShouldShowMain] = useState(false);
   const [showQuickAddTask, setShowQuickAddTask] = useState(false);
+  const [showDropDown, setShowDropDown] = useState(false);
 
   return (
     <header className="header" data-testid="header">
@@ -13,7 +17,14 @@ export const Header = ({ darkMode, setDarkMode }) => {
         </div>
         <div className="settings">
           <ul>
-            <li className="settings__add" data-testid="quick-add-task-action">
+            <li
+              className="settings__add"
+              data-testid="quick-add-task-action"
+              onClick={() => {
+                setShowQuickAddTask(true);
+                setShouldShowMain(true);
+              }}
+            >
               +
             </li>
             <li
@@ -25,16 +36,23 @@ export const Header = ({ darkMode, setDarkMode }) => {
             >
               <FaMoon />
             </li>
-            <li
-              className="settings__user"
-              data-testid="user-action"
-              >
-              <FaUserAlt />
-              </li>
+            {/* This is where they can log out, or go to settings. */}
+            <li className="settings__user" data-testid="user-action">
+              <FaUserAlt role="button" onClick={() => {
+                setShowDropDown(!showDropDown);
+              }}/>
+              <DropDown submenus={userSubmenu} showDropDown={showDropDown} />
+
+            </li>
           </ul>
         </div>
-        
       </nav>
+      <AddTask
+        showAddTaskMain={false}
+        setShouldShowMain={setShouldShowMain}
+        showQuickAddTask={showQuickAddTask}
+        setShowQuickAddTask={setShowQuickAddTask}
+      />
     </header>
   );
 };
