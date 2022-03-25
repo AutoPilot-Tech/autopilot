@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import {
   FaChevronDown,
   FaInbox,
-  FaRegCalendarAlt,
+  FaCheckSquare,
   FaRegCalendar,
+  FaConciergeBell,
+  FaCommentDots,
 } from 'react-icons/fa';
 import { Tracks } from '../Tracks';
 import { IndividualTrack } from '../IndividualTrack';
@@ -19,6 +21,19 @@ export const Sidebar = () => {
   return (
     <div className="sidebar" data-testid="sidebar">
       <ul className="sidebar__generic">
+      <li
+          data-testid="next_7"
+          className={active === 'next_7' ? 'active' : undefined}
+          onClick={() => {
+            setActive('next_7');
+            setSelectedTrack('NEXT_7');
+          }}
+        >
+          <span>
+            <FaRegCalendar />
+          </span>
+          <span>Today's Schedule</span>
+        </li>
         <li
           data-testid="inbox"
           className={active === 'inbox' ? 'active' : undefined}
@@ -41,23 +56,24 @@ export const Sidebar = () => {
           }}
         >
           <span>
-            <FaRegCalendar />
+            <FaCheckSquare />
           </span>
           <span>Today's Tasks</span>
         </li>
-        <li
-          data-testid="next_7"
-          className={active === 'next_7' ? 'active' : undefined}
+        {/* <li
+          data-testid="assistant"
+          className={active === 'assistant' ? 'active' : undefined}
           onClick={() => {
-            setActive('next_7');
-            setSelectedTrack('NEXT_7');
+            setActive('assistant');
+            setSelectedTrack('ASSISTANT');
           }}
         >
           <span>
-            <FaRegCalendarAlt />
+            <FaCommentDots />
           </span>
-          <span>Today's Schedule</span>
-        </li>
+          <span>Your Assistant</span>
+        </li> */}
+        
       </ul>
       <div
         className="sidebar__middle"

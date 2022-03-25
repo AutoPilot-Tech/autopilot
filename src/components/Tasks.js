@@ -14,6 +14,7 @@ export const Tasks = () => {
   const { tracks, selectedTrack } = useTracksValue();
   let { tasks } = useTasks(selectedTrack);
   const [showCalendar, setShowCalendar] = useState(false);
+  const [showChat, setShowChat] = useState(false);
 
   let trackName = '';
 
@@ -37,8 +38,12 @@ export const Tasks = () => {
   useEffect(() => {
     if (selectedTrack === 'NEXT_7') {
       setShowCalendar(true);
+      setShowChat(false);
+    } else if (selectedTrack === 'ASSISTANT') {
+      setShowChat(true);
     } else {
       setShowCalendar(false);
+      setShowChat
     }
   }, [selectedTrack])
 
