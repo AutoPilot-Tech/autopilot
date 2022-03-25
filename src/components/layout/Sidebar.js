@@ -14,6 +14,7 @@ export const Sidebar = () => {
   const { setSelectedTrack } = useTracksValue();
   const [active, setActive] = useState('inbox');
   const [showTracks, setShowTracks] = useState(true);
+  const [showRoutines, setShowRoutines] = useState(false);
 
   return (
     <div className="sidebar" data-testid="sidebar">
@@ -42,7 +43,7 @@ export const Sidebar = () => {
           <span>
             <FaRegCalendar />
           </span>
-          <span>Today's Schedule</span>
+          <span>Today's Tasks</span>
         </li>
         <li
           data-testid="next_7"
@@ -55,7 +56,7 @@ export const Sidebar = () => {
           <span>
             <FaRegCalendarAlt />
           </span>
-          <span>Next 7 Days</span>
+          <span>Today's Schedule</span>
         </li>
       </ul>
       <div
@@ -71,6 +72,18 @@ export const Sidebar = () => {
       </div>
       <ul className="sidebar__tracks">{showTracks && <Tracks />}</ul>
       <AddTrack />
+      <div
+        className="sidebar__middle"
+        onClick={() => {
+          setShowRoutines(!showRoutines);
+        }}
+        >
+          <span>
+            <FaChevronDown className={!showRoutines ? 'hidden-projects' : undefined }/>
+          </span>
+          <h2>Routines</h2>
+
+        </div>
     </div>
   );
 };
