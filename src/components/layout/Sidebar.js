@@ -98,7 +98,6 @@ export const Sidebar = () => {
             <FaChevronDown className={!showRoutines ? 'hidden-projects' : undefined }/>
           </span>
           <h2>Routines</h2>
-
         </div>
     </div>
   );

@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { FaRegListAlt, FaRegCalendarAlt } from 'react-icons/fa';
+import { FaRegListAlt, FaRegCalendarAlt, FaRegCalendar } from 'react-icons/fa';
 import moment from 'moment';
 import { db, auth } from '../firebase';
 import { useTracksValue } from '../context/tracks-context';
 import { TrackOverlay } from './TrackOverlay';
 import { TaskDate } from './TaskDate';
+import { TaskCalendar } from './TaskCalendar';
 
 export const AddTask = ({
   showAddTaskMain = true,
@@ -19,6 +20,10 @@ export const AddTask = ({
   const [showTrackOverlay, setShowTrackOverlay] = useState(false);
   const [showTaskDate, setShowTaskDate] = useState(false);
   const [user, setUser] = useState(null);
+  // Show the second modal for setting the task date and time
+  const [showTaskDateMain, setShowTaskDateMain] = useState(false);
+  // Show date picker with react-dates
+  const [showCalendarOverlay, setShowCalendarOverlay] = useState(false);
 
   const { selectedTrack } = useTracksValue();
 
@@ -30,8 +35,7 @@ export const AddTask = ({
       } else {
         setUser(null);
       }
-    }
-    );
+    });
     return unsubscribe;
   }, []);
 
@@ -111,6 +115,10 @@ export const AddTask = ({
             showTaskDate={showTaskDate}
             setShowTaskDate={setShowTaskDate}
           />
+          <TaskCalendar 
+            setShowCalendarOverlay={setShowCalendarOverlay}
+            showCalendarOverlay={showCalendarOverlay}
+          />
           <input
             className="add-task__content"
             data-testid="add-task-content"
@@ -142,6 +150,15 @@ export const AddTask = ({
               Cancel
             </span>
           )}
+          <span
+            className="add-task__calendar"
+            data-testid="show-calendar-overlay"
+            onClick={() => {
+              setShowCalendarOverlay(!showCalendarOverlay);
+            }}
+          >
+            <FaRegCalendar />
+          </span>
           <span
             className="add-task__project"
             data-testid="show-track-overlay"
