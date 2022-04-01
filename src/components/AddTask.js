@@ -64,6 +64,7 @@ export const AddTask = ({
           // bc we often will be setting start times and end times
           // startDate: taskStartDate,
           // endDate: taskEndDate,
+          date: collatedDate || taskDate,
           start: collatedDate || taskDate,
           end: collatedDate || taskDate,
           userId: user,
