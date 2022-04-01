@@ -8,7 +8,9 @@ export const Tracks = ({ activeValue = null }) => {
   return (
     <div>
         {tracks &&
-        tracks.map((track) => (
+        // filter out tracks that are true routine
+        tracks.filter((track) => !track.routine).map((track) => (
+        
       <li
         key={track.trackId}
         data-doc-id={track.docId}

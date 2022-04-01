@@ -11,6 +11,8 @@ import { Tracks } from '../Tracks';
 import { IndividualTrack } from '../IndividualTrack';
 import { AddTrack } from '../AddTrack';
 import { useTracksValue } from '../../context/tracks-context';
+import { Routines } from '../Routines';
+import { AddRoutine } from '../AddRoutine';
 
 export const Sidebar = () => {
   const { setSelectedTrack } = useTracksValue();
@@ -21,7 +23,7 @@ export const Sidebar = () => {
   return (
     <div className="sidebar" data-testid="sidebar">
       <ul className="sidebar__generic">
-      <li
+        <li
           data-testid="next_7"
           className={active === 'next_7' ? 'active' : undefined}
           onClick={() => {
@@ -73,7 +75,6 @@ export const Sidebar = () => {
           </span>
           <span>Your Assistant</span>
         </li> */}
-        
       </ul>
       <div
         className="sidebar__middle"
@@ -82,7 +83,9 @@ export const Sidebar = () => {
         }}
       >
         <span>
-          <FaChevronDown className={!showTracks ? 'hidden-projects' : undefined }/>
+          <FaChevronDown
+            className={!showTracks ? 'hidden-projects' : undefined}
+          />
         </span>
         <h2>Tracks</h2>
       </div>
@@ -93,12 +96,18 @@ export const Sidebar = () => {
         onClick={() => {
           setShowRoutines(!showRoutines);
         }}
-        >
-          <span>
-            <FaChevronDown className={!showRoutines ? 'hidden-projects' : undefined }/>
-          </span>
-          <h2>Routines</h2>
+      >
+        <span>
+          <FaChevronDown
+            className={!showRoutines ? 'hidden-projects' : undefined}
+          />
+        </span>
+        <h2>Routines</h2>
+
         </div>
+        <ul className="sidebar__tracks">{showRoutines && <Routines />}</ul>
+        <AddRoutine />
+      
     </div>
   );
 };

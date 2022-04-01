@@ -1,15 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { db, auth } from '../firebase';
+import React, { useEffect, useState } from 'react';
 import { generatePushId } from '../helpers';
+import { db, auth } from '../firebase';
 import { useTracksValue } from '../context/tracks-context';
 
-export const AddTrack = ({ shouldShow = false }) => {
+export const AddRoutine = ({ shouldShow = false }) => {
   const [show, setShow] = useState(shouldShow);
   const [trackName, setTrackName] = useState('');
   const [user, setUser] = useState(null);
-
-  const trackId = generatePushId();
-  const { tracks, setTracks } = useTracksValue();
 
   useEffect(() => {
     let unsubscribe = auth.onAuthStateChanged((user) => {
@@ -19,12 +16,14 @@ export const AddTrack = ({ shouldShow = false }) => {
       } else {
         setUser(null);
       }
-    }
-    );
+    });
     return unsubscribe;
   }, []);
 
-  const addTrack = () => {
+  const trackId = generatePushId();
+  const { tracks, setTracks } = useTracksValue();
+
+  const addRoutine = () => {
     trackName &&
       db
         .collection('tracks')
@@ -32,14 +31,14 @@ export const AddTrack = ({ shouldShow = false }) => {
           trackId,
           name: trackName,
           userId: user,
-          routine: false
+          routine: true,
         })
         .then(() => {
           tracks.push({
             trackId,
             name: trackName,
             userId: user,
-            routine: false
+            routine: true,
           });
           setTracks([...tracks]);
           setTrackName('');
@@ -61,10 +60,10 @@ export const AddTrack = ({ shouldShow = false }) => {
           <button
             className="add-track__submit"
             type="button"
-            onClick={() => addTrack()}
+            onClick={() => addRoutine()}
             data-testid="add-track-submit"
           >
-            Add Track
+            Add Routine
           </button>
           <span
             data-testid="hide-track-overlay"
@@ -82,7 +81,7 @@ export const AddTrack = ({ shouldShow = false }) => {
         onClick={() => setShow(!show)}
       >
         {' '}
-        Add Track{' '}
+        Add Routine{' '}
       </span>
     </div>
   );

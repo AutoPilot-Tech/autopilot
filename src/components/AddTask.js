@@ -118,6 +118,7 @@ export const AddTask = ({
           <TaskCalendar 
             setShowCalendarOverlay={setShowCalendarOverlay}
             showCalendarOverlay={showCalendarOverlay}
+            setTaskDate={setTaskDate}
           />
           <input
             className="add-task__content"

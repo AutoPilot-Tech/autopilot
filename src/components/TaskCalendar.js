@@ -6,6 +6,7 @@ import 'react-dates/lib/css/_datepicker.css';
 export function TaskCalendar({
   setShowCalendarOverlay,
   showCalendarOverlay,
+  setTaskDate,
 }) {
   const [date, setDate] = React.useState();
   const [focused, setFocused] = React.useState();
@@ -14,7 +15,7 @@ export function TaskCalendar({
       <div className="task__calendar">
         <SingleDatePicker
           date={date}
-          onDateChange={(date) => setDate(date)}
+          onDateChange={(date) => setTaskDate(date)}
           focused={focused}
           onFocusChange={({ focused }) => setFocused(focused)}
           id="date"
