@@ -5,26 +5,26 @@ import moment from 'moment';
 import { sortedObject } from '../helpers';
 import { useTracksValue } from '../context/tracks-context';
 
-
 // this is constantly getting new events for the calendar
 export const useEvents = () => {
   const [events, setEvents] = useState([]);
   // listen for changes to tasks collection in firebase
   useEffect(() => {
-    let unsubsribe = db.collection('tasks').onSnapshot((snapshot) => {
-      // snapshot is an array of all the tasks
-      const allEvents = snapshot.docs.map((task) => ({
-        id: task.id,
-        ...task.data(),
+    let userId = auth.currentUser.uid;
+    // when there is a new document in collection
+    let unsubscribe = db.collection('tasks').where('userId', '==', userId);
+    // set events with tasks
+    unsubscribe = unsubscribe.onSnapshot((snapshot) => {
+      const newEvents = snapshot.docs.map((event) => ({
+        id: event.id,
+        ...event.data(),
       }));
-      // sort the events by date
-      const sortedEvents = sortedObject(allEvents, 'date');
-      setEvents(sortedEvents);
+      setEvents(newEvents);
     });
-    return unsubsribe;
+    return () => unsubscribe();
   }, []);
+  return { events, setEvents };
 };
-
 
 // this is constantly getting new tracks
 export const useTasks = (selectedTrack) => {
@@ -42,7 +42,7 @@ export const useTasks = (selectedTrack) => {
         ? (unsubscribe = unsubscribe.where(
             'date',
             '==',
-            moment().format('DD/MM/YYYY')
+            moment().format('YYYY-MM-DD')
           ))
         : selectedTrack === 'INBOX' || selectedTrack === 0
         ? (unsubscribe = unsubscribe.where('date', '==', ''))

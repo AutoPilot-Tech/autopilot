@@ -10,7 +10,7 @@ export const TaskDate = ({ setTaskDate, showTaskDate, setShowTaskDate }) => {
           <li
             onClick={() => {
               setShowTaskDate(false);
-              setTaskDate(moment().format('DD/MM/YYYY'));
+              setTaskDate(moment().format('YYYY-MM-DD'));
             }}
             data-testid="task-date-overlay"
           >
@@ -22,7 +22,7 @@ export const TaskDate = ({ setTaskDate, showTaskDate, setShowTaskDate }) => {
           <li
             onClick={() => {
               setShowTaskDate(false);
-              setTaskDate(moment().add(1, 'day').format('DD/MM/YYYY'));
+              setTaskDate(moment().add(1, 'day').format('YYYY-MM-DD'));
             }}
             data-testid="task-date-tomorrow"
           >
@@ -34,7 +34,7 @@ export const TaskDate = ({ setTaskDate, showTaskDate, setShowTaskDate }) => {
           <li
             onClick={() => {
               setShowTaskDate(false);
-              setTaskDate(moment().add(7, 'days').format('DD/MM/YYYY'));
+              setTaskDate(moment().add(7, 'days').format('YYYY-MM-DD'));
             }}
             data-testid="task-date-next-week"
           >

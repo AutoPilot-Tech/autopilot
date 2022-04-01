@@ -46,9 +46,9 @@ export const AddTask = ({
     let collatedDate = '';
 
     if (trackId === 'TODAY') {
-      collatedDate = moment().format('DD/MM/YYYY');
+      collatedDate = moment().format('YYYY-MM-DD');
     } else if (trackId === 'NEXT_7') {
-      collatedDate = moment().add(7, 'days').format('DD/MM/YYYY');
+      collatedDate = moment().add(7, 'days').format('YYYY-MM-DD');
     }
     return (
       task &&
@@ -57,13 +57,15 @@ export const AddTask = ({
         .collection('tasks')
         .add({
           archived: false,
-          trackId,
-          task,
+          trackId: trackId,
+          task: task,
+          title: task,
           // need to figure out what to do with this, if its a collated
           // bc we often will be setting start times and end times
-          startDate: taskStartDate,
-          endDate: taskEndDate,
-          date: collatedDate || taskDate,
+          // startDate: taskStartDate,
+          // endDate: taskEndDate,
+          start: collatedDate || taskDate,
+          end: collatedDate || taskDate,
           userId: user,
         })
         .then(() => {
@@ -121,7 +123,7 @@ export const AddTask = ({
             showTaskDate={showTaskDate}
             setShowTaskDate={setShowTaskDate}
           />
-          <TaskCalendar 
+          <TaskCalendar
             setShowCalendarOverlay={setShowCalendarOverlay}
             showCalendarOverlay={showCalendarOverlay}
             setTaskDate={setTaskDate}

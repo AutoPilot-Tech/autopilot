@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState } from 'react';
 import { useTracks } from '../hooks';
-// import { useEvents } from '../hooks';
+import { useEvents } from '../hooks';
 
 // allows us to pass data down the component, without props.
 
@@ -10,12 +10,13 @@ export const TracksContext = createContext();
 export const TracksProvider = ({ children }) => {
   const { tracks, setTracks } = useTracks();
   const [selectedTrack, setSelectedTrack] = useState('INBOX');
+  const { events, setEvents } = useEvents();
   // add events here from useEvents custom hook:
   // const [events, setEvents] = useEvents();
 
   return (
     <TracksContext.Provider
-      value={{ tracks, setTracks, selectedTrack, setSelectedTrack }}
+      value={{ tracks, setTracks, selectedTrack, setSelectedTrack, events, setEvents }}
     >
       {children}
     </TracksContext.Provider>
