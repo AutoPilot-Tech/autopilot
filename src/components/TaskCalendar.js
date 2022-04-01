@@ -7,6 +7,8 @@ export function TaskCalendar({
   setShowCalendarOverlay,
   showCalendarOverlay,
   setTaskDate,
+  setTaskStartDate,
+  setTaskEndDate
 }) {
   const [date, setDate] = React.useState();
   const [focused, setFocused] = React.useState();
@@ -15,7 +17,10 @@ export function TaskCalendar({
       <div className="task__calendar">
         <SingleDatePicker
           date={date}
-          onDateChange={(date) => setTaskDate(date)}
+          onDateChange={(date) => {
+            console.log(date.format('DD/MM/YYYY'));
+            setTaskDate(date.format('DD/MM/YYYY'))}}
+
           focused={focused}
           onFocusChange={({ focused }) => setFocused(focused)}
           id="date"

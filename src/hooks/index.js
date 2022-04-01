@@ -5,6 +5,27 @@ import moment from 'moment';
 import { sortedObject } from '../helpers';
 import { useTracksValue } from '../context/tracks-context';
 
+
+// this is constantly getting new events for the calendar
+export const useEvents = () => {
+  const [events, setEvents] = useState([]);
+  // listen for changes to tasks collection in firebase
+  useEffect(() => {
+    let unsubsribe = db.collection('tasks').onSnapshot((snapshot) => {
+      // snapshot is an array of all the tasks
+      const allEvents = snapshot.docs.map((task) => ({
+        id: task.id,
+        ...task.data(),
+      }));
+      // sort the events by date
+      const sortedEvents = sortedObject(allEvents, 'date');
+      setEvents(sortedEvents);
+    });
+    return unsubsribe;
+  }, []);
+};
+
+
 // this is constantly getting new tracks
 export const useTasks = (selectedTrack) => {
   const [tasks, setTasks] = useState([]);

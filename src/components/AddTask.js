@@ -15,6 +15,8 @@ export const AddTask = ({
 }) => {
   const [task, setTask] = useState('');
   const [taskDate, setTaskDate] = useState('');
+  const [taskStartDate, setTaskStartDate] = useState('');
+  const [taskEndDate, setTaskEndDate] = useState('');
   const [track, setTrack] = useState('');
   const [showMain, setShowMain] = useState(shouldShowMain);
   const [showTrackOverlay, setShowTrackOverlay] = useState(false);
@@ -57,6 +59,10 @@ export const AddTask = ({
           archived: false,
           trackId,
           task,
+          // need to figure out what to do with this, if its a collated
+          // bc we often will be setting start times and end times
+          startDate: taskStartDate,
+          endDate: taskEndDate,
           date: collatedDate || taskDate,
           userId: user,
         })
@@ -119,6 +125,8 @@ export const AddTask = ({
             setShowCalendarOverlay={setShowCalendarOverlay}
             showCalendarOverlay={showCalendarOverlay}
             setTaskDate={setTaskDate}
+            setTaskStartDate={setTaskStartDate}
+            setTaskEndDate={setTaskEndDate}
           />
           <input
             className="add-task__content"
