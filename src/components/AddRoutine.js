@@ -7,6 +7,7 @@ export const AddRoutine = ({ shouldShow = false }) => {
   const [show, setShow] = useState(shouldShow);
   const [trackName, setTrackName] = useState('');
   const [user, setUser] = useState(null);
+  const [recurring, setRecurring] = useState(false);
 
   useEffect(() => {
     let unsubscribe = auth.onAuthStateChanged((user) => {
@@ -65,6 +66,18 @@ export const AddRoutine = ({ shouldShow = false }) => {
           >
             Add Routine
           </button>
+          {/* checkbox with label */}
+          <label className="add-track__recurring">
+            <input
+              type="checkbox"
+              checked={recurring}
+              onChange={() => setRecurring(!recurring)}
+              className="add-track__recurring-input"
+            />
+            <span className="add-track__recurring-label">Recurring?</span>
+          </label>
+        
+          
           <span
             data-testid="hide-track-overlay"
             className="add-track__cancel"
