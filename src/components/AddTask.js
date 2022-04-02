@@ -7,6 +7,7 @@ import { TrackOverlay } from './TrackOverlay';
 import { TaskDate } from './TaskDate';
 import DateTimePicker from '@mui/lab/DateTimePicker';
 import TextField from '@mui/material/TextField';
+import { amplitude } from '../utilities/amplitude';
 
 export const AddTask = ({
   showAddTaskMain = true,
@@ -42,6 +43,10 @@ export const AddTask = ({
     });
     return unsubscribe;
   }, []);
+
+  const logClick = () => {
+    amplitude.getInstance().logEvent('regularAddTaskClick');
+  }
 
   const addTask = () => {
     const trackId = track || selectedTrack;
@@ -92,7 +97,10 @@ export const AddTask = ({
           onClick={() => setShowMain(!showMain)}
         >
           <span className="add-task__plus">+</span>
-          <span className="add-task__text">Add Task</span>
+          <span className="add-task__text"
+            onClick={logClick}
+          
+          >Add Task</span>
         </div>
       )}
 

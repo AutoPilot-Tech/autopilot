@@ -13,12 +13,18 @@ import { AddTrack } from '../AddTrack';
 import { useTracksValue } from '../../context/tracks-context';
 import { Routines } from '../Routines';
 import { AddRoutine } from '../AddRoutine';
+import { amplitude } from '../../utilities/amplitude';
+
 
 export const Sidebar = () => {
   const { setSelectedTrack } = useTracksValue();
   const [active, setActive] = useState('inbox');
   const [showTracks, setShowTracks] = useState(true);
   const [showRoutines, setShowRoutines] = useState(true);
+
+  const logClick = (event) => {
+    amplitude.getInstance().logEvent(event);
+  }
 
   return (
     <div className="sidebar" data-testid="sidebar">
@@ -29,12 +35,13 @@ export const Sidebar = () => {
           onClick={() => {
             setActive('next_7');
             setSelectedTrack('NEXT_7');
+            logClick('sideBarCalendarClick');
           }}
         >
           <span>
             <FaRegCalendar />
           </span>
-          <span>Today's Schedule</span>
+          <span>Daily Schedule</span>
         </li>
         <li
           data-testid="inbox"
@@ -42,6 +49,7 @@ export const Sidebar = () => {
           onClick={() => {
             setActive('inbox');
             setSelectedTrack('INBOX');
+            logClick('sideBarInboxClick');
           }}
         >
           <span>
@@ -55,6 +63,7 @@ export const Sidebar = () => {
           onClick={() => {
             setActive('today');
             setSelectedTrack('TODAY');
+            logClick('sideBarTodaysTasksClick');
           }}
         >
           <span>
@@ -80,6 +89,7 @@ export const Sidebar = () => {
         className="sidebar__middle"
         onClick={() => {
           setShowTracks(!showTracks);
+          logClick('sideBarShowTracksClick');
         }}
       >
         <span>
@@ -95,6 +105,7 @@ export const Sidebar = () => {
         className="sidebar__middle"
         onClick={() => {
           setShowRoutines(!showRoutines);
+          logClick('sideBarShowRoutinesClick');
         }}
       >
         <span>

@@ -88,7 +88,7 @@ export const Tasks = () => {
               <li key={`${task.id}`}>
                 <Checkbox id={task.id} />
                 <span>{task.task}</span>
-                <span
+                {/* <span
                   className="tasks__task-delete"
                   onKeyDown={() => setShowConfirm(!showConfirm)}
                   onClick={() => setShowConfirm(!showConfirm)}
@@ -113,7 +113,7 @@ export const Tasks = () => {
                         </div>
                       </div>
                     )}
-                  </span>
+                  </span> */}
               </li>
             ))}
           </ul>

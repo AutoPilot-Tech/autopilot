@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { generatePushId } from '../helpers';
 import { db, auth } from '../firebase';
 import { useTracksValue } from '../context/tracks-context';
+import { amplitude } from '../utilities/amplitude';
 
 export const AddRoutine = ({ shouldShow = false }) => {
   const [show, setShow] = useState(shouldShow);
@@ -23,6 +24,10 @@ export const AddRoutine = ({ shouldShow = false }) => {
 
   const trackId = generatePushId();
   const { tracks, setTracks } = useTracksValue();
+
+  const logClick = () => {
+    amplitude.getInstance().logEvent('sideBarAddRoutineClick');
+  };
 
   const addRoutine = () => {
     trackName &&
@@ -61,7 +66,10 @@ export const AddRoutine = ({ shouldShow = false }) => {
           <button
             className="add-track__submit"
             type="button"
-            onClick={() => addRoutine()}
+            onClick={() => {
+              addRoutine();
+              logClick();
+            }}
             data-testid="add-track-submit"
           >
             Add Routine
@@ -76,8 +84,7 @@ export const AddRoutine = ({ shouldShow = false }) => {
             />
             <span className="add-track__recurring-label">Recurring?</span>
           </label>
-        
-          
+
           <span
             data-testid="hide-track-overlay"
             className="add-track__cancel"

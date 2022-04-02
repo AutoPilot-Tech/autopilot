@@ -3,11 +3,16 @@ import { FaMoon, FaUserAlt } from 'react-icons/fa';
 import { AddTask } from '../AddTask';
 import { DropDown } from '../DropDown';
 import { userSubmenu } from '../../constants/index';
+import { amplitude } from '../../utilities/amplitude';
 
 export const Header = ({ darkMode, setDarkMode }) => {
   const [shouldShowMain, setShouldShowMain] = useState(false);
   const [showQuickAddTask, setShowQuickAddTask] = useState(false);
   const [showDropDown, setShowDropDown] = useState(false);
+
+  const logClick = () => {
+    amplitude.getInstance().logEvent('quickAddTaskClicked');
+  }
 
   return (
     <header className="header" data-testid="header">
@@ -23,6 +28,7 @@ export const Header = ({ darkMode, setDarkMode }) => {
               onClick={() => {
                 setShowQuickAddTask(true);
                 setShouldShowMain(true);
+                logClick();
               }}
             >
               +

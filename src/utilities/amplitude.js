@@ -1,21 +1,11 @@
-import amplitude from 'amplitude-js';
+import amplitude from "amplitude-js";
 
-export const initAmplitude = () => {
-  amplitude.getInstance().init(process.env.REACT_APP_AMPLITUDE);
-};
+const API_KEY = 'd63e5936e1eda3b8d5a64cc3737a856e';
 
-export const setAmplitudeUserDevice = installationToken => {
-  amplitude.getInstance().setDeviceId(installationToken);
-};
-
-export const setAmplitudeUserId = userId => {
-  amplitude.getInstance().setUserId(userId);
-};
-
-export const setAmplitudeUserProperties = properties => {
-  amplitude.getInstance().setUserProperties(properties);
-};
-
-export const sendAmplitudeData = (eventType, eventProperties) => {
-  amplitude.getInstance().logEvent(eventType, eventProperties);
-};
+amplitude.getInstance().init(API_KEY, null, {
+// optional configuration options
+  includeUtm: true,
+  includeGclid: true,
+  includeReferrer: true,
+});
+export { amplitude };

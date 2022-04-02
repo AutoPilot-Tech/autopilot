@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { db, auth } from '../firebase';
 import { generatePushId } from '../helpers';
 import { useTracksValue } from '../context/tracks-context';
+import { amplitude } from '../utilities/amplitude';
 
 export const AddTrack = ({ shouldShow = false }) => {
   const [show, setShow] = useState(shouldShow);
@@ -23,6 +24,10 @@ export const AddTrack = ({ shouldShow = false }) => {
     );
     return unsubscribe;
   }, []);
+
+  const logClick = () => {
+    amplitude.getInstance().logEvent('sideBarAddTrackClick');
+  }
 
   const addTrack = () => {
     trackName &&
