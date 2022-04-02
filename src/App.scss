@@ -48,7 +48,7 @@ fafafa
     box-shadow: $generic-box-shadow;
     position: aboslute;
     width: 100%;
-    z-index: 1;
+    z-index: 99;
     top: 85px;
     border-radius: 3px;
 }
@@ -95,7 +95,7 @@ fafafa
 
 @mixin cancel() {
     color: #555;
-    curso: pointer;
+    cursor: pointer;
     font-size: 14px;
     margin: 2px 5px;
 }
@@ -666,4 +666,6 @@ header {
 .dropdown--hidden {
     display: none;
 }
+
+
 
