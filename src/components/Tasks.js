@@ -11,6 +11,9 @@ import { Calendar } from '../../src/components/Calendar';
 import { getRoutines } from '../helpers';
 import { findRoutine } from '../helpers';
 import { RoutineSettings } from './RoutineSettings';
+import { FaTrashAlt } from 'react-icons/fa';
+import { db } from '../firebase';
+
 
 // this just gets the tasks and renders them
 export const Tasks = () => {
@@ -18,6 +21,8 @@ export const Tasks = () => {
   let { tasks } = useTasks(selectedTrack);
   const [showCalendar, setShowCalendar] = useState(false);
   const [showChat, setShowChat] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+
 
   let trackName = '';
 
@@ -37,10 +42,13 @@ export const Tasks = () => {
     trackName = getTitle(tracks, selectedTrack);
   }
 
-  // filter tracks by routine is true
-  // let routines = tracks.filter((track) => track.routine);
-  // // if the trackName is in routines, then set isRoutine to true
-  //
+  const deleteTask = (docId) => {
+    db.collection('tasks').doc(docId).delete()
+    .then(() => {
+      console.log('task deleted');
+      
+    });
+  };
 
   // When selectedTrack changes, we want to check to see if it's the calendar
   useEffect(() => {
@@ -80,6 +88,32 @@ export const Tasks = () => {
               <li key={`${task.id}`}>
                 <Checkbox id={task.id} />
                 <span>{task.task}</span>
+                <span
+                  className="tasks__task-delete"
+                  onKeyDown={() => setShowConfirm(!showConfirm)}
+                  onClick={() => setShowConfirm(!showConfirm)}
+                  >
+                    <FaTrashAlt />
+                    {showConfirm && (
+                      <div className="task-delete-modal">
+                        <div className="task-delete-modal__inner">
+                          <p>
+                            Are you sure you want to delete this task? This cannot be
+                            undone.
+                          </p>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              deleteTask(task.id);
+                            }}
+                          >
+                            Delete
+                          </button>
+                          <span onClick={() => setShowConfirm(!showConfirm)}>Cancel</span>
+                        </div>
+                      </div>
+                    )}
+                  </span>
               </li>
             ))}
           </ul>

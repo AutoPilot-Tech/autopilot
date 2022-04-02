@@ -22,7 +22,6 @@ export const RoutineSettings = () => {
               value={value}
               onChange={(newValue) => {
                 setValue(newValue);
-                console.log('start date',newValue.format())
                 setRoutineStartDate(newValue.format());
               }}
             />
@@ -32,7 +31,6 @@ export const RoutineSettings = () => {
               value={value}
               onChange={(newValue) => {
                 setValue(newValue);
-                console.log('end date:', newValue.format())
                 setRoutineEndDate(newValue.format());
               }}
             />
