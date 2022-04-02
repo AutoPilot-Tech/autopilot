@@ -2,12 +2,19 @@ import React, { useState } from 'react'
 import DateTimePicker from '@mui/lab/DateTimePicker';
 import TextField from '@mui/material/TextField';
 import moment from 'moment';
+import { amplitude } from '../utilities/amplitude';
+import { auth } from '../firebase';
 
 export const RoutineSettings = () => {
     const [value, setValue] = useState('');
     const [routineStartDate, setRoutineStartDate] = useState('');
     const [routineEndDate, setRoutineEndDate] = useState('');
     const [routineRecurring, setRoutineRecurring] = useState(false);
+
+    const logClick = (event) => {
+      let userId = auth.currentUser.uid;
+      amplitude.getInstance().logEvent(event, userId);
+    };
 
 
   return (
@@ -24,6 +31,9 @@ export const RoutineSettings = () => {
                 setValue(newValue);
                 setRoutineStartDate(newValue.format());
               }}
+              onClick={() => {
+                logClick('routineSetStartTime');
+              }}
             />
             <DateTimePicker
               renderInput={(props) => <TextField {...props} />}
@@ -32,6 +42,9 @@ export const RoutineSettings = () => {
               onChange={(newValue) => {
                 setValue(newValue);
                 setRoutineEndDate(newValue.format());
+              }}
+              onClick={() => {
+                logClick('routineSetEndTime');
               }}
             />
             {/* set routine to recurring with a checkbox */}

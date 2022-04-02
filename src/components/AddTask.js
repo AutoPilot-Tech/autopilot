@@ -44,9 +44,9 @@ export const AddTask = ({
     return unsubscribe;
   }, []);
 
-  const logClick = () => {
+  const logClick = (event) => {
     let userId = auth.currentUser.uid;
-    amplitude.getInstance().logEvent('regularAddTaskClick', userId);
+    amplitude.getInstance().logEvent(event, userId);
   }
 
   const addTask = () => {
@@ -99,7 +99,7 @@ export const AddTask = ({
         >
           <span className="add-task__plus">+</span>
           <span className="add-task__text"
-            onClick={logClick}
+            onClick={logClick('regularAddTaskClick')}
           
           >Add Task</span>
         </div>
@@ -145,6 +145,9 @@ export const AddTask = ({
                 console.log('start date',newValue.format())
                 setTaskStartDate(newValue.format());
               }}
+              onClick={() => {
+                logClick('taskStartDateClick')
+              }}
             />
             <DateTimePicker
               renderInput={(props) => <TextField {...props} />}
@@ -154,6 +157,9 @@ export const AddTask = ({
                 setValue(newValue);
                 console.log('end date:', newValue.format())
                 setTaskEndDate(newValue.format());
+              }}
+              onClick={() => {
+                logClick('taskEndDateClick')
               }}
             />
 
