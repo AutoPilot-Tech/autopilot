@@ -11,12 +11,12 @@ export const TracksProvider = ({ children }) => {
   const { tracks, setTracks } = useTracks();
   const [selectedTrack, setSelectedTrack] = useState('INBOX');
   const { events, setEvents } = useEvents();
-  // add events here from useEvents custom hook:
-  // const [events, setEvents] = useEvents();
+  const [isRoutine, setIsRoutine] = useState(false);
+
 
   return (
     <TracksContext.Provider
-      value={{ tracks, setTracks, selectedTrack, setSelectedTrack, events, setEvents }}
+      value={{ tracks, setTracks, selectedTrack, setSelectedTrack, events, setEvents, isRoutine, setIsRoutine }}
     >
       {children}
     </TracksContext.Provider>

@@ -15,6 +15,15 @@ export const collatedTasksExist = (selectedTrack) => {
   return collatedTasks.find((task) => task.key === selectedTrack);
 };
 
+export const getRoutines = (tracks) => {
+  return tracks.filter((track) => track.routine);
+}
+
+export const findRoutineName = (routines, trackName) => {
+  let routine = routines.find((routine) => routine.name === trackName);
+  return routine.name;
+}
+
 // this is just taken from online, its similar to how firebase does it
 export const generatePushId = (() => {
   const PUSH_CHARS =

@@ -4,7 +4,7 @@ import { IndividualTrack } from './IndividualTrack';
 
 export const Tracks = ({ activeValue = null }) => {
   const [active, setActive] = useState(activeValue);
-  const { tracks, setSelectedTrack } = useTracksValue();
+  const { tracks, setSelectedTrack, isRoutine, setIsRoutine } = useTracksValue();
   return (
     <div>
         {tracks &&
@@ -25,6 +25,7 @@ export const Tracks = ({ activeValue = null }) => {
         onClick={() => {
           setActive(track.trackId);
           setSelectedTrack(track.trackId);
+          setIsRoutine(false);
         }}
       >
         <IndividualTrack track={track} />

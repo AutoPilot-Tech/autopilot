@@ -8,14 +8,16 @@ import { useTracksValue } from '../context/tracks-context';
 import { AddTask } from './AddTask';
 import { auth } from '../firebase';
 import { Calendar } from '../../src/components/Calendar';
+import { getRoutines } from '../helpers';
+import { findRoutine } from '../helpers';
+import { RoutineSettings } from './RoutineSettings';
 
 // this just gets the tasks and renders them
 export const Tasks = () => {
-  const { tracks, selectedTrack } = useTracksValue();
+  const { tracks, selectedTrack, isRoutine, setIsRoutine } = useTracksValue();
   let { tasks } = useTasks(selectedTrack);
   const [showCalendar, setShowCalendar] = useState(false);
   const [showChat, setShowChat] = useState(false);
-  const [isRoutine, setIsRoutine] = useState(false);
 
   let trackName = '';
 
@@ -35,25 +37,28 @@ export const Tasks = () => {
     trackName = getTitle(tracks, selectedTrack);
   }
 
+  // filter tracks by routine is true
+  // let routines = tracks.filter((track) => track.routine);
+  // // if the trackName is in routines, then set isRoutine to true
+  //
+
   // When selectedTrack changes, we want to check to see if it's the calendar
   useEffect(() => {
     if (selectedTrack === 'NEXT_7') {
       setShowCalendar(true);
       setShowChat(false);
     } else if (selectedTrack === 'ASSISTANT') {
+      // this is for the future.
       setShowChat(true);
     } else {
       setShowCalendar(false);
-      setShowChat
+      setShowChat;
     }
-  }, [selectedTrack])
-
-  // We want to check if the selected track is a routine, then change the state
-  
+    console.log('isRoutine', isRoutine);
+    
+  }, [selectedTrack]);
 
   useEffect(() => {
-    // BUG: We are not getting the correct trackName. Maybe it needs to be in a useEffect?
-    // This shows the selected track in the tab on the browser
     document.title = `Autopilot: ${trackName}`;
   }, [trackName]);
 
@@ -61,16 +66,24 @@ export const Tasks = () => {
 
   return (
     <div>
-      { showCalendar ? <Calendar /> : (
+      {showCalendar ? (
+        <Calendar />
+      ) : (
         <div className="tasks" data-testid="tasks">
-        <h2 data-test-id="track-name">{trackName}</h2><ul className="tasks__list">
-          {tasks.map(task => (
-            <li key={`${task.id}`}>
-              <Checkbox id={task.id} />
-              <span>{task.task}</span>
-            </li>
-          ))}
-        </ul><AddTask />
+          <h2 data-test-id="track-name">{trackName}</h2>
+          {isRoutine ? (
+            <RoutineSettings />
+          ) : <></>}
+
+          <ul className="tasks__list">
+            {tasks.map((task) => (
+              <li key={`${task.id}`}>
+                <Checkbox id={task.id} />
+                <span>{task.task}</span>
+              </li>
+            ))}
+          </ul>
+          <AddTask />
         </div>
       )}
     </div>

@@ -5,11 +5,8 @@ import { db, auth } from '../firebase';
 import { useTracksValue } from '../context/tracks-context';
 import { TrackOverlay } from './TrackOverlay';
 import { TaskDate } from './TaskDate';
-import { TaskCalendar } from './TaskCalendar';
 import DateTimePicker from '@mui/lab/DateTimePicker';
 import TextField from '@mui/material/TextField';
-import { LocalizationProvider } from '@mui/lab';
-import AdapterMoment from '@mui/lab/AdapterMoment';
 
 export const AddTask = ({
   showAddTaskMain = true,
