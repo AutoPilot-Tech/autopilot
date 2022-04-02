@@ -18,7 +18,7 @@ export const Sidebar = () => {
   const { setSelectedTrack } = useTracksValue();
   const [active, setActive] = useState('inbox');
   const [showTracks, setShowTracks] = useState(true);
-  const [showRoutines, setShowRoutines] = useState(false);
+  const [showRoutines, setShowRoutines] = useState(true);
 
   return (
     <div className="sidebar" data-testid="sidebar">

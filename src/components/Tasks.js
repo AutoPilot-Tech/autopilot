@@ -15,6 +15,7 @@ export const Tasks = () => {
   let { tasks } = useTasks(selectedTrack);
   const [showCalendar, setShowCalendar] = useState(false);
   const [showChat, setShowChat] = useState(false);
+  const [isRoutine, setIsRoutine] = useState(false);
 
   let trackName = '';
 
@@ -47,7 +48,11 @@ export const Tasks = () => {
     }
   }, [selectedTrack])
 
+  // We want to check if the selected track is a routine, then change the state
+  
+
   useEffect(() => {
+    // BUG: We are not getting the correct trackName. Maybe it needs to be in a useEffect?
     // This shows the selected track in the tab on the browser
     document.title = `${trackName}: Autopilot`;
   }, []);
