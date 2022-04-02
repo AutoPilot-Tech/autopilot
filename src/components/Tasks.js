@@ -54,8 +54,8 @@ export const Tasks = () => {
   useEffect(() => {
     // BUG: We are not getting the correct trackName. Maybe it needs to be in a useEffect?
     // This shows the selected track in the tab on the browser
-    document.title = `${trackName}: Autopilot`;
-  }, []);
+    document.title = `Autopilot: ${trackName}`;
+  }, [trackName]);
 
   // if setCalendar is true, then we will show the calendar
 
