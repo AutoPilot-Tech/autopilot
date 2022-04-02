@@ -4,14 +4,16 @@ import { AddTask } from '../AddTask';
 import { DropDown } from '../DropDown';
 import { userSubmenu } from '../../constants/index';
 import { amplitude } from '../../utilities/amplitude';
+import { auth } from '../../firebase';
 
 export const Header = ({ darkMode, setDarkMode }) => {
   const [shouldShowMain, setShouldShowMain] = useState(false);
   const [showQuickAddTask, setShowQuickAddTask] = useState(false);
   const [showDropDown, setShowDropDown] = useState(false);
 
-  const logClick = () => {
-    amplitude.getInstance().logEvent('quickAddTaskClicked');
+  const logClick = (event) => {
+    let userId = auth.currentUser.uid;
+    amplitude.getInstance().logEvent(event, userId);
   }
 
   return (
@@ -28,7 +30,7 @@ export const Header = ({ darkMode, setDarkMode }) => {
               onClick={() => {
                 setShowQuickAddTask(true);
                 setShouldShowMain(true);
-                logClick();
+                logClick('quickAddTaskClicked');
               }}
             >
               +
@@ -38,6 +40,7 @@ export const Header = ({ darkMode, setDarkMode }) => {
               data-testid="dark-mode-action"
               onClick={() => {
                 setDarkMode(!darkMode);
+                logClick('darkModeClicked');
               }}
             >
               <FaMoon />

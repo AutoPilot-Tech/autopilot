@@ -14,7 +14,7 @@ import { useTracksValue } from '../../context/tracks-context';
 import { Routines } from '../Routines';
 import { AddRoutine } from '../AddRoutine';
 import { amplitude } from '../../utilities/amplitude';
-
+import { auth } from '../../firebase';
 
 export const Sidebar = () => {
   const { setSelectedTrack } = useTracksValue();
@@ -23,7 +23,8 @@ export const Sidebar = () => {
   const [showRoutines, setShowRoutines] = useState(true);
 
   const logClick = (event) => {
-    amplitude.getInstance().logEvent(event);
+    let userId = auth.currentUser.uid;
+    amplitude.getInstance().logEvent(event, userId);
   }
 
   return (

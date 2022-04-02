@@ -45,7 +45,8 @@ export const AddTask = ({
   }, []);
 
   const logClick = () => {
-    amplitude.getInstance().logEvent('regularAddTaskClick');
+    let userId = auth.currentUser.uid;
+    amplitude.getInstance().logEvent('regularAddTaskClick', userId);
   }
 
   const addTask = () => {

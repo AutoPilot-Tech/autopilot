@@ -26,7 +26,8 @@ export const AddRoutine = ({ shouldShow = false }) => {
   const { tracks, setTracks } = useTracksValue();
 
   const logClick = () => {
-    amplitude.getInstance().logEvent('sideBarAddRoutineClick');
+    let userId = auth.currentUser.uid;
+    amplitude.getInstance().logEvent('sideBarAddRoutineClick', userId);
   };
 
   const addRoutine = () => {

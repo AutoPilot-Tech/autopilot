@@ -26,7 +26,8 @@ export const AddTrack = ({ shouldShow = false }) => {
   }, []);
 
   const logClick = () => {
-    amplitude.getInstance().logEvent('sideBarAddTrackClick');
+    let userId = auth.currentUser.uid;
+    amplitude.getInstance().logEvent('sideBarAddTrackClick', userId);
   }
 
   const addTrack = () => {
