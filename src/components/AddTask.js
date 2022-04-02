@@ -6,6 +6,10 @@ import { useTracksValue } from '../context/tracks-context';
 import { TrackOverlay } from './TrackOverlay';
 import { TaskDate } from './TaskDate';
 import { TaskCalendar } from './TaskCalendar';
+import DateTimePicker from '@mui/lab/DateTimePicker';
+import TextField from '@mui/material/TextField';
+import { LocalizationProvider } from '@mui/lab';
+import AdapterMoment from '@mui/lab/AdapterMoment';
 
 export const AddTask = ({
   showAddTaskMain = true,
@@ -26,6 +30,7 @@ export const AddTask = ({
   const [showTaskDateMain, setShowTaskDateMain] = useState(false);
   // Show date picker with react-dates
   const [showCalendarOverlay, setShowCalendarOverlay] = useState(false);
+  const [value, setValue] = useState('');
 
   const { selectedTrack } = useTracksValue();
 
@@ -65,8 +70,8 @@ export const AddTask = ({
           // startDate: taskStartDate,
           // endDate: taskEndDate,
           date: collatedDate || taskDate,
-          start: collatedDate || taskDate,
-          end: collatedDate || taskDate,
+          start: taskStartDate,
+          end: taskEndDate,
           userId: user,
         })
         .then(() => {
@@ -124,13 +129,28 @@ export const AddTask = ({
             showTaskDate={showTaskDate}
             setShowTaskDate={setShowTaskDate}
           />
-          <TaskCalendar
-            setShowCalendarOverlay={setShowCalendarOverlay}
-            showCalendarOverlay={showCalendarOverlay}
-            setTaskDate={setTaskDate}
-            setTaskStartDate={setTaskStartDate}
-            setTaskEndDate={setTaskEndDate}
-          />
+
+            <DateTimePicker
+              renderInput={(props) => <TextField {...props} />}
+              label="Start Date"
+              value={value}
+              onChange={(newValue) => {
+                setValue(newValue);
+                console.log('start date',newValue.format())
+                setTaskStartDate(newValue.format());
+              }}
+            />
+            <DateTimePicker
+              renderInput={(props) => <TextField {...props} />}
+              label="End Date"
+              value={value}
+              onChange={(newValue) => {
+                setValue(newValue);
+                console.log('end date:', newValue.format())
+                setTaskEndDate(newValue.format());
+              }}
+            />
+
           <input
             className="add-task__content"
             data-testid="add-task-content"
@@ -162,15 +182,7 @@ export const AddTask = ({
               Cancel
             </span>
           )}
-          <span
-            className="add-task__calendar"
-            data-testid="show-calendar-overlay"
-            onClick={() => {
-              setShowCalendarOverlay(!showCalendarOverlay);
-            }}
-          >
-            <FaRegCalendar />
-          </span>
+
           <span
             className="add-task__project"
             data-testid="show-track-overlay"

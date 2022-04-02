@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import AdapterMoment from '@mui/lab/AdapterMoment';
+import  { LocalizationProvider } from '@mui/lab';
 
 import { Header } from '../components/layout/Header';
 import { Content } from '../components/layout/Content';
@@ -28,14 +30,16 @@ export const Dashboard = ({darkModeDefault = true }) => {
   return (
     // if loading is true, show loading component
     loading ? <Loading /> : (
-      
-      <TracksProvider>
-        <main data-testid="application"
-        className={darkMode ? 'darkmode' : undefined}>
-          <Header darkMode={darkMode} setDarkMode={setDarkMode} />
-          <Content />
-        </main>
-       </TracksProvider>
+      <LocalizationProvider dateAdapter={AdapterMoment}>
+
+        <TracksProvider>
+          <main data-testid="application"
+          className={darkMode ? 'darkmode' : undefined}>
+            <Header darkMode={darkMode} setDarkMode={setDarkMode} />
+            <Content />
+          </main>
+        </TracksProvider>
+      </LocalizationProvider>
     )
   );
 };
