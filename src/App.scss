@@ -19,7 +19,7 @@ body {
     font-family: 'Roboto', sans-serif;
     color: white;
     font-smooth: always;
-    background-color: #13111A;
+    background-color: #1F1E1F;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 
@@ -137,8 +137,9 @@ fafafa
     header {
       -webkit-box-shadow: 0 1px 3px 0 rgba(0,0,0,0.15);
       box-shadow: 0 1px 3px 0 rgba(0,0,0,0.15);
-      background-image: linear-gradient(to right, #4F56FF, #FF4980);
-      border-color: transparent;
+    //   background-image: linear-gradient(to right, #4F56FF, #FF4980);
+      background-color: $generic-bg;
+    //   border-color: transparent;
     }
 
     // .sidebar {
@@ -160,7 +161,7 @@ header {
     background-color: $generic-bg;
     transition: height 200ms ease-in;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
-    height: 52px;
+    height: 44px;
     z-index: 400;
     position: fixed;
     top: 0;
@@ -177,9 +178,9 @@ header {
         grid-template-rows: 1fr;
         grid-column-gap: 0px;
         grid-row-gap: 0px;
-        max-width: 922px;
-        margin: auto;
-        height: 52px;
+        max-width: 100%;
+        margin: 0 100px 0 60px;
+        height: 44px;
 
         p, li {
             color: white;
@@ -194,6 +195,8 @@ header {
                 img {
                     width: 38px;
                 }
+
+                
             }
             &.settings {
                 grid-area: 1/3;
@@ -220,7 +223,7 @@ header {
 
                         &.settings__add {
                             margin-right: 30px;
-                            padding-bottom: 6px;
+                            padding-bottom: 1px;
                             font-size: 30px;
                         }
                         &.settings__user {
@@ -240,14 +243,15 @@ header {
 =========================================== */
 .sidebar {
     @include no-select();
-    width: 266px;
+    width: 350px;
     height: calc(100vh);
     padding-top: 74px;
     position: fixed;
     overflow-y: hidden;
     overflow-x: hidden;
-    border-right: $generic-border;
-    background-color: #13111A;
+    // border-right: $generic-border;
+    background-color: #343234;
+    padding-left: 60px;
 
     @include mq('900 px') {
         display: none;
@@ -277,7 +281,8 @@ header {
 
             &.active, &:hover {
                 font-weight: bold;
-                background-color: #302C3F;
+                background-color: #494649;
+                border-radius: 5px;
             }
             &:nth-child(1) {
                 .sidebar__dot {
@@ -323,7 +328,7 @@ header {
         margin-top: 20px;
         margin-bottom: 20px;
         display: flex;
-        border-bottom: $generic-border;
+        // border-bottom: $generic-border;
         padding-left: 10px;
         cursor: pointer;
 
@@ -367,7 +372,8 @@ header {
         }
         &.active, &:hover {
             font-weight: bold;
-            background-color: #302C3F;
+            background-color: #494649;
+            border-radius: 5px;
         }
     }
 
@@ -415,22 +421,20 @@ header {
 .content {
     display: grid;
     grid-template-columns: 1fr auto;
-    max-width: 922px;
-    margin: auto;
+    max-width: 80%;
 }
 
 
 /* Tasks 
 =========================================== */
 .tasks {
-    width: 656px;
-    background-color: #302C3F;
+    width: 100%;
+    background-color: #1F1E1F;
     margin-left: 266px;
-    border-right: $generic-border;
     min-height: calc(100vh);
     vertical-align: top;
-    padding-left: 40px;
-    padding-right: 40px;
+    padding-left: 200px;
+    padding-right: 170px;
     padding-top: 80px;
     padding-bottom: 84px;
 
@@ -442,7 +446,7 @@ header {
     h2 {
         font-size: 20px;
         font-weight: normal;
-        margin: 0 30px 20px 0;
+        margin: 30px 30px 20px 0;
     }
 
     .add-task {
@@ -457,7 +461,7 @@ header {
         padding-bottom: 10px;
         font-size: 14px;
         list-style-type: none;
-        border-bottom: 1px solid #f0f0f0;
+        border-bottom: $generic-border;
 
         .checkbox-holder{
             margin-right: 20px;
@@ -666,6 +670,7 @@ header {
 .dropdown--hidden {
     display: none;
 }
+
 
 
 

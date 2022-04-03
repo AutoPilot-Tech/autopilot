@@ -20,7 +20,7 @@ export const Header = ({ darkMode, setDarkMode }) => {
     <header className="header" data-testid="header">
       <nav>
         <div className="logo">
-          <img src="../../images/logo.png" alt="Autopilot" />
+            <img src="../../images/logo.png" alt="Autopilot" />
         </div>
         <div className="settings">
           <ul>
@@ -35,7 +35,7 @@ export const Header = ({ darkMode, setDarkMode }) => {
             >
               +
             </li>
-            <li
+            {/* <li
               className="settings__darkmode"
               data-testid="dark-mode-action"
               onClick={() => {
@@ -44,7 +44,7 @@ export const Header = ({ darkMode, setDarkMode }) => {
               }}
             >
               <FaMoon />
-            </li>
+            </li> */}
             {/* This is where they can log out, or go to settings. */}
             <li className="settings__user" data-testid="user-action">
               <FaUserAlt role="button" onClick={() => {
