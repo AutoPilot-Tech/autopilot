@@ -6,6 +6,7 @@
 
 html {
     box-sizing: border-box;
+    overflow: hidden;
 }
 *, *:before, *:after {
     box-sizing: inherit;
@@ -22,6 +23,7 @@ body {
     background-color: #1F1E1F;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow: hidden;
 
 }
 
@@ -137,9 +139,9 @@ fafafa
     header {
       -webkit-box-shadow: 0 1px 3px 0 rgba(0,0,0,0.15);
       box-shadow: 0 1px 3px 0 rgba(0,0,0,0.15);
-    //   background-image: linear-gradient(to right, #4F56FF, #FF4980);
-      background-color: $generic-bg;
-    //   border-color: transparent;
+      background-image: linear-gradient(to right, #4F56FF, #FF4980);
+    //   background-color: $generic-bg;
+      border-color: transparent;
     }
 
     // .sidebar {
@@ -671,6 +673,72 @@ header {
 .dropdown--hidden {
     display: none;
 }
+
+
+.fc table {
+    border-radius: 5px;
+    border: $generic-border;
+}
+
+
+
+.fc td, .fc th {
+    background-color: #1F1E1F;
+    border-radius: 5px;
+    border: $generic-border;
+}
+
+.fc-daygrid-day-frame {
+    background-color: #1F1E1F;
+}
+
+
+.fc .fc-scrollgrid {
+    border-collapse: separate;
+    border-right-width: 0;
+    border: 1px solid #5E5B71;
+    border-bottom-width: 0;
+}
+
+.fc .fc-button-primary {
+    color: #fff;
+    color: var(--fc-button-text-color, #fff);
+    background-color: #343234;
+    background-color: #343234;
+    border-color: #2C3E50;
+    border-color: var(--fc-button-border-color, #343234);
+}
+
+.fc .fc-timegrid-divider {
+    padding: 0;
+}
+
+.fc .fc-button-primary:disabled {
+    color: #fff;
+    color: var(--fc-button-text-color, #fff);
+    background-color: #2A282A;
+    background-color: var(--fc-button-bg-color, #2A282A);
+    border-color: #2C3E50;
+    border-color: var(--fc-button-border-color, #2A282A);
+}
+
+.fc .fc-button-primary:hover {
+    color: #fff;
+    color: var(--fc-button-text-color, #fff);
+    background-color: #494649;
+    background-color: var(--fc-button-bg-color, #494649);
+    border-color: #2C3E50;
+    border-color: var(--fc-button-border-color, #494649);
+}
+
+.track-vertical {
+    background-color: #151415;
+}
+
+.thumb-vertical {
+    background-color: #383838;
+}
+
 
 
 

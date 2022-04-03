@@ -52,7 +52,7 @@ export function Calendar() {
           events={events}
           nowIndicator
           contentHeight={1230}
-          eventColor={'#8b53d5'}
+          // eventColor={'#F0A202'}
         />
       </div>
     );
