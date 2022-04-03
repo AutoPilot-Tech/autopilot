@@ -21,6 +21,7 @@
     "moment": "^2.29.1",
     "node-sass": "^4.14.1",
     "react": "^16.14.0",
+    "react-confetti-explosion": "^1.0.3",
     "react-custom-scrollbars": "^4.2.1",
     "react-dates": "^21.8.0",
     "react-dom": "^16.14.0",

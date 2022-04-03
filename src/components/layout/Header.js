@@ -5,6 +5,9 @@ import { DropDown } from '../DropDown';
 import { userSubmenu } from '../../constants/index';
 import { amplitude } from '../../utilities/amplitude';
 import { auth } from '../../firebase';
+import { useTracksValue } from '../../context/tracks-context';
+
+
 
 export const Header = ({ darkMode, setDarkMode }) => {
   const [shouldShowMain, setShouldShowMain] = useState(false);
@@ -16,11 +19,14 @@ export const Header = ({ darkMode, setDarkMode }) => {
     amplitude.getInstance().logEvent(event, userId);
   }
 
+  
+
   return (
     <header className="header" data-testid="header">
       <nav>
         <div className="logo">
             <img src="../../images/logo.png" alt="Autopilot" />
+
         </div>
         <div className="settings">
           <ul>

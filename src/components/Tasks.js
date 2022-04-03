@@ -14,7 +14,6 @@ import { RoutineSettings } from './RoutineSettings';
 import { FaTrashAlt } from 'react-icons/fa';
 import { db } from '../firebase';
 
-
 // this just gets the tasks and renders them
 export const Tasks = () => {
   const { tracks, selectedTrack, isRoutine, setIsRoutine } = useTracksValue();
@@ -22,8 +21,7 @@ export const Tasks = () => {
   const [showCalendar, setShowCalendar] = useState(false);
   const [showChat, setShowChat] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-
-
+ 
   let trackName = '';
 
   if (collatedTasksExist(selectedTrack) && selectedTrack) {
@@ -43,11 +41,12 @@ export const Tasks = () => {
   }
 
   const deleteTask = (docId) => {
-    db.collection('tasks').doc(docId).delete()
-    .then(() => {
-      console.log('task deleted');
-      
-    });
+    db.collection('tasks')
+      .doc(docId)
+      .delete()
+      .then(() => {
+        console.log('task deleted');
+      });
   };
 
   // When selectedTrack changes, we want to check to see if it's the calendar
@@ -63,12 +62,13 @@ export const Tasks = () => {
       setShowChat;
     }
     console.log('isRoutine', isRoutine);
-    
   }, [selectedTrack]);
 
   useEffect(() => {
     document.title = `Autopilot: ${trackName}`;
   }, [trackName]);
+
+  
 
   // if setCalendar is true, then we will show the calendar
 
@@ -78,15 +78,17 @@ export const Tasks = () => {
         <Calendar />
       ) : (
         <div className="tasks" data-testid="tasks">
+          
           <h2 data-test-id="track-name">{trackName}</h2>
-          {isRoutine ? (
-            <RoutineSettings />
-          ) : <></>}
+          {isRoutine ? <RoutineSettings /> : <></>}
 
           <ul className="tasks__list">
             {tasks.map((task) => (
               <li key={`${task.id}`}>
-                <Checkbox id={task.id} />
+                <Checkbox
+                  id={task.id}
+                  
+                />
                 <span>{task.task}</span>
                 {/* <span
                   className="tasks__task-delete"

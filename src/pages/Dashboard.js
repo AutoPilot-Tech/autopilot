@@ -9,6 +9,7 @@ import { Loading } from './Loading';
 import { auth } from '../firebase';
 import { Scrollbars } from 'react-custom-scrollbars';
 
+
 // note: see src/context. Since we want to use tracksprovider at the
 // top level, we are using it here in App. This can be replaced
 // with Redux, later.
@@ -50,6 +51,7 @@ export const Dashboard = ({ darkModeDefault = true }) => {
               className={darkMode ? 'darkmode' : undefined}
             >
               <Header darkMode={darkMode} setDarkMode={setDarkMode} />
+              
               <Content />
             </main>
           </Scrollbars>
