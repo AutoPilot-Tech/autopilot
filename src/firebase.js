@@ -16,6 +16,7 @@ firebase.initializeApp({
 
 // Initialize Firebase
 var db = firebase.firestore();
+db.useEmulator('localhost', 8080);
 
 // initialize auth
 const auth = firebase.auth();
