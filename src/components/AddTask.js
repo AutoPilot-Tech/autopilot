@@ -29,6 +29,8 @@ export const AddTask = ({
   // Show date picker with react-dates
   const [showCalendarOverlay, setShowCalendarOverlay] = useState(false);
   const [value, setValue] = useState('');
+  const [startValue, setStartValue] = useState('');
+  const [endValue, setEndValue] = useState('');
 
   const { selectedTrack } = useTracksValue();
 
@@ -47,7 +49,7 @@ export const AddTask = ({
   const logClick = (event) => {
     let userId = auth.currentUser.uid;
     amplitude.getInstance().logEvent(event, userId);
-  }
+  };
 
   const addTask = () => {
     const trackId = track || selectedTrack;
@@ -98,10 +100,12 @@ export const AddTask = ({
           onClick={() => setShowMain(!showMain)}
         >
           <span className="add-task__plus">+</span>
-          <span className="add-task__text"
+          <span
+            className="add-task__text"
             onClick={logClick('regularAddTaskClick')}
-          
-          >Add Task</span>
+          >
+            Add Task
+          </span>
         </div>
       )}
 
@@ -136,32 +140,32 @@ export const AddTask = ({
             setShowTaskDate={setShowTaskDate}
           />
 
-            <DateTimePicker
-              renderInput={(props) => <TextField {...props} />}
-              label="Start Date"
-              value={value}
-              onChange={(newValue) => {
-                setValue(newValue);
-                console.log('start date',newValue.format())
-                setTaskStartDate(newValue.format());
-              }}
-              onClick={() => {
-                logClick('taskStartDateClick')
-              }}
-            />
-            <DateTimePicker
-              renderInput={(props) => <TextField {...props} />}
-              label="End Date"
-              value={value}
-              onChange={(newValue) => {
-                setValue(newValue);
-                console.log('end date:', newValue.format())
-                setTaskEndDate(newValue.format());
-              }}
-              onClick={() => {
-                logClick('taskEndDateClick')
-              }}
-            />
+          <DateTimePicker
+            renderInput={(props) => <TextField {...props} />}
+            label="Start Date"
+            value={startValue}
+            onChange={(newValue) => {
+              setStartValue(newValue);
+              console.log('start date', newValue.format());
+              setTaskStartDate(newValue.format());
+            }}
+            onClick={() => {
+              logClick('taskStartDateClick');
+            }}
+          />
+          <DateTimePicker
+            renderInput={(props) => <TextField {...props} />}
+            label="End Date"
+            value={endValue}
+            onChange={(newValue) => {
+              setEndValue(newValue);
+              console.log('end date:', newValue.format());
+              setTaskEndDate(newValue.format());
+            }}
+            onClick={() => {
+              logClick('taskEndDateClick');
+            }}
+          />
 
           <input
             className="add-task__content"

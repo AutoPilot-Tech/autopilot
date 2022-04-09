@@ -20,7 +20,7 @@ export const Sidebar = () => {
   const { setSelectedTrack, isRoutine, setIsRoutine } = useTracksValue();
   const [showTracks, setShowTracks] = useState(true);
   const [showRoutines, setShowRoutines] = useState(true);
-  const [active, setActive] = useState('inbox');
+  const [active, setActive] = useState('next_7');
 
   const logClick = (event) => {
     let userId = auth.currentUser.uid;

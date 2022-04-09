@@ -7,6 +7,8 @@ import { auth } from '../firebase';
 
 export const RoutineSettings = () => {
     const [value, setValue] = useState('');
+    const [startValue, setStartValue] = useState('');
+    const [endValue, setEndValue] = useState('');
     const [routineStartDate, setRoutineStartDate] = useState('');
     const [routineEndDate, setRoutineEndDate] = useState('');
     const [routineRecurring, setRoutineRecurring] = useState(false);
@@ -26,9 +28,9 @@ export const RoutineSettings = () => {
             <DateTimePicker
               renderInput={(props) => <TextField {...props} />}
               label="Start Date"
-              value={value}
+              value={startValue}
               onChange={(newValue) => {
-                setValue(newValue);
+                setStartValue(newValue);
                 setRoutineStartDate(newValue.format());
               }}
               onClick={() => {
@@ -38,9 +40,9 @@ export const RoutineSettings = () => {
             <DateTimePicker
               renderInput={(props) => <TextField {...props} />}
               label="End Date"
-              value={value}
+              value={endValue}
               onChange={(newValue) => {
-                setValue(newValue);
+                setEndValue(newValue);
                 setRoutineEndDate(newValue.format());
               }}
               onClick={() => {

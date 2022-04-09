@@ -10,10 +10,10 @@ export const TracksContext = createContext();
 // bottom level wherever maybe 6 levels deep
 export const TracksProvider = ({ children }) => {
   const { tracks, setTracks } = useTracks();
-  const [selectedTrack, setSelectedTrack] = useState('INBOX');
+  const [selectedTrack, setSelectedTrack] = useState('NEXT_7');
   const { events, setEvents } = useEvents();
   const [isRoutine, setIsRoutine] = useState(false);
-  const [active, setActive] = useState('inbox');
+  const [active, setActive] = useState('next_7');
   // 1. Whenever u need to do something, just rmember to make a custom hook,
   // 2. import it, and then destructure it in the tracks provider
   // 3. create a state in the provider, and then use it in the consumer
