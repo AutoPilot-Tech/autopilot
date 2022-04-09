@@ -4,34 +4,19 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { useState, useEffect } from 'react';
 import { useTracksValue } from '../context/tracks-context';
+import { useAutoFill } from '../hooks';
 
 export function Calendar() {
   const { events, setEvents } = useTracksValue();
 
-    // const events = [
-    //     {
-    //       id: 1,
-    //       title: 'event 1',
-    //       start: '2022-03-23T10:00:00',
-    //       end: '2022-03-23T12:00:00',
-    //     },
-    //     {
-    //       id: 2,
-    //       title: 'event 2',
-    //       start: '2022-03-23T13:00:00',
-    //       end: '2021-03-23T18:00:00',
-    //     },
-    //     { 
-    //       id: 3, 
-    //       title: 'event 3', 
-    //       start: '2022-03-23', 
-    //       end: '2021-03-23' },
-    //   ];
 
-    // show all the events
-    useEffect(() => {
-      console.log(events);
-    }, [])
+
+    
+
+    // testing for autofill
+    // useEffect(() => {
+    //   useAutoFill(events);
+    // }, [])
 
     return (
       <div className="tasks">

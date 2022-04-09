@@ -120,7 +120,9 @@ export const Tasks = () => {
             ))}
           </ul>
           <AddTask />
+          
         </div>
+        
       )}
     </div>
   );
