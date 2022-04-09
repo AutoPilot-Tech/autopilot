@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 import { useTracksValue } from '../context/tracks-context';
 import { IndividualTrack } from './IndividualTrack';
 
-export const Tracks = ({ activeValue = null }) => {
-  const [active, setActive] = useState(activeValue);
-  const { tracks, setSelectedTrack, isRoutine, setIsRoutine } = useTracksValue();
+export const Tracks = ({active, setActive}) => {
+  const { tracks, setSelectedTrack, isRoutine, setIsRoutine} = useTracksValue();
   return (
     <div>
         {tracks &&

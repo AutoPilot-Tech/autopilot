@@ -17,10 +17,10 @@ import { amplitude } from '../../utilities/amplitude';
 import { auth } from '../../firebase';
 
 export const Sidebar = () => {
-  const { setSelectedTrack } = useTracksValue();
-  const [active, setActive] = useState('inbox');
+  const { setSelectedTrack, isRoutine, setIsRoutine } = useTracksValue();
   const [showTracks, setShowTracks] = useState(true);
   const [showRoutines, setShowRoutines] = useState(true);
+  const [active, setActive] = useState('inbox');
 
   const logClick = (event) => {
     let userId = auth.currentUser.uid;
@@ -37,6 +37,7 @@ export const Sidebar = () => {
             setActive('next_7');
             setSelectedTrack('NEXT_7');
             logClick('sideBarCalendarClick');
+            setIsRoutine(false);
           }}
         >
           <span>
@@ -51,6 +52,7 @@ export const Sidebar = () => {
             setActive('inbox');
             setSelectedTrack('INBOX');
             logClick('sideBarInboxClick');
+            setIsRoutine(false);
           }}
         >
           <span>
@@ -65,6 +67,7 @@ export const Sidebar = () => {
             setActive('today');
             setSelectedTrack('TODAY');
             logClick('sideBarTodaysTasksClick');
+            setIsRoutine(false);
           }}
         >
           <span>
@@ -100,7 +103,7 @@ export const Sidebar = () => {
         </span>
         <h2>Tracks</h2>
       </div>
-      <ul className="sidebar__tracks">{showTracks && <Tracks />}</ul>
+      <ul className="sidebar__tracks">{showTracks && <Tracks active={active} setActive={setActive}/>}</ul>
       <AddTrack />
       <div
         className="sidebar__middle"
@@ -117,7 +120,7 @@ export const Sidebar = () => {
         <h2>Routines</h2>
 
         </div>
-        <ul className="sidebar__tracks">{showRoutines && <Routines />}</ul>
+        <ul className="sidebar__tracks">{showRoutines && <Routines active={active} setActive={setActive}/>}</ul>
         <AddRoutine />
       
     </div>

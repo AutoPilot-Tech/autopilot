@@ -75,6 +75,16 @@ export const useTasks = (selectedTrack) => {
   return { tasks, archivedTasks };
 };
 
+export const useActive = () => {
+  const [active, setActive] = useState('inbox');
+
+  useEffect(() => {
+    active = active;
+  }, [active]);
+
+
+}
+
 // this one will be pulling tracks only once, and only changes
 // when there is new tracks
 export const useTracks = () => {

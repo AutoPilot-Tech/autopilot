@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState } from 'react';
 import { useTracks } from '../hooks';
 import { useEvents } from '../hooks';
+import { useActive } from '../hooks';
 
 // allows us to pass data down the component, without props.
 
@@ -12,11 +13,15 @@ export const TracksProvider = ({ children }) => {
   const [selectedTrack, setSelectedTrack] = useState('INBOX');
   const { events, setEvents } = useEvents();
   const [isRoutine, setIsRoutine] = useState(false);
+  const [active, setActive] = useState('inbox');
+  // 1. Whenever u need to do something, just rmember to make a custom hook,
+  // 2. import it, and then destructure it in the tracks provider
+  // 3. create a state in the provider, and then use it in the consumer
 
 
   return (
     <TracksContext.Provider
-      value={{ tracks, setTracks, selectedTrack, setSelectedTrack, events, setEvents, isRoutine, setIsRoutine }}
+      value={{ tracks, setTracks, selectedTrack, setSelectedTrack, events, setEvents, isRoutine, setIsRoutine, active, setActive }}
     >
       {children}
     </TracksContext.Provider>

@@ -1,5 +1,6 @@
 import { collatedTasks } from '../constants';
 
+
 export const getTitle = (tracks, selectedTrackId) => {
   let track = tracks.find((track) => track.trackId === selectedTrackId);
   return track.name;

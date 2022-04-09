@@ -12,6 +12,8 @@ admin.initializeApp();
 //   response.send("Hello from Firebase!");
 // });
 
+
+
 // Take the text parameter passed to this HTTP endpoint and insert it into 
 // Firestore under the path /messages/:documentId/original
 exports.addMessage = functions.https.onRequest(async (req, res) => {
@@ -41,3 +43,5 @@ exports.makeUppercase = functions.firestore.document('/messages/{documentId}')
   // Setting an 'uppercase' field in Firestore document returns a Promise.
   return snap.ref.set({uppercase}, {merge: true});
 });
+
+

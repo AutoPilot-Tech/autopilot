@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { auth, signInWithGoogle } from '../firebase';
 
 export const Login = () => {
+  // components usually re renders when state changes
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -13,6 +14,7 @@ export const Login = () => {
     });
     return unsubscribe;
   }, []);
+
 
   const handleLogin = () => {
     auth
