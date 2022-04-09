@@ -14,6 +14,7 @@ export const TracksProvider = ({ children }) => {
   const { events, setEvents } = useEvents();
   const [isRoutine, setIsRoutine] = useState(false);
   const [active, setActive] = useState('next_7');
+  const [selectedRoutine, setSelectedRoutine] = useState('');
   // 1. Whenever u need to do something, just rmember to make a custom hook,
   // 2. import it, and then destructure it in the tracks provider
   // 3. create a state in the provider, and then use it in the consumer
@@ -21,7 +22,7 @@ export const TracksProvider = ({ children }) => {
 
   return (
     <TracksContext.Provider
-      value={{ tracks, setTracks, selectedTrack, setSelectedTrack, events, setEvents, isRoutine, setIsRoutine, active, setActive }}
+      value={{ tracks, setTracks, selectedTrack, setSelectedTrack, events, setEvents, isRoutine, setIsRoutine, active, setActive, selectedRoutine, setSelectedRoutine }}
     >
       {children}
     </TracksContext.Provider>

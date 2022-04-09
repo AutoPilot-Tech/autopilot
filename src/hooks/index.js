@@ -12,7 +12,7 @@ export const useEvents = () => {
   useEffect(() => {
     let userId = auth.currentUser.uid;
     // when there is a new document in collection
-    let unsubscribe = db.collection('tasks').where('userId', '==', userId);
+    let unsubscribe = db.collection('events').where('userId', '==', userId);
     // set events with tasks
     unsubscribe = unsubscribe.onSnapshot((snapshot) => {
       const newEvents = snapshot.docs.map((event) => ({
