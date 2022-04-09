@@ -21,7 +21,7 @@ export const Tasks = () => {
   const [showCalendar, setShowCalendar] = useState(false);
   const [showChat, setShowChat] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
- 
+
   let trackName = '';
 
   if (collatedTasksExist(selectedTrack) && selectedTrack) {
@@ -68,8 +68,6 @@ export const Tasks = () => {
     document.title = `Autopilot: ${trackName}`;
   }, [trackName]);
 
-  
-
   // if setCalendar is true, then we will show the calendar
 
   return (
@@ -78,17 +76,13 @@ export const Tasks = () => {
         <Calendar />
       ) : (
         <div className="tasks" data-testid="tasks">
-          
           <h2 data-test-id="track-name">{trackName}</h2>
           {isRoutine ? <RoutineSettings /> : <></>}
 
           <ul className="tasks__list">
             {tasks.map((task) => (
               <li key={`${task.id}`}>
-                <Checkbox
-                  id={task.id}
-                  
-                />
+                <Checkbox id={task.id} />
                 <span>{task.task}</span>
                 {/* <span
                   className="tasks__task-delete"
@@ -120,9 +114,7 @@ export const Tasks = () => {
             ))}
           </ul>
           <AddTask />
-          
         </div>
-        
       )}
     </div>
   );

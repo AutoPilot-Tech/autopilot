@@ -4,7 +4,6 @@ import { Dashboard } from './pages/Dashboard';
 import { Landing } from './pages/Landing';
 import { Login } from './pages/Login';
 import { Signup } from './pages/Signup';
-import './App.scss';
 
 export const App = () => {
   return (
