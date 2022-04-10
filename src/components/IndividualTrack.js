@@ -88,9 +88,9 @@ export const IndividualTrack = ({ track }) => {
           </div>
         )}
       </span> */}
-      <div>
-        <button type="button" onClick={openModal}>
-          <FaTrashAlt />
+      <div className="group">
+        <button className="ml-44 "type="button" onClick={openModal}>
+          <FaTrashAlt className="fill-slate-400 hidden group-hover:block "/>
         </button>
       </div>
 
