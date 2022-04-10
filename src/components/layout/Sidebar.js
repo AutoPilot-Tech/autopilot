@@ -25,20 +25,23 @@ export const Sidebar = () => {
   const logClick = (event) => {
     let userId = auth.currentUser.uid;
     amplitude.getInstance().logEvent(event, userId);
-  }
+  };
 
   function classNames(...classes) {
-    return classes.filter(Boolean).join(' ')
+    return classes.filter(Boolean).join(' ');
   }
-  
 
   return (
-    <nav className="fixed space-y-1 float-left h-screen flex flex-col pl-3 w-64 shadow">
+    <nav className="fixed space-y-1 float-left h-screen flex flex-col pl-3 w-64 shadow pt-20">
       <ul className="sidebar__generic">
         <li
           data-testid="next_7"
-          className={classNames(active === 'next_7' ? 'bg-gray-200 text-gray-900' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
-          'flex items-center px-3 py-2 text-sm font-medium rounded-md')}
+          className={classNames(
+            active === 'next_7'
+              ? 'bg-gray-200 text-gray-900'
+              : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+            'flex items-center px-3 py-2 text-sm font-medium rounded-md'
+          )}
           onClick={() => {
             setActive('next_7');
             setSelectedTrack('NEXT_7');
@@ -46,15 +49,19 @@ export const Sidebar = () => {
             setIsRoutine(false);
           }}
         >
-          <span>
+          <span className="mr-1">
             <FaRegCalendar />
           </span>
           <span>Daily Schedule</span>
         </li>
         <li
           data-testid="inbox"
-          className={classNames(active === 'inbox' ? 'bg-gray-200 text-gray-900' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
-          'flex items-center px-3 py-2 text-sm font-medium rounded-md')}
+          className={classNames(
+            active === 'inbox'
+              ? 'bg-gray-200 text-gray-900'
+              : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+            'flex items-center px-3 py-2 text-sm font-medium rounded-md'
+          )}
           onClick={() => {
             setActive('inbox');
             setSelectedTrack('INBOX');
@@ -62,15 +69,19 @@ export const Sidebar = () => {
             setIsRoutine(false);
           }}
         >
-          <span>
+          <span className="mr-1">
             <FaInbox />
           </span>
           <span>Inbox</span>
         </li>
         <li
           data-testid="today"
-          className={classNames(active === 'today' ? 'bg-gray-200 text-gray-900' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
-          'flex items-center px-3 py-2 text-sm font-medium rounded-md')}
+          className={classNames(
+            active === 'today'
+              ? 'bg-gray-200 text-gray-900'
+              : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+            'flex items-center px-3 py-2 text-sm font-medium rounded-md'
+          )}
           onClick={() => {
             setActive('today');
             setSelectedTrack('TODAY');
@@ -78,7 +89,7 @@ export const Sidebar = () => {
             setIsRoutine(false);
           }}
         >
-          <span>
+          <span className="mr-1">
             <FaCheckSquare />
           </span>
           <span>Today's Tasks</span>
@@ -104,15 +115,18 @@ export const Sidebar = () => {
           logClick('sideBarShowTracksClick');
         }}
       >
-        <span>
-          <FaChevronDown
-            className={!showTracks ? 'hidden-projects' : undefined}
-          />
-        </span>
-        <h2>Tracks</h2>
+        <div>
+        <p className="pl-3 pt-3 float-left text-gray-400 font-medium">
+          Tracks
+        </p>
+        <AddTrack />
+        </div>
+
+        
       </div>
-      <ul className="sidebar__tracks">{showTracks && <Tracks active={active} setActive={setActive}/>}</ul>
-      <AddTrack />
+      <ul className="sidebar__tracks">
+        {<Tracks active={active} setActive={setActive} />}
+      </ul>
       <div
         className="sidebar__middle"
         onClick={() => {
@@ -120,17 +134,17 @@ export const Sidebar = () => {
           logClick('sideBarShowRoutinesClick');
         }}
       >
-        <span>
-          <FaChevronDown
-            className={!showRoutines ? 'hidden-projects' : undefined}
-          />
-        </span>
-        <h2>Routines</h2>
-
-        </div>
-        <ul className="sidebar__tracks">{showRoutines && <Routines active={active} setActive={setActive}/>}</ul>
+        <div>
+        <p className="pl-3 pt-3 float-left text-gray-400 font-medium">
+          Routines
+        </p>
         <AddRoutine />
-      
+        </div>
+        
+      </div>
+      <ul className="sidebar__tracks">
+        {<Routines active={active} setActive={setActive} />}
+      </ul>
     </nav>
   );
 };

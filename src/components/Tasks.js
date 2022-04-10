@@ -13,6 +13,7 @@ import { findRoutine } from '../helpers';
 import { RoutineSettings } from './RoutineSettings';
 import { FaTrashAlt } from 'react-icons/fa';
 import { db } from '../firebase';
+import { TaskHeader } from './TaskHeader';
 
 // this just gets the tasks and renders them
 export const Tasks = () => {
@@ -71,12 +72,13 @@ export const Tasks = () => {
   // if setCalendar is true, then we will show the calendar
 
   return (
+    
     <div>
       {showCalendar ? (
         <Calendar />
       ) : (
-        <div className="ml-80 mr-64 pt-12" data-testid="tasks">
-          <h2 data-test-id="track-name">{trackName}</h2>
+        <div className="ml-80 mr-64 pt-20" data-testid="tasks">
+          <TaskHeader trackName={trackName} />
           {isRoutine ? <RoutineSettings /> : <></>}
 
           <ul className="tasks__list">

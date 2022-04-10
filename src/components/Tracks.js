@@ -9,7 +9,7 @@ function classNames(...classes) {
 export const Tracks = ({active, setActive}) => {
   const { tracks, setSelectedTrack, isRoutine, setIsRoutine} = useTracksValue();
   return (
-    <div>
+    <div className="space-y-1">
         {tracks &&
         // filter out tracks that are true routine
         tracks.filter((track) => !track.routine).map((track) => (

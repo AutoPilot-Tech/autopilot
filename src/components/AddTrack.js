@@ -53,7 +53,7 @@ export const AddTrack = ({ shouldShow = false }) => {
         });
   };
   return (
-    <div className="add-track" data-testid="add-track">
+    <div className="float-right mt-3 mr-5 cursor-pointer" data-testid="add-track">
       {show && (
         <div className="add-track__input">
           <input
@@ -81,14 +81,12 @@ export const AddTrack = ({ shouldShow = false }) => {
           </span>
         </div>
       )}
-      <span className="add-track__plus">+</span>
       <span
         data-testid="add-track-action"
-        className="add-track__text"
+        className="text-gray-400 cursor-pointer pl-1 pr-1 pt-0 pb-0 hover:rounded-md hover:text-gray-900 hover:bg-gray-200 text-lg"
         onClick={() => setShow(!show)}
       >
-        {' '}
-        Add Track{' '}
+        +
       </span>
     </div>
   );

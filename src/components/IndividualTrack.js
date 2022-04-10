@@ -60,7 +60,6 @@ export const IndividualTrack = ({ track }) => {
 
   return (
     <>
-      <span className="sidebar__dot">•</span>
       <span className="sidebar__track-name">{track.name}</span>
       {/* <span
         className="sidebar__track-delete"
@@ -89,7 +88,7 @@ export const IndividualTrack = ({ track }) => {
         )}
       </span> */}
       <div className="group">
-        <button className="ml-44 "type="button" onClick={openModal}>
+        <button className="ml-44"type="button" onClick={openModal}>
           <FaTrashAlt className="fill-slate-400 hidden group-hover:block "/>
         </button>
       </div>

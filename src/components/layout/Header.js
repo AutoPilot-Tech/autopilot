@@ -128,7 +128,7 @@ export function Header() {
       >
         {({ open }) => (
           <>
-            <div className="mx-auto px-4 sm:px-6 lg:px-8 mr-44">
+            <div className="fixed shadow mx-auto px-4 sm:px-6 lg:px-8 pr-44 z-50 bg-white min-w-full">
               <div className="flex justify-between xl:grid lg:gap-8 xl:grid-cols-12">
                 <div className="flex md:absolute md:left-0 md:inset-y-0 lg:static xl:col-span-2">
                   <div className="flex-shrink-0 flex items-center mr-10">
@@ -178,8 +178,6 @@ export function Header() {
                     href="#"
                     className="ml-5 flex-shrink-0 bg-white rounded-full p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                   >
-                    <span className="sr-only">View notifications</span>
-                    <BellIcon className="h-6 w-6" aria-hidden="true" />
                   </a>
 
                   {/* Profile dropdown */}
@@ -199,7 +197,7 @@ export function Header() {
                       leaveFrom="transform opacity-100 scale-100"
                       leaveTo="transform opacity-0 scale-95"
                     >
-                      <Menu.Items className="origin-top-right absolute z-50 right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 py-1 focus:outline-none">
+                      <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 py-1 focus:outline-none">
                         {userNavigation.map((item) => (
                           <Menu.Item key={item.name}>
                             {({ active }) => (
