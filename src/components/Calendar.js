@@ -43,7 +43,6 @@
 //     );
 //   }
 
-/* This example requires Tailwind CSS v2.0+ */
 import { Fragment, useEffect, useRef } from 'react'
 import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon, DotsHorizontalIcon } from '@heroicons/react/solid'
 import { Menu, Transition } from '@headlessui/react'
