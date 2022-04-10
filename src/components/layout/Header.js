@@ -105,7 +105,7 @@ const navigation = [
 ]
 const userNavigation = [
   { name: 'Your Profile', href: '#', onClick: '' },
-  { name: 'Settings', href: '#', onClick: '' },
+  { name: 'Settings', href: '/settings', onClick: '' },
   { name: 'Sign out', href: '#', onClick: logOut },
 ]
 
