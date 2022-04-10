@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import { useTracksValue } from '../context/tracks-context';
 import { IndividualTrack } from './IndividualTrack';
 
+function classNames(...classes) {
+  return classes.filter(Boolean).join(' ')
+}
+
 export const Tracks = ({active, setActive}) => {
   const { tracks, setSelectedTrack, isRoutine, setIsRoutine} = useTracksValue();
   return (
@@ -14,8 +18,8 @@ export const Tracks = ({active, setActive}) => {
         key={track.trackId}
         data-doc-id={track.docId}
         data-testid="track-action"
-        className={
-          active === track.trackId ? 'active sidebar__track' : 'sidebar__track'
+        className={classNames(active === track.trackId ? 'bg-gray-200 text-gray-900' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+        'flex items-center px-3 py-2 text-sm font-medium rounded-md')
         }
         onKeyDown={() => {
             setActive(track.trackId);

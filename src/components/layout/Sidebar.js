@@ -27,12 +27,18 @@ export const Sidebar = () => {
     amplitude.getInstance().logEvent(event, userId);
   }
 
+  function classNames(...classes) {
+    return classes.filter(Boolean).join(' ')
+  }
+  
+
   return (
-    <div className="sidebar" data-testid="sidebar">
+    <nav className="fixed space-y-1 float-left h-screen flex flex-col pl-3 w-64 shadow">
       <ul className="sidebar__generic">
         <li
           data-testid="next_7"
-          className={active === 'next_7' ? 'active' : undefined}
+          className={classNames(active === 'next_7' ? 'bg-gray-200 text-gray-900' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+          'flex items-center px-3 py-2 text-sm font-medium rounded-md')}
           onClick={() => {
             setActive('next_7');
             setSelectedTrack('NEXT_7');
@@ -47,7 +53,8 @@ export const Sidebar = () => {
         </li>
         <li
           data-testid="inbox"
-          className={active === 'inbox' ? 'active' : undefined}
+          className={classNames(active === 'inbox' ? 'bg-gray-200 text-gray-900' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+          'flex items-center px-3 py-2 text-sm font-medium rounded-md')}
           onClick={() => {
             setActive('inbox');
             setSelectedTrack('INBOX');
@@ -62,7 +69,8 @@ export const Sidebar = () => {
         </li>
         <li
           data-testid="today"
-          className={active === 'today' ? 'active' : undefined}
+          className={classNames(active === 'today' ? 'bg-gray-200 text-gray-900' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+          'flex items-center px-3 py-2 text-sm font-medium rounded-md')}
           onClick={() => {
             setActive('today');
             setSelectedTrack('TODAY');
@@ -123,6 +131,6 @@ export const Sidebar = () => {
         <ul className="sidebar__tracks">{showRoutines && <Routines active={active} setActive={setActive}/>}</ul>
         <AddRoutine />
       
-    </div>
+    </nav>
   );
 };

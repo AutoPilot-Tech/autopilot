@@ -4,6 +4,3 @@
 @tailwind components;
 @tailwind utilities;
 
-.h-full {
-    height: 100vh;
-}

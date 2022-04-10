@@ -75,7 +75,7 @@ export const Tasks = () => {
       {showCalendar ? (
         <Calendar />
       ) : (
-        <div className="tasks" data-testid="tasks">
+        <div className="ml-80 mr-64 pt-12" data-testid="tasks">
           <h2 data-test-id="track-name">{trackName}</h2>
           {isRoutine ? <RoutineSettings /> : <></>}
 

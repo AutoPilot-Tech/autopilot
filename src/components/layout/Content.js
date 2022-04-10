@@ -10,9 +10,9 @@ export const Content = () => {
   
 
   return (
-    <section className="content">
+    <div className="content">
       <Sidebar />
       <Tasks />      
-    </section>
+    </div>
   );
 };
