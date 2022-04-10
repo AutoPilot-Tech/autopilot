@@ -77,6 +77,19 @@ import { Fragment } from 'react'
 import { Menu, Popover, Transition } from '@headlessui/react'
 import { SearchIcon } from '@heroicons/react/solid'
 import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline'
+import { auth } from '../../firebase'
+
+const logOut = () => {
+  auth
+    .signOut()
+    .then(() => {
+      // send user back to log in page
+      window.location.href = '/login';
+    })
+    .catch((error) => {
+      console.log(error.message);
+    });
+};
 
 const user = {
   name: 'Chelsea Hagon',
@@ -91,9 +104,9 @@ const navigation = [
   { name: 'Directory', href: '#', current: false },
 ]
 const userNavigation = [
-  { name: 'Your Profile', href: '#' },
-  { name: 'Settings', href: '#' },
-  { name: 'Sign out', href: '#' },
+  { name: 'Your Profile', href: '#', onClick: '' },
+  { name: 'Settings', href: '#', onClick: '' },
+  { name: 'Sign out', href: '#', onClick: logOut },
 ]
 
 function classNames(...classes) {
@@ -195,7 +208,10 @@ export function Header() {
                                 className={classNames(
                                   active ? 'bg-gray-100' : '',
                                   'block py-2 px-4 text-sm text-gray-700'
+
                                 )}
+                                onClick={item.onClick ? item.onClick : null}
+
                               >
                                 {item.name}
                               </a>
