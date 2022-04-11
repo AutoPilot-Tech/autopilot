@@ -53,7 +53,10 @@ export const AddRoutine = ({ shouldShow = false }) => {
         });
   };
   return (
-    <div className="float-right mt-3 mr-5 cursor-pointer" data-testid="add-track">
+    <div
+      className="float-right mt-3 mr-5 cursor-pointer"
+      data-testid="add-track"
+    >
       {show && (
         <div className="add-track__input">
           <input
@@ -95,14 +98,28 @@ export const AddRoutine = ({ shouldShow = false }) => {
           </span>
         </div>
       )}
-      <span className="text-gray-400 cursor-pointer pl-1 pr-1 pt-0 pb-0 hover:rounded-md hover:text-gray-900 hover:bg-gray-200 text-lg">+</span>
+      <span
+        className="text-gray-400 cursor-pointer hover:rounded-md hover:text-gray-900 hover:bg-gray-200 text-lg"
+        onClick={() => setShow(!show)}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-5 w-5"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path
+            fillRule="evenodd"
+            d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
+            clipRule="evenodd"
+          />
+        </svg>
+      </span>
       <span
         data-testid="add-track-action"
         className="add-track__text"
         onClick={() => setShow(!show)}
-      >
-        
-      </span>
+      ></span>
     </div>
   );
 };

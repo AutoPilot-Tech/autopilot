@@ -60,7 +60,7 @@ export const IndividualTrack = ({ track }) => {
 
   return (
     <>
-      <span className="sidebar__track-name">{track.name}</span>
+      <span className="">{track.name}</span>
       {/* <span
         className="sidebar__track-delete"
         onKeyDown={() => setShowConfirm(!showConfirm)}
