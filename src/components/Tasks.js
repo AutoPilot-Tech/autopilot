@@ -14,6 +14,7 @@ import { RoutineSettings } from './RoutineSettings';
 import { FaTrashAlt } from 'react-icons/fa';
 import { db } from '../firebase';
 import { TaskHeader } from './TaskHeader';
+import { EmptyStateTasks } from './EmptyStateTasks';
 
 // this just gets the tasks and renders them
 export const Tasks = () => {
@@ -82,7 +83,11 @@ export const Tasks = () => {
           {isRoutine ? <RoutineSettings /> : <></>}
 
           <ul className="tasks__list">
-            {tasks.map((task) => (
+            {/* if there are no tasks, show the emptystate component, otherwise render them */}
+            {tasks.length === 0 ? (
+              <EmptyStateTasks />
+            ) : (
+            tasks.map((task) => (
               <li key={`${task.id}`}>
                 <Checkbox id={task.id} />
                 <span>{task.task}</span>
@@ -113,7 +118,7 @@ export const Tasks = () => {
                     )}
                   </span> */}
               </li>
-            ))}
+            )))}
           </ul>
           <AddTask />
         </div>

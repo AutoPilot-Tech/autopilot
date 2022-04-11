@@ -156,7 +156,7 @@ export const Sidebar = () => {
       >
         <div>
           <p className="pl-3 pt-3 float-left text-gray-400 font-medium">
-            Tracks
+            Projects
           </p>
           <AddTrack />
         </div>
