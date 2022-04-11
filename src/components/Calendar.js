@@ -9,10 +9,6 @@
 // export function Calendar() {
 //   const { events, setEvents } = useTracksValue();
 
-
-
-    
-
 //     // testing for autofill
 //     // useEffect(() => {
 //     //   useAutoFill(events);
@@ -25,7 +21,7 @@
 //           initialView="timeGridDay"
 //           headerToolbar = {{
 //             start: 'title',
-//             center: '',   
+//             center: '',
 //             end: 'today prev,next'
 //           }}
 //           customButtons={{
@@ -43,10 +39,16 @@
 //     );
 //   }
 
-import { Fragment, useEffect, useRef } from 'react'
-import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon, DotsHorizontalIcon } from '@heroicons/react/solid'
-import { Menu, Transition } from '@headlessui/react'
+import { Fragment, useEffect, useRef, useState } from 'react';
+import {
+  ChevronDownIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  DotsHorizontalIcon,
+} from '@heroicons/react/solid';
+import { Menu, Transition } from '@headlessui/react';
 import moment from 'moment';
+import { useTracksValue } from '../context/tracks-context';
 
 const days = [
   { date: '2021-12-27' },
@@ -91,34 +93,53 @@ const days = [
   { date: '2022-02-04' },
   { date: '2022-02-05' },
   { date: '2022-02-06' },
-]
+];
 
 function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(' ');
 }
 
 export function Calendar() {
-  const container = useRef(null)
-  const containerNav = useRef(null)
-  const containerOffset = useRef(null)
+  const { events, setEvents } = useTracksValue();
+  const container = useRef(null);
+  const containerNav = useRef(null);
+  const containerOffset = useRef(null);
+  const [todaysEvents, setTodaysEvents] = useState('');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Set the container scroll position based on the current time.
-    const currentMinute = new Date().getHours() * 60
+    const currentMinute = new Date().getHours() * 60;
     container.current.scrollTop =
-      ((container.current.scrollHeight - containerNav.current.offsetHeight - containerOffset.current.offsetHeight) *
+      ((container.current.scrollHeight -
+        containerNav.current.offsetHeight -
+        containerOffset.current.offsetHeight) *
         currentMinute) /
-      1440
-  }, [])
+      1440;
+  }, []);
+
+  // only get the events that have today's date in the start date
+  useEffect(() => {
+    const today = moment().format('YYYY-MM-DD');
+    const filteredEvents = events.filter((event) => {
+      return moment(event.start).format('YYYY-MM-DD') === today;
+    });
+    setTodaysEvents(filteredEvents);
+    // if todaysEvents has at least one object in it, set loading to false
+  }, [events]);
+
+  useEffect(() => {
+    if (todaysEvents.length > 0) {
+      setLoading(false);
+    }
+  }, [todaysEvents]);
 
   return (
     <div className="flex flex-col ml-80 mr-80 overflow-auto pt-20">
       <header className="relative flex flex-none items-center justify-between border-b border-gray-200 py-4 px-6">
         <div>
           <h1 className="text-lg font-semibold leading-6 text-gray-900">
-            <time className="sm:hidden">
-              {moment().format('MMM D YYYY')}
-            </time>
+            <time className="sm:hidden">{moment().format('MMM D YYYY')}</time>
             <time className="hidden sm:inline">
               {moment().format('MMMM D, YYYY')}
             </time>
@@ -158,7 +179,10 @@ export function Calendar() {
                 className="flex items-center rounded-md border border-gray-300 bg-white py-2 pl-3 pr-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
               >
                 Day view
-                <ChevronDownIcon className="ml-2 h-5 w-5 text-gray-400" aria-hidden="true" />
+                <ChevronDownIcon
+                  className="ml-2 h-5 w-5 text-gray-400"
+                  aria-hidden="true"
+                />
               </Menu.Button>
 
               <Transition
@@ -177,7 +201,9 @@ export function Calendar() {
                         <a
                           href="#"
                           className={classNames(
-                            active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                            active
+                              ? 'bg-gray-100 text-gray-900'
+                              : 'text-gray-700',
                             'block px-4 py-2 text-sm'
                           )}
                         >
@@ -190,7 +216,9 @@ export function Calendar() {
                         <a
                           href="#"
                           className={classNames(
-                            active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                            active
+                              ? 'bg-gray-100 text-gray-900'
+                              : 'text-gray-700',
                             'block px-4 py-2 text-sm'
                           )}
                         >
@@ -203,7 +231,9 @@ export function Calendar() {
                         <a
                           href="#"
                           className={classNames(
-                            active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                            active
+                              ? 'bg-gray-100 text-gray-900'
+                              : 'text-gray-700',
                             'block px-4 py-2 text-sm'
                           )}
                         >
@@ -216,7 +246,9 @@ export function Calendar() {
                         <a
                           href="#"
                           className={classNames(
-                            active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                            active
+                              ? 'bg-gray-100 text-gray-900'
+                              : 'text-gray-700',
                             'block px-4 py-2 text-sm'
                           )}
                         >
@@ -258,7 +290,9 @@ export function Calendar() {
                       <a
                         href="#"
                         className={classNames(
-                          active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                          active
+                            ? 'bg-gray-100 text-gray-900'
+                            : 'text-gray-700',
                           'block px-4 py-2 text-sm'
                         )}
                       >
@@ -273,7 +307,9 @@ export function Calendar() {
                       <a
                         href="#"
                         className={classNames(
-                          active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                          active
+                            ? 'bg-gray-100 text-gray-900'
+                            : 'text-gray-700',
                           'block px-4 py-2 text-sm'
                         )}
                       >
@@ -288,7 +324,9 @@ export function Calendar() {
                       <a
                         href="#"
                         className={classNames(
-                          active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                          active
+                            ? 'bg-gray-100 text-gray-900'
+                            : 'text-gray-700',
                           'block px-4 py-2 text-sm'
                         )}
                       >
@@ -301,7 +339,9 @@ export function Calendar() {
                       <a
                         href="#"
                         className={classNames(
-                          active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                          active
+                            ? 'bg-gray-100 text-gray-900'
+                            : 'text-gray-700',
                           'block px-4 py-2 text-sm'
                         )}
                       >
@@ -314,7 +354,9 @@ export function Calendar() {
                       <a
                         href="#"
                         className={classNames(
-                          active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                          active
+                            ? 'bg-gray-100 text-gray-900'
+                            : 'text-gray-700',
                           'block px-4 py-2 text-sm'
                         )}
                       >
@@ -327,7 +369,9 @@ export function Calendar() {
                       <a
                         href="#"
                         className={classNames(
-                          active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                          active
+                            ? 'bg-gray-100 text-gray-900'
+                            : 'text-gray-700',
                           'block px-4 py-2 text-sm'
                         )}
                       >
@@ -347,44 +391,65 @@ export function Calendar() {
             ref={containerNav}
             className="sticky top-0 z-10 grid flex-none grid-cols-7 bg-white text-xs text-gray-500 shadow ring-1 ring-black ring-opacity-5 md:hidden"
           >
-            <button type="button" className="flex flex-col items-center pt-3 pb-1.5">
+            <button
+              type="button"
+              className="flex flex-col items-center pt-3 pb-1.5"
+            >
               <span>W</span>
               {/* Default: "text-gray-900", Selected: "bg-gray-900 text-white", Today (Not Selected): "text-indigo-600", Today (Selected): "bg-indigo-600 text-white" */}
               <span className="mt-3 flex h-8 w-8 items-center justify-center rounded-full text-base font-semibold text-gray-900">
                 19
               </span>
             </button>
-            <button type="button" className="flex flex-col items-center pt-3 pb-1.5">
+            <button
+              type="button"
+              className="flex flex-col items-center pt-3 pb-1.5"
+            >
               <span>T</span>
               <span className="mt-3 flex h-8 w-8 items-center justify-center rounded-full text-base font-semibold text-indigo-600">
                 20
               </span>
             </button>
-            <button type="button" className="flex flex-col items-center pt-3 pb-1.5">
+            <button
+              type="button"
+              className="flex flex-col items-center pt-3 pb-1.5"
+            >
               <span>F</span>
               <span className="mt-3 flex h-8 w-8 items-center justify-center rounded-full text-base font-semibold text-gray-900">
                 21
               </span>
             </button>
-            <button type="button" className="flex flex-col items-center pt-3 pb-1.5">
+            <button
+              type="button"
+              className="flex flex-col items-center pt-3 pb-1.5"
+            >
               <span>S</span>
               <span className="mt-3 flex h-8 w-8 items-center justify-center rounded-full bg-gray-900 text-base font-semibold text-white">
                 22
               </span>
             </button>
-            <button type="button" className="flex flex-col items-center pt-3 pb-1.5">
+            <button
+              type="button"
+              className="flex flex-col items-center pt-3 pb-1.5"
+            >
               <span>S</span>
               <span className="mt-3 flex h-8 w-8 items-center justify-center rounded-full text-base font-semibold text-gray-900">
                 23
               </span>
             </button>
-            <button type="button" className="flex flex-col items-center pt-3 pb-1.5">
+            <button
+              type="button"
+              className="flex flex-col items-center pt-3 pb-1.5"
+            >
               <span>M</span>
               <span className="mt-3 flex h-8 w-8 items-center justify-center rounded-full text-base font-semibold text-gray-900">
                 24
               </span>
             </button>
-            <button type="button" className="flex flex-col items-center pt-3 pb-1.5">
+            <button
+              type="button"
+              className="flex flex-col items-center pt-3 pb-1.5"
+            >
               <span>T</span>
               <span className="mt-3 flex h-8 w-8 items-center justify-center rounded-full text-base font-semibold text-gray-900">
                 25
@@ -549,25 +614,64 @@ export function Calendar() {
               {/* Events */}
               <ol
                 className="col-start-1 col-end-2 row-start-1 grid grid-cols-1"
-                style={{ gridTemplateRows: '1.75rem repeat(288, minmax(0, 1fr)) auto' }}
+                style={{
+                  gridTemplateRows: '1.75rem repeat(288, minmax(0, 1fr)) auto',
+                }}
               >
-                <li className="relative mt-px flex" style={{ gridRow: '74 / span 12' }}>
+                <li
+                  className="relative mt-px flex"
+                  style={{ gridRow: '74 / span 12' }}
+                >
                   <a
                     href="#"
                     className="group absolute inset-1 flex flex-col overflow-y-auto rounded-lg bg-blue-50 p-2 text-xs leading-5 hover:bg-blue-100"
                   >
-                    <p className="order-1 font-semibold text-blue-700">Breakfast</p>
+                    <p className="order-1 font-semibold text-blue-700">
+                      Breakfast
+                    </p>
                     <p className="text-blue-500 group-hover:text-blue-700">
                       <time dateTime="2022-01-22T06:00">6:00 AM</time>
                     </p>
                   </a>
                 </li>
-                <li className="relative mt-px flex" style={{ gridRow: '92 / span 30' }}>
+                {loading ? (
+                  <></>
+                ) : (
+                  todaysEvents.map((block) => (
+                    <li
+                      key={`${block.id}`}
+                      className="relative mt-px flex"
+                      style={{
+                        gridRow: `${block.gridRow} / span ${block.span}`,
+                      }}
+                    >
+                      <a
+                        href="#"
+                        className="group absolute inset-1 flex flex-col overflow-y-auto rounded-lg bg-blue-50 p-2 text-xs leading-5 hover:bg-blue-100"
+                      >
+                        <p className="order-1 font-semibold text-blue-700">
+                          {block.title}
+                        </p>
+                        <p className="text-blue-500 group-hover:text-blue-700">
+                          <time dateTime="2022-01-22T${block.startTime}">
+                            {block.startTime}
+                          </time>
+                        </p>
+                      </a>
+                    </li>
+                  ))
+                )}
+                {/* <li
+                  className="relative mt-px flex"
+                  style={{ gridRow: '92 / span 30' }}
+                >
                   <a
                     href="#"
                     className="group absolute inset-1 flex flex-col overflow-y-auto rounded-lg bg-pink-50 p-2 text-xs leading-5 hover:bg-pink-100"
                   >
-                    <p className="order-1 font-semibold text-pink-700">Flight to Paris</p>
+                    <p className="order-1 font-semibold text-pink-700">
+                      Flight to Paris
+                    </p>
                     <p className="order-1 text-pink-500 group-hover:text-pink-700">
                       John F. Kennedy International Airport
                     </p>
@@ -575,31 +679,45 @@ export function Calendar() {
                       <time dateTime="2022-01-22T07:30">7:30 AM</time>
                     </p>
                   </a>
-                </li>
-                <li className="relative mt-px flex" style={{ gridRow: '134 / span 18' }}>
+                </li> */}
+                {/* <li
+                  className="relative mt-px flex"
+                  style={{ gridRow: '134 / span 18' }}
+                >
                   <a
                     href="#"
                     className="group absolute inset-1 flex flex-col overflow-y-auto rounded-lg bg-indigo-50 p-2 text-xs leading-5 hover:bg-indigo-100"
                   >
-                    <p className="order-1 font-semibold text-indigo-700">Sightseeing</p>
-                    <p className="order-1 text-indigo-500 group-hover:text-indigo-700">Eiffel Tower</p>
+                    <p className="order-1 font-semibold text-indigo-700">
+                      Sightseeing
+                    </p>
+                    <p className="order-1 text-indigo-500 group-hover:text-indigo-700">
+                      Eiffel Tower
+                    </p>
                     <p className="text-indigo-500 group-hover:text-indigo-700">
                       <time dateTime="2022-01-22T11:00">11:00 AM</time>
                     </p>
                   </a>
                 </li>
-                <li className="relative mt-px flex" style={{ gridRow: '206 / span 12'}}>
-                <a
+                <li
+                  className="relative mt-px flex"
+                  style={{ gridRow: '206 / span 12' }}
+                >
+                  <a
                     href="#"
                     className="group absolute inset-1 flex flex-col overflow-y-auto rounded-lg bg-indigo-50 p-2 text-xs leading-5 hover:bg-indigo-100"
                   >
-                    <p className="order-1 font-semibold text-indigo-700">Sightseeing</p>
-                    <p className="order-1 text-indigo-500 group-hover:text-indigo-700">Eiffel Tower</p>
+                    <p className="order-1 font-semibold text-indigo-700">
+                      Sightseeing
+                    </p>
+                    <p className="order-1 text-indigo-500 group-hover:text-indigo-700">
+                      Eiffel Tower
+                    </p>
                     <p className="text-indigo-500 group-hover:text-indigo-700">
                       <time dateTime="2022-01-22T11:00">11:00 AM</time>
                     </p>
                   </a>
-                </li>
+                </li> */}
               </ol>
             </div>
           </div>
@@ -609,10 +727,8 @@ export function Calendar() {
             Current Tasks
           </div>
           {/* Put it here */}
-          
-         
         </div>
       </div>
     </div>
-  )
+  );
 }
