@@ -5,35 +5,77 @@ import moment from 'moment';
 import { sortedObject } from '../helpers';
 import { useTracksValue } from '../context/tracks-context';
 
-// AutoFill Algorithm
+// AutoFill Algorithm ( Not a Hook)
 // Iteration 1: Random Fill
 export const useAutoFill = (events) => {
-  const [autoEvents, setAutoEvents] = useState([]);
-  const [tracks, setTracks] = useState([]);
+  // get the events with today's start date formatted YYYY-MM-DD
+  const todayEvents = events.filter((event) => {
+    return (
+      moment(event.startDate).format('YYYY-MM-DD') ===
+      moment().format('YYYY-MM-DD')
+    );
+  });
 
-  useEffect(() => {
-    // get the events with today's start date formatted YYYY-MM-DD
-    const todayEvents = events.filter((event) => {
-      return (
-        moment(event.startDate).format('YYYY-MM-DD') ===
-        moment().format('YYYY-MM-DD')
-      );
-    });
+  // The total amount of time that the user has in their daily schedule
+  const scheduleArray = Array(288).fill(null);
 
-    // The total amount of time that the user has in their daily schedule
-    const scheduleArray = Array(288).fill(null);
+  // go through today's events and get the gridRow for each event
+  todayEvents.forEach((event) => {
+    const startGridRow = event.gridRow;
+    const endGridRow = event.gridRow + (event.span - 1);
+    for (let i = startGridRow - 1; i <= endGridRow; i++) {
+      scheduleArray[i] = 1;
+    }
+  });
 
-    // go through today's events and get the gridRow for each event
-    todayEvents.forEach((event) => {
-      const startGridRow = event.gridRow;
-      const endGridRow = event.gridRow + (event.span - 1);
-      for (let i = startGridRow - 1; i <= endGridRow; i++) {
-        scheduleArray[i] = 1;
+  console.log(scheduleArray);
+
+  let dayStart = 61;
+  let dayEnd = 275;
+
+  //
+
+  // iterate through the scheduleArray
+  for (let i = dayStart; i <= dayEnd; i++) {
+    // need to check if there are 24 consecutive indices that are null then fill them with a 2
+    let consecutiveNulls = 0;
+    let consecutiveNullsStart = 0;
+    let consecutiveNullsEnd = 0;
+    for (let j = i; j <= i + 23; j++) {
+      // if this is the first index that is null then set the start index
+      if (j === i && scheduleArray[j] === null) {
+        consecutiveNullsStart = j;
       }
-    });
+      if (scheduleArray[j] === null) {
+        consecutiveNulls++;
+      }
+    }
+    if (consecutiveNulls === 24) {
+      // set consecutiveNullsEnd to the last index that is null
+      consecutiveNullsEnd = consecutiveNullsStart + 23;
+      let randomNumber = Math.floor(Math.random() * 24);
+      for (let k = i; k <= i + 23; k++) {
+        scheduleArray[k] = randomNumber;
+      }
 
-    console.log(scheduleArray);
-  }, []);
+      // Now make an event in firebase
+      let userId = auth.currentUser.uid;
+      let maintenanceRequired = false;
+      db.collection('events').add({
+        archived: false,
+        trackId: null,
+        routineId: null,
+        title: null,
+        start: null,
+        end: null,
+        userId: userId,
+        maintenanceRequired: maintenanceRequired,
+        gridRow: consecutiveNullsStart,
+        span: 24,
+      });
+    }
+  }
+  console.log('filled in scheduleArray:', scheduleArray);
 };
 
 // this is constantly getting new events for the calendar

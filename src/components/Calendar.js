@@ -1,44 +1,3 @@
-// import FullCalendar from '@fullcalendar/react';
-// import dayGridPlugin from '@fullcalendar/daygrid';
-// import timeGridPlugin from '@fullcalendar/timegrid';
-// import interactionPlugin from '@fullcalendar/interaction';
-// import { useState, useEffect } from 'react';
-// import { useTracksValue } from '../context/tracks-context';
-// import { useAutoFill } from '../hooks';
-
-// export function Calendar() {
-//   const { events, setEvents } = useTracksValue();
-
-//     // testing for autofill
-//     // useEffect(() => {
-//     //   useAutoFill(events);
-//     // }, [])
-
-//     return (
-//       <div className="ml-96 mr-64 pt-4">
-//         <FullCalendar
-//           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-//           initialView="timeGridDay"
-//           headerToolbar = {{
-//             start: 'title',
-//             center: '',
-//             end: 'today prev,next'
-//           }}
-//           customButtons={{
-//             new: {
-//               text: 'new',
-//               click: () => console.log('new event'),
-//             },
-//           }}
-//           events={events}
-//           nowIndicator
-//           contentHeight={1230}
-//           // eventColor={'#F0A202'}
-//         />
-//       </div>
-//     );
-//   }
-
 import { Fragment, useEffect, useRef, useState } from 'react';
 import {
   ChevronDownIcon,
@@ -49,6 +8,8 @@ import {
 import { Menu, Transition } from '@headlessui/react';
 import moment from 'moment';
 import { useTracksValue } from '../context/tracks-context';
+import { useAutoFill } from '../hooks';
+import { auth } from '../firebase';
 
 const days = [
   { date: '2021-12-27' },
@@ -106,6 +67,7 @@ export function Calendar() {
   const containerOffset = useRef(null);
   const [todaysEvents, setTodaysEvents] = useState('');
   const [loading, setLoading] = useState(true);
+  const [autoEvents, setAutoEvents] = useState([]);
 
   useEffect(() => {
     // Set the container scroll position based on the current time.
@@ -120,11 +82,85 @@ export function Calendar() {
 
   // only get the events that have today's date in the start date
   useEffect(() => {
+    setTodaysEvents([]);
     const today = moment().format('YYYY-MM-DD');
-    const filteredEvents = events.filter((event) => {
+    let todaysEvents = events.filter((event) => {
       return moment(event.start).format('YYYY-MM-DD') === today;
     });
-    setTodaysEvents(filteredEvents);
+
+    // The total amount of time that the user has in their daily schedule
+    const scheduleArray = Array(288).fill(null);
+
+    // go through today's events and get the gridRow for each event
+    todaysEvents.forEach((event) => {
+      const startGridRow = event.gridRow;
+      const endGridRow = event.gridRow + (event.span - 1);
+      for (let i = startGridRow - 1; i <= endGridRow; i++) {
+        scheduleArray[i] = 1;
+      }
+    });
+
+    console.log(scheduleArray);
+
+    let dayStart = 61;
+    let dayEnd = 275;
+
+    //
+
+    // iterate through the scheduleArray
+    for (let i = dayStart; i <= dayEnd; i++) {
+      // need to check if there are 24 consecutive indices that are null then fill them with a 2
+      let consecutiveNulls = 0;
+      let consecutiveNullsStart = 0;
+      let consecutiveNullsEnd = 0;
+      for (let j = i; j <= i + 23; j++) {
+        // if this is the first index that is null then set the start index
+        if (j === i && scheduleArray[j] === null) {
+          consecutiveNullsStart = j;
+        }
+        if (scheduleArray[j] === null) {
+          consecutiveNulls++;
+        }
+      }
+      if (consecutiveNulls === 24) {
+        // set consecutiveNullsEnd to the last index that is null
+        consecutiveNullsEnd = consecutiveNullsStart + 23;
+        let randomNumber = Math.floor(Math.random() * 24);
+        for (let k = i; k <= i + 23; k++) {
+          scheduleArray[k] = randomNumber;
+        }
+
+        // Now make an event in firebase
+        let userId = auth.currentUser.uid;
+        let maintenanceRequired = false;
+        // db.collection('events').add({
+        //   archived: false,
+        //   trackId: null,
+        //   routineId: null,
+        //   title: null,
+        //   start: null,
+        //   end: null,
+        //   userId: userId,
+        //   maintenanceRequired: maintenanceRequired,
+        //   gridRow: consecutiveNullsStart,
+        //   span: 24,
+        // });
+        todaysEvents.push({
+          archived: false,
+          trackId: 'Auto Fill Testing',
+          routineId: null,
+          title: 'Auto Fill Testing',
+          start: null,
+          end: null,
+          userId: userId,
+          maintenanceRequired: maintenanceRequired,
+          gridRow: consecutiveNullsStart,
+          span: 24,
+        });
+      }
+    }
+
+    setTodaysEvents(todaysEvents);
     // if todaysEvents has at least one object in it, set loading to false. This helps us not call .map on an empty array and crash the app
   }, [events]);
 
@@ -611,14 +647,14 @@ export function Calendar() {
                 <div />
               </div>
 
-              {/* Events */}
+              {/* Routines */}
               <ol
                 className="col-start-1 col-end-2 row-start-1 grid grid-cols-1"
                 style={{
                   gridTemplateRows: '1.75rem repeat(288, minmax(0, 1fr)) auto',
                 }}
               >
-                <li
+                {/* <li
                   className="relative mt-px flex"
                   style={{ gridRow: '74 / span 12' }}
                 >
@@ -633,7 +669,7 @@ export function Calendar() {
                       <time dateTime="2022-01-22T06:00">6:00 AM</time>
                     </p>
                   </a>
-                </li>
+                </li> */}
                 {loading ? (
                   <></>
                 ) : (
