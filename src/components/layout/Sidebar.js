@@ -40,7 +40,7 @@ export const Sidebar = () => {
             active === 'next_7'
               ? 'bg-gray-200 text-gray-900'
               : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
-            'flex items-center px-3 py-2 text-sm font-medium rounded-md'
+            'flex items-center px-3 py-2 text-sm font-medium rounded-md cursor-pointer'
           )}
           onClick={() => {
             setActive('next_7');
@@ -73,7 +73,7 @@ export const Sidebar = () => {
             active === 'inbox'
               ? 'bg-gray-200 text-gray-900'
               : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
-            'flex items-center px-3 py-2 text-sm font-medium rounded-md'
+            'flex items-center px-3 py-2 text-sm font-medium rounded-md cursor-pointer'
           )}
           onClick={() => {
             setActive('inbox');
@@ -106,7 +106,7 @@ export const Sidebar = () => {
             active === 'today'
               ? 'bg-gray-200 text-gray-900'
               : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
-            'flex items-center px-3 py-2 text-sm font-medium rounded-md'
+            'flex items-center px-3 py-2 text-sm font-medium rounded-md cursor-pointer'
           )}
           onClick={() => {
             setActive('today');
@@ -172,7 +172,6 @@ export const Sidebar = () => {
         }}
       >
         <div>
-          
           <p className="pl-3 pt-3 float-left text-gray-400 font-medium">
             Routines
           </p>

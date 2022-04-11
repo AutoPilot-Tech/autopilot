@@ -125,7 +125,7 @@ export function Calendar() {
       return moment(event.start).format('YYYY-MM-DD') === today;
     });
     setTodaysEvents(filteredEvents);
-    // if todaysEvents has at least one object in it, set loading to false
+    // if todaysEvents has at least one object in it, set loading to false. This helps us not call .map on an empty array and crash the app
   }, [events]);
 
   useEffect(() => {

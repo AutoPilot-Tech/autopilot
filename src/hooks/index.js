@@ -5,68 +5,36 @@ import moment from 'moment';
 import { sortedObject } from '../helpers';
 import { useTracksValue } from '../context/tracks-context';
 
+// AutoFill Algorithm
+// Iteration 1: Random Fill
 export const useAutoFill = (events) => {
-  console.log('events:', events)
-  // get today's date
-  const today = moment().format('YYYY-MM-DD');
+  const [autoEvents, setAutoEvents] = useState([]);
+  const [tracks, setTracks] = useState([]);
 
-  console.log('today:', today);
-  // filter the events to only show the ones that are today
-  const filteredEvents = events.filter((event) => {
-    return event.start.format('YYYY-MM-DD') === today;
-  });
+  useEffect(() => {
+    // get the events with today's start date formatted YYYY-MM-DD
+    const todayEvents = events.filter((event) => {
+      return (
+        moment(event.startDate).format('YYYY-MM-DD') ===
+        moment().format('YYYY-MM-DD')
+      );
+    });
 
-  console.log('filteredEvents', filteredEvents);
+    // The total amount of time that the user has in their daily schedule
+    const scheduleArray = Array(288).fill(null);
 
-  // Change the format of each filtered event to HH:mm:ss
-  const filteredEventsFormatted = filteredEvents.map((event) => {
-    return {
-      ...event,
-      start: event.start.format('HH:mm:ss'),
-      end: event.end.format('HH:mm:ss'),
-    };
-  }
-  );
+    // go through today's events and get the gridRow for each event
+    todayEvents.forEach((event) => {
+      const startGridRow = event.gridRow;
+      const endGridRow = event.gridRow + (event.span - 1);
+      for (let i = startGridRow - 1; i <= endGridRow; i++) {
+        scheduleArray[i] = 1;
+      }
+    });
 
-  console.log('filteredEventsFormatted:', filteredEventsFormatted);
-
-  // sort the events by start time
-  const sortedEvents = sortedObject(filteredEventsFormatted, 'start');
-
-  console.log('sortedEvents: ', sortedEvents)
-
-
-  // get the duration of each filtered event in hours
-  // const filteredEventsDuration = sortedEvents.map((event) => {
-  //   return moment.duration(event.end.diff(event.start)).asHours();
-  // }
-  // );
-
-  console.log('filteredEventsDuration: ', filteredEventsDuration)
-
-
-
-
-  // This is a hardcoded day start and day end for the autofill.
-  let dayStart = 9;
-  let dayEnd = 19;
-
-  // This is an array that represents the time boxes that are available for auto fill.
-  let timeboxes = [];
-
-  // Fill the timeboxes that are not available with the events.
-  // for (let i = dayStart; i < dayEnd; i++) {
-
-  // }
-
-
-
-
-
-return
-
-
-}
+    console.log(scheduleArray);
+  }, []);
+};
 
 // this is constantly getting new events for the calendar
 export const useEvents = () => {
@@ -144,9 +112,7 @@ export const useActive = () => {
   useEffect(() => {
     active = active;
   }, [active]);
-
-
-}
+};
 
 // this one will be pulling tracks only once, and only changes
 // when there is new tracks

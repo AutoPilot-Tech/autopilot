@@ -63,6 +63,7 @@ export const RoutineSettings = () => {
       let startTime = routineStartDate.add(1, 'days').format();
       let endTime = routineEndDate.add(1, 'days').format();
       // if its the 6th iteration or above set maintenanceRequired to true
+      // we will use this to regenerate more routines on the server side - this saves space and $$
       if (i >= 6) {
         maintenanceRequired = true;
       }
