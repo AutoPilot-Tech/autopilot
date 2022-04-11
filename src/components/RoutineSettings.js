@@ -39,7 +39,7 @@ export const RoutineSettings = () => {
     let startHour = moment(routineStartDate).hours();
     let startMinute = moment(routineStartDate).minutes();
     // Add two since its gridRow, and multiply by 12
-    let startTimeInHoursDecimal = startHour + (startMinute / 60);
+    let startTimeInHoursDecimal = Math.floor( startHour + (startMinute / 60));
     let gridRowForCalendar = Math.floor(startTimeInHoursDecimal * 12) + 2;
 
     console.log(routineStartDate);

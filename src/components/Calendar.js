@@ -82,89 +82,101 @@ export function Calendar() {
 
   // only get the events that have today's date in the start date
   useEffect(() => {
-    setTodaysEvents([]);
-    const today = moment().format('YYYY-MM-DD');
-    let todaysEvents = events.filter((event) => {
-      return moment(event.start).format('YYYY-MM-DD') === today;
-    });
+    // only run this code is events has any events in it
+    if (events.length > 0) {
+      let scheduleArray = Array(288).fill(null);
 
-    // The total amount of time that the user has in their daily schedule
-    const scheduleArray = Array(288).fill(null);
-
-    // go through today's events and get the gridRow for each event
-    todaysEvents.forEach((event) => {
-      const startGridRow = event.gridRow;
-      const endGridRow = event.gridRow + (event.span - 1);
-      for (let i = startGridRow - 1; i <= endGridRow; i++) {
-        scheduleArray[i] = 1;
-      }
-    });
-
-    console.log(scheduleArray);
-
-    let dayStart = 61;
-    let dayEnd = 275;
-
-    //
-
-    // iterate through the scheduleArray
-    for (let i = dayStart; i <= dayEnd; i++) {
-      // need to check if there are 24 consecutive indices that are null then fill them with a 2
-      let consecutiveNulls = 0;
-      let consecutiveNullsStart = 0;
-      let consecutiveNullsEnd = 0;
-      for (let j = i; j <= i + 23; j++) {
-        // if this is the first index that is null then set the start index
-        if (j === i && scheduleArray[j] === null) {
-          consecutiveNullsStart = j;
+      console.log('useEffect 1 just ran');
+      const today = moment().format('YYYY-MM-DD');
+      console.log(events);
+      let routineEvents = events.filter((event) => {
+        return moment(event.start).format('YYYY-MM-DD') === today;
+      });
+      // go through today's events and get the gridRow for each event
+      routineEvents.forEach((event) => {
+        const startGridRow = event.gridRow;
+        const endGridRow = event.gridRow + (event.span - 1);
+        for (let i = startGridRow - 1; i <= endGridRow; i++) {
+          scheduleArray[i] = 1;
         }
-        if (scheduleArray[j] === null) {
-          consecutiveNulls++;
-        }
-      }
-      if (consecutiveNulls === 24) {
-        // set consecutiveNullsEnd to the last index that is null
-        consecutiveNullsEnd = consecutiveNullsStart + 23;
-        let randomNumber = Math.floor(Math.random() * 24);
-        for (let k = i; k <= i + 23; k++) {
-          scheduleArray[k] = randomNumber;
-        }
+      });
+      console.log('scheduleArray: ', scheduleArray);
 
-        // Now make an event in firebase
-        let userId = auth.currentUser.uid;
-        let maintenanceRequired = false;
-        // db.collection('events').add({
-        //   archived: false,
-        //   trackId: null,
-        //   routineId: null,
-        //   title: null,
-        //   start: null,
-        //   end: null,
-        //   userId: userId,
-        //   maintenanceRequired: maintenanceRequired,
-        //   gridRow: consecutiveNullsStart,
-        //   span: 24,
-        // });
-        todaysEvents.push({
-          archived: false,
-          trackId: 'Auto Fill Testing',
-          routineId: null,
-          title: 'Auto Fill Testing',
-          start: null,
-          end: null,
-          userId: userId,
-          maintenanceRequired: maintenanceRequired,
-          gridRow: consecutiveNullsStart,
-          span: 24,
-        });
+      let dayStart = 61;
+      let dayEnd = 275;
+
+      // The total amount of time that the user has in their daily schedule
+
+      // iterate through the scheduleArray
+      for (let i = dayStart; i <= dayEnd; i++) {
+        // need to check if there are 24 consecutive indices that are null then fill them with a 2
+        let consecutiveNulls = 0;
+        let consecutiveNullsStart = 0;
+        let consecutiveNullsEnd = 0;
+        for (let j = i; j <= i + 23; j++) {
+          // if this is the first index that is null then set the start index
+          if (j === i && scheduleArray[j] === null) {
+            consecutiveNullsStart = j;
+          }
+          if (scheduleArray[j] === null) {
+            consecutiveNulls++;
+          }
+        }
+        if (consecutiveNulls === 24) {
+          // set consecutiveNullsEnd to the last index that is null
+          consecutiveNullsEnd = consecutiveNullsStart + 23;
+          console.log(
+            `Just hit 24 consecutive nulls with the start index of ${consecutiveNullsStart} and the end index of ${consecutiveNullsEnd}`
+          );
+
+          let randomNumber = Math.floor(Math.random() * 24);
+          for (let k = i; k <= i + 23; k++) {
+            scheduleArray[k] = randomNumber;
+          }
+          consecutiveNulls = 0;
+
+          // Now make an event in firebase
+          let userId = auth.currentUser.uid;
+          let maintenanceRequired = false;
+          // db.collection('events').add({
+          //   archived: false,
+          //   trackId: null,
+          //   routineId: null,
+          //   title: null,
+          //   start: null,
+          //   end: null,
+          //   userId: userId,
+          //   maintenanceRequired: maintenanceRequired,
+          //   gridRow: consecutiveNullsStart,
+          //   span: 24,
+          // });
+          routineEvents.push({
+            archived: false,
+            trackId: 'Auto Fill Testing',
+            routineId: '34535',
+            title: 'Auto Fill Testing',
+            // set start to the time now
+            start: moment().format('YYYY-MM-DD HH:mm'),
+            end: moment().format('YYYY-MM-DD HH:mm'),
+            userId: userId,
+            maintenanceRequired: maintenanceRequired,
+            gridRow: consecutiveNullsStart,
+            span: 24,
+          });
+          console.log(
+            `Just added event to routineEvents with gridRow: ${consecutiveNullsStart} and ${24} span`,
+            routineEvents
+          );
+        }
       }
+      setTodaysEvents(routineEvents);
     }
 
-    setTodaysEvents(todaysEvents);
     // if todaysEvents has at least one object in it, set loading to false. This helps us not call .map on an empty array and crash the app
   }, [events]);
 
   useEffect(() => {
+    console.log('useEffect 2 just ran');
     if (todaysEvents.length > 0) {
       setLoading(false);
     }

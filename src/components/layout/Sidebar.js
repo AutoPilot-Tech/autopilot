@@ -68,6 +68,39 @@ export const Sidebar = () => {
           <span>For You</span>
         </li>
         <li
+          data-testid="today"
+          className={classNames(
+            active === 'assistant'
+              ? 'bg-gray-200 text-gray-900'
+              : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+            'flex items-center px-3 py-2 text-sm font-medium rounded-md cursor-pointer'
+          )}
+          onClick={() => {
+            setActive('ASSISTANT');
+            setSelectedTrack('assistant');
+            logClick('sideBarAssistantClick');
+            setIsRoutine(false);
+          }}
+        >
+          <span className="mr-1">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"
+              />
+            </svg>
+          </span>
+          <span>Your Assistant</span>
+        </li>
+        <li
           data-testid="inbox"
           className={classNames(
             active === 'inbox'
@@ -133,19 +166,6 @@ export const Sidebar = () => {
           </span>
           <span>Today's Tasks</span>
         </li>
-        {/* <li
-          data-testid="assistant"
-          className={active === 'assistant' ? 'active' : undefined}
-          onClick={() => {
-            setActive('assistant');
-            setSelectedTrack('ASSISTANT');
-          }}
-        >
-          <span>
-            <FaCommentDots />
-          </span>
-          <span>Your Assistant</span>
-        </li> */}
       </ul>
       <div
         className="sidebar__middle"
