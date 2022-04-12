@@ -70,14 +70,14 @@ export const Sidebar = () => {
         <li
           data-testid="today"
           className={classNames(
-            active === 'assistant'
+            active === 'Assistant'
               ? 'bg-gray-200 text-gray-900'
               : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
             'flex items-center px-3 py-2 text-sm font-medium rounded-md cursor-pointer'
           )}
           onClick={() => {
-            setActive('ASSISTANT');
-            setSelectedTrack('assistant');
+            setActive('Assistant');
+            setSelectedTrack('ASSISTANT');
             logClick('sideBarAssistantClick');
             setIsRoutine(false);
           }}
@@ -165,6 +165,39 @@ export const Sidebar = () => {
             </svg>
           </span>
           <span>Today's Tasks</span>
+        </li>
+        <li
+          data-testid="today"
+          className={classNames(
+            active === 'Settings'
+              ? 'bg-gray-200 text-gray-900'
+              : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+            'flex items-center px-3 py-2 text-sm font-medium rounded-md cursor-pointer'
+          )}
+          onClick={() => {
+            setActive('Settings');
+            setSelectedTrack('SETTINGS');
+            logClick('sideBarClickSettings');
+            setIsRoutine(false);
+          }}
+        >
+          <span className="mr-1">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
+              />
+            </svg>
+          </span>
+          <span>Autopilot Settings</span>
         </li>
       </ul>
       <div

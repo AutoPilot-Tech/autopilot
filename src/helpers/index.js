@@ -1,4 +1,10 @@
 import { collatedTasks } from '../constants';
+import { colorsList } from '../constants';
+
+export const getRandomColor = () => {
+  const randomIndex = Math.floor(Math.random() * colorsList.length);
+  return colorsList[randomIndex];
+}
 
 
 export const getTitle = (tracks, selectedTrackId) => {

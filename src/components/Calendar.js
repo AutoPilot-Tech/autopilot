@@ -7,9 +7,10 @@ import {
 } from '@heroicons/react/solid';
 import { Menu, Transition } from '@headlessui/react';
 import moment from 'moment';
-import { useTracksValue } from '../context/tracks-context';
 import { useAutoFill } from '../hooks';
 import { auth } from '../firebase';
+import { useTracksValue } from '../context/tracks-context';
+import { generatePushId } from '../helpers';
 
 const days = [
   { date: '2021-12-27' },
@@ -68,6 +69,7 @@ export function Calendar() {
   const [todaysEvents, setTodaysEvents] = useState('');
   const [loading, setLoading] = useState(true);
   const [autoEvents, setAutoEvents] = useState([]);
+  const { tracks, setTracks } = useTracksValue();
 
   useEffect(() => {
     // Set the container scroll position based on the current time.
@@ -86,9 +88,7 @@ export function Calendar() {
     if (events.length > 0) {
       let scheduleArray = Array(288).fill(null);
 
-      console.log('useEffect 1 just ran');
       const today = moment().format('YYYY-MM-DD');
-      console.log(events);
       let routineEvents = events.filter((event) => {
         return moment(event.start).format('YYYY-MM-DD') === today;
       });
@@ -100,7 +100,6 @@ export function Calendar() {
           scheduleArray[i] = 1;
         }
       });
-      console.log('scheduleArray: ', scheduleArray);
 
       let dayStart = 61;
       let dayEnd = 275;
@@ -125,9 +124,6 @@ export function Calendar() {
         if (consecutiveNulls === 24) {
           // set consecutiveNullsEnd to the last index that is null
           consecutiveNullsEnd = consecutiveNullsStart + 23;
-          console.log(
-            `Just hit 24 consecutive nulls with the start index of ${consecutiveNullsStart} and the end index of ${consecutiveNullsEnd}`
-          );
 
           let randomNumber = Math.floor(Math.random() * 24);
           for (let k = i; k <= i + 23; k++) {
@@ -150,23 +146,59 @@ export function Calendar() {
           //   gridRow: consecutiveNullsStart,
           //   span: 24,
           // });
-          routineEvents.push({
-            archived: false,
-            trackId: 'Auto Fill Testing',
-            routineId: '34535',
-            title: 'Auto Fill Testing',
-            // set start to the time now
-            start: moment().format('YYYY-MM-DD HH:mm'),
-            end: moment().format('YYYY-MM-DD HH:mm'),
-            userId: userId,
-            maintenanceRequired: maintenanceRequired,
-            gridRow: consecutiveNullsStart,
-            span: 24,
-          });
-          console.log(
-            `Just added event to routineEvents with gridRow: ${consecutiveNullsStart} and ${24} span`,
-            routineEvents
-          );
+
+          // get a random track from the tracks array
+          // only run the below code if there is a track in the tracks array
+          if (tracks.length > 0) {
+            let randomTrack = tracks[Math.floor(Math.random() * tracks.length)];
+            let trackId = randomTrack.trackId;
+            let routineId = '444444';
+            let title = randomTrack.name;
+            let textColor = randomTrack.textColor;
+            let bgColor = randomTrack.bgColor;
+
+            // take consecutiveNullStart and get the original time from it
+            let gridRowForCalendar = consecutiveNullsStart - 1;
+            let startTimeInHoursDecimal = gridRowForCalendar / 12;
+            let minutes;
+            let hours;
+            // if startTime has a decimal place then extract it and save it
+            if (startTimeInHoursDecimal % 1 !== 0) {
+              let startTimeDecimal = startTimeInHoursDecimal % 1;
+              let startTimeWhole = startTimeInHoursDecimal - startTimeDecimal;
+              // remove the decimal from starTimeInHoursDecimal and save to startTimeFraction
+              minutes = startTimeDecimal * 60;
+              hours = startTimeWhole;
+            } else {
+              minutes = 0;
+              hours = startTimeInHoursDecimal;
+            }
+
+            // make a moment time with the minutes and hours
+            let startTime = moment()
+              .hours(hours)
+              .minutes(minutes)
+              .format('hh:mm A');
+            // generate a random key for the <li>
+            let key = Math.random().toString(36).substring(7);
+
+            routineEvents.push({
+              archived: false,
+              trackId: trackId,
+              routineId: routineId,
+              title: title,
+              startTime: startTime,
+              // this is kind of irrelevant lol, so set to n/a
+              endTime: 'n/a',
+              userId: userId,
+              maintenanceRequired: maintenanceRequired,
+              gridRow: consecutiveNullsStart,
+              span: 24,
+              textColor: textColor,
+              bgColor: bgColor,
+              key: key,
+            });
+          }
         }
       }
       setTodaysEvents(routineEvents);
@@ -176,9 +208,9 @@ export function Calendar() {
   }, [events]);
 
   useEffect(() => {
-    console.log('useEffect 2 just ran');
     if (todaysEvents.length > 0) {
       setLoading(false);
+      console.log(todaysEvents);
     }
   }, [todaysEvents]);
 
@@ -687,7 +719,7 @@ export function Calendar() {
                 ) : (
                   todaysEvents.map((block) => (
                     <li
-                      key={`${block.id}`}
+                      key={block.key}
                       className="relative mt-px flex"
                       style={{
                         gridRow: `${block.gridRow} / span ${block.span}`,
@@ -695,12 +727,16 @@ export function Calendar() {
                     >
                       <a
                         href="#"
-                        className="group absolute inset-1 flex flex-col overflow-y-auto rounded-lg bg-blue-50 p-2 text-xs leading-5 hover:bg-blue-100"
+                        className={`group absolute inset-1 flex flex-col overflow-y-auto rounded-lg ${block.bgColor} p-2 text-xs leading-5 hover:bg--100`}
                       >
-                        <p className="order-1 font-semibold text-blue-700">
+                        <p
+                          className={`order-1 font-semibold ${block.textColor}`}
+                        >
                           {block.title}
                         </p>
-                        <p className="text-blue-500 group-hover:text-blue-700">
+                        <p
+                          className={`${block.textColor} group-hover:${block.textColor}`}
+                        >
                           <time dateTime="2022-01-22T${block.startTime}">
                             {block.startTime}
                           </time>

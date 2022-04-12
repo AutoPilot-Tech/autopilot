@@ -3,6 +3,7 @@ import { generatePushId } from '../helpers';
 import { db, auth } from '../firebase';
 import { useTracksValue } from '../context/tracks-context';
 import { amplitude } from '../utilities/amplitude';
+import { getRandomColor } from '../helpers/index';
 
 export const AddRoutine = ({ shouldShow = false }) => {
   const [show, setShow] = useState(shouldShow);
@@ -31,6 +32,7 @@ export const AddRoutine = ({ shouldShow = false }) => {
   };
 
   const addRoutine = () => {
+    let trackColor = getRandomColor();
     trackName &&
       db
         .collection('tracks')
@@ -39,6 +41,8 @@ export const AddRoutine = ({ shouldShow = false }) => {
           name: trackName,
           userId: user,
           routine: true,
+          textColor: `text-${trackColor}-500`,
+          bgColor: `bg-${trackColor}-50`,
         })
         .then(() => {
           tracks.push({
@@ -46,6 +50,8 @@ export const AddRoutine = ({ shouldShow = false }) => {
             name: trackName,
             userId: user,
             routine: true,
+            textColor: `text-${trackColor}-500`,
+            bgColor: `bg-${trackColor}-50`,
           });
           setTracks([...tracks]);
           setTrackName('');

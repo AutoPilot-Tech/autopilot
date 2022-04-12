@@ -6,6 +6,7 @@ import { amplitude } from '../utilities/amplitude';
 import { db, auth } from '../firebase';
 import { useTracksValue } from '../context/tracks-context';
 import { getTitle } from '../helpers/index';
+import { getRandomColor } from '../helpers/index';
 
 export const RoutineSettings = () => {
   const [value, setValue] = useState('');
@@ -32,31 +33,40 @@ export const RoutineSettings = () => {
       trackName = getTitle(tracks, selectedTrack);
     }
     // calculate the duration of the event in minutes * 12 (used for span in Calendar)
-    let durationInMinutes =
-      moment(routineEndDate).diff(moment(routineStartDate), 'minutes');
-    let durationInHoursDecimal = (durationInMinutes / 60) * 12;
+    let durationInMinutes = moment(routineEndDate).diff(
+      moment(routineStartDate),
+      'minutes'
+    );
+    let durationInHoursDecimal = Math.round((durationInMinutes / 60) * 12);
     // get the start time's hour and minute'
     let startHour = moment(routineStartDate).hours();
     let startMinute = moment(routineStartDate).minutes();
+    let fractionalHour = startMinute / 60;
     // Add two since its gridRow, and multiply by 12
-    let startTimeInHoursDecimal = Math.floor( startHour + (startMinute / 60));
+    let startTimeInHoursDecimal = startHour + fractionalHour;
     let gridRowForCalendar = Math.floor(startTimeInHoursDecimal * 12) + 2;
 
     console.log(routineStartDate);
     console.log(routineEndDate);
     let userId = auth.currentUser.uid;
     let maintenanceRequired = false;
+    let color = getRandomColor();
+    let key = Math.random().toString(36).substring(7);
     db.collection('events').add({
       archived: false,
       trackId: selectedTrack,
       routineId: selectedTrack,
       title: trackName,
-      start: routineStartDate.format(),
-      end: routineEndDate.format(),
+      // format like 12:00 pm
+      startTime: routineStartDate.format('hh:mm A'),
+      endTime: routineEndDate.format('hh:mm A'),
       userId: userId,
       maintenanceRequired: maintenanceRequired,
       gridRow: gridRowForCalendar,
       span: durationInHoursDecimal,
+      textColor: `text-${color}-500`,
+      bgColor: `bg-${color}-50`,
+      key: key,
     });
     // schedule the routine for the next 7 days
     for (let i = 0; i < 7; i++) {
@@ -78,6 +88,9 @@ export const RoutineSettings = () => {
         maintenanceRequired: maintenanceRequired,
         gridRow: gridRowForCalendar,
         span: durationInHoursDecimal,
+        textColor: `text-${color}-500`,
+        bgColor: `bg-${color}-50`,
+        key: key,
       });
     }
   };
