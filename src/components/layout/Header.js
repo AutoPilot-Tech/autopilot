@@ -1,83 +1,8 @@
-// import React, { useState } from 'react';
-// import { FaMoon, FaUserAlt } from 'react-icons/fa';
-// import { AddTask } from '../AddTask';
-// import { DropDown } from '../DropDown';
-// import { userSubmenu } from '../../constants/index';
-// import { amplitude } from '../../utilities/amplitude';
-// import { auth } from '../../firebase';
-// import { useTracksValue } from '../../context/tracks-context';
-
-
-
-// export const Header = ({ darkMode, setDarkMode }) => {
-//   const [shouldShowMain, setShouldShowMain] = useState(false);
-//   const [showQuickAddTask, setShowQuickAddTask] = useState(false);
-//   const [showDropDown, setShowDropDown] = useState(false);
-
-//   const logClick = (event) => {
-//     let userId = auth.currentUser.uid;
-//     amplitude.getInstance().logEvent(event, userId);
-//   }
-
-  
-
-//   return (
-//     <header className="header" data-testid="header">
-//       <nav>
-//         <div className="logo">
-//             <img src="../../images/logo.png" alt="Autopilot" />
-
-//         </div>
-//         <div className="settings">
-//           <ul>
-//             <li
-//               className="settings__add"
-//               data-testid="quick-add-task-action"
-//               onClick={() => {
-//                 setShowQuickAddTask(true);
-//                 setShouldShowMain(true);
-//                 logClick('quickAddTaskClicked');
-//               }}
-//             >
-//               +
-//             </li>
-//             {/* <li
-//               className="settings__darkmode"
-//               data-testid="dark-mode-action"
-//               onClick={() => {
-//                 setDarkMode(!darkMode);
-//                 logClick('darkModeClicked');
-//               }}
-//             >
-//               <FaMoon />
-//             </li> */}
-//             {/* This is where they can log out, or go to settings. */}
-//             <li className="settings__user" data-testid="user-action">
-//               <FaUserAlt role="button" onClick={() => {
-//                 setShowDropDown(!showDropDown);
-//               }}/>
-//               <DropDown submenus={userSubmenu} showDropDown={showDropDown} />
-
-//             </li>
-//           </ul>
-//         </div>
-//       </nav>
-//       <AddTask
-//         showAddTaskMain={false}
-//         setShouldShowMain={setShouldShowMain}
-//         showQuickAddTask={showQuickAddTask}
-//         setShowQuickAddTask={setShowQuickAddTask}
-//       />
-//     </header>
-//   );
-// };
-
-
-import { Fragment } from 'react'
-import { Menu, Popover, Transition } from '@headlessui/react'
-import { SearchIcon } from '@heroicons/react/solid'
-import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline'
-import { auth } from '../../firebase'
+import { Fragment } from 'react';
+import { Menu, Popover, Transition } from '@headlessui/react';
+import { SearchIcon } from '@heroicons/react/solid';
+import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline';
+import { auth, functions } from '../../firebase';
 
 const logOut = () => {
   auth
@@ -91,26 +16,28 @@ const logOut = () => {
     });
 };
 
+var autoFill = functions.httpsCallable('autoFill');
+
 const user = {
   name: 'Chelsea Hagon',
   email: 'chelsea.hagon@example.com',
   imageUrl:
     'https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-}
+};
 const navigation = [
   { name: 'Dashboard', href: '#', current: true },
   { name: 'Calendar', href: '#', current: false },
   { name: 'Teams', href: '#', current: false },
   { name: 'Directory', href: '#', current: false },
-]
+];
 const userNavigation = [
   { name: 'Your Profile', href: '#', onClick: '' },
   { name: 'Settings', href: '/settings', onClick: '' },
   { name: 'Sign out', href: '#', onClick: logOut },
-]
+];
 
 function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(' ');
 }
 
 export function Header() {
@@ -177,15 +104,18 @@ export function Header() {
                   <a
                     href="#"
                     className="ml-5 flex-shrink-0 bg-white rounded-full p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                  >
-                  </a>
+                  ></a>
 
                   {/* Profile dropdown */}
                   <Menu as="div" className="flex-shrink-0 relative ml-5">
                     <div>
                       <Menu.Button className="bg-white rounded-full flex focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                         <span className="sr-only">Open user menu</span>
-                        <img className="h-8 w-8 rounded-full" src={user.imageUrl} alt="" />
+                        <img
+                          className="h-8 w-8 rounded-full"
+                          src={user.imageUrl}
+                          alt=""
+                        />
                       </Menu.Button>
                     </div>
                     <Transition
@@ -206,10 +136,8 @@ export function Header() {
                                 className={classNames(
                                   active ? 'bg-gray-100' : '',
                                   'block py-2 px-4 text-sm text-gray-700'
-
                                 )}
                                 onClick={item.onClick ? item.onClick : null}
-
                               >
                                 {item.name}
                               </a>
@@ -223,6 +151,9 @@ export function Header() {
                   <a
                     href="#"
                     className="ml-6 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    onClick={() => {
+                      autoFill({ text: 'hello' });
+                    }}
                   >
                     Add Timebox
                   </a>
@@ -238,7 +169,9 @@ export function Header() {
                     href={item.href}
                     aria-current={item.current ? 'page' : undefined}
                     className={classNames(
-                      item.current ? 'bg-gray-100 text-gray-900' : 'hover:bg-gray-50',
+                      item.current
+                        ? 'bg-gray-100 text-gray-900'
+                        : 'hover:bg-gray-50',
                       'block rounded-md py-2 px-3 text-base font-medium'
                     )}
                   >
@@ -249,11 +182,19 @@ export function Header() {
               <div className="border-t border-gray-200 pt-4 pb-3">
                 <div className="max-w-3xl mx-auto px-4 flex items-center sm:px-6">
                   <div className="flex-shrink-0">
-                    <img className="h-10 w-10 rounded-full" src={user.imageUrl} alt="" />
+                    <img
+                      className="h-10 w-10 rounded-full"
+                      src={user.imageUrl}
+                      alt=""
+                    />
                   </div>
                   <div className="ml-3">
-                    <div className="text-base font-medium text-gray-800">{user.name}</div>
-                    <div className="text-sm font-medium text-gray-500">{user.email}</div>
+                    <div className="text-base font-medium text-gray-800">
+                      {user.name}
+                    </div>
+                    <div className="text-sm font-medium text-gray-500">
+                      {user.email}
+                    </div>
                   </div>
                   <button
                     type="button"
@@ -280,6 +221,5 @@ export function Header() {
         )}
       </Popover>
     </>
-  )
+  );
 }
-

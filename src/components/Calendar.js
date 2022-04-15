@@ -11,6 +11,7 @@ import { useAutoFill } from '../hooks';
 import { auth } from '../firebase';
 import { useTracksValue } from '../context/tracks-context';
 import { generatePushId } from '../helpers';
+import { CurrentTasks } from './CurrentTasks';
 
 const days = [
   { date: '2021-12-27' },
@@ -806,11 +807,9 @@ export function Calendar() {
             </div>
           </div>
         </div>
-        <div className="hidden w-1/2 max-w-md flex-none border-l border-gray-100 py-10 px-8 md:block">
-          <div className="flex items-center text-center text-gray-900">
-            Current Tasks
-          </div>
-          {/* Put it here */}
+        <div className="hidden w-1/2 max-w-md h-10 flex-none border-l border-gray-100 py-10 px-8 md:block">
+          
+          <CurrentTasks />
         </div>
       </div>
     </div>

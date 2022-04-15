@@ -1,26 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import { auth, signInWithGoogle } from '../firebase';
+import React, {useState, useEffect} from "react";
+import {auth, signInWithGoogle, db} from "../firebase";
 
 export const Login = () => {
   // components usually re renders when state changes
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
-        window.location.href = '/dashboard';
+        window.location.href = "/dashboard";
       }
     });
     return unsubscribe;
   }, []);
 
-
   const handleLogin = () => {
     auth
       .signInWithEmailAndPassword(email, password)
       .then(() => {
-        console.log('success');
+        console.log("success");
       })
       .catch((error) => alert(error.message));
   };
