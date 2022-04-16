@@ -32,59 +32,77 @@ exports.onCreateUser = functions.auth.user().onCreate((user) => {
 
 exports.autoPilot = functions.firestore
   .document("events/{eventId}")
-  .onWrite((change, context) => {
+  .onWrite(async (change) => {
     // get the event from the event id then get the userId
     const event = change.after.data();
     const userId = event.userId;
-    const today = moment().format("YYYY-MM-DD");
-
-    // look up the user and get their scheduleArray
-    return (
-      db
-        .collection("users")
-        .doc(userId)
-        .get()
-        .then((doc) => {
-          // get the scheduleArray
-          return doc.data().scheduleArray;
-        })
-        // get all events from the database with this userId
-        .then((scheduleArray) => {
-          return db
-            .collection("events")
-            .where("userId", "==", userId)
-            .get()
-            .then((querySnapshot) => {
-              // filter out all events that are not today
-              const todayEvents = querySnapshot.docs.filter((event) => {
-                return (
-                  moment(event.data().start).format("YYYY-MM-DD") === today
-                );
-              });
-              return Promise.all(todayEvents);
-            })
-            .then((eventsThatAreScheduledToday) => {
-              // go through todays events
-              // and get the gridRow for each event
-              eventsThatAreScheduledToday.forEach((event) => {
-                console.log("event", event);
-                const startGridRow = event.gridRow;
-                const endGridRow = event.gridRow + (event.span - 1);
-                for (let i = startGridRow - 1; i <= endGridRow; i++) {
-                  // set the scheduleArray type to array
-                  scheduleArray[i] = event;
-                }
-              });
-              return scheduleArray;
-            });
-        })
-        .then((scheduleArray) => {
-          // update the scheduleArray
-          console.log("Updating user's schedule array....");
-          console.log("New scheduleArray", scheduleArray);
-          return db.collection("users").doc(userId).update({
-            scheduleArray: scheduleArray,
-          });
-        })
+    // get the user's scheduleArray
+    const scheduleArray = await getUserScheduleArray(userId);
+    // get the user's events for today
+    const todaysEvents = await getUserEventsForToday(userId);
+    // fill in the user's scheduleArray with 1's for the events that start today
+    const newScheduleArray = await scheduleFillForTodaysEvents(
+      scheduleArray,
+      todaysEvents
     );
+    // update the user's scheduleArray with the new array
+    await updateUserScheduleArray(userId, newScheduleArray);
+    functions.logger.log("autoPilot Schedule Fill finished.");
   });
+
+/**
+ * Get the user's schedule array
+ */
+
+async function getUserScheduleArray(userId) {
+  const user = await db.collection("users").doc(userId).get();
+  return user.data().scheduleArray;
+}
+
+/** Get the user's events and filter them for
+ * events that start today
+ */
+
+async function getUserEventsForToday(userId) {
+  const today = moment().format("YYYY-MM-DD");
+  const querySnapshot = await db
+    .collection("events")
+    .where("userId", "==", userId)
+    .get();
+  // filter out all events that are not today
+  const todayEvents = querySnapshot.docs.filter((event) => {
+    return moment(event.data().start).format("YYYY-MM-DD") === today;
+  });
+  return await Promise.all(todayEvents);
+}
+
+/**
+ * Fill in the user's schedule array with 1's
+ * for the events that start today
+ */
+function scheduleFillForTodaysEvents(scheduleArray, todaysEvents) {
+  todaysEvents.forEach((event) => {
+    const startGridRow = event.data().gridRow;
+    const endGridRow = event.data().gridRow + (event.data().span - 1);
+    console.log(`startGridRow: ${startGridRow}`);
+    console.log(`endGridRow: ${endGridRow}`);
+    for (let i = startGridRow - 1; i <= endGridRow; i++) {
+      scheduleArray[i] = 1;
+    }
+  });
+  // print every element in scheduleArray
+  for (let i = 0; i < scheduleArray.length; i++) {
+    console.log(scheduleArray[i]);
+  }
+  return scheduleArray;
+}
+
+/**
+ * Update the user's scheduleArray
+ * with the given array
+ */
+function updateUserScheduleArray(userId, scheduleArray) {
+  return db.collection("users").doc(userId).update({
+    scheduleArray: scheduleArray,
+  });
+}
