@@ -1,6 +1,7 @@
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const moment = require("moment");
+const {v4: uuidv4} = require("uuid");
 const useEmulator = true;
 
 if (useEmulator) {
@@ -20,12 +21,25 @@ const db = admin.firestore();
 
 exports.onCreateUser = functions.auth.user().onCreate((user) => {
   const scheduleArray = Array(288).fill(null);
+  // Create a new track with routine set to true for the user
+  createNewTrack(user.uid, "Errands", "bg-indigo-50", "text-indigi-500", false);
+  createNewTrack(user.uid, "Studying", "bg-blue-50", "text-blue-500", true);
+  createNewTrack(user.uid, "Morning", "bg-orange-50", "text-orange-500", true);
+  createNewTrack(
+    user.uid,
+    "Start here!",
+    "bg-green-50",
+    "text-green-500",
+    false
+  );
   const userRef = db.collection("users").doc(user.uid);
   return userRef.set({
     email: user.email,
     displayName: user.displayName,
     photoURL: user.photoURL,
     scheduleArray: scheduleArray,
+    dayStart: 86,
+    dayEnd: 254,
     createdAt: admin.firestore.FieldValue.serverTimestamp(),
   });
 });
@@ -35,7 +49,9 @@ exports.autoPilot = functions.firestore
   .onWrite(async (change) => {
     // get the event from the event id then get the userId
     const event = change.after.data();
+    // add this event to the user's event collection
     const userId = event.userId;
+    await db;
     // get the user's scheduleArray
     const scheduleArray = await getUserScheduleArray(userId);
     // get the user's events for today
@@ -43,7 +59,8 @@ exports.autoPilot = functions.firestore
     // fill in the user's scheduleArray with 1's for the events that start today
     const newScheduleArray = await scheduleFillForTodaysEvents(
       scheduleArray,
-      todaysEvents
+      todaysEvents,
+      userId
     );
     // update the user's scheduleArray with the new array
     await updateUserScheduleArray(userId, newScheduleArray);
@@ -78,22 +95,107 @@ async function getUserEventsForToday(userId) {
 
 /**
  * Fill in the user's schedule array with 1's
- * for the events that start today
+ * for the events that start today (INITIAL AUTO FILL)
  */
-function scheduleFillForTodaysEvents(scheduleArray, todaysEvents) {
+async function scheduleFillForTodaysEvents(
+  scheduleArray,
+  todaysEvents,
+  userId
+) {
+  // get the user's tracks
+  const tracks = await getUserTracks(userId);
   todaysEvents.forEach((event) => {
     const startGridRow = event.data().gridRow;
     const endGridRow = event.data().gridRow + (event.data().span - 1);
-    console.log(`startGridRow: ${startGridRow}`);
-    console.log(`endGridRow: ${endGridRow}`);
     for (let i = startGridRow - 1; i <= endGridRow; i++) {
       scheduleArray[i] = 1;
     }
+    let dayStart = 61;
+    let dayEnd = 275;
+
+    for (let i = dayStart; i <= dayEnd; i++) {
+      let consecutiveNulls = 0;
+      let consecutiveNullsStart = 0;
+      let consecutiveNullsEnd = 0;
+      for (let j = i; j <= i + 23; j++) {
+        // if this is the first non one, set the consetiveNonOneStart
+        if (j == i && scheduleArray[j] === null) {
+          consecutiveNullsStart = j;
+        }
+        // if this index is not a one, increment
+        if (scheduleArray[j] === null) {
+          consecutiveNulls++;
+        }
+        // Currently we are setting it to 24
+        // to account for 2 hours.
+        // As we grow, this algorithm will get
+        // more sophisticated.
+        if (consecutiveNulls === 24) {
+          consecutiveNullsEnd = consecutiveNullsStart + 23;
+          // now fill the consecutive openings with a random number
+          let randomNumber = Math.floor(Math.random() * 100);
+          for (let k = i; k <= i + 23; k++) {
+            scheduleArray[k] = randomNumber;
+          }
+          consecutiveNulls = 0;
+
+          let maintenanceRequired = false;
+          if (tracks.length > 0) {
+            let randomTrack = tracks[Math.floor(Math.random() * tracks.length)];
+            let trackId = randomTrack.trackId;
+            let routineId = "444444";
+            let title = randomTrack.name;
+            let textColor = randomTrack.textColor;
+            let bgColor = randomTrack.bgColor;
+
+            // take consecutiveNullStart and get the original time from it
+            let gridRowForCalendar = consecutiveNullsStart - 1;
+            let startTimeInHoursDecimal = gridRowForCalendar / 12;
+            let minutes;
+            let hours;
+            // if startTime has a decimal place then extract it and save it
+            if (startTimeInHoursDecimal % 1 !== 0) {
+              let startTimeDecimal = startTimeInHoursDecimal % 1;
+              let startTimeWhole = startTimeInHoursDecimal - startTimeDecimal;
+              // remove the decimal from starTimeInHoursDecimal and save to startTimeFraction
+              minutes = startTimeDecimal * 60;
+              hours = startTimeWhole;
+            } else {
+              minutes = 0;
+              hours = startTimeInHoursDecimal;
+            }
+
+            // make a moment time with the minutes and hours
+            let startTime = moment()
+              .hours(hours)
+              .minutes(minutes)
+              .format("hh:mm A");
+
+            // generate a random key for the <li>
+            let key = Math.random().toString(36).substring(7);
+
+            // add the event to the user's events
+            db.collection("users").doc(userId).collection("events").add({
+              archived: false,
+              trackId: trackId,
+              routineId: routineId,
+              title: title,
+              startTime: startTime,
+              // this is kind of irrelevant lol, so set to n/a
+              endTime: "n/a",
+              userId: userId,
+              maintenanceRequired: maintenanceRequired,
+              gridRow: consecutiveNullsStart,
+              span: 24,
+              textColor: textColor,
+              bgColor: bgColor,
+              key: key,
+            });
+          }
+        }
+      }
+    }
   });
-  // print every element in scheduleArray
-  for (let i = 0; i < scheduleArray.length; i++) {
-    console.log(scheduleArray[i]);
-  }
   return scheduleArray;
 }
 
@@ -105,4 +207,93 @@ function updateUserScheduleArray(userId, scheduleArray) {
   return db.collection("users").doc(userId).update({
     scheduleArray: scheduleArray,
   });
+}
+
+/**
+ * Get the user's tracks
+ * filter out any routines
+ */
+
+async function getUserTracks(userId) {
+  const querySnapshot = await db
+    .collection("tracks")
+    .where("userId", "==", userId)
+    .get();
+  let tracks = [];
+  querySnapshot.forEach((track) => {
+    tracks.push(track.data());
+  });
+  return tracks;
+}
+
+/**
+ * Create a new track for the user
+ */
+async function createNewTrack(
+  userId,
+  trackName,
+  bgColor,
+  textColor,
+  routineBoolean
+) {
+  const trackId = uuidv4();
+  const track = {
+    trackId: trackId,
+    userId: userId,
+    name: trackName,
+    textColor: textColor,
+    bgColor: bgColor,
+    routine: routineBoolean,
+  };
+  await db.collection("tracks").doc(trackId).set(track);
+  // if the trackName is "Morning"
+  if (trackName === "Morning") {
+    createNewTask(userId, "Wake up", trackId);
+    createNewTask(userId, "Exercise", trackId);
+    createNewTask(userId, "Eat a healthy breakfast", trackId);
+  } else if (trackName === "Studying") {
+    createNewTask(userId, "Turn off distractions", trackId);
+    createNewTask(userId, "Set pomodoro timer", trackId);
+    createNewTask(userId, "Focus", trackId);
+  } else if (trackName === "Errands") {
+    createNewTask(userId, "Get groceries", trackId);
+    createNewTask(userId, "Get gas", trackId);
+    createNewTask(userId, "Apply to internships", trackId);
+  } else if (trackName === "Start here!") {
+    createNewTask(userId, "Welcome to Autopilot (:", trackId);
+    createNewTask(
+      userId,
+      "Get started by revising routines and the habits and tasks in them - or make some of your own...",
+      trackId
+    );
+    createNewTask(userId, "Lastly, review your daily schedule!", trackId);
+    createNewTask(
+      userId,
+      "You can always reach out to the creators of Autopilot with the 'Your Assistant' tab!",
+      trackId
+    );
+    createNewTask(
+      userId,
+      "We love to hear your thoughts, give you advice on your schedule, and we would love to make features you feel are missing.",
+      trackId
+    );
+    createNewTask(userId, "Enjoy!", trackId);
+  }
+  return track;
+}
+
+/**
+ * Create a new task for the user
+ */
+async function createNewTask(userId, taskName, trackId) {
+  const taskId = uuidv4();
+  const task = {
+    archived: false,
+    userId: userId,
+    task: taskName,
+    title: taskName,
+    trackId: trackId,
+  };
+  await db.collection("tasks").doc(taskId).set(task);
+  return task;
 }

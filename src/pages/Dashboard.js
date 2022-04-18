@@ -1,19 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import AdapterMoment from '@mui/lab/AdapterMoment';
-import { LocalizationProvider } from '@mui/lab';
+import React, {useState, useEffect} from "react";
+import AdapterMoment from "@mui/lab/AdapterMoment";
+import {LocalizationProvider} from "@mui/lab";
 
-import { Header } from '../components/layout/Header';
-import { Content } from '../components/layout/Content';
-import { TracksProvider, useTracksValue } from '../context/tracks-context';
-import { Loading } from './Loading';
-import { auth } from '../firebase';
-import { Scrollbars } from 'react-custom-scrollbars';
+import {Header} from "../components/layout/Header";
+import {Content} from "../components/layout/Content";
+import {TracksProvider, useTracksValue} from "../context/tracks-context";
+import {Loading} from "./Loading";
+import {auth} from "../firebase";
+import {Scrollbars} from "react-custom-scrollbars";
+import {Footer} from "../components/layout/Footer";
 
 
 // note: see src/context. Since we want to use tracksprovider at the
 // top level, we are using it here in App. This can be replaced
 // with Redux, later.
-export const Dashboard = ({ darkModeDefault = true }) => {
+export const Dashboard = ({darkModeDefault = true}) => {
   const [darkMode, setDarkMode] = useState(darkModeDefault);
   const [loading, setLoading] = useState(true);
   // get user from context
@@ -21,7 +22,7 @@ export const Dashboard = ({ darkModeDefault = true }) => {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
-        console.log('user logged in', user);
+        console.log("user logged in", user);
 
         setLoading(false);
       }
@@ -42,22 +43,22 @@ export const Dashboard = ({ darkModeDefault = true }) => {
             // autoHideDuration={200}
             autoHeight
             autoHeightMin={0}
-            autoHeightMax={'100vh'}
+            autoHeightMax={"100vh"}
             // renderTrackVertical={props => <div {...props} className="track-vertical"/>}
             // renderThumbVertical={props => <div {...props} className="thumb-vertical"/>}
           >
-            <main
+            <div
               data-testid="application"
-              className={darkMode ? 'darkmode' : undefined}
+              className={"flex flex-col min-h-screen flex-grow"}
             >
               <Header darkMode={darkMode} setDarkMode={setDarkMode} />
-              
+
               <Content />
-            </main>
+              <Footer />
+            </div>
           </Scrollbars>
         </TracksProvider>
       </LocalizationProvider>
     )
   );
 };
-

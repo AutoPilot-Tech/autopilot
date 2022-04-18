@@ -1,5 +1,6 @@
 import { PlusIcon } from '@heroicons/react/solid'
 import { useTracks } from '../context/tracks-context'
+import { ColorSettings } from './ColorSettings';
 
 
 export function TaskHeader({trackName}) {

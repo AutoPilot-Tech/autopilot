@@ -1,21 +1,21 @@
-import React, { useState } from 'react';
-import DateTimePicker from '@mui/lab/DateTimePicker';
-import TextField from '@mui/material/TextField';
-import moment from 'moment';
-import { amplitude } from '../utilities/amplitude';
-import { db, auth } from '../firebase';
-import { useTracksValue } from '../context/tracks-context';
-import { getTitle } from '../helpers/index';
-import { getRandomColor } from '../helpers/index';
+import React, {useState} from "react";
+import DateTimePicker from "@mui/lab/DateTimePicker";
+import TextField from "@mui/material/TextField";
+import moment from "moment";
+import {amplitude} from "../utilities/amplitude";
+import {db, auth} from "../firebase";
+import {useTracksValue} from "../context/tracks-context";
+import {getTitle} from "../helpers/index";
+import {getRandomColor} from "../helpers/index";
 
 export const RoutineSettings = () => {
-  const [value, setValue] = useState('');
-  const [startValue, setStartValue] = useState('');
-  const [endValue, setEndValue] = useState('');
-  const [routineStartDate, setRoutineStartDate] = useState('');
-  const [routineEndDate, setRoutineEndDate] = useState('');
+  const [value, setValue] = useState("");
+  const [startValue, setStartValue] = useState("");
+  const [endValue, setEndValue] = useState("");
+  const [routineStartDate, setRoutineStartDate] = useState("");
+  const [routineEndDate, setRoutineEndDate] = useState("");
   const [routineRecurring, setRoutineRecurring] = useState(false);
-  const { tracks, selectedTrack } = useTracksValue();
+  const {tracks, selectedTrack} = useTracksValue();
 
   const logClick = (event) => {
     let userId = auth.currentUser.uid;
@@ -23,7 +23,8 @@ export const RoutineSettings = () => {
   };
 
   const routineScheduler = () => {
-    let trackName = '';
+    console.log("Routine scheduler just ran");
+    let trackName = "";
     if (
       // if the selected track is not a collated track (i.e. a specific track)
       tracks &&
@@ -35,7 +36,7 @@ export const RoutineSettings = () => {
     // calculate the duration of the event in minutes * 12 (used for span in Calendar)
     let durationInMinutes = moment(routineEndDate).diff(
       moment(routineStartDate),
-      'minutes'
+      "minutes"
     );
     let durationInHoursDecimal = Math.round((durationInMinutes / 60) * 12);
     // get the start time's hour and minute'
@@ -52,14 +53,14 @@ export const RoutineSettings = () => {
     let maintenanceRequired = false;
     let color = getRandomColor();
     let key = Math.random().toString(36).substring(7);
-    db.collection('events').add({
+    db.collection("events").add({
       archived: false,
       trackId: selectedTrack,
       routineId: selectedTrack,
       title: trackName,
       // format like 12:00 pm
-      startTime: routineStartDate.format('hh:mm A'),
-      endTime: routineEndDate.format('hh:mm A'),
+      startTime: routineStartDate.format("hh:mm A"),
+      endTime: routineEndDate.format("hh:mm A"),
       userId: userId,
       maintenanceRequired: maintenanceRequired,
       gridRow: gridRowForCalendar,
@@ -70,28 +71,32 @@ export const RoutineSettings = () => {
     });
     // schedule the routine for the next 7 days
     for (let i = 0; i < 7; i++) {
-      let startTime = routineStartDate.add(1, 'days').format();
-      let endTime = routineEndDate.add(1, 'days').format();
+      let startTime = routineStartDate.add(1, "days").format();
+      let endTime = routineEndDate.add(1, "days").format();
       // if its the 6th iteration or above set maintenanceRequired to true
       // we will use this to regenerate more routines on the server side - this saves space and $$
       if (i >= 6) {
         maintenanceRequired = true;
       }
-      db.collection('events').add({
-        archived: false,
-        trackId: selectedTrack,
-        routineId: selectedTrack,
-        title: trackName,
-        start: startTime,
-        end: endTime,
-        userId: userId,
-        maintenanceRequired: maintenanceRequired,
-        gridRow: gridRowForCalendar,
-        span: durationInHoursDecimal,
-        textColor: `text-${color}-500`,
-        bgColor: `bg-${color}-50`,
-        key: key,
-      });
+      // get the user's doc then add events to it
+      db.collection("users")
+        .doc(userId)
+        .collection("events")
+        .add({
+          archived: false,
+          trackId: selectedTrack,
+          routineId: selectedTrack,
+          title: trackName,
+          start: startTime,
+          end: endTime,
+          userId: userId,
+          maintenanceRequired: maintenanceRequired,
+          gridRow: gridRowForCalendar,
+          span: durationInHoursDecimal,
+          textColor: `text-${color}-500`,
+          bgColor: `bg-${color}-50`,
+          key: key,
+        });
     }
   };
 
@@ -108,7 +113,7 @@ export const RoutineSettings = () => {
             setRoutineStartDate(newValue);
           }}
           onClick={() => {
-            logClick('routineSetStartTime');
+            logClick("routineSetStartTime");
           }}
         />
         <DateTimePicker
@@ -120,7 +125,7 @@ export const RoutineSettings = () => {
             setRoutineEndDate(newValue);
           }}
           onClick={() => {
-            logClick('routineSetEndTime');
+            logClick("routineSetEndTime");
           }}
         />
         {/* set routine to recurring with a checkbox */}
@@ -130,9 +135,11 @@ export const RoutineSettings = () => {
           value={routineRecurring}
           onChange={(e) => {
             setRoutineRecurring(e.target.value);
-            routineScheduler();
           }}
         />
+        <button onClick={routineScheduler}>
+          <p>Schedule Routine</p>
+        </button>
         <p>Recurring Routine?</p>
       </div>
     </div>

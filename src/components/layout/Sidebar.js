@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from "react";
 import {
   FaChevronDown,
   FaInbox,
@@ -6,21 +6,21 @@ import {
   FaRegCalendar,
   FaConciergeBell,
   FaCommentDots,
-} from 'react-icons/fa';
-import { Tracks } from '../Tracks';
-import { IndividualTrack } from '../IndividualTrack';
-import { AddTrack } from '../AddTrack';
-import { useTracksValue } from '../../context/tracks-context';
-import { Routines } from '../Routines';
-import { AddRoutine } from '../AddRoutine';
-import { amplitude } from '../../utilities/amplitude';
-import { auth } from '../../firebase';
+} from "react-icons/fa";
+import {Tracks} from "../Tracks";
+import {IndividualTrack} from "../IndividualTrack";
+import {AddTrack} from "../AddTrack";
+import {useTracksValue} from "../../context/tracks-context";
+import {Routines} from "../Routines";
+import {AddRoutine} from "../AddRoutine";
+import {amplitude} from "../../utilities/amplitude";
+import {auth} from "../../firebase";
 
 export const Sidebar = () => {
-  const { setSelectedTrack, isRoutine, setIsRoutine } = useTracksValue();
+  const {setSelectedTrack, isRoutine, setIsRoutine} = useTracksValue();
   const [showTracks, setShowTracks] = useState(true);
   const [showRoutines, setShowRoutines] = useState(true);
-  const [active, setActive] = useState('next_7');
+  const [active, setActive] = useState("next_7");
 
   const logClick = (event) => {
     let userId = auth.currentUser.uid;
@@ -28,7 +28,7 @@ export const Sidebar = () => {
   };
 
   function classNames(...classes) {
-    return classes.filter(Boolean).join(' ');
+    return classes.filter(Boolean).join(" ");
   }
 
   return (
@@ -37,15 +37,15 @@ export const Sidebar = () => {
         <li
           data-testid="next_7"
           className={classNames(
-            active === 'next_7'
-              ? 'bg-gray-200 text-gray-900'
-              : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
-            'flex items-center px-3 py-2 text-sm font-medium rounded-md cursor-pointer'
+            active === "next_7"
+              ? "bg-gray-200 text-gray-900"
+              : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
+            "flex items-center px-3 py-2 text-sm font-medium rounded-md cursor-pointer"
           )}
           onClick={() => {
-            setActive('next_7');
-            setSelectedTrack('NEXT_7');
-            logClick('sideBarCalendarClick');
+            setActive("next_7");
+            setSelectedTrack("NEXT_7");
+            logClick("sideBarCalendarClick");
             setIsRoutine(false);
           }}
         >
@@ -70,15 +70,15 @@ export const Sidebar = () => {
         <li
           data-testid="today"
           className={classNames(
-            active === 'Assistant'
-              ? 'bg-gray-200 text-gray-900'
-              : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
-            'flex items-center px-3 py-2 text-sm font-medium rounded-md cursor-pointer'
+            active === "Assistant"
+              ? "bg-gray-200 text-gray-900"
+              : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
+            "flex items-center px-3 py-2 text-sm font-medium rounded-md cursor-pointer"
           )}
           onClick={() => {
-            setActive('Assistant');
-            setSelectedTrack('ASSISTANT');
-            logClick('sideBarAssistantClick');
+            setActive("Assistant");
+            setSelectedTrack("ASSISTANT");
+            logClick("sideBarAssistantClick");
             setIsRoutine(false);
           }}
         >
@@ -103,15 +103,15 @@ export const Sidebar = () => {
         <li
           data-testid="inbox"
           className={classNames(
-            active === 'inbox'
-              ? 'bg-gray-200 text-gray-900'
-              : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
-            'flex items-center px-3 py-2 text-sm font-medium rounded-md cursor-pointer'
+            active === "inbox"
+              ? "bg-gray-200 text-gray-900"
+              : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
+            "flex items-center px-3 py-2 text-sm font-medium rounded-md cursor-pointer"
           )}
           onClick={() => {
-            setActive('inbox');
-            setSelectedTrack('INBOX');
-            logClick('sideBarInboxClick');
+            setActive("inbox");
+            setSelectedTrack("INBOX");
+            logClick("sideBarInboxClick");
             setIsRoutine(false);
           }}
         >
@@ -136,15 +136,15 @@ export const Sidebar = () => {
         <li
           data-testid="today"
           className={classNames(
-            active === 'today'
-              ? 'bg-gray-200 text-gray-900'
-              : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
-            'flex items-center px-3 py-2 text-sm font-medium rounded-md cursor-pointer'
+            active === "today"
+              ? "bg-gray-200 text-gray-900"
+              : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
+            "flex items-center px-3 py-2 text-sm font-medium rounded-md cursor-pointer"
           )}
           onClick={() => {
-            setActive('today');
-            setSelectedTrack('TODAY');
-            logClick('sideBarTodaysTasksClick');
+            setActive("today");
+            setSelectedTrack("TODAY");
+            logClick("sideBarTodaysTasksClick");
             setIsRoutine(false);
           }}
         >
@@ -169,15 +169,15 @@ export const Sidebar = () => {
         <li
           data-testid="today"
           className={classNames(
-            active === 'Settings'
-              ? 'bg-gray-200 text-gray-900'
-              : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
-            'flex items-center px-3 py-2 text-sm font-medium rounded-md cursor-pointer'
+            active === "Settings"
+              ? "bg-gray-200 text-gray-900"
+              : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
+            "flex items-center px-3 py-2 text-sm font-medium rounded-md cursor-pointer"
           )}
           onClick={() => {
-            setActive('Settings');
-            setSelectedTrack('SETTINGS');
-            logClick('sideBarClickSettings');
+            setActive("Settings");
+            setSelectedTrack("SETTINGS");
+            logClick("sideBarClickSettings");
             setIsRoutine(false);
           }}
         >
@@ -204,7 +204,7 @@ export const Sidebar = () => {
         className="sidebar__middle"
         onClick={() => {
           setShowTracks(!showTracks);
-          logClick('sideBarShowTracksClick');
+          logClick("sideBarShowTracksClick");
         }}
       >
         <div>
@@ -221,7 +221,7 @@ export const Sidebar = () => {
         className="sidebar__middle"
         onClick={() => {
           setShowRoutines(!showRoutines);
-          logClick('sideBarShowRoutinesClick');
+          logClick("sideBarShowRoutinesClick");
         }}
       >
         <div>

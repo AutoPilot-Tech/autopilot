@@ -1,26 +1,29 @@
 import React, {useState, useEffect} from "react";
 import {auth, signInWithGoogle} from "../firebase";
 
-export function LoginNew() {
+export function SignupNew() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
 
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (user) {
-        window.location.href = "/dashboard";
-      }
-    });
-    return unsubscribe;
-  }, []);
+  const handleSignUp = () => {
+    console.log("email: ", email);
+    console.log("password: ", password);
+    console.log("firstName: ", firstName);
+    console.log("lastName: ", lastName);
 
-  const handleLogin = () => {
     auth
-      .signInWithEmailAndPassword(email, password)
-      .then(() => {
-        console.log("success");
+      .createUserWithEmailAndPassword(email, password)
+      .then((userCredential) => {
+        // redirect to /dashboard
+        window.location.href = "/dashboard";
       })
-      .catch((error) => alert(error.message));
+      .catch((error) => {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        // ..
+      });
   };
 
   return (
@@ -35,17 +38,8 @@ export function LoginNew() {
                 src="../../images/autopilot_black.png"
               />
               <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
-                Sign in to your account
+                Sign up for Autopilot
               </h2>
-              <p className="mt-2 text-sm text-gray-600">
-                Or{" "}
-                <a
-                  href="#"
-                  className="font-medium text-indigo-600 hover:text-indigo-500"
-                >
-                  sign up
-                </a>
-              </p>
             </div>
 
             <div className="mt-8">
@@ -78,7 +72,7 @@ export function LoginNew() {
                   </div>
                   <div className="relative flex justify-center text-sm">
                     <span className="px-2 bg-white text-gray-500">
-                      Or continue with
+                      Or signup with email
                     </span>
                   </div>
                 </div>
@@ -86,25 +80,63 @@ export function LoginNew() {
 
               <div className="mt-6">
                 <form action="#" method="POST" className="space-y-6">
-                  <div>
-                    <label
-                      htmlFor="email"
-                      className="block text-sm font-medium text-gray-700"
-                    >
-                      Email address
-                    </label>
-                    <div className="mt-1">
-                      <input
-                        id="email"
-                        name="email"
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        autoComplete="email"
-                        required
-                        className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                      />
-                    </div>
+                  <label
+                    htmlFor="firstname"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    First name
+                  </label>
+
+                  <div className="mt-1">
+                    <input
+                      id="firstname"
+                      name="firstname"
+                      type="text"
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
+                      autoComplete="first name"
+                      required
+                      className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    />
+                  </div>
+                  <label
+                    htmlFor="lastname"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Last name
+                  </label>
+
+                  <div className="mt-1">
+                    <input
+                      id="lastname"
+                      name="lastname"
+                      type="text"
+                      value={lastName}
+                      onChange={(e) => setLastName(e.target.value)}
+                      autoComplete="last name"
+                      required
+                      className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    />
+                  </div>
+
+                  <label
+                    htmlFor="email"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Email address
+                  </label>
+
+                  <div className="mt-1">
+                    <input
+                      id="email"
+                      name="email"
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      autoComplete="email"
+                      required
+                      className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    />
                   </div>
 
                   <div className="space-y-1">
@@ -128,24 +160,13 @@ export function LoginNew() {
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between">
-                    <div className="text-sm">
-                      <a
-                        href="#"
-                        className="font-medium text-indigo-600 hover:text-indigo-500"
-                      >
-                        Forgot your password?
-                      </a>
-                    </div>
-                  </div>
-
                   <div>
                     <button
                       type="button"
                       className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                      onClick={handleLogin}
+                      onClick={handleSignUp}
                     >
-                      Sign in
+                      Sign up
                     </button>
                   </div>
                 </form>
