@@ -100,7 +100,7 @@ export const Tasks = () => {
       {showCalendar ? (
         <Calendar />
       ) : (
-        <div className="ml-80 mr-64 pt-20 flex flex-col" data-testid="tasks">
+        <div className="ml-80 mr-70 pt-20 flex flex-col" data-testid="tasks">
           <TaskHeader trackName={trackName} />
           {/* <ColorSettings /> */}
           {isRoutine ? <RoutineSettings /> : <></>}
