@@ -1,76 +1,76 @@
-import { Fragment, useEffect, useRef, useState } from 'react';
+import {Fragment, useEffect, useRef, useState} from "react";
 import {
   ChevronDownIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
   DotsHorizontalIcon,
-} from '@heroicons/react/solid';
-import { Menu, Transition } from '@headlessui/react';
-import moment from 'moment';
-import { useAutoFill } from '../hooks';
-import { auth } from '../firebase';
-import { useTracksValue } from '../context/tracks-context';
-import { generatePushId } from '../helpers';
-import { CurrentTasks } from './CurrentTasks';
+} from "@heroicons/react/solid";
+import {Menu, Transition} from "@headlessui/react";
+import moment from "moment";
+import {useAutoFill} from "../hooks";
+import {auth} from "../firebase";
+import {useTracksValue} from "../context/tracks-context";
+import {generatePushId} from "../helpers";
+import {CurrentTasks} from "./CurrentTasks";
 
 const days = [
-  { date: '2021-12-27' },
-  { date: '2021-12-28' },
-  { date: '2021-12-29' },
-  { date: '2021-12-30' },
-  { date: '2021-12-31' },
-  { date: '2022-01-01', isCurrentMonth: true },
-  { date: '2022-01-02', isCurrentMonth: true },
-  { date: '2022-01-03', isCurrentMonth: true },
-  { date: '2022-01-04', isCurrentMonth: true },
-  { date: '2022-01-05', isCurrentMonth: true },
-  { date: '2022-01-06', isCurrentMonth: true },
-  { date: '2022-01-07', isCurrentMonth: true },
-  { date: '2022-01-08', isCurrentMonth: true },
-  { date: '2022-01-09', isCurrentMonth: true },
-  { date: '2022-01-10', isCurrentMonth: true },
-  { date: '2022-01-11', isCurrentMonth: true },
-  { date: '2022-01-12', isCurrentMonth: true, isToday: true },
-  { date: '2022-01-13', isCurrentMonth: true },
-  { date: '2022-01-14', isCurrentMonth: true },
-  { date: '2022-01-15', isCurrentMonth: true },
-  { date: '2022-01-16', isCurrentMonth: true },
-  { date: '2022-01-17', isCurrentMonth: true },
-  { date: '2022-01-18', isCurrentMonth: true },
-  { date: '2022-01-19', isCurrentMonth: true },
-  { date: '2022-01-20', isCurrentMonth: true },
-  { date: '2022-01-21', isCurrentMonth: true },
-  { date: '2022-01-22', isCurrentMonth: true, isSelected: true },
-  { date: '2022-01-23', isCurrentMonth: true },
-  { date: '2022-01-24', isCurrentMonth: true },
-  { date: '2022-01-25', isCurrentMonth: true },
-  { date: '2022-01-26', isCurrentMonth: true },
-  { date: '2022-01-27', isCurrentMonth: true },
-  { date: '2022-01-28', isCurrentMonth: true },
-  { date: '2022-01-29', isCurrentMonth: true },
-  { date: '2022-01-30', isCurrentMonth: true },
-  { date: '2022-01-31', isCurrentMonth: true },
-  { date: '2022-02-01' },
-  { date: '2022-02-02' },
-  { date: '2022-02-03' },
-  { date: '2022-02-04' },
-  { date: '2022-02-05' },
-  { date: '2022-02-06' },
+  {date: "2021-12-27"},
+  {date: "2021-12-28"},
+  {date: "2021-12-29"},
+  {date: "2021-12-30"},
+  {date: "2021-12-31"},
+  {date: "2022-01-01", isCurrentMonth: true},
+  {date: "2022-01-02", isCurrentMonth: true},
+  {date: "2022-01-03", isCurrentMonth: true},
+  {date: "2022-01-04", isCurrentMonth: true},
+  {date: "2022-01-05", isCurrentMonth: true},
+  {date: "2022-01-06", isCurrentMonth: true},
+  {date: "2022-01-07", isCurrentMonth: true},
+  {date: "2022-01-08", isCurrentMonth: true},
+  {date: "2022-01-09", isCurrentMonth: true},
+  {date: "2022-01-10", isCurrentMonth: true},
+  {date: "2022-01-11", isCurrentMonth: true},
+  {date: "2022-01-12", isCurrentMonth: true, isToday: true},
+  {date: "2022-01-13", isCurrentMonth: true},
+  {date: "2022-01-14", isCurrentMonth: true},
+  {date: "2022-01-15", isCurrentMonth: true},
+  {date: "2022-01-16", isCurrentMonth: true},
+  {date: "2022-01-17", isCurrentMonth: true},
+  {date: "2022-01-18", isCurrentMonth: true},
+  {date: "2022-01-19", isCurrentMonth: true},
+  {date: "2022-01-20", isCurrentMonth: true},
+  {date: "2022-01-21", isCurrentMonth: true},
+  {date: "2022-01-22", isCurrentMonth: true, isSelected: true},
+  {date: "2022-01-23", isCurrentMonth: true},
+  {date: "2022-01-24", isCurrentMonth: true},
+  {date: "2022-01-25", isCurrentMonth: true},
+  {date: "2022-01-26", isCurrentMonth: true},
+  {date: "2022-01-27", isCurrentMonth: true},
+  {date: "2022-01-28", isCurrentMonth: true},
+  {date: "2022-01-29", isCurrentMonth: true},
+  {date: "2022-01-30", isCurrentMonth: true},
+  {date: "2022-01-31", isCurrentMonth: true},
+  {date: "2022-02-01"},
+  {date: "2022-02-02"},
+  {date: "2022-02-03"},
+  {date: "2022-02-04"},
+  {date: "2022-02-05"},
+  {date: "2022-02-06"},
 ];
 
 function classNames(...classes) {
-  return classes.filter(Boolean).join(' ');
+  return classes.filter(Boolean).join(" ");
 }
 
 export function Calendar() {
-  const { events, setEvents } = useTracksValue();
+  const {events, setEvents} = useTracksValue();
   const container = useRef(null);
   const containerNav = useRef(null);
   const containerOffset = useRef(null);
-  const [todaysEvents, setTodaysEvents] = useState('');
+  const [todaysEvents, setTodaysEvents] = useState("");
   const [loading, setLoading] = useState(true);
   const [autoEvents, setAutoEvents] = useState([]);
-  const { tracks, setTracks } = useTracksValue();
+  const {tracks, setTracks} = useTracksValue();
 
   useEffect(() => {
     // Set the container scroll position based on the current time.
@@ -89,9 +89,9 @@ export function Calendar() {
     if (events.length > 0) {
       let scheduleArray = Array(288).fill(null);
 
-      const today = moment().format('YYYY-MM-DD');
+      const today = moment().format("YYYY-MM-DD");
       let routineEvents = events.filter((event) => {
-        return moment(event.start).format('YYYY-MM-DD') === today;
+        return moment(event.start).format("YYYY-MM-DD") === today;
       });
       // go through today's events and get the gridRow for each event
       routineEvents.forEach((event) => {
@@ -153,7 +153,7 @@ export function Calendar() {
           if (tracks.length > 0) {
             let randomTrack = tracks[Math.floor(Math.random() * tracks.length)];
             let trackId = randomTrack.trackId;
-            let routineId = '444444';
+            let routineId = "444444";
             let title = randomTrack.name;
             let textColor = randomTrack.textColor;
             let bgColor = randomTrack.bgColor;
@@ -179,7 +179,7 @@ export function Calendar() {
             let startTime = moment()
               .hours(hours)
               .minutes(minutes)
-              .format('hh:mm A');
+              .format("hh:mm A");
             // generate a random key for the <li>
             let key = Math.random().toString(36).substring(7);
 
@@ -190,7 +190,7 @@ export function Calendar() {
               title: title,
               startTime: startTime,
               // this is kind of irrelevant lol, so set to n/a
-              endTime: 'n/a',
+              endTime: "n/a",
               userId: userId,
               maintenanceRequired: maintenanceRequired,
               gridRow: consecutiveNullsStart,
@@ -220,41 +220,41 @@ export function Calendar() {
       <header className="relative flex flex-none items-center justify-between border-b border-gray-200 py-4 px-6">
         <div>
           <h1 className="text-lg font-semibold leading-6 text-gray-900">
-            <time className="sm:hidden">{moment().format('MMM D YYYY')}</time>
+            <time className="sm:hidden">{moment().format("MMM D YYYY")}</time>
             <time className="hidden sm:inline">
-              {moment().format('MMMM D, YYYY')}
+              {moment().format("MMMM D, YYYY")}
             </time>
           </h1>
           <p className="mt-1 text-sm text-gray-500">
-            {moment().format('dddd')}
+            {moment().format("dddd")}
           </p>
         </div>
         <div className="flex items-center">
           <div className="flex items-center rounded-md shadow-sm md:items-stretch">
-            <button
+            {/* <button
               type="button"
               className="flex items-center justify-center rounded-l-md border border-r-0 border-gray-300 bg-white py-2 pl-3 pr-4 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-gray-50"
             >
               <span className="sr-only">Previous month</span>
               <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
-            </button>
-            <button
+            </button> */}
+            {/* <button
               type="button"
               className="hidden border-t border-b border-gray-300 bg-white px-3.5 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900 focus:relative md:block"
             >
               Today
-            </button>
+            </button> */}
             <span className="relative -mx-px h-5 w-px bg-gray-300 md:hidden" />
-            <button
+            {/* <button
               type="button"
               className="flex items-center justify-center rounded-r-md border border-l-0 border-gray-300 bg-white py-2 pl-4 pr-3 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-gray-50"
             >
               <span className="sr-only">Next month</span>
               <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
-            </button>
+            </button> */}
           </div>
           <div className="hidden md:ml-4 md:flex md:items-center">
-            <Menu as="div" className="relative">
+            {/* <Menu as="div" className="relative">
               <Menu.Button
                 type="button"
                 className="flex items-center rounded-md border border-gray-300 bg-white py-2 pl-3 pr-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
@@ -274,18 +274,18 @@ export function Calendar() {
                 leave="transition ease-in duration-75"
                 leaveFrom="transform opacity-100 scale-100"
                 leaveTo="transform opacity-0 scale-95"
-              >
-                <Menu.Items className="focus:outline-none absolute right-0 mt-3 w-36 origin-top-right overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5">
+              > */}
+            {/* <Menu.Items className="focus:outline-none absolute right-0 mt-3 w-36 origin-top-right overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5">
                   <div className="py-1">
                     <Menu.Item>
-                      {({ active }) => (
+                      {({active}) => (
                         <a
                           href="#"
                           className={classNames(
                             active
-                              ? 'bg-gray-100 text-gray-900'
-                              : 'text-gray-700',
-                            'block px-4 py-2 text-sm'
+                              ? "bg-gray-100 text-gray-900"
+                              : "text-gray-700",
+                            "block px-4 py-2 text-sm"
                           )}
                         >
                           Day view
@@ -293,14 +293,14 @@ export function Calendar() {
                       )}
                     </Menu.Item>
                     <Menu.Item>
-                      {({ active }) => (
+                      {({active}) => (
                         <a
                           href="#"
                           className={classNames(
                             active
-                              ? 'bg-gray-100 text-gray-900'
-                              : 'text-gray-700',
-                            'block px-4 py-2 text-sm'
+                              ? "bg-gray-100 text-gray-900"
+                              : "text-gray-700",
+                            "block px-4 py-2 text-sm"
                           )}
                         >
                           Week view
@@ -308,14 +308,14 @@ export function Calendar() {
                       )}
                     </Menu.Item>
                     <Menu.Item>
-                      {({ active }) => (
+                      {({active}) => (
                         <a
                           href="#"
                           className={classNames(
                             active
-                              ? 'bg-gray-100 text-gray-900'
-                              : 'text-gray-700',
-                            'block px-4 py-2 text-sm'
+                              ? "bg-gray-100 text-gray-900"
+                              : "text-gray-700",
+                            "block px-4 py-2 text-sm"
                           )}
                         >
                           Month view
@@ -323,14 +323,14 @@ export function Calendar() {
                       )}
                     </Menu.Item>
                     <Menu.Item>
-                      {({ active }) => (
+                      {({active}) => (
                         <a
                           href="#"
                           className={classNames(
                             active
-                              ? 'bg-gray-100 text-gray-900'
-                              : 'text-gray-700',
-                            'block px-4 py-2 text-sm'
+                              ? "bg-gray-100 text-gray-900"
+                              : "text-gray-700",
+                            "block px-4 py-2 text-sm"
                           )}
                         >
                           Year view
@@ -338,9 +338,9 @@ export function Calendar() {
                       )}
                     </Menu.Item>
                   </div>
-                </Menu.Items>
-              </Transition>
-            </Menu>
+                </Menu.Items> */}
+            {/* </Transition>
+            </Menu> */}
             {/* <div className="ml-6 h-6 w-px bg-gray-300" />
             {/* <button
               type="button"
@@ -367,14 +367,14 @@ export function Calendar() {
               <Menu.Items className="focus:outline-none absolute right-0 mt-3 w-36 origin-top-right divide-y divide-gray-100 overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5">
                 <div className="py-1">
                   <Menu.Item>
-                    {({ active }) => (
+                    {({active}) => (
                       <a
                         href="#"
                         className={classNames(
                           active
-                            ? 'bg-gray-100 text-gray-900'
-                            : 'text-gray-700',
-                          'block px-4 py-2 text-sm'
+                            ? "bg-gray-100 text-gray-900"
+                            : "text-gray-700",
+                          "block px-4 py-2 text-sm"
                         )}
                       >
                         Create event
@@ -382,7 +382,7 @@ export function Calendar() {
                     )}
                   </Menu.Item>
                 </div>
-                <div className="py-1">
+                {/* <div className="py-1">
                   <Menu.Item>
                     {({ active }) => (
                       <a
@@ -398,8 +398,8 @@ export function Calendar() {
                       </a>
                     )}
                   </Menu.Item>
-                </div>
-                <div className="py-1">
+                </div> */}
+                {/* <div className="py-1">
                   <Menu.Item>
                     {({ active }) => (
                       <a
@@ -410,7 +410,7 @@ export function Calendar() {
                             : 'text-gray-700',
                           'block px-4 py-2 text-sm'
                         )}
-                      >
+                      >Today
                         Day view
                       </a>
                     )}
@@ -460,7 +460,7 @@ export function Calendar() {
                       </a>
                     )}
                   </Menu.Item>
-                </div>
+                </div> */}
               </Menu.Items>
             </Transition>
           </Menu>
@@ -543,7 +543,7 @@ export function Calendar() {
               {/* Horizontal lines */}
               <div
                 className="col-start-1 col-end-2 row-start-1 grid divide-y divide-gray-100"
-                style={{ gridTemplateRows: 'repeat(48, minmax(3.5rem, 1fr))' }}
+                style={{gridTemplateRows: "repeat(48, minmax(3.5rem, 1fr))"}}
               >
                 <div ref={containerOffset} className="row-end-1 h-7"></div>
                 <div>
@@ -696,7 +696,7 @@ export function Calendar() {
               <ol
                 className="col-start-1 col-end-2 row-start-1 grid grid-cols-1"
                 style={{
-                  gridTemplateRows: '1.75rem repeat(288, minmax(0, 1fr)) auto',
+                  gridTemplateRows: "1.75rem repeat(288, minmax(0, 1fr)) auto",
                 }}
               >
                 {/* <li
@@ -808,7 +808,6 @@ export function Calendar() {
           </div>
         </div>
         <div className="hidden w-1/2 max-w-md h-10 flex-none border-l border-gray-100 py-10 px-8 md:block">
-          
           <CurrentTasks />
         </div>
       </div>

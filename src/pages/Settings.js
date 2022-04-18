@@ -65,14 +65,6 @@ export function Settings() {
 
   return (
     <>
-      {/*
-        This example requires updating your template:
-
-        ```
-        <html class="h-full bg-gray-100">
-        <body class="h-full">
-        ```
-      */}
       <div className="h-full">
         <Disclosure as="header" className="bg-white shadow">
           {({ open }) => (

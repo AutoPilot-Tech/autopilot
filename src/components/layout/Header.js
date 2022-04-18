@@ -1,43 +1,44 @@
-import { Fragment } from 'react';
-import { Menu, Popover, Transition } from '@headlessui/react';
-import { SearchIcon } from '@heroicons/react/solid';
-import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline';
-import { auth, functions } from '../../firebase';
+import {Fragment} from "react";
+import {Menu, Popover, Transition} from "@headlessui/react";
+import {SearchIcon} from "@heroicons/react/solid";
+import {BellIcon, MenuIcon, XIcon} from "@heroicons/react/outline";
+import {auth, functions} from "../../firebase";
+import {CircularButton} from "../CircularButton";
 
 const logOut = () => {
   auth
     .signOut()
     .then(() => {
       // send user back to log in page
-      window.location.href = '/login';
+      window.location.href = "/login";
     })
     .catch((error) => {
       console.log(error.message);
     });
 };
 
-var autoFill = functions.httpsCallable('autoFill');
+var autoFill = functions.httpsCallable("autoFill");
 
 const user = {
-  name: 'Chelsea Hagon',
-  email: 'chelsea.hagon@example.com',
+  name: "Chelsea Hagon",
+  email: "chelsea.hagon@example.com",
   imageUrl:
-    'https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+    "https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
 };
 const navigation = [
-  { name: 'Dashboard', href: '#', current: true },
-  { name: 'Calendar', href: '#', current: false },
-  { name: 'Teams', href: '#', current: false },
-  { name: 'Directory', href: '#', current: false },
+  {name: "Dashboard", href: "#", current: true},
+  {name: "Calendar", href: "#", current: false},
+  {name: "Teams", href: "#", current: false},
+  {name: "Directory", href: "#", current: false},
 ];
 const userNavigation = [
-  { name: 'Your Profile', href: '#', onClick: '' },
-  { name: 'Settings', href: '/settings', onClick: '' },
-  { name: 'Sign out', href: '#', onClick: logOut },
+  {name: "Your Profile", href: "#", onClick: ""},
+  {name: "Settings", href: "/settings", onClick: ""},
+  {name: "Sign out", href: "#", onClick: logOut},
 ];
 
 function classNames(...classes) {
-  return classes.filter(Boolean).join(' ');
+  return classes.filter(Boolean).join(" ");
 }
 
 export function Header() {
@@ -46,14 +47,14 @@ export function Header() {
       {/* When the mobile menu is open, add `overflow-hidden` to the `body` element to prevent double scrollbars */}
       <Popover
         as="header"
-        className={({ open }) =>
+        className={({open}) =>
           classNames(
-            open ? 'sticky inset-0 z-40 overflow-y-auto' : '',
-            'bg-white shadow-sm lg:static lg:overflow-y-visible'
+            open ? "sticky inset-0 z-40 overflow-y-auto" : "",
+            "bg-white shadow-sm lg:static lg:overflow-y-visible"
           )
         }
       >
-        {({ open }) => (
+        {({open}) => (
           <>
             <div className="fixed shadow mx-auto px-4 sm:px-6 lg:px-8 pr-44 z-50 bg-white min-w-full">
               <div className="flex justify-between xl:grid lg:gap-8 xl:grid-cols-12">
@@ -100,14 +101,17 @@ export function Header() {
                     )}
                   </Popover.Button>
                 </div>
+
                 <div className="hidden lg:flex lg:items-center lg:justify-end xl:col-span-4">
+                  <CircularButton />
+
                   <a
                     href="#"
                     className="ml-5 flex-shrink-0 bg-white rounded-full p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                   ></a>
 
                   {/* Profile dropdown */}
-                  <Menu as="div" className="flex-shrink-0 relative ml-5">
+                  <Menu as="div" className="flex-shrink-0 relative mr-5">
                     <div>
                       <Menu.Button className="bg-white rounded-full flex focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                         <span className="sr-only">Open user menu</span>
@@ -130,12 +134,12 @@ export function Header() {
                       <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 py-1 focus:outline-none">
                         {userNavigation.map((item) => (
                           <Menu.Item key={item.name}>
-                            {({ active }) => (
+                            {({active}) => (
                               <a
                                 href={item.href}
                                 className={classNames(
-                                  active ? 'bg-gray-100' : '',
-                                  'block py-2 px-4 text-sm text-gray-700'
+                                  active ? "bg-gray-100" : "",
+                                  "block py-2 px-4 text-sm text-gray-700"
                                 )}
                                 onClick={item.onClick ? item.onClick : null}
                               >
@@ -147,16 +151,6 @@ export function Header() {
                       </Menu.Items>
                     </Transition>
                   </Menu>
-
-                  <a
-                    href="#"
-                    className="ml-6 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                    onClick={() => {
-                      autoFill({ text: 'hello' });
-                    }}
-                  >
-                    Add Timebox
-                  </a>
                 </div>
               </div>
             </div>
@@ -167,12 +161,12 @@ export function Header() {
                   <a
                     key={item.name}
                     href={item.href}
-                    aria-current={item.current ? 'page' : undefined}
+                    aria-current={item.current ? "page" : undefined}
                     className={classNames(
                       item.current
-                        ? 'bg-gray-100 text-gray-900'
-                        : 'hover:bg-gray-50',
-                      'block rounded-md py-2 px-3 text-base font-medium'
+                        ? "bg-gray-100 text-gray-900"
+                        : "hover:bg-gray-50",
+                      "block rounded-md py-2 px-3 text-base font-medium"
                     )}
                   >
                     {item.name}
