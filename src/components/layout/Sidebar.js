@@ -20,7 +20,7 @@ export const Sidebar = () => {
   const {setSelectedTrack, isRoutine, setIsRoutine} = useTracksValue();
   const [showTracks, setShowTracks] = useState(true);
   const [showRoutines, setShowRoutines] = useState(true);
-  const [active, setActive] = useState("next_7");
+  const [active, setActive] = useState("calendar");
 
   const logClick = (event) => {
     let userId = auth.currentUser.uid;
@@ -37,14 +37,14 @@ export const Sidebar = () => {
         <li
           data-testid="next_7"
           className={classNames(
-            active === "next_7"
+            active === "calendar"
               ? "bg-gray-200 text-gray-900"
               : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
             "flex items-center px-3 py-2 text-sm font-medium rounded-md cursor-pointer"
           )}
           onClick={() => {
-            setActive("next_7");
-            setSelectedTrack("NEXT_7");
+            setActive("calendar");
+            setSelectedTrack("CALENDAR");
             logClick("sideBarCalendarClick");
             setIsRoutine(false);
           }}

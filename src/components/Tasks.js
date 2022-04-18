@@ -77,7 +77,7 @@ export const Tasks = () => {
 
   // When selectedTrack changes, we want to check to see if it's the calendar
   useEffect(() => {
-    if (selectedTrack === "NEXT_7") {
+    if (selectedTrack === "CALENDAR") {
       setShowCalendar(true);
       setShowChat(false);
     } else if (selectedTrack === "ASSISTANT") {

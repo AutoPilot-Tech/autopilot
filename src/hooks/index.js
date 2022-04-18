@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
-import { db, auth } from '../firebase';
-import { collatedTasksExist } from '../helpers';
-import moment from 'moment';
-import { sortedObject } from '../helpers';
-import { useTracksValue } from '../context/tracks-context';
+import {useState, useEffect} from "react";
+import {db, auth} from "../firebase";
+import {collatedTasksExist} from "../helpers";
+import moment from "moment";
+import {sortedObject} from "../helpers";
+import {useTracksValue} from "../context/tracks-context";
 
 // AutoFill Algorithm ( Not a Hook)
 // Iteration 1: Random Fill
@@ -11,8 +11,8 @@ export const useAutoFill = (events) => {
   // get the events with today's start date formatted YYYY-MM-DD
   const todayEvents = events.filter((event) => {
     return (
-      moment(event.startDate).format('YYYY-MM-DD') ===
-      moment().format('YYYY-MM-DD')
+      moment(event.startDate).format("YYYY-MM-DD") ===
+      moment().format("YYYY-MM-DD")
     );
   });
 
@@ -61,7 +61,7 @@ export const useAutoFill = (events) => {
       // Now make an event in firebase
       let userId = auth.currentUser.uid;
       let maintenanceRequired = false;
-      db.collection('events').add({
+      db.collection("events").add({
         archived: false,
         trackId: null,
         routineId: null,
@@ -75,7 +75,7 @@ export const useAutoFill = (events) => {
       });
     }
   }
-  console.log('filled in scheduleArray:', scheduleArray);
+  console.log("filled in scheduleArray:", scheduleArray);
 };
 
 // this is constantly getting new events for the calendar
@@ -85,7 +85,7 @@ export const useEvents = () => {
   useEffect(() => {
     let userId = auth.currentUser.uid;
     // when there is a new document in collection
-    let unsubscribe = db.collection('events').where('userId', '==', userId);
+    let unsubscribe = db.collection("events").where("userId", "==", userId);
     // set events with tasks
     unsubscribe = unsubscribe.onSnapshot((snapshot) => {
       const newEvents = snapshot.docs.map((event) => ({
@@ -96,7 +96,7 @@ export const useEvents = () => {
     });
     return () => unsubscribe();
   }, []);
-  return { events, setEvents };
+  return {events, setEvents};
 };
 
 // this is constantly getting new tracks
@@ -106,19 +106,19 @@ export const useTasks = (selectedTrack) => {
 
   useEffect(() => {
     let userId = auth.currentUser.uid;
-    let unsubscribe = db.collection('tasks').where('userId', '==', userId);
+    let unsubscribe = db.collection("tasks").where("userId", "==", userId);
 
     unsubscribe =
       selectedTrack && !collatedTasksExist(selectedTrack)
-        ? (unsubscribe = unsubscribe.where('trackId', '==', selectedTrack))
-        : selectedTrack === 'TODAY'
+        ? (unsubscribe = unsubscribe.where("trackId", "==", selectedTrack))
+        : selectedTrack === "TODAY"
         ? (unsubscribe = unsubscribe.where(
-            'date',
-            '==',
-            moment().format('YYYY-MM-DD')
+            "date",
+            "==",
+            moment().format("YYYY-MM-DD")
           ))
-        : selectedTrack === 'INBOX' || selectedTrack === 0
-        ? (unsubscribe = unsubscribe.where('date', '==', ''))
+        : selectedTrack === "INBOX" || selectedTrack === 0
+        ? (unsubscribe = unsubscribe.where("date", "==", ""))
         : unsubscribe;
 
     unsubscribe = unsubscribe.onSnapshot((snapshot) => {
@@ -128,10 +128,10 @@ export const useTasks = (selectedTrack) => {
       }));
 
       setTasks(
-        selectedTrack === 'NEXT_7'
+        selectedTrack === "NEXT_7"
           ? newTasks.filter(
               (task) =>
-                moment(task.date, 'YYYY-MM-DD').diff(moment(), 'days') <= 7 &&
+                moment(task.date, "YYYY-MM-DD").diff(moment(), "days") <= 7 &&
                 task.archived !== true
             )
           : newTasks.filter((task) => task.archived !== true)
@@ -145,11 +145,11 @@ export const useTasks = (selectedTrack) => {
     return () => unsubscribe();
   }, [selectedTrack]);
 
-  return { tasks, archivedTasks };
+  return {tasks, archivedTasks};
 };
 
 export const useActive = () => {
-  const [active, setActive] = useState('inbox');
+  const [active, setActive] = useState("inbox");
 
   useEffect(() => {
     active = active;
@@ -163,9 +163,9 @@ export const useTracks = () => {
 
   useEffect(() => {
     let userId = auth.currentUser.uid;
-    db.collection('tracks')
-      .where('userId', '==', userId)
-      .orderBy('trackId')
+    db.collection("tracks")
+      .where("userId", "==", userId)
+      .orderBy("trackId")
       // this required an index in firebase
       .get()
       .then((snapshot) => {
@@ -198,5 +198,5 @@ export const useTracks = () => {
       });
   }, [tracks]);
 
-  return { tracks, setTracks };
+  return {tracks, setTracks};
 };

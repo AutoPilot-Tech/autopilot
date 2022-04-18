@@ -10,10 +10,10 @@ export const TracksContext = createContext();
 // bottom level wherever maybe 6 levels deep
 export const TracksProvider = ({ children }) => {
   const { tracks, setTracks } = useTracks();
-  const [selectedTrack, setSelectedTrack] = useState('NEXT_7');
+  const [selectedTrack, setSelectedTrack] = useState('CALENDAR');
   const { events, setEvents } = useEvents();
   const [isRoutine, setIsRoutine] = useState(false);
-  const [active, setActive] = useState('next_7');
+  const [active, setActive] = useState('calendar');
   const [selectedRoutine, setSelectedRoutine] = useState('');
   // 1. Whenever u need to do something, just rmember to make a custom hook,
   // 2. import it, and then destructure it in the tracks provider
