@@ -10,7 +10,6 @@ import {auth} from "../firebase";
 import {Scrollbars} from "react-custom-scrollbars";
 import {Footer} from "../components/layout/Footer";
 
-
 // note: see src/context. Since we want to use tracksprovider at the
 // top level, we are using it here in App. This can be replaced
 // with Redux, later.
@@ -18,6 +17,15 @@ export const Dashboard = ({darkModeDefault = true}) => {
   const [darkMode, setDarkMode] = useState(darkModeDefault);
   const [loading, setLoading] = useState(true);
   // get user from context
+
+  // if the user isnt signed in send them back to login page
+  useEffect(() => {
+    auth.onAuthStateChanged((user) => {
+      if (!user) {
+        window.location.href = "/login";
+      }
+    });
+  }, []);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {

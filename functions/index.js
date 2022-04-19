@@ -110,6 +110,29 @@ exports.onCreateUser = functions.auth.user().onCreate((user) => {
     "text-green-500",
     false
   );
+  let key = Math.random().toString(36).substring(7);
+
+  // create a time at 7 am formatted in hh mm AM/PM
+  const morningStart = moment().hour(7).minute(0).format("hh:mm A");
+  const morningEnd = moment().hour(8).minute(30).format("hh:mm A");
+
+  // create a routine for the user
+  db.collection("events").add({
+    archived: false,
+    trackId: uuidv4(),
+    routineId: uuidv4(),
+    title: "Morning",
+    // format like 12:00 pm
+    startTime: morningStart,
+    endTime: morningEnd,
+    userId: user.uid,
+    maintenanceRequired: true,
+    gridRow: 86,
+    span: 18,
+    textColor: `text-orange-500`,
+    bgColor: `bg-orange-50`,
+    key: key,
+  });
 
   const userRef = db.collection("users").doc(user.uid);
   return userRef.set({
@@ -189,6 +212,23 @@ async function scheduleFillForTodaysEvents(
   // get the user's tracks
   const tracks = await getUserTracks(userId);
   todaysEvents.forEach((event) => {
+    // Add this event to the user's events
+    db.collection("users").doc(userId).collection("events").add({
+      archived: false,
+      trackId: event.data().trackId,
+      routineId: event.data().routineId,
+      title: event.data().title,
+      // format like 12:00 pm
+      startTime: event.data().startTime,
+      endTime: event.data().endTime,
+      userId: userId,
+      maintenanceRequired: event.data().maintenanceRequired,
+      gridRow: event.data().gridRow,
+      span: event.data().span,
+      textColor: event.data().textColor,
+      bgColor: event.data().bgColor,
+      key: event.data().key,
+    });
     const startGridRow = event.data().gridRow;
     const endGridRow = event.data().gridRow + (event.data().span - 1);
     for (let i = startGridRow - 1; i <= endGridRow; i++) {
@@ -260,6 +300,11 @@ async function scheduleFillForTodaysEvents(
               .minutes(minutes)
               .format("hh:mm A");
 
+            // add two hours to the starTtime
+            let endTime = moment(startTime, "hh:mm A")
+              .add(2, "hours")
+              .format("hh:mm A");
+
             // generate a random key for the <li>
             let key = Math.random().toString(36).substring(7);
 
@@ -271,7 +316,7 @@ async function scheduleFillForTodaysEvents(
               title: title,
               startTime: startTime,
               // this is kind of irrelevant lol, so set to n/a
-              endTime: "n/a",
+              endTime: endTime,
               userId: userId,
               maintenanceRequired: maintenanceRequired,
               gridRow: consecutiveNullsStart,

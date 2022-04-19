@@ -7,12 +7,14 @@ import {Signup} from "./pages/Signup";
 import {Settings} from "./pages/Settings";
 import {LoginNew} from "./pages/LoginNew";
 import {SignupNew} from "./pages/SignupNew";
+import {LandingNew} from "./pages/LandingNew";
 
 export const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Landing />} />
+        <Route path="/landing" element={<Landing />} />
+        <Route path="/" element={<LandingNew />} />
         <Route path="/signup" element={<SignupNew />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/settings" element={<Settings />} />
