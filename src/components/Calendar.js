@@ -12,6 +12,7 @@ import {auth} from "../firebase";
 import {useTracksValue} from "../context/tracks-context";
 import {generatePushId} from "../helpers";
 import {CurrentTasks} from "./CurrentTasks";
+import {WelcomeBack} from "./WelcomeBack";
 
 const days = [
   {date: "2021-12-27"},
@@ -217,6 +218,7 @@ export function Calendar() {
 
   return (
     <div className="flex flex-col ml-80 mr-80 overflow-auto pt-20">
+      <WelcomeBack />
       <header className="relative flex flex-none items-center justify-between border-b border-gray-200 py-4 px-6">
         <div>
           <h1 className="text-lg font-semibold leading-6 text-gray-900">

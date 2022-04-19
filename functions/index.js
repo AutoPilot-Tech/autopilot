@@ -19,11 +19,96 @@ admin.initializeApp({
 
 const db = admin.firestore();
 
+// Stores element and its priority
+class QElement {
+  constructor(element, priority) {
+    this.element = element;
+    this.priority = priority;
+  }
+}
+
+// Priority queue to be used for determining which routines
+// that have deep work enabled should be filled into the
+// scheduleArray
+class PriorityQueue {
+  constructor() {
+    this.items = [];
+  }
+  // helper method checks if queue is empty
+  isEmpty() {
+    return this.items.length === 0;
+  }
+
+  enqueue(element, priority) {
+    var qElement = new QElement(element, priority);
+    var contain = false;
+
+    for (var i = 0; i < this.items.length; i++) {
+      if (this.items[i].priority > qElement.priority) {
+        this.items.splice(i, 0, qElement);
+        contain = true;
+        break;
+      }
+    }
+    // if highest priority goes to back pf queue
+    if (!contain) {
+      this.items.push(qElement);
+    }
+  }
+
+  // removes the highest priority element.
+  dequeue() {
+    if (this.isEmpty()) {
+      return "Underflow";
+    }
+    return this.items.shift();
+  }
+
+  // returns the highest priority element.
+  // Then it changes the priority of that element by -3.
+  front() {
+    if (this.isEmpty()) {
+      return "nothing in queue";
+    }
+    highestPriorityItem = items[0];
+    highestPriority = items[0].priority;
+
+    // change the priotity of the highest priority element
+    this.dequeue();
+    this.enqueue(highestPriorityItem.element, highestPriority - 3);
+    return this.items[0];
+  }
+
+  // returns lowest priority element
+  rear() {
+    if (this.isEmpty()) {
+      return "nothing in queue";
+    }
+    return this.items[this.items.length - 1];
+  }
+
+  // prints all elements in the queue
+  printPQueue() {
+    var str = "";
+    for (var i = 0; i < this.items.length; i++) {
+      str += this.items[i].element + " ";
+    }
+    return str;
+  }
+}
+
 exports.onCreateUser = functions.auth.user().onCreate((user) => {
   const scheduleArray = Array(288).fill(null);
   // Create a new track with routine set to true for the user
-  createNewTrack(user.uid, "Errands", "bg-indigo-50", "text-indigi-500", false);
-  createNewTrack(user.uid, "Studying", "bg-blue-50", "text-blue-500", true);
+  createNewTrack(
+    user.uid,
+    "Errands",
+    "bg-indigo-50",
+    "text-indigi-500",
+    false,
+    2
+  );
+  createNewTrack(user.uid, "Studying", "bg-blue-50", "text-blue-500", true, 1);
   createNewTrack(user.uid, "Morning", "bg-orange-50", "text-orange-500", true);
   createNewTrack(
     user.uid,
@@ -32,6 +117,9 @@ exports.onCreateUser = functions.auth.user().onCreate((user) => {
     "text-green-500",
     false
   );
+  const userPriorityQueue = new PriorityQueue();
+  userPriorityQueue.enqueue("Studying", 1);
+  userPriorityQueue.enqueue("Errands", 2);
   const userRef = db.collection("users").doc(user.uid);
   return userRef.set({
     email: user.email,
@@ -41,17 +129,23 @@ exports.onCreateUser = functions.auth.user().onCreate((user) => {
     dayStart: 86,
     dayEnd: 254,
     createdAt: admin.firestore.FieldValue.serverTimestamp(),
+    routinePriorityQueue: userPriorityQueue,
   });
 });
 
-exports.autoPilot = functions.firestore
+/**
+ * Initial AutoFill: When user first signs up,
+ * reset schedule,
+ * or the day has just started at 12am.
+ * NOTE: The trigger needs to be changed.
+ */
+exports.initialScheduleFill = functions.firestore
   .document("events/{eventId}")
   .onWrite(async (change) => {
     // get the event from the event id then get the userId
     const event = change.after.data();
     // add this event to the user's event collection
     const userId = event.userId;
-    await db;
     // get the user's scheduleArray
     const scheduleArray = await getUserScheduleArray(userId);
     // get the user's events for today
@@ -141,12 +235,17 @@ async function scheduleFillForTodaysEvents(
 
           let maintenanceRequired = false;
           if (tracks.length > 0) {
+            // Getting Random Track Variation:
             let randomTrack = tracks[Math.floor(Math.random() * tracks.length)];
             let trackId = randomTrack.trackId;
+            // Change this soon
             let routineId = "444444";
             let title = randomTrack.name;
             let textColor = randomTrack.textColor;
             let bgColor = randomTrack.bgColor;
+
+            // Get the user's priorityQueue
+            const userPriorityQueue = getUserPriorityQueue(userId);
 
             // take consecutiveNullStart and get the original time from it
             let gridRowForCalendar = consecutiveNullsStart - 1;
@@ -196,7 +295,45 @@ async function scheduleFillForTodaysEvents(
       }
     }
   });
+
+  // Now go through the scheduleArray and fill in nulls with the errand routine.
+  // get the information about the user's errand routine.
+  const errandRoutine = await getErrandRoutine(userId);
+  for (let i = 0; i < scheduleArray.length; i++) {
+    if (scheduleArray[i] === null) {
+      scheduleArray[i] = errandRoutine.data();
+    }
+  }
   return scheduleArray;
+}
+
+/**
+ * Get the user's priority queue
+ */
+function getUserPriorityQueue(userId) {
+  const priorityQueue = db
+    .collection("users")
+    .doc(userId)
+    .get()
+    .then((doc) => {
+      // get priority queue
+      return doc.data().priorityQueue;
+    });
+  return priorityQueue;
+}
+
+/**
+ * Get the user's errand routine
+ */
+async function getErrandRoutine(userId) {
+  // Find the track that has the name "Errands"
+  const errandTrack = await db
+    .collection("tracks")
+    .where("userId", "==", userId)
+    .where("name", "==", "Errands")
+    .get();
+  // get the routineId of the errand routine
+  return errandTrack;
 }
 
 /**
@@ -234,7 +371,8 @@ async function createNewTrack(
   trackName,
   bgColor,
   textColor,
-  routineBoolean
+  routineBoolean,
+  priority
 ) {
   const trackId = uuidv4();
   const track = {
@@ -244,6 +382,7 @@ async function createNewTrack(
     textColor: textColor,
     bgColor: bgColor,
     routine: routineBoolean,
+    priority: priority,
   };
   await db.collection("tracks").doc(trackId).set(track);
   // if the trackName is "Morning"

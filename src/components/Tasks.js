@@ -195,7 +195,6 @@ export const Tasks = () => {
               </div>
             </>
           )}
-
         </div>
       )}
     </div>
