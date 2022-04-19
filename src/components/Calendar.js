@@ -8,7 +8,7 @@ import {
 import {Menu, Transition} from "@headlessui/react";
 import moment from "moment";
 import {useAutoFill} from "../hooks";
-import {auth} from "../firebase";
+import {auth, db} from "../firebase";
 import {useTracksValue} from "../context/tracks-context";
 import {generatePushId} from "../helpers";
 import {CurrentTasks} from "./CurrentTasks";
@@ -85,129 +85,148 @@ export function Calendar() {
   }, []);
 
   // only get the events that have today's date in the start date
+  // useEffect(() => {
+  //   // only run this code is events has any events in it
+  //   if (events.length > 0) {
+  //     let scheduleArray = Array(288).fill(null);
+
+  //     const today = moment().format("YYYY-MM-DD");
+  //     let routineEvents = events.filter((event) => {
+  //       return moment(event.start).format("YYYY-MM-DD") === today;
+  //     });
+  //     // go through today's events and get the gridRow for each event
+  //     routineEvents.forEach((event) => {
+  //       const startGridRow = event.gridRow;
+  //       const endGridRow = event.gridRow + (event.span - 1);
+  //       for (let i = startGridRow - 1; i <= endGridRow; i++) {
+  //         scheduleArray[i] = 1;
+  //       }
+  //     });
+
+  //     let dayStart = 61;
+  //     let dayEnd = 275;
+
+  //     // The total amount of time that the user has in their daily schedule
+
+  //     // iterate through the scheduleArray
+  //     for (let i = dayStart; i <= dayEnd; i++) {
+  //       // need to check if there are 24 consecutive indices that are null then fill them with a 2
+  //       let consecutiveNulls = 0;
+  //       let consecutiveNullsStart = 0;
+  //       let consecutiveNullsEnd = 0;
+  //       for (let j = i; j <= i + 23; j++) {
+  //         // if this is the first index that is null then set the start index
+  //         if (j === i && scheduleArray[j] === null) {
+  //           consecutiveNullsStart = j;
+  //         }
+  //         if (scheduleArray[j] === null) {
+  //           consecutiveNulls++;
+  //         }
+  //       }
+  //       if (consecutiveNulls === 24) {
+  //         // set consecutiveNullsEnd to the last index that is null
+  //         consecutiveNullsEnd = consecutiveNullsStart + 23;
+
+  //         let randomNumber = Math.floor(Math.random() * 24);
+  //         for (let k = i; k <= i + 23; k++) {
+  //           scheduleArray[k] = randomNumber;
+  //         }
+  //         consecutiveNulls = 0;
+
+  //         // Now make an event in firebase
+  //         let userId = auth.currentUser.uid;
+  //         let maintenanceRequired = false;
+  //         // db.collection('events').add({
+  //         //   archived: false,
+  //         //   trackId: null,
+  //         //   routineId: null,
+  //         //   title: null,
+  //         //   start: null,
+  //         //   end: null,
+  //         //   userId: userId,
+  //         //   maintenanceRequired: maintenanceRequired,
+  //         //   gridRow: consecutiveNullsStart,
+  //         //   span: 24,
+  //         // });
+
+  //         // get a random track from the tracks array
+  //         // only run the below code if there is a track in the tracks array
+  //         if (tracks.length > 0) {
+  //           let randomTrack = tracks[Math.floor(Math.random() * tracks.length)];
+  //           let trackId = randomTrack.trackId;
+  //           let routineId = "444444";
+  //           let title = randomTrack.name;
+  //           let textColor = randomTrack.textColor;
+  //           let bgColor = randomTrack.bgColor;
+
+  //           // take consecutiveNullStart and get the original time from it
+  //           let gridRowForCalendar = consecutiveNullsStart - 1;
+  //           let startTimeInHoursDecimal = gridRowForCalendar / 12;
+  //           let minutes;
+  //           let hours;
+  //           // if startTime has a decimal place then extract it and save it
+  //           if (startTimeInHoursDecimal % 1 !== 0) {
+  //             let startTimeDecimal = startTimeInHoursDecimal % 1;
+  //             let startTimeWhole = startTimeInHoursDecimal - startTimeDecimal;
+  //             // remove the decimal from starTimeInHoursDecimal and save to startTimeFraction
+  //             minutes = startTimeDecimal * 60;
+  //             hours = startTimeWhole;
+  //           } else {
+  //             minutes = 0;
+  //             hours = startTimeInHoursDecimal;
+  //           }
+
+  //           // make a moment time with the minutes and hours
+  //           let startTime = moment()
+  //             .hours(hours)
+  //             .minutes(minutes)
+  //             .format("hh:mm A");
+  //           // generate a random key for the <li>
+  //           let key = Math.random().toString(36).substring(7);
+
+  //           routineEvents.push({
+  //             archived: false,
+  //             trackId: trackId,
+  //             routineId: routineId,
+  //             title: title,
+  //             startTime: startTime,
+  //             // this is kind of irrelevant lol, so set to n/a
+  //             endTime: "n/a",
+  //             userId: userId,
+  //             maintenanceRequired: maintenanceRequired,
+  //             gridRow: consecutiveNullsStart,
+  //             span: 24,
+  //             textColor: textColor,
+  //             bgColor: bgColor,
+  //             key: key,
+  //           });
+  //         }
+  //       }
+  //     }
+  //     setTodaysEvents(routineEvents);
+  //   }
+
+  //   // if todaysEvents has at least one object in it, set loading to false. This helps us not call .map on an empty array and crash the app
+  // }, [events]);
+
   useEffect(() => {
-    // only run this code is events has any events in it
-    if (events.length > 0) {
-      let scheduleArray = Array(288).fill(null);
-
-      const today = moment().format("YYYY-MM-DD");
-      let routineEvents = events.filter((event) => {
-        return moment(event.start).format("YYYY-MM-DD") === today;
+    let unsubscribe = db
+      .collection("users")
+      .doc(auth.currentUser.uid)
+      .collection("events")
+      .onSnapshot((snapshot) => {
+        let eventsArray = [];
+        snapshot.forEach((doc) => {
+          let event = doc.data();
+          event.id = doc.id;
+          eventsArray.push(event);
+        });
+        setTodaysEvents(eventsArray);
       });
-      // go through today's events and get the gridRow for each event
-      routineEvents.forEach((event) => {
-        const startGridRow = event.gridRow;
-        const endGridRow = event.gridRow + (event.span - 1);
-        for (let i = startGridRow - 1; i <= endGridRow; i++) {
-          scheduleArray[i] = 1;
-        }
-      });
-
-      let dayStart = 61;
-      let dayEnd = 275;
-
-      // The total amount of time that the user has in their daily schedule
-
-      // iterate through the scheduleArray
-      for (let i = dayStart; i <= dayEnd; i++) {
-        // need to check if there are 24 consecutive indices that are null then fill them with a 2
-        let consecutiveNulls = 0;
-        let consecutiveNullsStart = 0;
-        let consecutiveNullsEnd = 0;
-        for (let j = i; j <= i + 23; j++) {
-          // if this is the first index that is null then set the start index
-          if (j === i && scheduleArray[j] === null) {
-            consecutiveNullsStart = j;
-          }
-          if (scheduleArray[j] === null) {
-            consecutiveNulls++;
-          }
-        }
-        if (consecutiveNulls === 24) {
-          // set consecutiveNullsEnd to the last index that is null
-          consecutiveNullsEnd = consecutiveNullsStart + 23;
-
-          let randomNumber = Math.floor(Math.random() * 24);
-          for (let k = i; k <= i + 23; k++) {
-            scheduleArray[k] = randomNumber;
-          }
-          consecutiveNulls = 0;
-
-          // Now make an event in firebase
-          let userId = auth.currentUser.uid;
-          let maintenanceRequired = false;
-          // db.collection('events').add({
-          //   archived: false,
-          //   trackId: null,
-          //   routineId: null,
-          //   title: null,
-          //   start: null,
-          //   end: null,
-          //   userId: userId,
-          //   maintenanceRequired: maintenanceRequired,
-          //   gridRow: consecutiveNullsStart,
-          //   span: 24,
-          // });
-
-          // get a random track from the tracks array
-          // only run the below code if there is a track in the tracks array
-          if (tracks.length > 0) {
-            let randomTrack = tracks[Math.floor(Math.random() * tracks.length)];
-            let trackId = randomTrack.trackId;
-            let routineId = "444444";
-            let title = randomTrack.name;
-            let textColor = randomTrack.textColor;
-            let bgColor = randomTrack.bgColor;
-
-            // take consecutiveNullStart and get the original time from it
-            let gridRowForCalendar = consecutiveNullsStart - 1;
-            let startTimeInHoursDecimal = gridRowForCalendar / 12;
-            let minutes;
-            let hours;
-            // if startTime has a decimal place then extract it and save it
-            if (startTimeInHoursDecimal % 1 !== 0) {
-              let startTimeDecimal = startTimeInHoursDecimal % 1;
-              let startTimeWhole = startTimeInHoursDecimal - startTimeDecimal;
-              // remove the decimal from starTimeInHoursDecimal and save to startTimeFraction
-              minutes = startTimeDecimal * 60;
-              hours = startTimeWhole;
-            } else {
-              minutes = 0;
-              hours = startTimeInHoursDecimal;
-            }
-
-            // make a moment time with the minutes and hours
-            let startTime = moment()
-              .hours(hours)
-              .minutes(minutes)
-              .format("hh:mm A");
-            // generate a random key for the <li>
-            let key = Math.random().toString(36).substring(7);
-
-            routineEvents.push({
-              archived: false,
-              trackId: trackId,
-              routineId: routineId,
-              title: title,
-              startTime: startTime,
-              // this is kind of irrelevant lol, so set to n/a
-              endTime: "n/a",
-              userId: userId,
-              maintenanceRequired: maintenanceRequired,
-              gridRow: consecutiveNullsStart,
-              span: 24,
-              textColor: textColor,
-              bgColor: bgColor,
-              key: key,
-            });
-          }
-        }
-      }
-      setTodaysEvents(routineEvents);
-    }
-
-    // if todaysEvents has at least one object in it, set loading to false. This helps us not call .map on an empty array and crash the app
-  }, [events]);
+    return () => {
+      unsubscribe();
+    };
+  }, []);
 
   useEffect(() => {
     if (todaysEvents.length > 0) {

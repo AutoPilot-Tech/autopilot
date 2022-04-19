@@ -69,6 +69,26 @@ export const RoutineSettings = () => {
       bgColor: `bg-${color}-50`,
       key: key,
     });
+    db.collection("users")
+      .doc(userId)
+      .collection("events")
+      .add({
+        archived: false,
+        trackId: selectedTrack,
+        routineId: selectedTrack,
+        title: trackName,
+        // format like 12:00 pm
+        startTime: routineStartDate.format("hh:mm A"),
+        endTime: routineEndDate.format("hh:mm A"),
+        userId: userId,
+        maintenanceRequired: maintenanceRequired,
+        gridRow: gridRowForCalendar,
+        span: durationInHoursDecimal,
+        textColor: `text-${color}-500`,
+        bgColor: `bg-${color}-50`,
+        key: key,
+      });
+
     // schedule the routine for the next 7 days
     for (let i = 0; i < 7; i++) {
       let startTime = routineStartDate.add(1, "days").format();

@@ -40,7 +40,7 @@ export function LoginNew() {
               <p className="mt-2 text-sm text-gray-600">
                 Or{" "}
                 <a
-                  href="#"
+                  href="/signup"
                   className="font-medium text-indigo-600 hover:text-indigo-500"
                 >
                   sign up

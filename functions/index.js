@@ -100,15 +100,8 @@ class PriorityQueue {
 exports.onCreateUser = functions.auth.user().onCreate((user) => {
   const scheduleArray = Array(288).fill(null);
   // Create a new track with routine set to true for the user
-  createNewTrack(
-    user.uid,
-    "Errands",
-    "bg-indigo-50",
-    "text-indigi-500",
-    false,
-    2
-  );
-  createNewTrack(user.uid, "Studying", "bg-blue-50", "text-blue-500", true, 1);
+  createNewTrack(user.uid, "Errands", "bg-indigo-50", "text-indigi-500", false);
+  createNewTrack(user.uid, "Studying", "bg-blue-50", "text-blue-500", true);
   createNewTrack(user.uid, "Morning", "bg-orange-50", "text-orange-500", true);
   createNewTrack(
     user.uid,
@@ -117,9 +110,7 @@ exports.onCreateUser = functions.auth.user().onCreate((user) => {
     "text-green-500",
     false
   );
-  const userPriorityQueue = new PriorityQueue();
-  userPriorityQueue.enqueue("Studying", 1);
-  userPriorityQueue.enqueue("Errands", 2);
+
   const userRef = db.collection("users").doc(user.uid);
   return userRef.set({
     email: user.email,
@@ -129,7 +120,6 @@ exports.onCreateUser = functions.auth.user().onCreate((user) => {
     dayStart: 86,
     dayEnd: 254,
     createdAt: admin.firestore.FieldValue.serverTimestamp(),
-    routinePriorityQueue: userPriorityQueue,
   });
 });
 
@@ -144,8 +134,8 @@ exports.initialScheduleFill = functions.firestore
   .onWrite(async (change) => {
     // get the event from the event id then get the userId
     const event = change.after.data();
-    // add this event to the user's event collection
     const userId = event.userId;
+
     // get the user's scheduleArray
     const scheduleArray = await getUserScheduleArray(userId);
     // get the user's events for today
@@ -245,7 +235,7 @@ async function scheduleFillForTodaysEvents(
             let bgColor = randomTrack.bgColor;
 
             // Get the user's priorityQueue
-            const userPriorityQueue = getUserPriorityQueue(userId);
+            // const userPriorityQueue = getUserPriorityQueue(userId);
 
             // take consecutiveNullStart and get the original time from it
             let gridRowForCalendar = consecutiveNullsStart - 1;
@@ -382,7 +372,6 @@ async function createNewTrack(
     textColor: textColor,
     bgColor: bgColor,
     routine: routineBoolean,
-    priority: priority,
   };
   await db.collection("tracks").doc(trackId).set(track);
   // if the trackName is "Morning"

@@ -1,21 +1,29 @@
-import React, { useState, useEffect } from 'react';
-import { auth, db, signInWithGoogle } from '../firebase';
+import React, {useState, useEffect} from "react";
+import {auth, db, signInWithGoogle} from "../firebase";
 
 export const Signup = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
 
   const handleSignUp = () => {
-    console.log('email: ', email);
-    console.log('password: ', password);
-    console.log('firstName: ', firstName);
-    console.log('lastName: ', lastName);
+    console.log("email: ", email);
+    console.log("password: ", password);
+    console.log("firstName: ", firstName);
+    console.log("lastName: ", lastName);
 
     auth
       .createUserWithEmailAndPassword(email, password)
-      .then((userCredential) => {})
+      .then((res) => {
+        // update the user profile in the db
+        const user = auth.currentUser.uid;
+        db.collection("users")
+          .doc(user)
+          .set({
+            displayName: `${firstName}`,
+          });
+      })
       .catch((error) => {
         var errorCode = error.code;
         var errorMessage = error.message;

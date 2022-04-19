@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import {auth, signInWithGoogle} from "../firebase";
+import {auth, db, signInWithGoogle} from "../firebase";
 
 export function SignupNew() {
   const [email, setEmail] = useState("");
@@ -16,13 +16,20 @@ export function SignupNew() {
     auth
       .createUserWithEmailAndPassword(email, password)
       .then((userCredential) => {
-        // redirect to /dashboard
-        window.location.href = "/dashboard";
+        const user = auth.currentUser.uid;
+        return db
+          .collection("users")
+          .doc(user)
+          .set({
+            displayName: `${firstName}`,
+          })
+          .then(() => (window.location.href = "/dashboard"));
       })
       .catch((error) => {
         var errorCode = error.code;
         var errorMessage = error.message;
-        // ..
+        console.log(errorCode);
+        console.log(errorMessage);
       });
   };
 
