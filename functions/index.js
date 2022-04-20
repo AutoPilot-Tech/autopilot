@@ -116,13 +116,23 @@ exports.onCreateUser = functions.auth.user().onCreate((user) => {
   const morningStart = moment().hour(7).minute(0).format("hh:mm A");
   const morningEnd = moment().hour(8).minute(30).format("hh:mm A");
 
-  // create a routine for the user
-  db.collection("events").add({
-    archived: false,
-    trackId: uuidv4(),
-    routineId: uuidv4(),
-    title: "Morning",
-    // format like 12:00 pm
+  // get the track id for the morning routine
+  const morningTrackId = db
+    .collection("tracks")
+    .where("userId", "==", user.uid)
+    .get()
+    .then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        if (doc.data().name === "Morning") {
+          const morningTrackId = doc.id;
+          return morningTrackId;
+        }
+      });
+    });
+
+  db.collection("tracks").doc(morningTrackId).collection("habits").add({
+    trackDocId: morningTrackId,
+    title: "Wake  Routine",
     startTime: morningStart,
     endTime: morningEnd,
     userId: user.uid,
@@ -211,6 +221,21 @@ async function scheduleFillForTodaysEvents(
 ) {
   // get the user's tracks
   const tracks = await getUserTracks(userId);
+  const dayStart = db
+    .collection("users")
+    .doc(userId)
+    .get()
+    .then((doc) => {
+      return doc.data().dayStart;
+    });
+  const dayEnd = db
+    .collection("users")
+    .doc(userId)
+    .get()
+    .then((doc) => {
+      return doc.data().dayEnd;
+    });
+
   todaysEvents.forEach((event) => {
     // Add this event to the user's events
     db.collection("users").doc(userId).collection("events").add({
@@ -234,8 +259,6 @@ async function scheduleFillForTodaysEvents(
     for (let i = startGridRow - 1; i <= endGridRow; i++) {
       scheduleArray[i] = 1;
     }
-    let dayStart = 61;
-    let dayEnd = 275;
 
     for (let i = dayStart; i <= dayEnd; i++) {
       let consecutiveNulls = 0;
@@ -407,7 +430,6 @@ async function createNewTrack(
   bgColor,
   textColor,
   routineBoolean,
-  priority
 ) {
   const trackId = uuidv4();
   const track = {
@@ -417,6 +439,7 @@ async function createNewTrack(
     textColor: textColor,
     bgColor: bgColor,
     routine: routineBoolean,
+    starter: true,
   };
   await db.collection("tracks").doc(trackId).set(track);
   // if the trackName is "Morning"
