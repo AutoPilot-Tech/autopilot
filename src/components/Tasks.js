@@ -81,15 +81,18 @@ export const Tasks = () => {
     if (selectedTrack === "CALENDAR") {
       setShowCalendar(true);
       setShowChat(false);
+      setShowSettings(false);
     } else if (selectedTrack === "ASSISTANT") {
       // this is for the future.
       setShowChat(true);
+      setShowSettings(false);
     } else if (selectedTrack === "SETTINGS") {
       setShowCalendar(false);
       setShowChat(false);
       setShowSettings(true);
     } else {
       setShowCalendar(false);
+      setShowSettings(false);
     }
   }, [selectedTrack]);
 

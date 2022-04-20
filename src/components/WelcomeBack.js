@@ -29,10 +29,10 @@ export function WelcomeBack() {
   const greeting2 = [
     `Is it morning or night?`,
     `Legends are waking up at 5am or going to bed at 5am, ${displayName}`,
-    `It's ${currentHour} o'clock, ${displayName}`,
+    `It's ${oClock} o'clock, ${displayName}`,
     `Freaky hours, ${displayName}`,
     `We believe in you, ${displayName}`,
-    `It's ${currentHour} o'clock, ${displayName}... and OU still sucks.`,
+    `It's ${oClock} o'clock, ${displayName}... and OU still sucks.`,
   ];
 
   // 6 am - 12pm
@@ -48,7 +48,7 @@ export function WelcomeBack() {
   const greeting4 = [
     `Good Afternoon, ${displayName}!`,
     `Welcome back, ${displayName}!`,
-    `It's ${currentHour} o'clock, ${displayName}... and OU still sucks.`,
+    `It's ${oClock} o'clock, ${displayName}... and OU still sucks.`,
     `The day isn't over yet, ${displayName}!`,
     `${displayName}, you're doing great.`,
   ];
