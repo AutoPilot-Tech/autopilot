@@ -13,33 +13,6 @@ export function CurrentTasks() {
     );
   };
 
-  const tasks = [
-    {
-      task: "Work",
-      dueDate: "Tomorrow",
-      project: "Project 1",
-      key: generateKey(),
-    },
-    {
-      task: "Work",
-      dueDate: "Tomorrow",
-      project: "Project 1",
-      key: generateKey(),
-    },
-    {
-      task: "Work",
-      dueDate: "Tomorrow",
-      project: "Project 1",
-      key: generateKey(),
-    },
-    {
-      task: "Work",
-      dueDate: "Tomorrow",
-      project: "Project 1",
-      key: generateKey(),
-    },
-  ];
-
   // Get the current routine
   useEffect(() => {
     // get the time in hh:mm format
@@ -125,12 +98,6 @@ export function CurrentTasks() {
                     >
                       Due Date
                     </th> */}
-                    <th
-                      scope="col"
-                      className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                    >
-                      Routine
-                    </th>
 
                     {/* <th
                       scope="col"
