@@ -2,11 +2,11 @@ const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const moment = require("moment");
 const {v4: uuidv4} = require("uuid");
-const useEmulator = true;
+// const useEmulator = true;
 
-if (useEmulator) {
-  process.env["FIRESTORE_EMULATOR_HOST"] = "localhost:8080";
-}
+// if (useEmulator) {
+//   process.env["FIRESTORE_EMULATOR_HOST"] = "localhost:8080";
+// }
 
 admin.initializeApp({
   credential: admin.credential.cert({
@@ -139,9 +139,12 @@ exports.onCreateUser = functions.auth.user().onCreate((user) => {
   // });
 
   const userRef = db.collection("users").doc(user.uid);
+  let parts = user.displayName.split("\\s+");
+  let firstName = parts[0];
+  let lastname = parts[1];
   return userRef.set({
     email: user.email,
-    displayName: user.displayName,
+    displayName: firstName,
     photoURL: user.photoURL,
     scheduleArray: scheduleArray,
     dayStart: 86,

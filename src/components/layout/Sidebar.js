@@ -67,7 +67,7 @@ export const Sidebar = () => {
           </span>
           <span>For You</span>
         </li>
-        <li
+        {/* <li
           data-testid="today"
           className={classNames(
             active === "Assistant"
@@ -99,7 +99,7 @@ export const Sidebar = () => {
             </svg>
           </span>
           <span>Your Assistant</span>
-        </li>
+        </li> */}
         <li
           data-testid="inbox"
           className={classNames(

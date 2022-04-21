@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { FaRegListAlt, FaRegCalendarAlt, FaRegCalendar } from 'react-icons/fa';
-import moment from 'moment';
-import { db, auth } from '../firebase';
-import { useTracksValue } from '../context/tracks-context';
-import { TrackOverlay } from './TrackOverlay';
-import { TaskDate } from './TaskDate';
-import DateTimePicker from '@mui/lab/DateTimePicker';
-import TextField from '@mui/material/TextField';
-import { amplitude } from '../utilities/amplitude';
+import React, {useState, useEffect} from "react";
+import {FaRegListAlt, FaRegCalendarAlt, FaRegCalendar} from "react-icons/fa";
+import moment from "moment";
+import {db, auth} from "../firebase";
+import {useTracksValue} from "../context/tracks-context";
+import {TrackOverlay} from "./TrackOverlay";
+import {TaskDate} from "./TaskDate";
+import DateTimePicker from "@mui/lab/DateTimePicker";
+import TextField from "@mui/material/TextField";
+import {amplitude} from "../utilities/amplitude";
 
 export const AddTask = ({
   showAddTaskMain = true,
@@ -15,11 +15,11 @@ export const AddTask = ({
   showQuickAddTask,
   setShowQuickAddTask,
 }) => {
-  const [task, setTask] = useState('');
-  const [taskDate, setTaskDate] = useState('');
-  const [taskStartDate, setTaskStartDate] = useState('');
-  const [taskEndDate, setTaskEndDate] = useState('');
-  const [track, setTrack] = useState('');
+  const [task, setTask] = useState("");
+  const [taskDate, setTaskDate] = useState("");
+  const [taskStartDate, setTaskStartDate] = useState("");
+  const [taskEndDate, setTaskEndDate] = useState("");
+  const [track, setTrack] = useState("");
   const [showMain, setShowMain] = useState(shouldShowMain);
   const [showTrackOverlay, setShowTrackOverlay] = useState(false);
   const [showTaskDate, setShowTaskDate] = useState(false);
@@ -28,11 +28,11 @@ export const AddTask = ({
   const [showTaskDateMain, setShowTaskDateMain] = useState(false);
   // Show date picker with react-dates
   const [showCalendarOverlay, setShowCalendarOverlay] = useState(false);
-  const [value, setValue] = useState('');
-  const [startValue, setStartValue] = useState('');
-  const [endValue, setEndValue] = useState('');
+  const [value, setValue] = useState("");
+  const [startValue, setStartValue] = useState("");
+  const [endValue, setEndValue] = useState("");
 
-  const { selectedTrack } = useTracksValue();
+  const {selectedTrack} = useTracksValue();
 
   useEffect(() => {
     let unsubscribe = auth.onAuthStateChanged((user) => {
@@ -53,18 +53,18 @@ export const AddTask = ({
 
   const addTask = () => {
     const trackId = track || selectedTrack;
-    let collatedDate = '';
+    let collatedDate = "";
 
-    if (trackId === 'TODAY') {
-      collatedDate = moment().format('YYYY-MM-DD');
-    } else if (trackId === 'NEXT_7') {
-      collatedDate = moment().add(7, 'days').format('YYYY-MM-DD');
+    if (trackId === "TODAY") {
+      collatedDate = moment().format("YYYY-MM-DD");
+    } else if (trackId === "NEXT_7") {
+      collatedDate = moment().add(7, "days").format("YYYY-MM-DD");
     }
     return (
       task &&
       trackId &&
       db
-        .collection('tasks')
+        .collection("tasks")
         .add({
           archived: false,
           trackId: trackId,
@@ -80,9 +80,9 @@ export const AddTask = ({
           userId: user,
         })
         .then(() => {
-          setTask('');
-          setTrack('');
-          setShowMain('');
+          setTask("");
+          setTrack("");
+          setShowMain("");
           setShowTrackOverlay(false);
         })
     );
@@ -90,7 +90,7 @@ export const AddTask = ({
 
   return (
     <div
-      className={showQuickAddTask ? 'add-task add-task__overlay' : 'add-task'}
+      className={showQuickAddTask ? "add-task add-task__overlay" : "add-task"}
       data-testid="add-task-comp"
     >
       {showAddTaskMain && (
@@ -102,7 +102,7 @@ export const AddTask = ({
           <span className="add-task__plus">+</span>
           <span
             className="add-task__text"
-            onClick={logClick('regularAddTaskClick')}
+            onClick={logClick("regularAddTaskClick")}
           >
             Add Task
           </span>
@@ -145,12 +145,10 @@ export const AddTask = ({
             label="Start Date"
             value={startValue}
             onChange={(newValue) => {
-              setStartValue(newValue);
-              console.log('start date', newValue.format());
               setTaskStartDate(newValue.format());
             }}
             onClick={() => {
-              logClick('taskStartDateClick');
+              logClick("taskStartDateClick");
             }}
           />
           <DateTimePicker
@@ -158,12 +156,10 @@ export const AddTask = ({
             label="End Date"
             value={endValue}
             onChange={(newValue) => {
-              setEndValue(newValue);
-              console.log('end date:', newValue.format());
               setTaskEndDate(newValue.format());
             }}
             onClick={() => {
-              logClick('taskEndDateClick');
+              logClick("taskEndDateClick");
             }}
           />
 

@@ -13,8 +13,7 @@ export const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/landing" element={<Landing />} />
-        <Route path="/" element={<LandingNew />} />
+        <Route path="/" element={<Landing />} />
         <Route path="/signup" element={<SignupNew />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/settings" element={<Settings />} />

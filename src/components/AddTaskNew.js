@@ -49,6 +49,7 @@ export const AddTaskNew = ({
       if (user) {
         // this is the user's id
         setUser(user.uid);
+
       } else {
         setUser(null);
       }
@@ -56,6 +57,8 @@ export const AddTaskNew = ({
     return unsubscribe;
   }, []);
 
+
+  
   const logClick = (event) => {
     let userId = auth.currentUser.uid;
     amplitude.getInstance().logEvent(event, userId);
@@ -173,7 +176,6 @@ export const AddTaskNew = ({
                     value={startValue}
                     onChange={(newValue) => {
                       setStartValue(newValue);
-                      console.log("start date", newValue.format());
                       setTaskStartDate(newValue.format());
                     }}
                     onClick={() => {
@@ -193,7 +195,6 @@ export const AddTaskNew = ({
                     value={endValue}
                     onChange={(newValue) => {
                       setEndValue(newValue);
-                      console.log("end date:", newValue.format());
                       setTaskEndDate(newValue.format());
                     }}
                     onClick={() => {

@@ -1,8 +1,8 @@
-import {Fragment} from "react";
+import {Fragment, useEffect, useState} from "react";
 import {Menu, Popover, Transition} from "@headlessui/react";
 import {SearchIcon} from "@heroicons/react/solid";
 import {BellIcon, MenuIcon, XIcon} from "@heroicons/react/outline";
-import {auth, functions} from "../../firebase";
+import {auth, db} from "../../firebase";
 import {CircularButton} from "../CircularButton";
 
 const logOut = () => {
@@ -17,8 +17,6 @@ const logOut = () => {
     });
 };
 
-var autoFill = functions.httpsCallable("autoFill");
-
 const user = {
   name: "Chelsea Hagon",
   email: "chelsea.hagon@example.com",
@@ -32,8 +30,8 @@ const navigation = [
   {name: "Directory", href: "#", current: false},
 ];
 const userNavigation = [
-  {name: "Your Profile", href: "#", onClick: ""},
-  {name: "Settings", href: "/settings", onClick: ""},
+  // {name: "Your Profile", href: "#", onClick: ""},
+  // {name: "Settings", href: "/settings", onClick: ""},
   {name: "Sign out", href: "#", onClick: logOut},
 ];
 
@@ -42,6 +40,22 @@ function classNames(...classes) {
 }
 
 export function Header() {
+  const [userPhoto, setUserPhoto] = useState("");
+
+  // get the users photo
+  useEffect(() => {
+    const unsubscribe = db
+      .collection("users")
+      .doc(auth.currentUser.uid)
+      .onSnapshot((snapshot) => {
+        let imageUrl = snapshot.data().photoURL;
+        setUserPhoto(imageUrl);
+      });
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
   return (
     <>
       {/* When the mobile menu is open, add `overflow-hidden` to the `body` element to prevent double scrollbars */}
@@ -117,7 +131,7 @@ export function Header() {
                         <span className="sr-only">Open user menu</span>
                         <img
                           className="h-8 w-8 rounded-full"
-                          src={user.imageUrl}
+                          src={userPhoto}
                           alt=""
                         />
                       </Menu.Button>
