@@ -63,7 +63,7 @@ export function Header() {
                     <a href="/dashboard">
                       <img
                         className="block h-16 w-auto"
-                        src="../../images/autopilot_black.png"
+                        src="../../images/autopilot_alpha.png"
                         alt="Autopilot"
                       />
                     </a>
