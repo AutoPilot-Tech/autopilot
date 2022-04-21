@@ -1,6 +1,6 @@
 {
-  "name": "athios",
-  "version": "0.1.0",
+  "name": "autopilot",
+  "version": "0.0.1",
   "private": true,
   "dependencies": {
     "@babel/runtime": "^7.17.8",
