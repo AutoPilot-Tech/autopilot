@@ -318,14 +318,14 @@ export function Landing() {
                 <div className="hidden md:absolute md:flex md:items-center md:justify-end md:inset-y-0 md:right-0">
                   <span className="inline-flex rounded-md shadow mr-7">
                     <a
-                      href="#"
+                      href="/login"
                       className=" inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-indigo-600 bg-white hover:text-indigo-500"
                     >
                       Log in
                     </a>
                   </span>
                   <a
-                    href="#"
+                    href="/signup"
                     className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-white bg-gray-600 hover:bg-gray-700"
                   >
                     Start free trial
@@ -375,7 +375,7 @@ export function Landing() {
                     ))}
                   </div>
                   <a
-                    href="#"
+                    href="/login"
                     className="block w-full px-5 py-3 text-center font-medium text-indigo-600 bg-gray-50 hover:bg-gray-100 hover:text-indigo-700"
                   >
                     Log in

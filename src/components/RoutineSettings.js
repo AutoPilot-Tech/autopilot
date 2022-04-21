@@ -93,6 +93,8 @@ export const RoutineSettings = () => {
     for (let i = 0; i < 7; i++) {
       let startTime = routineStartDate.add(1, "days").format();
       let endTime = routineEndDate.add(1, "days").format();
+      let newKey = Math.random().toString(36).substring(7);
+
       // if its the 6th iteration or above set maintenanceRequired to true
       // we will use this to regenerate more routines on the server side - this saves space and $$
       if (i >= 6) {
@@ -115,7 +117,7 @@ export const RoutineSettings = () => {
           span: durationInHoursDecimal,
           textColor: `text-${color}-500`,
           bgColor: `bg-${color}-50`,
-          key: key,
+          key: newKey,
         });
     }
   };

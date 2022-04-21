@@ -100,49 +100,43 @@ class PriorityQueue {
 exports.onCreateUser = functions.auth.user().onCreate((user) => {
   const scheduleArray = Array(288).fill(null);
   // Create a new track with routine set to true for the user
-  createNewTrack(user.uid, "Errands", "bg-indigo-50", "text-indigi-500", false);
+  createNewTrack(user.uid, "Errands", "bg-indigo-50", "text-indigo-500", false);
   createNewTrack(user.uid, "Studying", "bg-blue-50", "text-blue-500", true);
   createNewTrack(user.uid, "Morning", "bg-orange-50", "text-orange-500", true);
-  createNewTrack(
-    user.uid,
-    "Start here!",
-    "bg-green-50",
-    "text-green-500",
-    false
-  );
+  createNewTrack(user.uid, "Start here!", "bg-blue-50", "text-blue-500", false);
   let key = Math.random().toString(36).substring(7);
 
   // create a time at 7 am formatted in hh mm AM/PM
   const morningStart = moment().hour(7).minute(0).format("hh:mm A");
   const morningEnd = moment().hour(8).minute(30).format("hh:mm A");
 
-  // get the track id for the morning routine
-  const morningTrackId = db
-    .collection("tracks")
-    .where("userId", "==", user.uid)
-    .get()
-    .then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        if (doc.data().name === "Morning") {
-          const morningTrackId = doc.id;
-          return morningTrackId;
-        }
-      });
-    });
+  // // get the track id for the morning routine
+  // const morningTrackId = db
+  //   .collection("tracks")
+  //   .where("userId", "==", user.uid)
+  //   .get()
+  //   .then((querySnapshot) => {
+  //     querySnapshot.forEach((doc) => {
+  //       if (doc.data().name === "Morning") {
+  //         const morningTrackId = doc.id;
+  //         return morningTrackId;
+  //       }
+  //     });
+  //   })
 
-  db.collection("tracks").doc(morningTrackId).collection("habits").add({
-    trackDocId: morningTrackId,
-    title: "Wake  Routine",
-    startTime: morningStart,
-    endTime: morningEnd,
-    userId: user.uid,
-    maintenanceRequired: true,
-    gridRow: 86,
-    span: 18,
-    textColor: `text-orange-500`,
-    bgColor: `bg-orange-50`,
-    key: key,
-  });
+  // db.collection("tracks").doc(morningTrackId).collection("habits").add({
+  //   trackDocId: morningTrackId,
+  //   title: "Wake  Routine",
+  //   startTime: morningStart,
+  //   endTime: morningEnd,
+  //   userId: user.uid,
+  //   maintenanceRequired: true,
+  //   gridRow: 86,
+  //   span: 18,
+  //   textColor: `text-orange-500`,
+  //   bgColor: `bg-orange-50`,
+  //   key: key,
+  // });
 
   const userRef = db.collection("users").doc(user.uid);
   return userRef.set({
@@ -221,14 +215,14 @@ async function scheduleFillForTodaysEvents(
 ) {
   // get the user's tracks
   const tracks = await getUserTracks(userId);
-  const dayStart = db
+  const dayStart = await db
     .collection("users")
     .doc(userId)
     .get()
     .then((doc) => {
       return doc.data().dayStart;
     });
-  const dayEnd = db
+  const dayEnd = await db
     .collection("users")
     .doc(userId)
     .get()
@@ -236,24 +230,12 @@ async function scheduleFillForTodaysEvents(
       return doc.data().dayEnd;
     });
 
+  console.log(`DAY START: ${dayStart}`);
+  console.log(`DAY END: ${dayEnd}`);
+
   todaysEvents.forEach((event) => {
     // Add this event to the user's events
-    db.collection("users").doc(userId).collection("events").add({
-      archived: false,
-      trackId: event.data().trackId,
-      routineId: event.data().routineId,
-      title: event.data().title,
-      // format like 12:00 pm
-      startTime: event.data().startTime,
-      endTime: event.data().endTime,
-      userId: userId,
-      maintenanceRequired: event.data().maintenanceRequired,
-      gridRow: event.data().gridRow,
-      span: event.data().span,
-      textColor: event.data().textColor,
-      bgColor: event.data().bgColor,
-      key: event.data().key,
-    });
+    // addEventToUserEvents(event.data());
     const startGridRow = event.data().gridRow;
     const endGridRow = event.data().gridRow + (event.data().span - 1);
     for (let i = startGridRow - 1; i <= endGridRow; i++) {
@@ -338,7 +320,6 @@ async function scheduleFillForTodaysEvents(
               routineId: routineId,
               title: title,
               startTime: startTime,
-              // this is kind of irrelevant lol, so set to n/a
               endTime: endTime,
               userId: userId,
               maintenanceRequired: maintenanceRequired,
@@ -356,12 +337,12 @@ async function scheduleFillForTodaysEvents(
 
   // Now go through the scheduleArray and fill in nulls with the errand routine.
   // get the information about the user's errand routine.
-  const errandRoutine = await getErrandRoutine(userId);
-  for (let i = 0; i < scheduleArray.length; i++) {
-    if (scheduleArray[i] === null) {
-      scheduleArray[i] = errandRoutine.data();
-    }
-  }
+  // const errandRoutine = await getErrandRoutine(userId);
+  // for (let i = 0; i < scheduleArray.length; i++) {
+  //   if (scheduleArray[i] === null) {
+  //     scheduleArray[i] = errandRoutine.data();
+  //   }
+  // }
   return scheduleArray;
 }
 
@@ -383,16 +364,16 @@ function getUserPriorityQueue(userId) {
 /**
  * Get the user's errand routine
  */
-async function getErrandRoutine(userId) {
-  // Find the track that has the name "Errands"
-  const errandTrack = await db
-    .collection("tracks")
-    .where("userId", "==", userId)
-    .where("name", "==", "Errands")
-    .get();
-  // get the routineId of the errand routine
-  return errandTrack;
-}
+// async function getErrandRoutine(userId) {
+//   // Find the track that has the name "Errands"
+//   const errandTrack = await db
+//     .collection("tracks")
+//     .where("userId", "==", userId)
+//     .where("name", "==", "Errands")
+//     .get();
+//   // get the routineId of the errand routine
+//   return errandTrack;
+// }
 
 /**
  * Update the user's scheduleArray
@@ -429,7 +410,7 @@ async function createNewTrack(
   trackName,
   bgColor,
   textColor,
-  routineBoolean,
+  routineBoolean
 ) {
   const trackId = uuidv4();
   const track = {
@@ -483,13 +464,26 @@ async function createNewTrack(
  */
 async function createNewTask(userId, taskName, trackId) {
   const taskId = uuidv4();
+  // generate key for task
+  const key = Math.random().toString(36).substring(7);
   const task = {
     archived: false,
     userId: userId,
     task: taskName,
     title: taskName,
     trackId: trackId,
+    key: key,
   };
   await db.collection("tasks").doc(taskId).set(task);
   return task;
+}
+
+/**
+ * Add event to user's events
+ */
+async function addEventToUserEvents(event) {
+  // add the event to the user's event collection
+  const userEventsRef = db.collection("users").doc(event.userId);
+  await userEventsRef.collection("events").add(event);
+  return;
 }

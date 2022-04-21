@@ -73,6 +73,13 @@ export function Calendar() {
   const [autoEvents, setAutoEvents] = useState([]);
   const {tracks, setTracks} = useTracksValue();
 
+  // function that deletes an event
+  const deleteEvent = (key) => {
+    const newEvents = events.filter((event) => event.key !== key);
+    setTodaysEvents(newEvents);
+    setEvents(newEvents);
+  };
+
   useEffect(() => {
     // Set the container scroll position based on the current time.
     const currentMinute = new Date().getHours() * 60;
@@ -756,6 +763,26 @@ export function Calendar() {
                         >
                           {block.title}
                         </p>
+                        {/* create a delete button on the right top side of the event
+                        <button
+                          // all the way to the right
+                          className="absolute right-0 top-0 mr-2 mt-2"
+                          onClick={() => {
+                            deleteEvent(block.key);
+                          }}
+                        >
+                          <svg
+                            className="h-5 w-5 text-red-500 group-hover:text-red-700"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </button> */}
                         <p
                           className={`${block.textColor} group-hover:${block.textColor}`}
                         >

@@ -64,6 +64,8 @@ export const AddTaskNew = ({
   const addTask = () => {
     const trackId = track || selectedTrack;
     let collatedDate = "";
+    // generate key for this task
+    let key = Math.random().toString(36).substring(7);
 
     if (trackId === "TODAY") {
       collatedDate = moment().format("YYYY-MM-DD");
@@ -88,6 +90,7 @@ export const AddTaskNew = ({
           start: taskStartDate,
           end: taskEndDate,
           userId: user,
+          key: key,
         })
         .then(() => {
           setTask("");
