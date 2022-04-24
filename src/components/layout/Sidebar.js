@@ -17,6 +17,7 @@ import {amplitude} from "../../utilities/amplitude";
 import {auth} from "../../firebase";
 import {AddTrackNew} from "../AddTrackNew";
 import {PlusIcon} from "@heroicons/react/solid";
+import {AddRoutineNew} from "../AddRoutineNew";
 
 export const Sidebar = () => {
   const {setSelectedTrack, isRoutine, setIsRoutine} = useTracksValue();
@@ -230,7 +231,7 @@ export const Sidebar = () => {
           <p className="pl-3 pt-3 float-left text-gray-400 font-medium">
             Routines
           </p>
-          <AddRoutine />
+          <AddRoutineNew />
         </div>
       </div>
       <ul className="sidebar__tracks">

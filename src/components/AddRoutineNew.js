@@ -6,11 +6,17 @@ import {amplitude} from "../utilities/amplitude";
 import {getRandomColor} from "../helpers/index";
 import {PlusIcon} from "@heroicons/react/solid";
 import {Transition, Dialog} from "@headlessui/react";
+import DateTimePicker from "@mui/lab/DateTimePicker";
+import TextField from "@mui/material/TextField";
 
-export const AddTrackNew = ({shouldShow = false}) => {
+export const AddRoutineNew = ({shouldShow = false}) => {
   const [user, setUser] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [routineName, setRoutineName] = useState("");
+  const [startValue, setStartValue] = useState("");
+  const [endValue, setEndValue] = useState("");
+  const [routineStartDate, setRoutineStartDate] = useState("");
+  const [routineEndDate, setRoutineEndDate] = useState("");
 
   const trackId = generatePushId();
   const {tracks, setTracks} = useTracksValue();
@@ -37,12 +43,12 @@ export const AddTrackNew = ({shouldShow = false}) => {
 
   const addTrack = () => {
     let trackColor = getRandomColor();
-    projectName &&
+    routineName &&
       db
         .collection("tracks")
         .add({
           trackId,
-          name: projectName,
+          name: routineName,
           userId: user,
           routine: false,
           textColor: `text-${trackColor}-500`,
@@ -51,13 +57,13 @@ export const AddTrackNew = ({shouldShow = false}) => {
         .then(() => {
           tracks.push({
             trackId,
-            name: projectName,
+            name: routineName,
             userId: user,
             routine: false,
             color: trackColor,
           });
           setTracks([...tracks]);
-          setProjectName("");
+          setRoutineName("");
           closeModal();
         });
   };
@@ -84,7 +90,7 @@ export const AddTrackNew = ({shouldShow = false}) => {
         <Dialog
           as="div"
           className="fixed inset-0 z-10 overflow-y-auto"
-          onClose={closeModal}
+          onClose={() => {}}
         >
           <div className="min-h-screen px-4 text-center">
             <Transition.Child
@@ -120,19 +126,43 @@ export const AddTrackNew = ({shouldShow = false}) => {
                   as="h3"
                   className="text-lg font-medium leading-6 text-gray-900"
                 >
-                  Add New Project
+                  Add New Routine
                 </Dialog.Title>
 
+                <div className="mt-4 mb-4 grid grid-cols-2 gap-4">
+                  <DateTimePicker
+                    renderInput={(props) => <TextField {...props} />}
+                    label="Start Time"
+                    value={startValue}
+                    onChange={(newValue) => {
+                      setStartValue(newValue);
+                      setRoutineStartDate(newValue.format());
+                    }}
+                  />
+
+                  <DateTimePicker
+                    renderInput={(props) => <TextField {...props} />}
+                    label="End Time"
+                    value={endValue}
+                    onChange={(newValue) => {
+                      setEndValue(newValue);
+                      setRoutineEndDate(newValue.format());
+                    }}
+                    onClick={() => {
+                      logClick("taskEndDateClick");
+                    }}
+                  />
+                </div>
                 <div className="flex flex-col">
                   <label className="mb-2 mt-2 text-gray-900">
-                    Project Name
+                    Routine Name
                   </label>
                   <input
                     className="add-task__content"
                     data-testid="add-task-content"
                     type="text"
-                    value={projectName}
-                    onChange={(e) => setProjectName(e.target.value)}
+                    value={routineName}
+                    onChange={(e) => setRoutineName(e.target.value)}
                   />
                 </div>
 
