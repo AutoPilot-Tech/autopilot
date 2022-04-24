@@ -40,8 +40,9 @@ export const Dashboard = ({darkModeDefault = true}) => {
         setDisplayName(user.displayName);
         setPhotoUrl(user.photoURL);
         // check to see if the user's tracks are loaded
-
         setUserLoading(false);
+      } else {
+        console.log("User is not signed in");
       }
     });
     return unsubscribe;
@@ -49,7 +50,7 @@ export const Dashboard = ({darkModeDefault = true}) => {
 
   return userLoading ? (
     <div className="grid place-items-center h-screen">
-      <SyncLoader loading={userLoading} size={15} speedMultiplier={2} />
+      <SyncLoader loading={true} size={15} speedMultiplier={2} />
     </div>
   ) : (
     <LocalizationProvider dateAdapter={AdapterMoment}>

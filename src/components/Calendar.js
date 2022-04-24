@@ -92,131 +92,6 @@ export function Calendar() {
       1440;
   }, []);
 
-  // only get the events that have today's date in the start date
-  // useEffect(() => {
-  //   // only run this code is events has any events in it
-  //   if (events.length > 0) {
-  //     let scheduleArray = Array(288).fill(null);
-
-  //     const today = moment().format("YYYY-MM-DD");
-  //     let routineEvents = events.filter((event) => {
-  //       return moment(event.start).format("YYYY-MM-DD") === today;
-  //     });
-  //     // go through today's events and get the gridRow for each event
-  //     routineEvents.forEach((event) => {
-  //       const startGridRow = event.gridRow;
-  //       const endGridRow = event.gridRow + (event.span - 1);
-  //       for (let i = startGridRow - 1; i <= endGridRow; i++) {
-  //         scheduleArray[i] = 1;
-  //       }
-  //     });
-
-  //     let dayStart = 61;
-  //     let dayEnd = 275;
-
-  //     // The total amount of time that the user has in their daily schedule
-
-  //     // iterate through the scheduleArray
-  //     for (let i = dayStart; i <= dayEnd; i++) {
-  //       // need to check if there are 24 consecutive indices that are null then fill them with a 2
-  //       let consecutiveNulls = 0;
-  //       let consecutiveNullsStart = 0;
-  //       let consecutiveNullsEnd = 0;
-  //       for (let j = i; j <= i + 23; j++) {
-  //         // if this is the first index that is null then set the start index
-  //         if (j === i && scheduleArray[j] === null) {
-  //           consecutiveNullsStart = j;
-  //         }
-  //         if (scheduleArray[j] === null) {
-  //           consecutiveNulls++;
-  //         }
-  //       }
-  //       if (consecutiveNulls === 24) {
-  //         // set consecutiveNullsEnd to the last index that is null
-  //         consecutiveNullsEnd = consecutiveNullsStart + 23;
-
-  //         let randomNumber = Math.floor(Math.random() * 24);
-  //         for (let k = i; k <= i + 23; k++) {
-  //           scheduleArray[k] = randomNumber;
-  //         }
-  //         consecutiveNulls = 0;
-
-  //         // Now make an event in firebase
-  //         let userId = auth.currentUser.uid;
-  //         let maintenanceRequired = false;
-  //         // db.collection('events').add({
-  //         //   archived: false,
-  //         //   trackId: null,
-  //         //   routineId: null,
-  //         //   title: null,
-  //         //   start: null,
-  //         //   end: null,
-  //         //   userId: userId,
-  //         //   maintenanceRequired: maintenanceRequired,
-  //         //   gridRow: consecutiveNullsStart,
-  //         //   span: 24,
-  //         // });
-
-  //         // get a random track from the tracks array
-  //         // only run the below code if there is a track in the tracks array
-  //         if (tracks.length > 0) {
-  //           let randomTrack = tracks[Math.floor(Math.random() * tracks.length)];
-  //           let trackId = randomTrack.trackId;
-  //           let routineId = "444444";
-  //           let title = randomTrack.name;
-  //           let textColor = randomTrack.textColor;
-  //           let bgColor = randomTrack.bgColor;
-
-  //           // take consecutiveNullStart and get the original time from it
-  //           let gridRowForCalendar = consecutiveNullsStart - 1;
-  //           let startTimeInHoursDecimal = gridRowForCalendar / 12;
-  //           let minutes;
-  //           let hours;
-  //           // if startTime has a decimal place then extract it and save it
-  //           if (startTimeInHoursDecimal % 1 !== 0) {
-  //             let startTimeDecimal = startTimeInHoursDecimal % 1;
-  //             let startTimeWhole = startTimeInHoursDecimal - startTimeDecimal;
-  //             // remove the decimal from starTimeInHoursDecimal and save to startTimeFraction
-  //             minutes = startTimeDecimal * 60;
-  //             hours = startTimeWhole;
-  //           } else {
-  //             minutes = 0;
-  //             hours = startTimeInHoursDecimal;
-  //           }
-
-  //           // make a moment time with the minutes and hours
-  //           let startTime = moment()
-  //             .hours(hours)
-  //             .minutes(minutes)
-  //             .format("hh:mm A");
-  //           // generate a random key for the <li>
-  //           let key = Math.random().toString(36).substring(7);
-
-  //           routineEvents.push({
-  //             archived: false,
-  //             trackId: trackId,
-  //             routineId: routineId,
-  //             title: title,
-  //             startTime: startTime,
-  //             // this is kind of irrelevant lol, so set to n/a
-  //             endTime: "n/a",
-  //             userId: userId,
-  //             maintenanceRequired: maintenanceRequired,
-  //             gridRow: consecutiveNullsStart,
-  //             span: 24,
-  //             textColor: textColor,
-  //             bgColor: bgColor,
-  //             key: key,
-  //           });
-  //         }
-  //       }
-  //     }
-  //     setTodaysEvents(routineEvents);
-  //   }
-
-  //   // if todaysEvents has at least one object in it, set loading to false. This helps us not call .map on an empty array and crash the app
-  // }, [events]);
-
   useEffect(() => {
     let unsubscribe = db
       .collection("users")
@@ -260,30 +135,30 @@ export function Calendar() {
         </div>
         <div className="flex items-center">
           <div className="flex items-center rounded-md shadow-sm md:items-stretch">
-            {/* <button
+            <button
               type="button"
               className="flex items-center justify-center rounded-l-md border border-r-0 border-gray-300 bg-white py-2 pl-3 pr-4 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-gray-50"
             >
               <span className="sr-only">Previous month</span>
               <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
-            </button> */}
-            {/* <button
+            </button>
+            <button
               type="button"
               className="hidden border-t border-b border-gray-300 bg-white px-3.5 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900 focus:relative md:block"
             >
               Today
-            </button> */}
+            </button>
             <span className="relative -mx-px h-5 w-px bg-gray-300 md:hidden" />
-            {/* <button
+            <button
               type="button"
               className="flex items-center justify-center rounded-r-md border border-l-0 border-gray-300 bg-white py-2 pl-4 pr-3 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-gray-50"
             >
               <span className="sr-only">Next month</span>
               <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
-            </button> */}
+            </button>
           </div>
           <div className="hidden md:ml-4 md:flex md:items-center">
-            {/* <Menu as="div" className="relative">
+            <Menu as="div" className="relative">
               <Menu.Button
                 type="button"
                 className="flex items-center rounded-md border border-gray-300 bg-white py-2 pl-3 pr-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
@@ -303,8 +178,8 @@ export function Calendar() {
                 leave="transition ease-in duration-75"
                 leaveFrom="transform opacity-100 scale-100"
                 leaveTo="transform opacity-0 scale-95"
-              > */}
-            {/* <Menu.Items className="focus:outline-none absolute right-0 mt-3 w-36 origin-top-right overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5">
+              >
+                <Menu.Items className="focus:outline-none absolute right-0 mt-3 w-36 origin-top-right overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5">
                   <div className="py-1">
                     <Menu.Item>
                       {({active}) => (
@@ -367,16 +242,16 @@ export function Calendar() {
                       )}
                     </Menu.Item>
                   </div>
-                </Menu.Items> */}
-            {/* </Transition>
-            </Menu> */}
-            {/* <div className="ml-6 h-6 w-px bg-gray-300" />
-            {/* <button
+                </Menu.Items>
+              </Transition>
+            </Menu>
+            <div className="ml-6 h-6 w-px bg-gray-300" />
+            <button
               type="button"
               className="focus:outline-none ml-6 rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
             >
               Add event
-            </button> */}
+            </button>
           </div>
           <Menu as="div" className="relative ml-6 md:hidden">
             <Menu.Button className="-mx-2 flex items-center rounded-full border border-transparent p-2 text-gray-400 hover:text-gray-500">
@@ -411,48 +286,48 @@ export function Calendar() {
                     )}
                   </Menu.Item>
                 </div>
-                {/* <div className="py-1">
+                <div className="py-1">
                   <Menu.Item>
-                    {({ active }) => (
+                    {({active}) => (
                       <a
                         href="#"
                         className={classNames(
                           active
-                            ? 'bg-gray-100 text-gray-900'
-                            : 'text-gray-700',
-                          'block px-4 py-2 text-sm'
+                            ? "bg-gray-100 text-gray-900"
+                            : "text-gray-700",
+                          "block px-4 py-2 text-sm"
                         )}
                       >
                         Go to today
                       </a>
                     )}
                   </Menu.Item>
-                </div> */}
-                {/* <div className="py-1">
+                </div>
+                <div className="py-1">
                   <Menu.Item>
-                    {({ active }) => (
+                    {({active}) => (
                       <a
                         href="#"
                         className={classNames(
                           active
-                            ? 'bg-gray-100 text-gray-900'
-                            : 'text-gray-700',
-                          'block px-4 py-2 text-sm'
+                            ? "bg-gray-100 text-gray-900"
+                            : "text-gray-700",
+                          "block px-4 py-2 text-sm"
                         )}
-                      >Today
-                        Day view
+                      >
+                        Today Day view
                       </a>
                     )}
                   </Menu.Item>
                   <Menu.Item>
-                    {({ active }) => (
+                    {({active}) => (
                       <a
                         href="#"
                         className={classNames(
                           active
-                            ? 'bg-gray-100 text-gray-900'
-                            : 'text-gray-700',
-                          'block px-4 py-2 text-sm'
+                            ? "bg-gray-100 text-gray-900"
+                            : "text-gray-700",
+                          "block px-4 py-2 text-sm"
                         )}
                       >
                         Week view
@@ -460,14 +335,14 @@ export function Calendar() {
                     )}
                   </Menu.Item>
                   <Menu.Item>
-                    {({ active }) => (
+                    {({active}) => (
                       <a
                         href="#"
                         className={classNames(
                           active
-                            ? 'bg-gray-100 text-gray-900'
-                            : 'text-gray-700',
-                          'block px-4 py-2 text-sm'
+                            ? "bg-gray-100 text-gray-900"
+                            : "text-gray-700",
+                          "block px-4 py-2 text-sm"
                         )}
                       >
                         Month view
@@ -475,21 +350,21 @@ export function Calendar() {
                     )}
                   </Menu.Item>
                   <Menu.Item>
-                    {({ active }) => (
+                    {({active}) => (
                       <a
                         href="#"
                         className={classNames(
                           active
-                            ? 'bg-gray-100 text-gray-900'
-                            : 'text-gray-700',
-                          'block px-4 py-2 text-sm'
+                            ? "bg-gray-100 text-gray-900"
+                            : "text-gray-700",
+                          "block px-4 py-2 text-sm"
                         )}
                       >
                         Year view
                       </a>
                     )}
                   </Menu.Item>
-                </div> */}
+                </div>
               </Menu.Items>
             </Transition>
           </Menu>
@@ -744,57 +619,7 @@ export function Calendar() {
                     </p>
                   </a>
                 </li> */}
-                {loading ? (
-                  <></>
-                ) : (
-                  todaysEvents.map((block) => (
-                    <li
-                      key={block.key}
-                      className="relative mt-px flex"
-                      style={{
-                        gridRow: `${block.gridRow} / span ${block.span}`,
-                      }}
-                    >
-                      <a
-                        href="#"
-                        className={`group absolute inset-1 flex flex-col overflow-y-auto rounded-lg ${block.bgColor} p-2 text-xs leading-5 hover:bg--100`}
-                      >
-                        <p
-                          className={`order-1 font-semibold ${block.textColor}`}
-                        >
-                          {block.title}
-                        </p>
-                        {/* create a delete button on the right top side of the event
-                        <button
-                          // all the way to the right
-                          className="absolute right-0 top-0 mr-2 mt-2"
-                          onClick={() => {
-                            deleteEvent(block.key);
-                          }}
-                        >
-                          <svg
-                            className="h-5 w-5 text-red-500 group-hover:text-red-700"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                        </button> */}
-                        <p
-                          className={`${block.textColor} group-hover:${block.textColor}`}
-                        >
-                          <time dateTime="2022-01-22T${block.startTime}">
-                            {block.startTime}
-                          </time>
-                        </p>
-                      </a>
-                    </li>
-                  ))
-                )}
+
                 {/* <li
                   className="relative mt-px flex"
                   style={{ gridRow: '92 / span 30' }}
@@ -863,3 +688,55 @@ export function Calendar() {
     </div>
   );
 }
+
+// {loading ? (
+//   <></>
+// ) : (
+//   todaysEvents.map((block) => (
+//     <li
+//       key={block.key}
+//       className="relative mt-px flex"
+//       style={{
+//         gridRow: `${block.gridRow} / span ${block.span}`,
+//       }}
+//     >
+//       <a
+//         href="#"
+//         className={`group absolute inset-1 flex flex-col overflow-y-auto rounded-lg ${block.bgColor} p-2 text-xs leading-5 hover:bg--100`}
+//       >
+//         <p
+//           className={`order-1 font-semibold ${block.textColor}`}
+//         >
+//           {block.title}
+//         </p>
+//         {/* create a delete button on the right top side of the event
+//         <button
+//           // all the way to the right
+//           className="absolute right-0 top-0 mr-2 mt-2"
+//           onClick={() => {
+//             deleteEvent(block.key);
+//           }}
+//         >
+//           <svg
+//             className="h-5 w-5 text-red-500 group-hover:text-red-700"
+//             fill="currentColor"
+//             viewBox="0 0 20 20"
+//           >
+//             <path
+//               fillRule="evenodd"
+//               d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+//               clipRule="evenodd"
+//             />
+//           </svg>
+//         </button> */}
+//         <p
+//           className={`${block.textColor} group-hover:${block.textColor}`}
+//         >
+//           <time dateTime="2022-01-22T${block.startTime}">
+//             {block.startTime}
+//           </time>
+//         </p>
+//       </a>
+//     </li>
+//   ))
+// )}
