@@ -61,7 +61,6 @@ export const AddRoutine = ({ shouldShow = false }) => {
   return (
     <div
       className="float-right mt-3 mr-5 cursor-pointer"
-      data-testid="add-track"
     >
       {show && (
         <div className="add-track__input">
@@ -71,7 +70,7 @@ export const AddRoutine = ({ shouldShow = false }) => {
             className="add-trck__name"
             data-testid="track-name"
             type="text"
-            placeholder="Name your track"
+            placeholder="Name your project"
           />
           <button
             className="add-track__submit"

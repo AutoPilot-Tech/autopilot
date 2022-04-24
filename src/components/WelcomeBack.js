@@ -1,10 +1,12 @@
 import moment from "moment";
-import {useEffect, useState} from "react";
+import {useEffect, useState, useMemo} from "react";
 import {auth, db} from "../firebase";
 import {useTracksValue} from "../context/tracks-context";
 import {useLoadingValue} from "../context/loading-context";
 
 export function WelcomeBack() {
+  // keep this component from updating when it's updated
+
   // get the user's name
   const displayName = auth.currentUser.displayName;
   // get current hour formatted in 24 hour time
@@ -72,34 +74,40 @@ export function WelcomeBack() {
     `We're ready, are you?`,
   ];
 
+  function getGreeting() {
+    console.log("running");
+    const greeting =
+      currentHour >= 0 && currentHour < 3
+        ? greeting1[Math.floor(Math.random() * greeting1.length)]
+        : // if the current hour is between 3am and 6am
+        currentHour >= 3 && currentHour < 6
+        ? greeting2[Math.floor(Math.random() * greeting2.length)]
+        : // if the current hour is between 6am and 12pm
+        currentHour >= 6 && currentHour < 12
+        ? greeting3[Math.floor(Math.random() * greeting3.length)]
+        : // if the current hour is between 12pm and 6pm
+        currentHour >= 12 && currentHour < 18
+        ? greeting4[Math.floor(Math.random() * greeting4.length)]
+        : // if the current hour is between 6pm and 8pm
+        currentHour >= 18 && currentHour < 20
+        ? greeting5[Math.floor(Math.random() * greeting5.length)]
+        : // if the current hour is between 8pm and 10pm
+        currentHour >= 20 && currentHour < 22
+        ? greeting6[Math.floor(Math.random() * greeting6.length)]
+        : // if the current hour is between 10pm and 12am
+        currentHour >= 22 && currentHour < 24
+        ? greeting7[Math.floor(Math.random() * greeting7.length)]
+        : "";
+    return greeting;
+  }
+
+  const greetingMemoized = useMemo(() => getGreeting(), [currentHour]);
+
   return (
     <div className="md:flex md:items-center md:justify-between pt-3 pb-5 ml-2">
       <div className="flex-1 min-w-0">
         <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
-          {
-            // if the current hour is between 12 am and 3am
-            currentHour >= 0 && currentHour < 3
-              ? greeting1[Math.floor(Math.random() * greeting1.length)]
-              : // if the current hour is between 3am and 6am
-              currentHour >= 3 && currentHour < 6
-              ? greeting2[Math.floor(Math.random() * greeting2.length)]
-              : // if the current hour is between 6am and 12pm
-              currentHour >= 6 && currentHour < 12
-              ? greeting3[Math.floor(Math.random() * greeting3.length)]
-              : // if the current hour is between 12pm and 6pm
-              currentHour >= 12 && currentHour < 18
-              ? greeting4[Math.floor(Math.random() * greeting4.length)]
-              : // if the current hour is between 6pm and 8pm
-              currentHour >= 18 && currentHour < 20
-              ? greeting5[Math.floor(Math.random() * greeting5.length)]
-              : // if the current hour is between 8pm and 10pm
-              currentHour >= 20 && currentHour < 22
-              ? greeting6[Math.floor(Math.random() * greeting6.length)]
-              : // if the current hour is between 10pm and 12am
-              currentHour >= 22 && currentHour < 24
-              ? greeting7[Math.floor(Math.random() * greeting7.length)]
-              : ""
-          }
+          {greetingMemoized}
         </h2>
       </div>
     </div>

@@ -10,7 +10,7 @@ import {Transition, Dialog} from "@headlessui/react";
 export const AddTrackNew = ({shouldShow = false}) => {
   const [user, setUser] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [projectName, setProjectName] = useState("");
+  const [routineName, setRoutineName] = useState("");
 
   const trackId = generatePushId();
   const {tracks, setTracks} = useTracksValue();
