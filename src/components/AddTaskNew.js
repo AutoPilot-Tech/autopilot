@@ -37,6 +37,7 @@ export const AddTaskNew = ({
   const [endValue, setEndValue] = useState("");
 
   function closeModal() {
+    console.log("closing modal");
     setIsOpen(false);
   }
 
@@ -49,7 +50,6 @@ export const AddTaskNew = ({
       if (user) {
         // this is the user's id
         setUser(user.uid);
-
       } else {
         setUser(null);
       }
@@ -57,8 +57,6 @@ export const AddTaskNew = ({
     return unsubscribe;
   }, []);
 
-
-  
   const logClick = (event) => {
     let userId = auth.currentUser.uid;
     amplitude.getInstance().logEvent(event, userId);
@@ -120,7 +118,7 @@ export const AddTaskNew = ({
           <Dialog
             as="div"
             className="fixed inset-0 z-10 overflow-y-auto"
-            onClose={closeModal}
+            onClose={() => {}}
           >
             <div className="min-h-screen px-4 text-center">
               <Transition.Child
@@ -156,52 +154,56 @@ export const AddTaskNew = ({
                     as="h3"
                     className="text-lg font-medium leading-6 text-gray-900"
                   >
-                    Add New Task to {selectedTrack}
+                    Add New Task
                   </Dialog.Title>
-                  <div className="mt-2">
+                  {/* <div className="mt-2">
                     <TrackOverlay
                       setTrack={setTrack}
                       showTrackOverlay={showTrackOverlay}
                       setShowTrackOverlay={setShowTrackOverlay}
                     />
-                  </div>
-                  <TaskDate
+                  </div> */}
+                  {/* <TaskDate
                     setTaskDate={setTaskDate}
                     showTaskDate={showTaskDate}
                     setShowTaskDate={setShowTaskDate}
-                  />
-                  <DateTimePicker
-                    renderInput={(props) => <TextField {...props} />}
-                    label="Start Date"
-                    value={startValue}
-                    onChange={(newValue) => {
-                      setStartValue(newValue);
-                      setTaskStartDate(newValue.format());
-                    }}
-                    onClick={() => {
-                      logClick("taskStartDateClick");
-                    }}
-                  />
-                  <input
-                    className="add-task__content"
-                    data-testid="add-task-content"
-                    type="text"
-                    value={task}
-                    onChange={(e) => setTask(e.target.value)}
-                  />
-                  <DateTimePicker
-                    renderInput={(props) => <TextField {...props} />}
-                    label="End Date"
-                    value={endValue}
-                    onChange={(newValue) => {
-                      setEndValue(newValue);
-                      setTaskEndDate(newValue.format());
-                    }}
-                    onClick={() => {
-                      logClick("taskEndDateClick");
-                    }}
-                  />
-                  <span
+                  /> */}
+                  <div className="mt-4 mb-4 grid grid-cols-2 gap-4">
+                    <DateTimePicker
+                      renderInput={(props) => <TextField {...props} />}
+                      label="Start Date"
+                      value={startValue}
+                      onChange={(newValue) => {
+                        setStartValue(newValue);
+                        setTaskStartDate(newValue.format());
+                      }}
+                    />
+
+                    <DateTimePicker
+                      renderInput={(props) => <TextField {...props} />}
+                      label="End Date"
+                      value={endValue}
+                      onChange={(newValue) => {
+                        setEndValue(newValue);
+                        setTaskEndDate(newValue.format());
+                      }}
+                      onClick={() => {
+                        logClick("taskEndDateClick");
+                      }}
+                    />
+                  </div>
+                  <div className="flex flex-col">
+                    <label className="mb-2 mt-2 text-gray-900">Task Name</label>
+                    <input
+                      className="add-task__content"
+                      data-testid="add-task-content"
+                      type="text"
+                      value={task}
+                      onChange={(e) => setTask(e.target.value)}
+                    />
+                  </div>
+
+                  {/* <span
                     className="add-task__project"
                     data-testid="show-track-overlay"
                     onClick={() => {
@@ -209,8 +211,8 @@ export const AddTaskNew = ({
                     }}
                   >
                     <FaRegListAlt />
-                  </span>
-                  <span
+                  </span> */}
+                  {/* <span
                     className="add-task__date"
                     data-testid="show-task-date-overlay"
                     onClick={() => {
@@ -218,21 +220,19 @@ export const AddTaskNew = ({
                     }}
                   >
                     <FaRegCalendarAlt />
-                  </span>
+                  </span> */}
 
-                  <div className="mt-4">
+                  <div className="mt-4 grid grid-cols-2">
                     <button
                       type="button"
-                      className="inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+                      className="m-auto inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
                       onClick={closeModal}
                     >
                       Cancel
                     </button>
-                  </div>
-                  <div className="mt-4">
                     <button
                       type="button"
-                      className="inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+                      className="m-auto inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
                       onClick={addTask}
                     >
                       Add Task

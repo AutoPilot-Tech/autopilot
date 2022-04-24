@@ -2,11 +2,11 @@ const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const moment = require("moment");
 const {v4: uuidv4} = require("uuid");
-// const useEmulator = true;
+const useEmulator = true;
 
-// if (useEmulator) {
-//   process.env["FIRESTORE_EMULATOR_HOST"] = "localhost:8080";
-// }
+if (useEmulator) {
+  process.env["FIRESTORE_EMULATOR_HOST"] = "localhost:8080";
+}
 
 admin.initializeApp({
   credential: admin.credential.cert({
@@ -100,43 +100,15 @@ class PriorityQueue {
 exports.onCreateUser = functions.auth.user().onCreate((user) => {
   const scheduleArray = Array(288).fill(null);
   // Create a new track with routine set to true for the user
-  createNewTrack(user.uid, "Errands", "bg-indigo-50", "text-indigo-500", false);
-  createNewTrack(user.uid, "Studying", "bg-blue-50", "text-blue-500", true);
-  createNewTrack(user.uid, "Morning", "bg-orange-50", "text-orange-500", true);
-  createNewTrack(user.uid, "Start here!", "bg-blue-50", "text-blue-500", false);
+  // createNewTrack(user.uid, "Errands", "bg-indigo-50", "text-indigo-500", false);
+  // createNewTrack(user.uid, "Studying", "bg-blue-50", "text-blue-500", true);
+  // createNewTrack(user.uid, "Morning", "bg-orange-50", "text-orange-500", true);
+  // createNewTrack(user.uid, "Start here!", "bg-blue-50", "text-blue-500", false);
   let key = Math.random().toString(36).substring(7);
 
   // create a time at 7 am formatted in hh mm AM/PM
   const morningStart = moment().hour(7).minute(0).format("hh:mm A");
   const morningEnd = moment().hour(8).minute(30).format("hh:mm A");
-
-  // // get the track id for the morning routine
-  // const morningTrackId = db
-  //   .collection("tracks")
-  //   .where("userId", "==", user.uid)
-  //   .get()
-  //   .then((querySnapshot) => {
-  //     querySnapshot.forEach((doc) => {
-  //       if (doc.data().name === "Morning") {
-  //         const morningTrackId = doc.id;
-  //         return morningTrackId;
-  //       }
-  //     });
-  //   })
-
-  // db.collection("tracks").doc(morningTrackId).collection("habits").add({
-  //   trackDocId: morningTrackId,
-  //   title: "Wake  Routine",
-  //   startTime: morningStart,
-  //   endTime: morningEnd,
-  //   userId: user.uid,
-  //   maintenanceRequired: true,
-  //   gridRow: 86,
-  //   span: 18,
-  //   textColor: `text-orange-500`,
-  //   bgColor: `bg-orange-50`,
-  //   key: key,
-  // });
 
   const userRef = db.collection("users").doc(user.uid);
   let parts = user.displayName.split("\\s+");

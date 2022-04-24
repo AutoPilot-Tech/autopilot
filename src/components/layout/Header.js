@@ -4,6 +4,7 @@ import {SearchIcon} from "@heroicons/react/solid";
 import {BellIcon, MenuIcon, XIcon} from "@heroicons/react/outline";
 import {auth, db} from "../../firebase";
 import {CircularButton} from "../CircularButton";
+import {useLoadingValue} from "../../context/loading-context";
 
 const logOut = () => {
   auth
@@ -40,21 +41,7 @@ function classNames(...classes) {
 }
 
 export function Header() {
-  const [userPhoto, setUserPhoto] = useState("");
-
-  // get the users photo
-  useEffect(() => {
-    const unsubscribe = db
-      .collection("users")
-      .doc(auth.currentUser.uid)
-      .onSnapshot((snapshot) => {
-        let imageUrl = snapshot.data().photoURL;
-        setUserPhoto(imageUrl);
-      });
-    return () => {
-      unsubscribe();
-    };
-  }, []);
+  const {photoUrl} = useLoadingValue();
 
   return (
     <>
@@ -131,7 +118,7 @@ export function Header() {
                         <span className="sr-only">Open user menu</span>
                         <img
                           className="h-8 w-8 rounded-full"
-                          src={userPhoto}
+                          src={photoUrl}
                           alt=""
                         />
                       </Menu.Button>

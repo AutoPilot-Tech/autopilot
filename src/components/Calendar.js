@@ -13,6 +13,7 @@ import {useTracksValue} from "../context/tracks-context";
 import {generatePushId} from "../helpers";
 import {CurrentTasks} from "./CurrentTasks";
 import {WelcomeBack} from "./WelcomeBack";
+import {AddTaskNew} from "./AddTaskNew";
 
 const days = [
   {date: "2021-12-27"},

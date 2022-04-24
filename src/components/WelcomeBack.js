@@ -1,11 +1,12 @@
 import moment from "moment";
 import {useEffect, useState} from "react";
 import {auth, db} from "../firebase";
+import {useTracksValue} from "../context/tracks-context";
+import {useLoadingValue} from "../context/loading-context";
 
 export function WelcomeBack() {
   // get the user's name
-  const [displayName, setDisplayName] = useState("");
-  const [greeting, setGreeting] = useState("");
+  const displayName = auth.currentUser.displayName;
   // get current hour formatted in 24 hour time
   const currentHour = moment().format("H");
   // format in 12 hour time
@@ -70,19 +71,6 @@ export function WelcomeBack() {
     `Welcome Back, ${displayName}!`,
     `We're ready, are you?`,
   ];
-
-  // get the user's first name
-  useEffect(() => {
-    let unsubscribe = db
-      .collection("users")
-      .doc(auth.currentUser.uid)
-      .onSnapshot((doc) => {
-        setDisplayName(doc.data().displayName);
-      });
-    return () => {
-      unsubscribe();
-    };
-  }, []);
 
   return (
     <div className="md:flex md:items-center md:justify-between pt-3 pb-5 ml-2">

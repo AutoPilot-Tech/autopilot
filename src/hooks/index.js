@@ -3,7 +3,7 @@ import {db, auth} from "../firebase";
 import {collatedTasksExist} from "../helpers";
 import moment from "moment";
 import {sortedObject} from "../helpers";
-import {useTracksValue} from "../context/tracks-context";
+import {useLoadingValue} from "../context/loading-context";
 
 // AutoFill Algorithm ( Not a Hook)
 // Iteration 1: Random Fill
@@ -160,6 +160,7 @@ export const useActive = () => {
 // when there is new tracks
 export const useTracks = () => {
   const [tracks, setTracks] = useState([]);
+  const {setTracksLoading} = useLoadingValue();
 
   useEffect(() => {
     let userId = auth.currentUser.uid;
@@ -173,6 +174,9 @@ export const useTracks = () => {
           ...track.data(),
           docId: track.id,
         }));
+
+        // if all tracks length is more than 0, set loading to false
+        
 
         // firebase is weird about giving us the same order fields in objects, so we
         // need to sort it first.
