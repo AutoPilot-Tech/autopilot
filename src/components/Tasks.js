@@ -41,33 +41,18 @@ export const Tasks = () => {
 
   const moveTaskListItem = useCallback((dragIndex, hoverIndex, tasks) => {
     console.log("callback Ran");
-    // THE FOLLOWING WORKS, BUT SHOULD NOT BE USED IN PRODUCTION OR ELSE
-    // GG WALLET
-    console.log(tasks);
 
     const dragTask = tasks[dragIndex].id;
     const hoverTask = tasks[hoverIndex].id;
-    // // swap in the database
-    // console.log("database updated");
-    // db.collection("tasks").doc(dragTask).update({
-    //   index: hoverIndex,
-    // });
-    // db.collection("tasks").doc(hoverItem).update({
-    //   index: dragIndex,
-    // });
-    // swap in the tasks array
 
-    // const dragTask = tasks[dragIndex];
-    // const hoverTask = tasks[hoverIndex];
-
-    setTasks((prevTasks) =>
-      update(prevTasks, {
-        $splice: [
-          [dragIndex, 1],
-          [hoverIndex, 0, prevTasks[dragIndex]],
-        ],
-      })
-    );
+    // setTasks((prevTasks) =>
+    //   update(prevTasks, {
+    //     $splice: [
+    //       [dragIndex, 1],
+    //       [hoverIndex, 0, prevTasks[dragIndex]],
+    //     ],
+    //   })
+    // );
     db.collection("tasks").doc(dragTask).update({
       index: hoverIndex,
     });
@@ -76,14 +61,7 @@ export const Tasks = () => {
     });
   }, []);
 
-  async function updateDataBase(dragTask, hoverTask, hoverIndex, dragIndex) {
-    await db.collection("tasks").doc(dragTask).update({
-      index: hoverIndex,
-    });
-    await db.collection("tasks").doc(hoverTask).update({
-      index: dragIndex,
-    });
-  }
+ 
 
   const renderTask = useCallback((task) => {
     return (

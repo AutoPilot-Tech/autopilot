@@ -56,7 +56,7 @@ export function IndividualTask({task, index, moveListItem}) {
   const ref = useRef(null);
 
   // This is how this task becomes draggable
-  const [{isDragging}, dragRef] = useDrag({
+  const [{isDragging}, dragRef, preview] = useDrag({
     type: "task",
     item: {index},
     collect: (monitor) => ({
@@ -122,6 +122,21 @@ export function IndividualTask({task, index, moveListItem}) {
     setIsOpen(true);
   }
 
+  function reIndexTasks(startIndex) {
+    db.collection("tasks")
+      .where("trackId", "==", selectedTrack)
+      .get()
+      .then(function (querySnapshot) {
+        querySnapshot.forEach(function (doc) {
+          if (doc.data().index > startIndex) {
+            doc.ref.update({
+              index: doc.data().index - 1,
+            });
+          }
+        });
+      });
+  }
+
   const deleteTask = (docId) => {
     db.collection("tasks")
       .doc(docId)
@@ -141,7 +156,7 @@ export function IndividualTask({task, index, moveListItem}) {
       <div
         className={
           isDragging
-            ? "opacity-0 group flex text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded"
+            ? "group flex text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded opacity-5"
             : "opacity-100 group flex text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded"
         }
         onMouseEnter={() => {
@@ -152,10 +167,10 @@ export function IndividualTask({task, index, moveListItem}) {
             setShowSettingsIcon(false);
           }
         }}
-        ref={ref}
+        ref={preview}
         data-handler-id={handlerId}
       >
-        <div className="w-8">
+        <div className="w-8" ref={ref}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className={
@@ -174,7 +189,10 @@ export function IndividualTask({task, index, moveListItem}) {
             type="checkbox"
             className="cursor-pointer relative top-4 -mt-2 h-4 w-4 rounded border-gray-500 text-indigo-600 focus:ring-indigo-500 sm:left-6"
             value={task.task}
-            onChange={(e) => archiveTask(task.id)}
+            onChange={(e) => {
+              archiveTask(task.id);
+              reIndexTasks(task.index);
+            }}
           />
         </div>
 
