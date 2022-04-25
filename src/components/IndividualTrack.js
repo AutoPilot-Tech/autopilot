@@ -172,8 +172,8 @@ export const IndividualTrack = ({track}) => {
                               <a
                                 href={item.href}
                                 className={classNames(
-                                  active ? "bg-gray-100" : "",
-                                  "block py-2 px-4 text-sm text-gray-700"
+                                  active ? "bg-gray-100 cursor-pointer" : "",
+                                  "block py-2 px-4 text-sm text-gray-700 cursor-pointer"
                                 )}
                                 onClick={item.onClick ? item.onClick : null}
                               >
@@ -241,17 +241,17 @@ export const IndividualTrack = ({track}) => {
                   </p>
                 </div>
 
-                <div className="mt-4">
+                <div className="mt-4 grid grid-cols-2">
                   <button
                     type="button"
-                    className="inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+                    className="m-auto inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
                     onClick={closeModal}
                   >
                     Cancel
                   </button>
                   <button
                     type="button"
-                    className="inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+                    className="m-auto inline-flex justify-center px-4 py-2 text-sm font-medium text-red-900 bg-red-100 border border-transparent rounded-md hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-red-500"
                     onClick={() => {
                       deleteTrack(track.docId);
                       closeModal();

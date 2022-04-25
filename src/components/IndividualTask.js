@@ -77,7 +77,7 @@ export function IndividualTask({task}) {
   return (
     <>
       <div
-        className="group flex"
+        className="group flex text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded"
         onMouseEnter={() => {
           setShowSettingsIcon(true);
         }}
@@ -90,7 +90,7 @@ export function IndividualTask({task}) {
         <div className="w-16">
           <input
             type="checkbox"
-            className="relative top-4 -mt-2 h-4 w-4 rounded border-gray-500 text-indigo-600 focus:ring-indigo-500 sm:left-6"
+            className="cursor-pointer relative top-4 -mt-2 h-4 w-4 rounded border-gray-500 text-indigo-600 focus:ring-indigo-500 sm:left-6"
             value={task.task}
             onChange={(e) => archiveTask(task.id)}
           />
@@ -151,8 +151,8 @@ export function IndividualTask({task}) {
                               <a
                                 href={item.href}
                                 className={classNames(
-                                  active ? "bg-gray-100" : "",
-                                  "block py-2 px-4 text-sm text-gray-700"
+                                  active ? "bg-gray-100 cursor-pointer" : "",
+                                  "block py-2 px-4 text-sm text-gray-700 cursor-pointer"
                                 )}
                                 onClick={item.onClick ? item.onClick : null}
                               >
@@ -218,17 +218,17 @@ export function IndividualTask({task}) {
                     </p>
                   </div>
 
-                  <div className="mt-4">
+                  <div className="mt-4 grid grid-cols-2">
                     <button
                       type="button"
-                      className="inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+                      className="m-auto inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
                       onClick={closeModal}
                     >
                       Cancel
                     </button>
                     <button
                       type="button"
-                      className="inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+                      className="m-auto inline-flex justify-center px-4 py-2 text-sm font-medium text-red-900 bg-red-100 border border-transparent rounded-md hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-red-500"
                       onClick={() => {
                         deleteTask(task.id);
                         closeModal();

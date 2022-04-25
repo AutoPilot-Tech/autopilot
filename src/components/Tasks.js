@@ -130,7 +130,9 @@ export const Tasks = () => {
                     <div className="divide-y divide-gray-200 bg-white">
                       <ul>
                         {tasks.map((task) => (
-                          <li key={task.id}>
+                          <li
+                            key={task.id}
+                          >
                             <IndividualTask task={task} key={task.id} />
                           </li>
                         ))}
