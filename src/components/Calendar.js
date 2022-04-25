@@ -246,12 +246,12 @@ export function Calendar() {
               </Transition>
             </Menu>
             <div className="ml-6 h-6 w-px bg-gray-300" />
-            <button
+            {/* <button
               type="button"
               className="focus:outline-none ml-6 rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
             >
               Add event
-            </button>
+            </button> */}
           </div>
           <Menu as="div" className="relative ml-6 md:hidden">
             <Menu.Button className="-mx-2 flex items-center rounded-full border border-transparent p-2 text-gray-400 hover:text-gray-500">
