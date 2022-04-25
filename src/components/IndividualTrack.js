@@ -125,8 +125,8 @@ export const IndividualTrack = ({track}) => {
             as="div"
             className={
               showSettingsIcon
-                ? "object-contain mr-1 relative float-right h-2"
-                : "object-contain mr-1 relative float-right hidden h-2"
+                ? "object-contain mr-2 relative float-right h-0"
+                : "object-contain mr-2 relative float-right hidden h-0"
             }
           >
             {({open}) => (
@@ -136,7 +136,7 @@ export const IndividualTrack = ({track}) => {
                   <div className="object-contain">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      className="w-5 text-gray-400"
+                      className="py-0 w-5 text-gray-400 hover:text-gray-600"
                       viewBox="0 0 20 20"
                       fill="currentColor"
                       onClick={() => {

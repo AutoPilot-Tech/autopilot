@@ -68,7 +68,6 @@ export function IndividualTask({task, index, moveListItem}) {
   const [{handlerId}, dropRef] = useDrop({
     accept: "task",
     collect(monitor) {
-      
       return {
         handlerId: monitor.getHandlerId(),
       };
@@ -156,6 +155,20 @@ export function IndividualTask({task, index, moveListItem}) {
         ref={ref}
         data-handler-id={handlerId}
       >
+        <div className="w-8">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className={
+              showSettingsIcon
+                ? "w-5 text-gray-400  ml-3 mt-4 relative float-left hover:text-gray-600 cursor-move"
+                : "w-5  ml-3 mt-4 relative float-left text-gray-400 hover:text-gray-600 hidden"
+            }
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+          </svg>
+        </div>
         <div className="w-16">
           <input
             type="checkbox"
@@ -165,7 +178,7 @@ export function IndividualTask({task, index, moveListItem}) {
           />
         </div>
 
-        <div className=" py-4 pr-3 text-sm font-medium w-64 flex-auto ">
+        <div className="py-4 pr-3 text-sm font-medium w-64 flex-auto ">
           {task.task}
         </div>
         <div className="w-14 flex-auto">
@@ -184,7 +197,7 @@ export function IndividualTask({task, index, moveListItem}) {
                   <div className="object-contain">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      className="w-5 text-gray-400"
+                      className="w-5 text-gray-400 hover:text-gray-600"
                       viewBox="0 0 20 20"
                       fill="currentColor"
                       onClick={() => {

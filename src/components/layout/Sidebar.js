@@ -35,15 +35,15 @@ export const Sidebar = () => {
   }
 
   return (
-    <nav className="fixed space-y-1 float-left flex flex-col pl-3 shadow pt-20 w-72 h-screen">
-      <ul className="sidebar__generic">
+    <nav className="fixed space-y-1 float-left flex flex-col pl-6 shadow pt-16 h-screen w-72">
+      <ul className="pt-2 pr-1">
         <li
           data-testid="next_7"
           className={classNames(
             active === "calendar"
               ? "bg-gray-200 text-gray-900"
               : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
-            "flex items-center px-3 py-2 text-sm font-medium rounded-md cursor-pointer"
+            "flex items-center px-2 py-1.5 font-medium rounded-md cursor-pointer text-sm subpixel-antialiased"
           )}
           onClick={() => {
             setActive("calendar");
@@ -52,10 +52,10 @@ export const Sidebar = () => {
             setIsRoutine(false);
           }}
         >
-          <span className="mr-1">
+          <span className="mr-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
+              className="h-6 w-6 text-rose-500 hover:fill-rose-500"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -70,46 +70,13 @@ export const Sidebar = () => {
           </span>
           <span>For You</span>
         </li>
-        {/* <li
-          data-testid="today"
-          className={classNames(
-            active === "Assistant"
-              ? "bg-gray-200 text-gray-900"
-              : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
-            "flex items-center px-3 py-2 text-sm font-medium rounded-md cursor-pointer"
-          )}
-          onClick={() => {
-            setActive("Assistant");
-            setSelectedTrack("ASSISTANT");
-            logClick("sideBarAssistantClick");
-            setIsRoutine(false);
-          }}
-        >
-          <span className="mr-1">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"
-              />
-            </svg>
-          </span>
-          <span>Your Assistant</span>
-        </li> */}
         <li
           data-testid="inbox"
           className={classNames(
             active === "inbox"
               ? "bg-gray-200 text-gray-900"
               : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
-            "flex items-center px-3 py-2 text-sm font-medium rounded-md cursor-pointer"
+            "flex items-center px-2 py-1.5 font-medium rounded-md cursor-pointer text-sm subpixel-antialiased"
           )}
           onClick={() => {
             setActive("inbox");
@@ -118,10 +85,10 @@ export const Sidebar = () => {
             setIsRoutine(false);
           }}
         >
-          <span className="mr-1">
+          <span className="mr-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
+              className="h-6 w-6 text-blue-500"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -142,7 +109,7 @@ export const Sidebar = () => {
             active === "today"
               ? "bg-gray-200 text-gray-900"
               : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
-            "flex items-center px-3 py-2 text-sm font-medium rounded-md cursor-pointer"
+            "flex items-center px-2 py-1.5 font-medium rounded-md cursor-pointer text-sm subpixel-antialiased"
           )}
           onClick={() => {
             setActive("today");
@@ -151,10 +118,10 @@ export const Sidebar = () => {
             setIsRoutine(false);
           }}
         >
-          <span className="mr-1">
+          <span className="mr-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
+              className="h-6 w-6 text-orange-500"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -175,7 +142,7 @@ export const Sidebar = () => {
             active === "Settings"
               ? "bg-gray-200 text-gray-900"
               : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
-            "flex items-center px-3 py-2 text-sm font-medium rounded-md cursor-pointer"
+            "flex items-center px-2 py-1.5 font-medium rounded-md cursor-pointer text-sm subpixel-antialiased"
           )}
           onClick={() => {
             setActive("Settings");
@@ -184,10 +151,10 @@ export const Sidebar = () => {
             setIsRoutine(false);
           }}
         >
-          <span className="mr-1">
+          <span className="mr-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
+              className="h-6 w-6 text-indigo-500"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -210,10 +177,8 @@ export const Sidebar = () => {
           logClick("sideBarShowTracksClick");
         }}
       >
-        <div>
-          <p className="pl-3 pt-3 float-left text-gray-400 font-medium">
-            Projects
-          </p>
+        <div className="grid grid-cols-2 mt-5 mb-2 pr-1">
+          <p className="pl-2 float-left text-gray-400 font-medium">Projects</p>
           <AddTrackNew />
         </div>
       </div>
@@ -227,10 +192,8 @@ export const Sidebar = () => {
           logClick("sideBarShowRoutinesClick");
         }}
       >
-        <div>
-          <p className="pl-3 pt-3 float-left text-gray-400 font-medium">
-            Routines
-          </p>
+        <div className="grid grid-cols-2 mt-5">
+          <p className="pl-2 float-left text-gray-400 font-medium">Routines</p>
           <AddRoutineNew />
         </div>
       </div>

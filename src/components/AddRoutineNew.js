@@ -68,14 +68,14 @@ export const AddRoutineNew = ({shouldShow = false}) => {
         });
   };
   return (
-    <div className="float-right mt-3 mr-4 cursor-pointer">
+    <div className="mr-5 mt-1 cursor-pointer">
       <span
-        className="text-gray-400 cursor-pointer  hover:rounded-md hover:text-gray-900 hover:bg-gray-200 text-lg"
+        className="float-right text-gray-400 cursor-pointer  hover:rounded-md hover:text-gray-900 hover:bg-gray-200 text-lg"
         onClick={openModal}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          className="h-5 w-5"
+          className="h-4 w-4"
           viewBox="0 0 20 20"
           fill="currentColor"
         >

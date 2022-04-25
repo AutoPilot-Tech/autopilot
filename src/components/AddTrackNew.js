@@ -62,9 +62,9 @@ export const AddTrackNew = ({shouldShow = false}) => {
         });
   };
   return (
-    <div className="float-right mt-3 mr-4 cursor-pointer">
+    <div className="mr-5 mt-0.5 cursor-pointer">
       <span
-        className="text-gray-400 cursor-pointer  hover:rounded-md hover:text-gray-900 hover:bg-gray-200 text-lg"
+        className="p-0 float-right text-gray-400 cursor-pointer  hover:rounded-md hover:text-gray-900 hover:bg-gray-200 text-lg"
         onClick={openModal}
       >
         <svg

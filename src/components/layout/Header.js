@@ -63,7 +63,7 @@ export function Header() {
                   <div className="flex-shrink-0 flex items-center mr-10">
                     <a href="/dashboard">
                       <img
-                        className="block h-16 w-auto"
+                        className="block w-auto h-14"
                         src="../../images/autopilot_alpha.png"
                         alt="Autopilot"
                       />
@@ -155,8 +155,6 @@ export function Header() {
                 </div>
               </div>
             </div>
-
-            
           </>
         )}
       </Popover>
