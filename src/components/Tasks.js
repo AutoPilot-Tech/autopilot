@@ -18,6 +18,8 @@ import {EmptyStateTasks} from "./EmptyStateTasks";
 import {ColorSettings} from "./ColorSettings";
 import {AddTaskNew} from "./AddTaskNew";
 import {AutopilotSettings} from "./AutopilotSettings";
+import {IndividualTask} from "./IndividualTask";
+import {Scrollbars} from "react-custom-scrollbars";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -103,14 +105,17 @@ export const Tasks = () => {
   // if setCalendar is true, then we will show the calendar
 
   return (
-    <div>
+    <>
       {
         showCalendar ? (
           <Calendar />
         ) : showSettings ? (
           <AutopilotSettings />
         ) : (
-          <div className="ml-80 mr-64 pt-20 flex flex-col" data-testid="tasks">
+          <div
+            className="ml-80 mr-64 pt-20 pl-1 pr-1 flex-col grow h-fit"
+            data-testid="tasks"
+          >
             <TaskHeader trackName={trackName} />
             {/* <ColorSettings /> */}
             {isRoutine ? <RoutineSettings /> : <></>}
@@ -120,94 +125,25 @@ export const Tasks = () => {
               <EmptyStateTasks />
             ) : (
               <>
-                <div className="relative overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
-                  <div className="absolute top-0 left-12 flex h-12 items-center space-x-3 sm:left-16">
-                    <button
-                      type="button"
-                      className="inline-flex items-center rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-30"
-                    >
-                      Delete
-                    </button>
+                <div className="relative shadow ring-2 p-1 bg-white ring-black ring-opacity-5 md:rounded-lg ">
+                  <div className="min-w-full divide-y divide-gray-300">
+                    <div className="divide-y divide-gray-200 bg-white">
+                      <ul>
+                        {tasks.map((task) => (
+                          <li key={task.id}>
+                            <IndividualTask task={task} key={task.id} />
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   </div>
-                  <table className="min-w-full table-fixed divide-y divide-gray-300">
-                    <thead className="bg-gray-50">
-                      <tr>
-                        <th
-                          scope="col"
-                          className="relative w-12 px-6 sm:w-16 sm:px-8"
-                        >
-                          <input
-                            type="checkbox"
-                            className="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 sm:left-6"
-                            ref={checkbox}
-                            checked={checked}
-                            onChange={toggleAll}
-                          />
-                        </th>
-                        <th
-                          scope="col"
-                          className="min-w-[12rem] py-3.5 pr-3 text-left text-sm font-semibold text-gray-900"
-                        >
-                          Task
-                        </th>
-
-                        {/* <th
-                        scope="col"
-                        className="relative py-3.5 pl-3 pr-4 sm:pr-6"
-                      >
-                        <span className="sr-only">Edit</span>
-                      </th> */}
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-200 bg-white">
-                      {tasks.map((task) => (
-                        <tr
-                          key={task.id}
-                          className={
-                            selectedTasks.includes(task)
-                              ? "bg-gray-50"
-                              : undefined
-                          }
-                        >
-                          <td className="relative w-12 px-6 sm:w-16 sm:px-8">
-                            {selectedTasks.includes(task) && (
-                              <div className="absolute inset-y-0 left-0 w-0.5 bg-indigo-600" />
-                            )}
-                            <input
-                              type="checkbox"
-                              className="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 sm:left-6"
-                              value={task.task}
-                              checked={selectedTasks.includes(task)}
-                              onChange={(e) =>
-                                setSelectedTasks(
-                                  e.target.checked
-                                    ? [...selectedTasks, task]
-                                    : selectedTasks.filter((t) => t !== t)
-                                )
-                              }
-                            />
-                          </td>
-                          <td
-                            className={classNames(
-                              "whitespace-nowrap py-4 pr-3 text-sm font-medium",
-                              selectedTasks.includes(task)
-                                ? "text-indigo-600"
-                                : "text-gray-900"
-                            )}
-                          >
-                            {task.task}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
                 </div>
               </>
             )}
           </div>
         ) // if showSettings is true, show settings
       }
-    </div>
+    </>
   );
   //     <h2 data-testid="track-name">{trackName}</h2>
 

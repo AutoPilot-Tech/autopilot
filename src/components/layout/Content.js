@@ -6,7 +6,7 @@ import {useTracksValue} from "../../context/tracks-context";
 
 export const Content = () => {
   return (
-    <div className="grow">
+    <div className="grow flex-row mb-48">
       <Sidebar />
       <Tasks />
     </div>

@@ -35,7 +35,7 @@ export const Sidebar = () => {
   }
 
   return (
-    <nav className="fixed space-y-1 float-left h-screen flex flex-col pl-3 shadow pt-20 w-72">
+    <nav className="fixed space-y-1 float-left flex flex-col pl-3 shadow pt-20 w-72 h-screen">
       <ul className="sidebar__generic">
         <li
           data-testid="next_7"

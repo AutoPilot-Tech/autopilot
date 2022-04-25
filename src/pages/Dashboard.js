@@ -56,23 +56,21 @@ export const Dashboard = ({darkModeDefault = true}) => {
     <LocalizationProvider dateAdapter={AdapterMoment}>
       <TracksProvider>
         <Scrollbars
-          // autoHide
+          autoHide
           // autoHideTimeout={1000}
           // autoHideDuration={200}
           autoHeight
           autoHeightMin={0}
-          autoHeightMax={"100vh"}
+          // see all of the content
+          autoHeightMax={'100vh'}
           // renderTrackVertical={props => <div {...props} className="track-vertical"/>}
           // renderThumbVertical={props => <div {...props} className="thumb-vertical"/>}
         >
-          <div
-            data-testid="application"
-            className={"flex flex-col min-h-screen flex-grow"}
-          >
+          <div data-testid="application" className="min-h-screen grow">
             <Header darkMode={darkMode} setDarkMode={setDarkMode} />
-
             <Content />
-            <Footer />
+
+            {/* <Footer /> */}
           </div>
         </Scrollbars>
       </TracksProvider>
