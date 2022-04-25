@@ -68,6 +68,7 @@ export function IndividualTask({task, index, moveListItem}) {
   const [{handlerId}, dropRef] = useDrop({
     accept: "task",
     collect(monitor) {
+      
       return {
         handlerId: monitor.getHandlerId(),
       };

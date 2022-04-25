@@ -68,7 +68,12 @@ export const Tasks = () => {
         ],
       })
     );
-    updateDataBase(dragTask, hoverTask, hoverIndex, dragIndex);
+    db.collection("tasks").doc(dragTask).update({
+      index: hoverIndex,
+    });
+    db.collection("tasks").doc(hoverTask).update({
+      index: dragIndex,
+    });
   }, []);
 
   async function updateDataBase(dragTask, hoverTask, hoverIndex, dragIndex) {

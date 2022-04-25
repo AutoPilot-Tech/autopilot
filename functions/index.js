@@ -2,11 +2,11 @@ const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const moment = require("moment");
 const {v4: uuidv4} = require("uuid");
-const useEmulator = true;
+// const useEmulator = true;
 
-if (useEmulator) {
-  process.env["FIRESTORE_EMULATOR_HOST"] = "localhost:8080";
-}
+// if (useEmulator) {
+//   process.env["FIRESTORE_EMULATOR_HOST"] = "localhost:8080";
+// }
 
 admin.initializeApp({
   credential: admin.credential.cert({
