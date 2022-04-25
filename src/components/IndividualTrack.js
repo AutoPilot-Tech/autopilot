@@ -1,17 +1,18 @@
-import React, { useState, Fragment } from 'react';
-import { FaTrash, FaTrashAlt } from 'react-icons/fa';
-import { useTracksValue } from '../context/tracks-context';
-import { db } from '../firebase';
-import { Menu, Popover, Transition, Dialog } from '@headlessui/react';
-import { SearchIcon } from '@heroicons/react/solid';
-import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline';
-import { Modal } from './Modal';
+import React, {useState, Fragment, useRef, useEffect} from "react";
+import {FaTrash, FaTrashAlt} from "react-icons/fa";
+import {useTracksValue} from "../context/tracks-context";
+import {db} from "../firebase";
+import {Menu, Popover, Transition, Dialog} from "@headlessui/react";
+import {SearchIcon} from "@heroicons/react/solid";
+import {BellIcon, MenuIcon, XIcon} from "@heroicons/react/outline";
+import {Modal} from "./Modal";
+import {FormControlUnstyledContext} from "@mui/material/node_modules/@mui/base";
 
 const user = {
-  name: 'Chelsea Hagon',
-  email: 'chelsea.hagon@example.com',
+  name: "Chelsea Hagon",
+  email: "chelsea.hagon@example.com",
   imageUrl:
-    'https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+    "https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
 };
 
 // function DeletionDialog() {
@@ -36,9 +37,48 @@ const user = {
 //   )
 // }
 
-export const IndividualTrack = ({ track }) => {
-  let [isOpen, setIsOpen] = useState(false)
-  const { tracks, setTracks, setSelectedTrack } = useTracksValue();
+/**
+ * Hook that alerts clicks outside of the passed ref
+ */
+function useOutsideAlerter(ref, setOpenSettings, setShowSettingsIcon) {
+  useEffect(() => {
+    /**
+     * Alert if clicked on outside of element
+     */
+    function handleClickOutside(event) {
+      if (ref.current && !ref.current.contains(event.target)) {
+        setOpenSettings(false);
+        setShowSettingsIcon(false);
+      }
+    }
+    // Bind the event listener
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      // Unbind the event listener on clean up
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [ref]);
+}
+
+/**
+ * Component that alerts if you click outside of it
+ */
+export default function OutsideAlerter(props) {
+  const wrapperRef = useRef(null);
+  useOutsideAlerter(
+    wrapperRef,
+    props.setOpenSettings,
+    props.setShowSettingsIcon
+  );
+
+  return <div ref={wrapperRef}>{props.children}</div>;
+}
+
+export const IndividualTrack = ({track}) => {
+  let [isOpen, setIsOpen] = useState(false);
+  const {tracks, setTracks, setSelectedTrack} = useTracksValue();
+  const [openSettings, setOpenSettings] = useState(false);
+  const [showSettingsIcon, setShowSettingsIcon] = useState(false);
 
   function closeModal() {
     setIsOpen(false);
@@ -49,48 +89,107 @@ export const IndividualTrack = ({ track }) => {
   }
 
   const deleteTrack = (docId) => {
-    db.collection('tracks')
+    db.collection("tracks")
       .doc(docId)
       .delete()
       .then(() => {
         setTracks([...tracks]);
-        setSelectedTrack('INBOX');
+        setSelectedTrack("INBOX");
       });
   };
 
+  function classNames(...classes) {
+    return classes.filter(Boolean).join(" ");
+  }
+
+  const navigation = [{name: "Delete Project", onClick: openModal}];
+
   return (
     <>
-      <span className="">{track.name}</span>
-      {/* <span
-        className="sidebar__track-delete"
-        onKeyDown={() => setShowConfirm(!showConfirm)}
-        onClick={() => setShowConfirm(!showConfirm)}
+      <div
+        className="grid grid-cols-2 group w-full"
+        onMouseEnter={() => {
+          setShowSettingsIcon(true);
+        }}
+        onMouseLeave={() => {
+          if (!openSettings) {
+            setShowSettingsIcon(false);
+          }
+        }}
       >
-        <FaTrashAlt />
-        {showConfirm && (
-          <div className="track-delete-modal">
-            <div className="track-delete-modal__inner">
-              <p>
-                Are you sure you want to delete this track? This cannot be
-                undone.
-              </p>
-              <button
-                type="button"
-                onClick={() => {
-                  deleteTrack(track.docId);
-                }}
-              >
-                Delete
-              </button>
-              <span onClick={() => setShowConfirm(!showConfirm)}>Cancel</span>
-            </div>
-          </div>
-        )}
-      </span> */}
-      <div className="group">
-        <button className="ml-44"type="button" onClick={openModal}>
-          <FaTrashAlt className="fill-slate-400 hidden group-hover:block "/>
-        </button>
+        <div className="">
+          <span className="">{track.name}</span>
+        </div>
+        <div>
+          <Menu
+            as="div"
+            className={
+              showSettingsIcon
+                ? "flex-shrink-0 mr-1 relative float-right"
+                : "flex-shrink-0 mr-1 relative float-right hidden"
+            }
+          >
+            {({open}) => (
+              <>
+                <Menu.Button>
+                  <span className="sr-only">Open user menu</span>
+                  <div>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className=" w-5 "
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                      onClick={() => {
+                        setOpenSettings(true);
+                        setShowSettingsIcon(true);
+                      }}
+                    >
+                      <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
+                    </svg>
+                  </div>
+                </Menu.Button>
+                {openSettings && (
+                  <OutsideAlerter
+                    setOpenSettings={setOpenSettings}
+                    setShowSettingsIcon={setShowSettingsIcon}
+                  >
+                    <Transition
+                      as={Fragment}
+                      enter="transition ease-out duration-100"
+                      enterFrom="transform opacity-0 scale-95"
+                      enterTo="transform opacity-100 scale-100"
+                      leave="transition ease-in duration-75"
+                      leaveFrom="transform opacity-100 scale-100"
+                      leaveTo="transform opacity-0 scale-95"
+                    >
+                      <Menu.Items
+                        static
+                        className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 py-1 focus:outline-none"
+                      >
+                        {navigation.map((item) => (
+                          <Menu.Item key={item.name}>
+                            {({active}) => (
+                              <a
+                                href={item.href}
+                                className={classNames(
+                                  active ? "bg-gray-100" : "",
+                                  "block py-2 px-4 text-sm text-gray-700"
+                                )}
+                                onClick={item.onClick ? item.onClick : null}
+                              >
+                                {item.name}
+                              </a>
+                            )}
+                          </Menu.Item>
+                        ))}
+                      </Menu.Items>
+                    </Transition>
+                  </OutsideAlerter>
+                )}
+              </>
+            )}
+          </Menu>
+        </div>
       </div>
 
       <Transition appear show={isOpen} as={Fragment}>
@@ -137,7 +236,8 @@ export const IndividualTrack = ({ track }) => {
                 </Dialog.Title>
                 <div className="mt-2">
                   <p className="text-sm text-gray-500">
-                    Are you sure you want to delete this track? This action cannot be undone.
+                    Are you sure you want to delete this track? This action
+                    cannot be undone.
                   </p>
                 </div>
 
@@ -155,8 +255,7 @@ export const IndividualTrack = ({ track }) => {
                     onClick={() => {
                       deleteTrack(track.docId);
                       closeModal();
-                    }
-                    }
+                    }}
                   >
                     Delete
                   </button>
