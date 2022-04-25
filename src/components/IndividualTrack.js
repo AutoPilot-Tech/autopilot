@@ -136,7 +136,7 @@ export const IndividualTrack = ({track}) => {
                   <div className="object-contain">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      className="w-5"
+                      className="w-5 text-gray-400"
                       viewBox="0 0 20 20"
                       fill="currentColor"
                       onClick={() => {

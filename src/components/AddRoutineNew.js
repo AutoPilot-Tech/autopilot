@@ -50,7 +50,7 @@ export const AddRoutineNew = ({shouldShow = false}) => {
           trackId,
           name: routineName,
           userId: user,
-          routine: false,
+          routine: true,
           textColor: `text-${trackColor}-500`,
           bgColor: `bg-${trackColor}-50`,
         })
@@ -59,7 +59,7 @@ export const AddRoutineNew = ({shouldShow = false}) => {
             trackId,
             name: routineName,
             userId: user,
-            routine: false,
+            routine: true,
             color: trackColor,
           });
           setTracks([...tracks]);
