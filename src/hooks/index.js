@@ -2,7 +2,7 @@ import {useState, useEffect} from "react";
 import {db, auth} from "../firebase";
 import {collatedTasksExist} from "../helpers";
 import moment from "moment";
-import {sortedObject} from "../helpers";
+import {sortedObject, sortArrayOfObjects} from "../helpers";
 import {useLoadingValue} from "../context/loading-context";
 
 // AutoFill Algorithm ( Not a Hook)
@@ -103,6 +103,7 @@ export const useEvents = () => {
 export const useTasks = (selectedTrack) => {
   const [tasks, setTasks] = useState([]);
   const [archivedTasks, setArchivedTasks] = useState([]);
+  const [tasksLength, setTasksLength] = useState(0);
 
   useEffect(() => {
     let userId = auth.currentUser.uid;
@@ -127,25 +128,33 @@ export const useTasks = (selectedTrack) => {
         ...task.data(),
       }));
 
+      // go through newTasks and sort them by index property
+      const sortedTasksByIndex = sortArrayOfObjects(newTasks);
+
       setTasks(
         selectedTrack === "NEXT_7"
-          ? newTasks.filter(
+          ? sortedTasksByIndex.filter(
               (task) =>
                 moment(task.date, "YYYY-MM-DD").diff(moment(), "days") <= 7 &&
                 task.archived !== true
             )
-          : newTasks.filter((task) => task.archived !== true)
+          : sortedTasksByIndex.filter((task) => task.archived !== true)
       );
 
       // Set all tasks that are archived
-      setArchivedTasks(newTasks.filter((task) => task.archived !== false));
+      setArchivedTasks(
+        sortedTasksByIndex.filter((task) => task.archived !== false)
+      );
+      // See how many tasks are in the tasks array
+      setTasksLength(newTasks.length);
     });
+
     // don't want to be checking for tracks all the time, only when there is a new
     // track
     return () => unsubscribe();
   }, [selectedTrack]);
 
-  return {tasks, archivedTasks};
+  return {tasks, archivedTasks, tasksLength, setTasks};
 };
 
 export const useActive = () => {
@@ -176,7 +185,6 @@ export const useTracks = () => {
         }));
 
         // if all tracks length is more than 0, set loading to false
-        
 
         // firebase is weird about giving us the same order fields in objects, so we
         // need to sort it first.

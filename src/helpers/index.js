@@ -65,3 +65,10 @@ export const sortedObject = unordered => {
       return obj
     }, {});
 };
+
+// sort array of objects by key value pair index
+export const sortArrayOfObjects = (array) => {
+  return array.sort((a, b) => {
+    return a.index - b.index;
+  });
+}

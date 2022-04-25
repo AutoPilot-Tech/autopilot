@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef, useLayoutEffect} from "react";
+import React, {useEffect, useState, useRef, useCallback} from "react";
 import {collection, getDocs} from "firebase/firestore";
 import {Checkbox} from "./Checkbox";
 import {useTasks} from "../hooks";
@@ -28,7 +28,7 @@ function classNames(...classes) {
 // this just gets the tasks and renders them
 export const Tasks = () => {
   const {tracks, selectedTrack, isRoutine, setIsRoutine} = useTracksValue();
-  let {tasks} = useTasks(selectedTrack);
+  let {tasks, setTasks} = useTasks(selectedTrack);
   const [showCalendar, setShowCalendar] = useState(false);
   const [showChat, setShowChat] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -37,6 +37,38 @@ export const Tasks = () => {
   const [selectedTasks, setSelectedTasks] = useState([]);
   const [indeterminate, setIndeterminate] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+
+  const moveTaskListItem = useCallback(
+    (dragIndex, hoverIndex) => {
+      console.log("callback Ran");
+      // THE FOLLOWING WORKS, BUT SHOULD NOT BE USED IN PRODUCTION OR ELSE
+      // GG WALLET
+
+      // const dragTask = tasks[dragIndex].id;
+      // const hoverItem = tasks[hoverIndex].id;
+
+      // swap in the database
+      // console.log("database updated");
+      // db.collection("tasks").doc(dragTask).update({
+      //   index: hoverIndex,
+      // });
+      // db.collection("tasks").doc(hoverItem).update({
+      //   index: dragIndex,
+      // });
+      // swap in the tasks array
+
+      const dragTask = tasks[dragIndex];
+      const hoverTask = tasks[hoverIndex];
+
+      setTasks((tasks) => {
+        const updatedTasks = [...tasks];
+        updatedTasks[dragIndex] = hoverTask;
+        updatedTasks[hoverIndex] = dragTask;
+        return updatedTasks;
+      });
+    },
+    [tasks]
+  );
 
   let trackName = "";
 
@@ -54,15 +86,6 @@ export const Tasks = () => {
   ) {
     trackName = getTitle(tracks, selectedTrack);
   }
-
-  const deleteTask = (docId) => {
-    db.collection("tasks")
-      .doc(docId)
-      .delete()
-      .then(() => {
-        console.log("task deleted");
-      });
-  };
 
   // useLayoutEffect(() => {
   //   const isIndeterminate =
@@ -113,7 +136,7 @@ export const Tasks = () => {
           <AutopilotSettings />
         ) : (
           <div
-            className="ml-80 mr-64 pt-20 pl-1 pr-1 flex-col grow h-fit"
+            className="ml-80 pt-20 pl-1 pr-1 flex-col grow h-fit mr-28"
             data-testid="tasks"
           >
             <TaskHeader trackName={trackName} />
@@ -130,10 +153,13 @@ export const Tasks = () => {
                     <div className="divide-y divide-gray-200 bg-white">
                       <ul>
                         {tasks.map((task) => (
-                          <li
-                            key={task.id}
-                          >
-                            <IndividualTask task={task} key={task.id} />
+                          <li key={task.id}>
+                            <IndividualTask
+                              task={task}
+                              key={task.id}
+                              index={task.index}
+                              moveListItem={moveTaskListItem}
+                            />
                           </li>
                         ))}
                       </ul>

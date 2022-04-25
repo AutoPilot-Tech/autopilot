@@ -10,6 +10,7 @@ import TextField from "@mui/material/TextField";
 import {amplitude} from "../utilities/amplitude";
 import {Transition, Dialog} from "@headlessui/react";
 import {PlusIcon} from "@heroicons/react/solid";
+import {useTasks} from "../hooks/index";
 
 export const AddTaskNew = ({
   showAddTaskMain = true,
@@ -18,6 +19,7 @@ export const AddTaskNew = ({
   setShowQuickAddTask,
 }) => {
   const {selectedTrack} = useTracksValue();
+  const {tasksLength} = useTasks(selectedTrack);
   const [isOpen, setIsOpen] = useState(false);
   const [task, setTask] = useState("");
   const [taskDate, setTaskDate] = useState("");
@@ -62,11 +64,16 @@ export const AddTaskNew = ({
     amplitude.getInstance().logEvent(event, userId);
   };
 
+  // get tasks for this track then get length
+
   const addTask = () => {
+    // if tasks is undefined, set taskLength to 0
+
     const trackId = track || selectedTrack;
     let collatedDate = "";
     // generate key for this task
     let key = Math.random().toString(36).substring(7);
+    // get the number of tasks for this track
 
     if (trackId === "TODAY") {
       collatedDate = moment().format("YYYY-MM-DD");
@@ -92,6 +99,7 @@ export const AddTaskNew = ({
           end: taskEndDate,
           userId: user,
           key: key,
+          index: tasksLength,
         })
         .then(() => {
           setTask("");

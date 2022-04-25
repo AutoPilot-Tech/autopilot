@@ -2,6 +2,7 @@ import React, {useState, useEffect, useRef, Fragment} from "react";
 import {db} from "../firebase";
 import {useTracksValue} from "../context/tracks-context";
 import {Menu, Transition, Dialog} from "@headlessui/react";
+import {useDrag, useDrop} from "react-dnd";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -44,11 +45,47 @@ export default function OutsideAlerter(props) {
   return <div ref={wrapperRef}>{props.children}</div>;
 }
 
-export function IndividualTask({task}) {
+export function IndividualTask({task, index, moveListItem}) {
   const [isOpen, setIsOpen] = useState(false);
   const [openSettings, setOpenSettings] = useState(false);
   const [showSettingsIcon, setShowSettingsIcon] = useState(false);
-  const {tasks, setTasks} = useTracksValue();
+  // const {tasks, setTasks} = useTracksValue();
+
+  // This is how this task becomes draggable
+  const [{isDragging}, dragRef] = useDrag({
+    type: "task",
+    item: {index},
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  });
+
+  // This item task is also a drop area for other tasks
+  const [spec, dropRef] = useDrop({
+    accept: "task",
+    hover: (item, monitor) => {
+      const dragIndex = item.index;
+      const hoverIndex = index;
+      const hoverBoundingRect = ref.current?.getBoundingClientRect();
+      const hoverMiddleY =
+        (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+      const hoverActualY = monitor.getClientOffset().y - hoverBoundingRect.top;
+
+      // if dragging down, continue only when hover is smaller than middle Y
+      if (dragIndex < hoverIndex && hoverActualY < hoverMiddleY) return;
+      // if dragging up, continue only when hover is bigger than middle Y
+      if (dragIndex > hoverIndex && hoverActualY > hoverMiddleY) return;
+
+      moveListItem(dragIndex, hoverIndex);
+      item.index = hoverIndex;
+    },
+  });
+
+  // Join the 2 refs together into one (both draggable and can be dropped on)
+  const ref = useRef(null);
+  const dragDropRef = dragRef(dropRef(ref));
+
+  // Make items being dragged transparent, so it's easier to see where we drop them
 
   const navigation = [{name: "Delete Task", onClick: openModal}];
 
@@ -65,7 +102,7 @@ export function IndividualTask({task}) {
       .doc(docId)
       .delete()
       .then(() => {
-        setTasks([...tasks]);
+        // setTasks([...tasks]);
       });
   };
 
@@ -77,7 +114,11 @@ export function IndividualTask({task}) {
   return (
     <>
       <div
-        className="group flex text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded"
+        className={
+          isDragging
+            ? "opacity-0 group flex text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded"
+            : "opacity-100 group flex text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded"
+        }
         onMouseEnter={() => {
           setShowSettingsIcon(true);
         }}
@@ -86,6 +127,7 @@ export function IndividualTask({task}) {
             setShowSettingsIcon(false);
           }
         }}
+        ref={dragDropRef}
       >
         <div className="w-16">
           <input

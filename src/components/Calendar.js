@@ -119,7 +119,7 @@ export function Calendar() {
   }, [todaysEvents]);
 
   return (
-    <div className="flex flex-col ml-80 mr-80 overflow-auto pt-20">
+    <div className="flex flex-col ml-80 overflow-auto pt-20 mr-28">
       <WelcomeBack />
       <header className="relative flex flex-none items-center justify-between border-b border-gray-200 py-4 px-6">
         <div>
