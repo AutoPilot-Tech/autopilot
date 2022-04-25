@@ -3,6 +3,7 @@ import {db} from "../firebase";
 import {useTracksValue} from "../context/tracks-context";
 import {Menu, Transition, Dialog} from "@headlessui/react";
 import {useDrag, useDrop} from "react-dnd";
+import {useTasks} from "../hooks/index";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -49,7 +50,10 @@ export function IndividualTask({task, index, moveListItem}) {
   const [isOpen, setIsOpen] = useState(false);
   const [openSettings, setOpenSettings] = useState(false);
   const [showSettingsIcon, setShowSettingsIcon] = useState(false);
-  // const {tasks, setTasks} = useTracksValue();
+  const {selectedTrack} = useTracksValue();
+  const {tasks} = useTasks(selectedTrack);
+
+  const ref = useRef(null);
 
   // This is how this task becomes draggable
   const [{isDragging}, dragRef] = useDrag({
@@ -61,29 +65,50 @@ export function IndividualTask({task, index, moveListItem}) {
   });
 
   // This item task is also a drop area for other tasks
-  const [spec, dropRef] = useDrop({
+  const [{handlerId}, dropRef] = useDrop({
     accept: "task",
-    hover: (item, monitor) => {
+    collect(monitor) {
+      return {
+        handlerId: monitor.getHandlerId(),
+      };
+    },
+    hover(item, monitor) {
+      if (!ref.current) {
+        return;
+      }
       const dragIndex = item.index;
       const hoverIndex = index;
+      if (dragIndex === hoverIndex) {
+        return;
+      }
+      // Determine rectangle on screen
       const hoverBoundingRect = ref.current?.getBoundingClientRect();
+      // Get vertical middle
       const hoverMiddleY =
         (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
-      const hoverActualY = monitor.getClientOffset().y - hoverBoundingRect.top;
+      // Determine mouse position
+      const clientOffset = monitor.getClientOffset();
+      // Get pixels to the top
+      const hoverClientY = clientOffset.y - hoverBoundingRect.top;
+      // Only perform the move when the mouse has crossed half of the items height
+      // When dragging downwards, only move when the cursor is below 50%
+      // When dragging upwards, only move when the cursor is above 50%
+      // Dragging downwards
+      if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
+        return;
+      }
+      // Dragging upwards
+      if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
+        return;
+      }
 
-      // if dragging down, continue only when hover is smaller than middle Y
-      if (dragIndex < hoverIndex && hoverActualY < hoverMiddleY) return;
-      // if dragging up, continue only when hover is bigger than middle Y
-      if (dragIndex > hoverIndex && hoverActualY > hoverMiddleY) return;
-
-      moveListItem(dragIndex, hoverIndex);
+      moveListItem(dragIndex, hoverIndex, tasks);
       item.index = hoverIndex;
     },
   });
 
   // Join the 2 refs together into one (both draggable and can be dropped on)
-  const ref = useRef(null);
-  const dragDropRef = dragRef(dropRef(ref));
+  dragRef(dropRef(ref));
 
   // Make items being dragged transparent, so it's easier to see where we drop them
 
@@ -127,7 +152,8 @@ export function IndividualTask({task, index, moveListItem}) {
             setShowSettingsIcon(false);
           }
         }}
-        ref={dragDropRef}
+        ref={ref}
+        data-handler-id={handlerId}
       >
         <div className="w-16">
           <input

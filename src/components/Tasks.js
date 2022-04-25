@@ -1,4 +1,5 @@
 import React, {useEffect, useState, useRef, useCallback} from "react";
+import update from "immutability-helper";
 import {collection, getDocs} from "firebase/firestore";
 import {Checkbox} from "./Checkbox";
 import {useTasks} from "../hooks";
@@ -38,37 +39,59 @@ export const Tasks = () => {
   const [indeterminate, setIndeterminate] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
 
-  const moveTaskListItem = useCallback(
-    (dragIndex, hoverIndex) => {
-      console.log("callback Ran");
-      // THE FOLLOWING WORKS, BUT SHOULD NOT BE USED IN PRODUCTION OR ELSE
-      // GG WALLET
+  const moveTaskListItem = useCallback((dragIndex, hoverIndex, tasks) => {
+    console.log("callback Ran");
+    // THE FOLLOWING WORKS, BUT SHOULD NOT BE USED IN PRODUCTION OR ELSE
+    // GG WALLET
+    console.log(tasks);
 
-      // const dragTask = tasks[dragIndex].id;
-      // const hoverItem = tasks[hoverIndex].id;
+    const dragTask = tasks[dragIndex].id;
+    const hoverTask = tasks[hoverIndex].id;
+    // // swap in the database
+    // console.log("database updated");
+    // db.collection("tasks").doc(dragTask).update({
+    //   index: hoverIndex,
+    // });
+    // db.collection("tasks").doc(hoverItem).update({
+    //   index: dragIndex,
+    // });
+    // swap in the tasks array
 
-      // swap in the database
-      // console.log("database updated");
-      // db.collection("tasks").doc(dragTask).update({
-      //   index: hoverIndex,
-      // });
-      // db.collection("tasks").doc(hoverItem).update({
-      //   index: dragIndex,
-      // });
-      // swap in the tasks array
+    // const dragTask = tasks[dragIndex];
+    // const hoverTask = tasks[hoverIndex];
 
-      const dragTask = tasks[dragIndex];
-      const hoverTask = tasks[hoverIndex];
+    setTasks((prevTasks) =>
+      update(prevTasks, {
+        $splice: [
+          [dragIndex, 1],
+          [hoverIndex, 0, prevTasks[dragIndex]],
+        ],
+      })
+    );
+    updateDataBase(dragTask, hoverTask, hoverIndex, dragIndex);
+  }, []);
 
-      setTasks((tasks) => {
-        const updatedTasks = [...tasks];
-        updatedTasks[dragIndex] = hoverTask;
-        updatedTasks[hoverIndex] = dragTask;
-        return updatedTasks;
-      });
-    },
-    [tasks]
-  );
+  async function updateDataBase(dragTask, hoverTask, hoverIndex, dragIndex) {
+    await db.collection("tasks").doc(dragTask).update({
+      index: hoverIndex,
+    });
+    await db.collection("tasks").doc(hoverTask).update({
+      index: dragIndex,
+    });
+  }
+
+  const renderTask = useCallback((task) => {
+    return (
+      <li key={task.id}>
+        <IndividualTask
+          task={task}
+          key={task.id}
+          index={task.index}
+          moveListItem={moveTaskListItem}
+        />
+      </li>
+    );
+  }, []);
 
   let trackName = "";
 
@@ -85,20 +108,6 @@ export const Tasks = () => {
     !collatedTasksExist(selectedTrack)
   ) {
     trackName = getTitle(tracks, selectedTrack);
-  }
-
-  // useLayoutEffect(() => {
-  //   const isIndeterminate =
-  //     selectedTasks.length > 0 && selectedTasks.length < tasks.length;
-  //   setChecked(selectedTasks.length === tasks.length);
-  //   setIndeterminate(isIndeterminate);
-  //   checkbox.current.indeterminate = isIndeterminate;
-  // }, [selectedTasks]);
-
-  function toggleAll() {
-    setSelectedTasks(checked || indeterminate ? [] : people);
-    setChecked(!checked && !indeterminate);
-    setIndeterminate(false);
   }
 
   // When selectedTrack changes, we want to check to see if it's the calendar
@@ -151,18 +160,7 @@ export const Tasks = () => {
                 <div className="relative shadow ring-2 p-1 bg-white ring-black ring-opacity-5 md:rounded-lg ">
                   <div className="min-w-full divide-y divide-gray-300">
                     <div className="divide-y divide-gray-200 bg-white">
-                      <ul>
-                        {tasks.map((task) => (
-                          <li key={task.id}>
-                            <IndividualTask
-                              task={task}
-                              key={task.id}
-                              index={task.index}
-                              moveListItem={moveTaskListItem}
-                            />
-                          </li>
-                        ))}
-                      </ul>
+                      <ul>{tasks.map((task) => renderTask(task))}</ul>
                     </div>
                   </div>
                 </div>
