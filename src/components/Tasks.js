@@ -1,18 +1,13 @@
 import React, {useEffect, useState, useRef, useCallback} from "react";
-import update from "immutability-helper";
-import {collection, getDocs} from "firebase/firestore";
-import {Checkbox} from "./Checkbox";
+
 import {useTasks} from "../hooks";
 import {collatedTasks} from "../constants";
 import {getTitle, getCollatedTitle, collatedTasksExist} from "../helpers";
 import {useTracksValue} from "../context/tracks-context";
-import {AddTask} from "./AddTask";
-import {auth} from "../firebase";
+
 import {Calendar} from "../../src/components/Calendar";
-import {getRoutines} from "../helpers";
-import {findRoutine} from "../helpers";
+
 import {RoutineSettings} from "./RoutineSettings";
-import {FaTrashAlt} from "react-icons/fa";
 import {db} from "../firebase";
 import {TaskHeader} from "./TaskHeader";
 import {EmptyStateTasks} from "./EmptyStateTasks";

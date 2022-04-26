@@ -1,28 +1,13 @@
 import React, {useState} from "react";
-import {
-  FaChevronDown,
-  FaInbox,
-  FaCheckSquare,
-  FaRegCalendar,
-  FaConciergeBell,
-  FaCommentDots,
-} from "react-icons/fa";
-import {Tracks} from "../Tracks";
-import {IndividualTrack} from "../IndividualTrack";
-import {AddTrack} from "../AddTrack";
-import {useTracksValue} from "../../context/tracks-context";
 import {Routines} from "../Routines";
-import {AddRoutine} from "../AddRoutine";
+import {useTracksValue} from "../../context/tracks-context";
 import {amplitude} from "../../utilities/amplitude";
 import {auth} from "../../firebase";
 import {AddTrackNew} from "../AddTrackNew";
-import {PlusIcon} from "@heroicons/react/solid";
-import {AddRoutineNew} from "../AddRoutineNew";
 
 export const Sidebar = () => {
-  const {setSelectedTrack, isRoutine, setIsRoutine} = useTracksValue();
+  const {setSelectedTrack, setIsRoutine} = useTracksValue();
   const [showTracks, setShowTracks] = useState(true);
-  const [showRoutines, setShowRoutines] = useState(true);
   const [active, setActive] = useState("calendar");
 
   const logClick = (event) => {
@@ -38,7 +23,6 @@ export const Sidebar = () => {
     <nav className="fixed space-y-1 float-left flex flex-col pl-6 shadow pt-16 h-screen w-72">
       <ul className="pt-2 pr-1">
         <li
-          data-testid="next_7"
           className={classNames(
             active === "calendar"
               ? "bg-gray-200 text-gray-900"
@@ -71,7 +55,6 @@ export const Sidebar = () => {
           <span>For You</span>
         </li>
         <li
-          data-testid="inbox"
           className={classNames(
             active === "inbox"
               ? "bg-gray-200 text-gray-900"
@@ -104,7 +87,6 @@ export const Sidebar = () => {
           <span>Inbox</span>
         </li>
         <li
-          data-testid="today"
           className={classNames(
             active === "today"
               ? "bg-gray-200 text-gray-900"
@@ -171,35 +153,17 @@ export const Sidebar = () => {
         </li>
       </ul>
       <div
-        className="sidebar__middle"
         onClick={() => {
           setShowTracks(!showTracks);
           logClick("sideBarShowTracksClick");
         }}
       >
         <div className="grid grid-cols-2 mt-5 mb-2 pr-1">
-          <p className="pl-2 float-left text-gray-400 font-medium">Projects</p>
+          <p className="pl-2 float-left text-gray-400 font-medium">Routines</p>
           <AddTrackNew />
         </div>
       </div>
-      <ul className="sidebar__tracks">
-        {<Tracks active={active} setActive={setActive} />}
-      </ul>
-      <div
-        className="sidebar__middle"
-        onClick={() => {
-          setShowRoutines(!showRoutines);
-          logClick("sideBarShowRoutinesClick");
-        }}
-      >
-        <div className="grid grid-cols-2 mt-5">
-          <p className="pl-2 float-left text-gray-400 font-medium">Routines</p>
-          <AddRoutineNew />
-        </div>
-      </div>
-      <ul className="sidebar__tracks">
-        {<Routines active={active} setActive={setActive} />}
-      </ul>
+      <ul>{<Routines active={active} setActive={setActive} />}</ul>
     </nav>
   );
 };

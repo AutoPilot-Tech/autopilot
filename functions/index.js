@@ -2,7 +2,16 @@ const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const moment = require("moment");
 const {v4: uuidv4} = require("uuid");
-const useEmulator = true;
+let useEmulator;
+if (process.env.FUNCTIONS_EMULATOR === true) {
+  useEmulator = true;
+} else {
+  useEmulator = false;
+}
+
+
+
+
 
 if (useEmulator) {
   process.env["FIRESTORE_EMULATOR_HOST"] = "localhost:8080";

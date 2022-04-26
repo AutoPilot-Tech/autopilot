@@ -17,11 +17,14 @@ firebase.initializeApp({
 
 // Initialize Firebase
 var db = firebase.firestore();
-db.useEmulator("localhost", 8080);
 
 // initialize auth
 const auth = firebase.auth();
-auth.useEmulator("http://localhost:9099");
+
+if (location.hostname === "localhost") {
+  db.useEmulator("localhost", 8080);
+  auth.useEmulator("http://localhost:9099/", {disableWarnings: true});
+}
 
 const googleProvider = new firebase.auth.GoogleAuthProvider();
 const signInWithGoogle = () => {
