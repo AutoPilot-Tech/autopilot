@@ -86,7 +86,7 @@ export const Sidebar = () => {
           </span>
           <span>Inbox</span>
         </li>
-        <li
+        {/* <li
           className={classNames(
             active === "today"
               ? "bg-gray-200 text-gray-900"
@@ -116,8 +116,8 @@ export const Sidebar = () => {
               />
             </svg>
           </span>
-          <span>Today's Actions</span>
-        </li>
+          <span>Today</span>
+        </li> */}
         <li
           data-testid="today"
           className={classNames(
