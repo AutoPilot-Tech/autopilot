@@ -12,6 +12,7 @@ import {Footer} from "../components/layout/Footer";
 import SyncLoader from "react-spinners/SyncLoader";
 import {useLoadingValue} from "../context/loading-context";
 import {css} from "@emotion/react";
+import {Banner} from "../components/layout/Banner";
 
 // note: see src/context. Since we want to use tracksprovider at the
 // top level, we are using it here in App. This can be replaced
@@ -21,6 +22,7 @@ export const Dashboard = ({darkModeDefault = true}) => {
   // const {loading, setLoading} = useLoadingValue();
   const [userLoading, setUserLoading] = useState(true);
   const {setDisplayName, setPhotoUrl} = useLoadingValue();
+  const [showBanner, setShowBanner] = useState(true);
   // const {tracksLoading, setTracksLoading} = useLoadingValue();
   // get user from context
 
@@ -62,12 +64,13 @@ export const Dashboard = ({darkModeDefault = true}) => {
           autoHeight
           autoHeightMin={0}
           // see all of the content
-          autoHeightMax={'100vh'}
+          autoHeightMax={"100vh"}
           // renderTrackVertical={props => <div {...props} className="track-vertical"/>}
           // renderThumbVertical={props => <div {...props} className="thumb-vertical"/>}
         >
-          <div data-testid="application" className="min-h-screen grow">
+          <div className="min-h-screen grow flex flex-col">
             <Header darkMode={darkMode} setDarkMode={setDarkMode} />
+            {showBanner ? (<Banner setShowBanner={setShowBanner}/>) : null}
             <Content />
 
             {/* <Footer /> */}

@@ -20,7 +20,7 @@ export const Sidebar = () => {
   }
 
   return (
-    <nav className="fixed space-y-1 float-left flex flex-col pl-6 shadow pt-16 h-screen w-72">
+    <nav className="fixed space-y-1 float-left flex flex-col pl-6 shadow pt-2 h-screen w-72">
       <ul className="pt-2 pr-1">
         <li
           className={classNames(
