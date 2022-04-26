@@ -1,5 +1,4 @@
-import {PlusIcon} from "@heroicons/react/solid";
-import {AddTaskNew} from "./AddTaskNew";
+import {CreateAction} from "./CreateAction";
 
 export function EmptyStateTasks() {
   return (
@@ -24,7 +23,7 @@ export function EmptyStateTasks() {
         Get started by creating a new action.
       </p>
       <div className="mt-6">
-        <AddTaskNew />
+        <CreateAction />
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import moment from "moment";
 import {db, auth} from "../firebase";
-import {AddTaskNew} from "./AddTaskNew";
+import {CreateAction} from "./CreateAction";
 
 export function CurrentTasks() {
   const [currentTasks, setCurrentTasks] = useState([]);
@@ -72,7 +72,7 @@ export function CurrentTasks() {
           </p> */}
         </div>
         <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-          <AddTaskNew />
+          <CreateAction />
         </div>
       </div>
       <div className="mt-8 flex flex-col">
@@ -86,7 +86,7 @@ export function CurrentTasks() {
                       scope="col"
                       className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
                     >
-                      Task
+                      Action
                     </th>
                     {/* <th
                       scope="col"

@@ -2,15 +2,12 @@ import React, {useState, useEffect, Fragment} from "react";
 import moment from "moment";
 import {db, auth} from "../firebase";
 import {useTracksValue} from "../context/tracks-context";
-
-import DateTimePicker from "@mui/lab/DateTimePicker";
-import TextField from "@mui/material/TextField";
 import {amplitude} from "../utilities/amplitude";
 import {Transition, Dialog} from "@headlessui/react";
 import {PlusIcon} from "@heroicons/react/solid";
 import {useTasks} from "../hooks/index";
 
-export const AddTaskNew = ({shouldShowMain = false}) => {
+export const CreateAction = ({shouldShowMain = false}) => {
   const {selectedTrack} = useTracksValue();
   const {tasksLength} = useTasks(selectedTrack);
   const [isOpen, setIsOpen] = useState(false);
@@ -157,18 +154,7 @@ export const AddTaskNew = ({shouldShowMain = false}) => {
                   >
                     Schedule Action
                   </Dialog.Title>
-                  {/* <div className="mt-2">
-                    <TrackOverlay
-                      setTrack={setTrack}
-                      showTrackOverlay={showTrackOverlay}
-                      setShowTrackOverlay={setShowTrackOverlay}
-                    />
-                  </div> */}
-                  {/* <TaskDate
-                    setTaskDate={setTaskDate}
-                    showTaskDate={showTaskDate}
-                    setShowTaskDate={setShowTaskDate}
-                  /> */}
+
                   <div className="mt-4 mb-4 grid grid-cols-2 gap-4">
                     {/* <DateTimePicker
                       renderInput={(props) => <TextField {...props} />}

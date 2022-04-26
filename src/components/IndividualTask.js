@@ -112,7 +112,7 @@ export function IndividualTask({task, index, moveListItem}) {
 
   // Make items being dragged transparent, so it's easier to see where we drop them
 
-  const navigation = [{name: "Delete Task", onClick: openModal}];
+  const navigation = [{name: "Delete", onClick: openModal}];
 
   function closeModal() {
     setIsOpen(false);
@@ -309,11 +309,11 @@ export function IndividualTask({task, index, moveListItem}) {
                     as="h3"
                     className="text-lg font-medium leading-6 text-gray-900"
                   >
-                    Delete Task
+                    Delete Action
                   </Dialog.Title>
                   <div className="mt-2">
                     <p className="text-sm text-gray-500">
-                      Are you sure you want to delete this task? This action
+                      Are you sure you want to delete this action? This action
                       cannot be undone.
                     </p>
                   </div>

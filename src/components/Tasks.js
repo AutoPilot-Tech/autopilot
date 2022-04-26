@@ -11,11 +11,8 @@ import {RoutineSettings} from "./RoutineSettings";
 import {db} from "../firebase";
 import {TaskHeader} from "./TaskHeader";
 import {EmptyStateTasks} from "./EmptyStateTasks";
-import {ColorSettings} from "./ColorSettings";
-import {AddTaskNew} from "./AddTaskNew";
 import {AutopilotSettings} from "./AutopilotSettings";
 import {IndividualTask} from "./IndividualTask";
-import {Scrollbars} from "react-custom-scrollbars";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -23,20 +20,13 @@ function classNames(...classes) {
 
 // this just gets the tasks and renders them
 export const Tasks = () => {
-  const {tracks, selectedTrack, isRoutine, setIsRoutine} = useTracksValue();
+  const {tracks, selectedTrack, isRoutine} = useTracksValue();
   let {tasks, setTasks} = useTasks(selectedTrack);
   const [showCalendar, setShowCalendar] = useState(false);
   const [showChat, setShowChat] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-  const checkbox = useRef();
-  const [checked, setChecked] = useState(false);
-  const [selectedTasks, setSelectedTasks] = useState([]);
-  const [indeterminate, setIndeterminate] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
-
   const moveTaskListItem = useCallback((dragIndex, hoverIndex, tasks) => {
-    console.log("callback Ran");
-
     const dragTask = tasks[dragIndex].id;
     const hoverTask = tasks[hoverIndex].id;
 
@@ -55,8 +45,6 @@ export const Tasks = () => {
       index: dragIndex,
     });
   }, []);
-
- 
 
   const renderTask = useCallback((task) => {
     return (

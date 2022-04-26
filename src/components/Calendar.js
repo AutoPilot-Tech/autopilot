@@ -13,7 +13,8 @@ import {useTracksValue} from "../context/tracks-context";
 import {generatePushId} from "../helpers";
 import {CurrentTasks} from "./CurrentTasks";
 import {WelcomeBack} from "./WelcomeBack";
-import {AddTaskNew} from "./AddTaskNew";
+import {CreateAction} from "./CreateAction";
+import {Scrollbars} from "react-custom-scrollbars";
 
 const days = [
   {date: "2021-12-27"},
@@ -245,7 +246,7 @@ export function Calendar() {
                 </Menu.Items>
               </Transition>
             </Menu>
-            <div className="ml-6 h-6 w-px bg-gray-300" />
+            {/* <div className="ml-6 h-6 w-px bg-gray-300" /> */}
             {/* <button
               type="button"
               className="focus:outline-none ml-6 rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
@@ -370,240 +371,255 @@ export function Calendar() {
           </Menu>
         </div>
       </header>
-      <div className="flex flex-auto overflow-hidden bg-white">
-        <div ref={container} className="flex flex-auto flex-col overflow-auto">
+      <Scrollbars
+        autoHide
+        // autoHideTimeout={1000}
+        // autoHideDuration={200}
+        autoHeight
+        autoHeightMin={0}
+        // see all of the content
+        autoHeightMax={"100vh"}
+        // renderTrackVertical={props => <div {...props} className="track-vertical"/>}
+        // renderThumbVertical={props => <div {...props} className="thumb-vertical"/>}
+      >
+        <div className="flex flex-auto bg-white">
           <div
-            ref={containerNav}
-            className="sticky top-0 z-10 grid flex-none grid-cols-7 bg-white text-xs text-gray-500 shadow ring-1 ring-black ring-opacity-5 md:hidden"
+            ref={container}
+            className="flex flex-auto flex-col overflow-auto"
           >
-            <button
-              type="button"
-              className="flex flex-col items-center pt-3 pb-1.5"
+            <div
+              ref={containerNav}
+              className="sticky top-0 z-10 grid flex-none grid-cols-7 bg-white text-xs text-gray-500 shadow ring-1 ring-black ring-opacity-5 md:hidden"
             >
-              <span>W</span>
-              {/* Default: "text-gray-900", Selected: "bg-gray-900 text-white", Today (Not Selected): "text-indigo-600", Today (Selected): "bg-indigo-600 text-white" */}
-              <span className="mt-3 flex h-8 w-8 items-center justify-center rounded-full text-base font-semibold text-gray-900">
-                19
-              </span>
-            </button>
-            <button
-              type="button"
-              className="flex flex-col items-center pt-3 pb-1.5"
-            >
-              <span>T</span>
-              <span className="mt-3 flex h-8 w-8 items-center justify-center rounded-full text-base font-semibold text-indigo-600">
-                20
-              </span>
-            </button>
-            <button
-              type="button"
-              className="flex flex-col items-center pt-3 pb-1.5"
-            >
-              <span>F</span>
-              <span className="mt-3 flex h-8 w-8 items-center justify-center rounded-full text-base font-semibold text-gray-900">
-                21
-              </span>
-            </button>
-            <button
-              type="button"
-              className="flex flex-col items-center pt-3 pb-1.5"
-            >
-              <span>S</span>
-              <span className="mt-3 flex h-8 w-8 items-center justify-center rounded-full bg-gray-900 text-base font-semibold text-white">
-                22
-              </span>
-            </button>
-            <button
-              type="button"
-              className="flex flex-col items-center pt-3 pb-1.5"
-            >
-              <span>S</span>
-              <span className="mt-3 flex h-8 w-8 items-center justify-center rounded-full text-base font-semibold text-gray-900">
-                23
-              </span>
-            </button>
-            <button
-              type="button"
-              className="flex flex-col items-center pt-3 pb-1.5"
-            >
-              <span>M</span>
-              <span className="mt-3 flex h-8 w-8 items-center justify-center rounded-full text-base font-semibold text-gray-900">
-                24
-              </span>
-            </button>
-            <button
-              type="button"
-              className="flex flex-col items-center pt-3 pb-1.5"
-            >
-              <span>T</span>
-              <span className="mt-3 flex h-8 w-8 items-center justify-center rounded-full text-base font-semibold text-gray-900">
-                25
-              </span>
-            </button>
-          </div>
-          <div className="flex w-full flex-auto">
-            <div className="w-14 flex-none bg-white ring-1 ring-gray-100" />
-            <div className="grid flex-auto grid-cols-1 grid-rows-1">
-              {/* Horizontal lines */}
-              <div
-                className="col-start-1 col-end-2 row-start-1 grid divide-y divide-gray-100"
-                style={{gridTemplateRows: "repeat(48, minmax(3.5rem, 1fr))"}}
+              <button
+                type="button"
+                className="flex flex-col items-center pt-3 pb-1.5"
               >
-                <div ref={containerOffset} className="row-end-1 h-7"></div>
-                <div>
-                  <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    12AM
+                <span>W</span>
+                {/* Default: "text-gray-900", Selected: "bg-gray-900 text-white", Today (Not Selected): "text-indigo-600", Today (Selected): "bg-indigo-600 text-white" */}
+                <span className="mt-3 flex h-8 w-8 items-center justify-center rounded-full text-base font-semibold text-gray-900">
+                  19
+                </span>
+              </button>
+              <button
+                type="button"
+                className="flex flex-col items-center pt-3 pb-1.5"
+              >
+                <span>T</span>
+                <span className="mt-3 flex h-8 w-8 items-center justify-center rounded-full text-base font-semibold text-indigo-600">
+                  20
+                </span>
+              </button>
+              <button
+                type="button"
+                className="flex flex-col items-center pt-3 pb-1.5"
+              >
+                <span>F</span>
+                <span className="mt-3 flex h-8 w-8 items-center justify-center rounded-full text-base font-semibold text-gray-900">
+                  21
+                </span>
+              </button>
+              <button
+                type="button"
+                className="flex flex-col items-center pt-3 pb-1.5"
+              >
+                <span>S</span>
+                <span className="mt-3 flex h-8 w-8 items-center justify-center rounded-full bg-gray-900 text-base font-semibold text-white">
+                  22
+                </span>
+              </button>
+              <button
+                type="button"
+                className="flex flex-col items-center pt-3 pb-1.5"
+              >
+                <span>S</span>
+                <span className="mt-3 flex h-8 w-8 items-center justify-center rounded-full text-base font-semibold text-gray-900">
+                  23
+                </span>
+              </button>
+              <button
+                type="button"
+                className="flex flex-col items-center pt-3 pb-1.5"
+              >
+                <span>M</span>
+                <span className="mt-3 flex h-8 w-8 items-center justify-center rounded-full text-base font-semibold text-gray-900">
+                  24
+                </span>
+              </button>
+              <button
+                type="button"
+                className="flex flex-col items-center pt-3 pb-1.5"
+              >
+                <span>T</span>
+                <span className="mt-3 flex h-8 w-8 items-center justify-center rounded-full text-base font-semibold text-gray-900">
+                  25
+                </span>
+              </button>
+            </div>
+            <div className="flex w-full flex-auto overscroll-auto">
+              <div className="w-14 flex-none bg-white ring-1 ring-gray-100" />
+              <div className="grid flex-auto grid-cols-1 grid-rows-1">
+                {/* Horizontal lines */}
+                <div
+                  className="col-start-1 col-end-2 row-start-1 grid divide-y divide-gray-100"
+                  style={{gridTemplateRows: "repeat(48, minmax(3.5rem, 1fr))"}}
+                >
+                  <div ref={containerOffset} className="row-end-1 h-7"></div>
+                  <div>
+                    <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
+                      12AM
+                    </div>
                   </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    1AM
+                  <div />
+                  <div>
+                    <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
+                      1AM
+                    </div>
                   </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    2AM
+                  <div />
+                  <div>
+                    <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
+                      2AM
+                    </div>
                   </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    3AM
+                  <div />
+                  <div>
+                    <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
+                      3AM
+                    </div>
                   </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    4AM
+                  <div />
+                  <div>
+                    <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
+                      4AM
+                    </div>
                   </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    5AM
+                  <div />
+                  <div>
+                    <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
+                      5AM
+                    </div>
                   </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    6AM
+                  <div />
+                  <div>
+                    <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
+                      6AM
+                    </div>
                   </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    7AM
+                  <div />
+                  <div>
+                    <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
+                      7AM
+                    </div>
                   </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    8AM
+                  <div />
+                  <div>
+                    <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
+                      8AM
+                    </div>
                   </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    9AM
+                  <div />
+                  <div>
+                    <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
+                      9AM
+                    </div>
                   </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    10AM
+                  <div />
+                  <div>
+                    <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
+                      10AM
+                    </div>
                   </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    11AM
+                  <div />
+                  <div>
+                    <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
+                      11AM
+                    </div>
                   </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    12PM
+                  <div />
+                  <div>
+                    <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
+                      12PM
+                    </div>
                   </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    1PM
+                  <div />
+                  <div>
+                    <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
+                      1PM
+                    </div>
                   </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    2PM
+                  <div />
+                  <div>
+                    <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
+                      2PM
+                    </div>
                   </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    3PM
+                  <div />
+                  <div>
+                    <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
+                      3PM
+                    </div>
                   </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    4PM
+                  <div />
+                  <div>
+                    <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
+                      4PM
+                    </div>
                   </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    5PM
+                  <div />
+                  <div>
+                    <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
+                      5PM
+                    </div>
                   </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    6PM
+                  <div />
+                  <div>
+                    <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
+                      6PM
+                    </div>
                   </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    7PM
+                  <div />
+                  <div>
+                    <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
+                      7PM
+                    </div>
                   </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    8PM
+                  <div />
+                  <div>
+                    <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
+                      8PM
+                    </div>
                   </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    9PM
+                  <div />
+                  <div>
+                    <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
+                      9PM
+                    </div>
                   </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    10PM
+                  <div />
+                  <div>
+                    <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
+                      10PM
+                    </div>
                   </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    11PM
+                  <div />
+                  <div>
+                    <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
+                      11PM
+                    </div>
                   </div>
+                  <div />
                 </div>
-                <div />
-              </div>
 
-              {/* Routines */}
-              <ol
-                className="col-start-1 col-end-2 row-start-1 grid grid-cols-1"
-                style={{
-                  gridTemplateRows: "1.75rem repeat(288, minmax(0, 1fr)) auto",
-                }}
-              >
-                {/* <li
+                {/* Routines */}
+                <ol
+                  className="col-start-1 col-end-2 row-start-1 grid grid-cols-1"
+                  style={{
+                    gridTemplateRows:
+                      "1.75rem repeat(288, minmax(0, 1fr)) auto",
+                  }}
+                >
+                  {/* <li
                   className="relative mt-px flex"
                   style={{ gridRow: '74 / span 12' }}
                 >
@@ -620,7 +636,7 @@ export function Calendar() {
                   </a>
                 </li> */}
 
-                {/* <li
+                  {/* <li
                   className="relative mt-px flex"
                   style={{ gridRow: '92 / span 30' }}
                 >
@@ -639,7 +655,7 @@ export function Calendar() {
                     </p>
                   </a>
                 </li> */}
-                {/* <li
+                  {/* <li
                   className="relative mt-px flex"
                   style={{ gridRow: '134 / span 18' }}
                 >
@@ -677,14 +693,12 @@ export function Calendar() {
                     </p>
                   </a>
                 </li> */}
-              </ol>
+                </ol>
+              </div>
             </div>
           </div>
         </div>
-        <div className="hidden w-1/2 max-w-md h-10 flex-none border-l border-gray-100 py-10 px-8 md:block">
-          <CurrentTasks />
-        </div>
-      </div>
+      </Scrollbars>
     </div>
   );
 }
