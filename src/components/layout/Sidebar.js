@@ -116,7 +116,7 @@ export const Sidebar = () => {
               />
             </svg>
           </span>
-          <span>Today's Tasks</span>
+          <span>Today's Actions</span>
         </li>
         <li
           data-testid="today"

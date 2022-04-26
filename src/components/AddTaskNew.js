@@ -1,10 +1,8 @@
 import React, {useState, useEffect, Fragment} from "react";
-import {FaRegListAlt, FaRegCalendarAlt, FaRegCalendar} from "react-icons/fa";
 import moment from "moment";
 import {db, auth} from "../firebase";
 import {useTracksValue} from "../context/tracks-context";
-import {TrackOverlay} from "./TrackOverlay";
-import {TaskDate} from "./TaskDate";
+
 import DateTimePicker from "@mui/lab/DateTimePicker";
 import TextField from "@mui/material/TextField";
 import {amplitude} from "../utilities/amplitude";
@@ -12,12 +10,7 @@ import {Transition, Dialog} from "@headlessui/react";
 import {PlusIcon} from "@heroicons/react/solid";
 import {useTasks} from "../hooks/index";
 
-export const AddTaskNew = ({
-  showAddTaskMain = true,
-  shouldShowMain = false,
-  showQuickAddTask,
-  setShowQuickAddTask,
-}) => {
+export const AddTaskNew = ({shouldShowMain = false}) => {
   const {selectedTrack} = useTracksValue();
   const {tasksLength} = useTasks(selectedTrack);
   const [isOpen, setIsOpen] = useState(false);
@@ -30,11 +23,7 @@ export const AddTaskNew = ({
   const [showTrackOverlay, setShowTrackOverlay] = useState(false);
   const [showTaskDate, setShowTaskDate] = useState(false);
   const [user, setUser] = useState(null);
-  // Show the second modal for setting the task date and time
-  const [showTaskDateMain, setShowTaskDateMain] = useState(false);
-  // Show date picker with react-dates
-  const [showCalendarOverlay, setShowCalendarOverlay] = useState(false);
-  const [value, setValue] = useState("");
+
   const [startValue, setStartValue] = useState("");
   const [endValue, setEndValue] = useState("");
 
@@ -98,10 +87,6 @@ export const AddTaskNew = ({
           trackId: trackId,
           task: task,
           title: task,
-          // need to figure out what to do with this, if its a collated
-          // bc we often will be setting start times and end times
-          // startDate: taskStartDate,
-          // endDate: taskEndDate,
           date: collatedDate || taskDate,
           start: taskStartDate,
           end: taskEndDate,
@@ -128,7 +113,7 @@ export const AddTaskNew = ({
           onClick={openModal}
         >
           <PlusIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-          Add Task
+          New Action
         </button>
         <Transition appear show={isOpen} as={Fragment}>
           <Dialog
@@ -170,7 +155,7 @@ export const AddTaskNew = ({
                     as="h3"
                     className="text-lg font-medium leading-6 text-gray-900"
                   >
-                    Add New Task
+                    Schedule Action
                   </Dialog.Title>
                   {/* <div className="mt-2">
                     <TrackOverlay
@@ -185,9 +170,9 @@ export const AddTaskNew = ({
                     setShowTaskDate={setShowTaskDate}
                   /> */}
                   <div className="mt-4 mb-4 grid grid-cols-2 gap-4">
-                    <DateTimePicker
+                    {/* <DateTimePicker
                       renderInput={(props) => <TextField {...props} />}
-                      label="Start Date"
+                      label="Start time (optional)"
                       value={startValue}
                       onChange={(newValue) => {
                         setStartValue(newValue);
@@ -197,7 +182,7 @@ export const AddTaskNew = ({
 
                     <DateTimePicker
                       renderInput={(props) => <TextField {...props} />}
-                      label="End Date"
+                      label="End time (optional)"
                       value={endValue}
                       onChange={(newValue) => {
                         setEndValue(newValue);
@@ -206,10 +191,9 @@ export const AddTaskNew = ({
                       onClick={() => {
                         logClick("taskEndDateClick");
                       }}
-                    />
+                    /> */}
                   </div>
                   <div className="flex flex-col">
-                    <label className="mb-2 mt-2 text-gray-900">Task Name</label>
                     <input
                       className="mt-3 w-full p-2 rounded-md text-gray-900 placeholder-gray-500 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out"
                       data-testid="add-task-content"
@@ -217,6 +201,7 @@ export const AddTaskNew = ({
                       value={task}
                       onChange={(e) => setTask(e.target.value)}
                       onKeyDown={handleKeypress}
+                      placeholder="Action name"
                     />
                   </div>
 
@@ -252,7 +237,7 @@ export const AddTaskNew = ({
                       className="m-auto inline-flex justify-center px-4 py-2 text-sm font-medium text-green-900 bg-green-100 border border-transparent rounded-md hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-green-500"
                       onClick={addTask}
                     >
-                      Add Task
+                      Schedule
                     </button>
                   </div>
                 </div>
