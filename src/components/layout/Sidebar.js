@@ -3,7 +3,7 @@ import {Routines} from "../Routines";
 import {useTracksValue} from "../../context/tracks-context";
 import {amplitude} from "../../utilities/amplitude";
 import {auth} from "../../firebase";
-import {AddTrackNew} from "../AddTrackNew";
+import {AddRoutine} from "../AddRoutine";
 
 export const Sidebar = () => {
   const {setSelectedTrack, setIsRoutine} = useTracksValue();
@@ -160,7 +160,7 @@ export const Sidebar = () => {
       >
         <div className="grid grid-cols-2 mt-5 mb-2 pr-1">
           <p className="pl-2 float-left text-gray-400 font-medium">Routines</p>
-          <AddTrackNew />
+          <AddRoutine />
         </div>
       </div>
       <ul>{<Routines active={active} setActive={setActive} />}</ul>

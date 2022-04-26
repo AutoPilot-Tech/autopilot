@@ -1,15 +1,27 @@
-import React, { useEffect, useState } from 'react';
-import { generatePushId } from '../helpers';
-import { db, auth } from '../firebase';
-import { useTracksValue } from '../context/tracks-context';
-import { amplitude } from '../utilities/amplitude';
-import { getRandomColor } from '../helpers/index';
+import React, {useState, useEffect, Fragment} from "react";
+import {db, auth} from "../firebase";
+import {generatePushId} from "../helpers";
+import {useTracksValue} from "../context/tracks-context";
+import {amplitude} from "../utilities/amplitude";
+import {getRandomColor} from "../helpers/index";
+import {PlusIcon} from "@heroicons/react/solid";
+import {Transition, Dialog} from "@headlessui/react";
 
-export const AddRoutine = ({ shouldShow = false }) => {
-  const [show, setShow] = useState(shouldShow);
-  const [trackName, setTrackName] = useState('');
+export const AddRoutine = ({shouldShow = false}) => {
   const [user, setUser] = useState(null);
-  const [recurring, setRecurring] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [projectName, setProjectName] = useState("");
+
+  const trackId = generatePushId();
+  const {tracks, setTracks} = useTracksValue();
+
+  function closeModal() {
+    setIsOpen(false);
+  }
+
+  function openModal() {
+    setIsOpen(true);
+  }
 
   useEffect(() => {
     let unsubscribe = auth.onAuthStateChanged((user) => {
@@ -23,89 +35,45 @@ export const AddRoutine = ({ shouldShow = false }) => {
     return unsubscribe;
   }, []);
 
-  const trackId = generatePushId();
-  const { tracks, setTracks } = useTracksValue();
-
-  const logClick = () => {
-    let userId = auth.currentUser.uid;
-    amplitude.getInstance().logEvent('sideBarAddRoutineClick', userId);
+  const handleKeypress = (e) => {
+    //it triggers by pressing the enter key
+    if (e.keyCode === 13) {
+      addTrack();
+      closeModal();
+    }
   };
 
-  const addRoutine = () => {
+  const addTrack = () => {
     let trackColor = getRandomColor();
-    trackName &&
+    projectName &&
       db
-        .collection('tracks')
+        .collection("tracks")
         .add({
           trackId,
-          name: trackName,
+          name: projectName,
           userId: user,
-          routine: true,
+          routine: false,
           textColor: `text-${trackColor}-500`,
           bgColor: `bg-${trackColor}-50`,
         })
         .then(() => {
           tracks.push({
             trackId,
-            name: trackName,
+            name: projectName,
             userId: user,
-            routine: true,
-            textColor: `text-${trackColor}-500`,
-            bgColor: `bg-${trackColor}-50`,
+            routine: false,
+            color: trackColor,
           });
           setTracks([...tracks]);
-          setTrackName('');
-          setShow(false);
+          setProjectName("");
+          closeModal();
         });
   };
   return (
-    <div
-      className="float-right mt-3 mr-5 cursor-pointer"
-    >
-      {show && (
-        <div className="add-track__input">
-          <input
-            value={trackName}
-            onChange={(e) => setTrackName(e.target.value)}
-            className="add-trck__name"
-            data-testid="track-name"
-            type="text"
-            placeholder="Name your project"
-          />
-          <button
-            className="add-track__submit"
-            type="button"
-            onClick={() => {
-              addRoutine();
-              logClick();
-            }}
-            data-testid="add-track-submit"
-          >
-            Add Routine
-          </button>
-          {/* checkbox with label */}
-          <label className="add-track__recurring">
-            <input
-              type="checkbox"
-              checked={recurring}
-              onChange={() => setRecurring(!recurring)}
-              className="add-track__recurring-input"
-            />
-            <span className="add-track__recurring-label">Recurring?</span>
-          </label>
-
-          <span
-            data-testid="hide-track-overlay"
-            className="add-track__cancel"
-            onClick={() => setShow(false)}
-          >
-            Cancel
-          </span>
-        </div>
-      )}
+    <div className="mr-5 mt-0.5 cursor-pointer">
       <span
-        className="text-gray-400 cursor-pointer hover:rounded-md hover:text-gray-900 hover:bg-gray-200 text-lg"
-        onClick={() => setShow(!show)}
+        className="p-0 float-right text-gray-400 cursor-pointer  hover:rounded-md hover:text-gray-900 hover:bg-gray-200 text-lg"
+        onClick={openModal}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -120,11 +88,82 @@ export const AddRoutine = ({ shouldShow = false }) => {
           />
         </svg>
       </span>
-      <span
-        data-testid="add-track-action"
-        className="add-track__text"
-        onClick={() => setShow(!show)}
-      ></span>
+      <Transition appear show={isOpen} as={Fragment}>
+        <Dialog
+          as="div"
+          className="fixed inset-0 z-10 overflow-y-auto"
+          onClose={closeModal}
+        >
+          <div className="min-h-screen px-4 text-center">
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0"
+              enterTo="opacity-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
+            >
+              <Dialog.Overlay className="fixed inset-0" />
+            </Transition.Child>
+
+            {/* This element is to trick the browser into centering the modal contents. */}
+            <span
+              className="inline-block h-screen align-middle"
+              aria-hidden="true"
+            >
+              &#8203;
+            </span>
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0 scale-95"
+              enterTo="opacity-100 scale-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100 scale-100"
+              leaveTo="opacity-0 scale-95"
+            >
+              <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+                <Dialog.Title
+                  as="h3"
+                  className="text-lg font-medium leading-6 text-gray-900"
+                >
+                  Add New Routine
+                </Dialog.Title>
+
+                <div className="flex flex-col">
+                  <input
+                    className="mt-3 w-full p-2 rounded-md text-gray-900 placeholder-gray-500 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out"
+                    data-testid="add-task-content"
+                    type="text"
+                    value={projectName}
+                    onChange={(e) => setProjectName(e.target.value)}
+                    placeholder="Routine Name"
+                    onKeyDown={handleKeypress}
+                  />
+                </div>
+
+                <div className="mt-4 grid grid-cols-2">
+                  <button
+                    type="button"
+                    className="m-auto inline-flex justify-center px-4 py-2 text-sm font-medium text-red-900 bg-red-100 border border-transparent rounded-md hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-red-500"
+                    onClick={closeModal}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    className="m-auto inline-flex justify-center px-4 py-2 text-sm font-medium text-green-900 bg-green-100 border border-transparent rounded-md hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-green-500"
+                    onClick={addTrack}
+                  >
+                    Add Routine
+                  </button>
+                </div>
+              </div>
+            </Transition.Child>
+          </div>
+        </Dialog>
+      </Transition>
     </div>
   );
 };

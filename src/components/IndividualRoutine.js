@@ -2,40 +2,7 @@ import React, {useState, Fragment, useRef, useEffect} from "react";
 import {FaTrash, FaTrashAlt} from "react-icons/fa";
 import {useTracksValue} from "../context/tracks-context";
 import {db} from "../firebase";
-import {Menu, Popover, Transition, Dialog} from "@headlessui/react";
-import {SearchIcon} from "@heroicons/react/solid";
-import {BellIcon, MenuIcon, XIcon} from "@heroicons/react/outline";
-import {Modal} from "./Modal";
-import {FormControlUnstyledContext} from "@mui/material/node_modules/@mui/base";
-
-const user = {
-  name: "Chelsea Hagon",
-  email: "chelsea.hagon@example.com",
-  imageUrl:
-    "https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-};
-
-// function DeletionDialog() {
-//   let [isOpen, setIsOpen] = useState(true);
-
-//   return (
-//     <Dialog open={isOpen} onClose={() => setIsOpen(false)}>
-//       <Dialog.Overlay />
-
-//       <Dialog.Title>Delete track</Dialog.Title>
-//       <Dialog.Description>
-//         This will permanently delete this track
-//       </Dialog.Description>
-
-//       <p>
-//         Are you sure you want to delete this track? This action cannot be undone.
-//       </p>
-
-//       <button onClick={() => setIsOpen(false)}>Cancel</button>
-//       <button onClick={() => setIsOpen(false)}>Delete</button>
-//     </Dialog>
-//   )
-// }
+import {Menu, Transition, Dialog} from "@headlessui/react";
 
 /**
  * Hook that alerts clicks outside of the passed ref
@@ -74,7 +41,7 @@ export default function OutsideAlerter(props) {
   return <div ref={wrapperRef}>{props.children}</div>;
 }
 
-export const IndividualTrack = ({track}) => {
+export const IndividualRoutine = ({track}) => {
   let [isOpen, setIsOpen] = useState(false);
   const {tracks, setTracks, setSelectedTrack} = useTracksValue();
   const [openSettings, setOpenSettings] = useState(false);
@@ -102,7 +69,7 @@ export const IndividualTrack = ({track}) => {
     return classes.filter(Boolean).join(" ");
   }
 
-  const navigation = [{name: "Delete Project", onClick: openModal}];
+  const navigation = [{name: "Delete Routine", onClick: openModal}];
 
   return (
     <>
@@ -232,11 +199,11 @@ export const IndividualTrack = ({track}) => {
                   as="h3"
                   className="text-lg font-medium leading-6 text-gray-900"
                 >
-                  Delete track
+                  Delete routine
                 </Dialog.Title>
                 <div className="mt-2">
                   <p className="text-sm text-gray-500">
-                    Are you sure you want to delete this track? This action
+                    Are you sure you want to delete this routine? This action
                     cannot be undone.
                   </p>
                 </div>

@@ -66,6 +66,14 @@ export const AddTaskNew = ({
 
   // get tasks for this track then get length
 
+  const handleKeypress = (e) => {
+    //it triggers by pressing the enter key
+    if (e.keyCode === 13) {
+      addTask();
+      closeModal();
+    }
+  };
+
   const addTask = () => {
     // if tasks is undefined, set taskLength to 0
 
@@ -203,11 +211,12 @@ export const AddTaskNew = ({
                   <div className="flex flex-col">
                     <label className="mb-2 mt-2 text-gray-900">Task Name</label>
                     <input
-                      className="add-task__content"
+                      className="mt-3 w-full p-2 rounded-md text-gray-900 placeholder-gray-500 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out"
                       data-testid="add-task-content"
                       type="text"
                       value={task}
                       onChange={(e) => setTask(e.target.value)}
+                      onKeyDown={handleKeypress}
                     />
                   </div>
 

@@ -1,6 +1,6 @@
-import React, {useState} from "react";
+import React from "react";
 import {useTracksValue} from "../context/tracks-context";
-import {IndividualTrack} from "./IndividualTrack";
+import {IndividualRoutine} from "./IndividualRoutine";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -35,7 +35,7 @@ export const Routines = ({active, setActive}) => {
                 setIsRoutine(false);
               }}
             >
-              <IndividualTrack track={track} />
+              <IndividualRoutine track={track} />
             </li>
           ))}
     </div>
