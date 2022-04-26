@@ -3,8 +3,8 @@ import {SpeakerphoneIcon, XIcon} from "@heroicons/react/outline";
 
 export const Banner = ({setShowBanner}) => {
   return (
-    <div className="bg-indigo-700">
-      <div className="py-3 px-3 sm:px-6 lg:px-8 max-w-full">
+    <div className="bg-indigo-700 fixed left-0 bottom-0 right-0 z-50 order-1">
+      <div className="py-3 px-3 sm:px-6 lg:px-8 max-w-full ">
         <div className="flex items-center justify-between flex-wrap">
           <div className="w-0 flex-1 flex items-center">
             <span className="flex p-2 rounded-lg bg-indigo-800">
