@@ -59,21 +59,14 @@ export const Dashboard = ({darkModeDefault = true}) => {
       <TracksProvider>
         <Scrollbars
           autoHide
-          // autoHideTimeout={1000}
-          // autoHideDuration={200}
           autoHeight
           autoHeightMin={0}
-          // see all of the content
           autoHeightMax={"100vh"}
-          // renderTrackVertical={props => <div {...props} className="track-vertical"/>}
-          // renderThumbVertical={props => <div {...props} className="thumb-vertical"/>}
         >
-          <div className="min-h-screen grow flex flex-col">
-            <Header darkMode={darkMode} setDarkMode={setDarkMode} />
-            {showBanner ? (<Banner setShowBanner={setShowBanner}/>) : null}
+          <Header darkMode={darkMode} setDarkMode={setDarkMode} />
+          <div className="pt-14 flex flex-col">
+            {showBanner ? <Banner setShowBanner={setShowBanner} /> : null}
             <Content />
-
-            {/* <Footer /> */}
           </div>
         </Scrollbars>
       </TracksProvider>

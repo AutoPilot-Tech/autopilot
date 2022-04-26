@@ -57,7 +57,7 @@ export function Header() {
       >
         {({open}) => (
           <>
-            <div className="shadow mx-auto px-4 sm:px-6 lg:px-8 pr-44 z-50 bg-white min-w-full">
+            <div className="fixed shadow mx-auto px-4 sm:px-6 lg:px-8 pr-44 z-50 bg-white min-w-full">
               <div className="flex justify-between xl:grid lg:gap-8 xl:grid-cols-12">
                 <div className="flex md:absolute md:left-0 md:inset-y-0 lg:static xl:col-span-2">
                   <div className="flex-shrink-0 flex items-center mr-10">
