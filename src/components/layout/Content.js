@@ -7,7 +7,7 @@ import {Banner} from "./Banner";
 
 export const Content = () => {
   return (
-    <div className="grow flex-row mb-48 order-2">
+    <div className="relative grow flex-row mb-48 order-2 top-14" id="content">
       <Sidebar />
       <Tasks />
     </div>

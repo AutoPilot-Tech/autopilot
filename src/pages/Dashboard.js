@@ -64,7 +64,7 @@ export const Dashboard = ({darkModeDefault = true}) => {
           autoHeightMax={"100vh"}
         >
           <Header darkMode={darkMode} setDarkMode={setDarkMode} />
-          <div className="pt-14 flex flex-col">
+          <div>
             {showBanner ? <Banner setShowBanner={setShowBanner} /> : null}
             <Content />
           </div>

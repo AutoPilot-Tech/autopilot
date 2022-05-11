@@ -75,7 +75,6 @@ export function WelcomeBack() {
   ];
 
   function getGreeting() {
-    console.log("running");
     const greeting =
       currentHour >= 0 && currentHour < 3
         ? greeting1[Math.floor(Math.random() * greeting1.length)]

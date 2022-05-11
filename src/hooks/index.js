@@ -101,6 +101,7 @@ export const useEvents = () => {
 
 // this is constantly getting new tracks
 export const useTasks = (selectedTrack) => {
+  console.log("use tasks");
   const [tasks, setTasks] = useState([]);
   const [archivedTasks, setArchivedTasks] = useState([]);
   const [tasksLength, setTasksLength] = useState(0);
@@ -168,6 +169,7 @@ export const useActive = () => {
 // this one will be pulling tracks only once, and only changes
 // when there is new tracks
 export const useTracks = () => {
+  console.log("use tracks");
   const [tracks, setTracks] = useState([]);
   const {setTracksLoading} = useLoadingValue();
 

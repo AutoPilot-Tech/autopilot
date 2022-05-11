@@ -25,25 +25,12 @@ export const CreateAction = ({shouldShowMain = false}) => {
   const [endValue, setEndValue] = useState("");
 
   function closeModal() {
-    console.log("closing modal");
     setIsOpen(false);
   }
 
   function openModal() {
     setIsOpen(true);
   }
-
-  useEffect(() => {
-    let unsubscribe = auth.onAuthStateChanged((user) => {
-      if (user) {
-        // this is the user's id
-        setUser(user.uid);
-      } else {
-        setUser(null);
-      }
-    });
-    return unsubscribe;
-  }, []);
 
   const logClick = (event) => {
     let userId = auth.currentUser.uid;
@@ -62,7 +49,7 @@ export const CreateAction = ({shouldShowMain = false}) => {
 
   const addTask = () => {
     // if tasks is undefined, set taskLength to 0
-
+    const user = auth.currentUser.uid;
     const trackId = track || selectedTrack;
     let collatedDate = "";
     // generate key for this task
@@ -107,7 +94,7 @@ export const CreateAction = ({shouldShowMain = false}) => {
         <button
           type="button"
           className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          onClick={openModal}
+          onClick={() => openModal()}
         >
           <PlusIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
           New Action
@@ -186,7 +173,7 @@ export const CreateAction = ({shouldShowMain = false}) => {
                       type="text"
                       value={task}
                       onChange={(e) => setTask(e.target.value)}
-                      onKeyDown={handleKeypress}
+                      onKeyDown={(e) => handleKeypress(e)}
                       placeholder="Action name"
                     />
                   </div>
@@ -214,14 +201,14 @@ export const CreateAction = ({shouldShowMain = false}) => {
                     <button
                       type="button"
                       className="m-auto inline-flex justify-center px-4 py-2 text-sm font-medium text-red-900 bg-red-100 border border-transparent rounded-md hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-red-500"
-                      onClick={closeModal}
+                      onClick={() => closeModal()}
                     >
                       Cancel
                     </button>
                     <button
                       type="button"
                       className="m-auto inline-flex justify-center px-4 py-2 text-sm font-medium text-green-900 bg-green-100 border border-transparent rounded-md hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-green-500"
-                      onClick={addTask}
+                      onClick={() => addTask()}
                     >
                       Schedule
                     </button>

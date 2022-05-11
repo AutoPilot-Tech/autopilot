@@ -44,6 +44,7 @@ export const AddRoutine = ({shouldShow = false}) => {
   };
 
   const addTrack = () => {
+    console.log("Adding routine");
     let trackColor = getRandomColor();
     projectName &&
       db
@@ -73,7 +74,7 @@ export const AddRoutine = ({shouldShow = false}) => {
     <div className="mr-5 mt-0.5 cursor-pointer">
       <span
         className="p-0 float-right text-gray-400 cursor-pointer  hover:rounded-md hover:text-gray-900 hover:bg-gray-200 text-lg"
-        onClick={openModal}
+        onClick={() => openModal()}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -92,7 +93,7 @@ export const AddRoutine = ({shouldShow = false}) => {
         <Dialog
           as="div"
           className="fixed inset-0 z-10 overflow-y-auto"
-          onClose={closeModal}
+          onClose={() => closeModal()}
         >
           <div className="min-h-screen px-4 text-center">
             <Transition.Child
@@ -139,7 +140,7 @@ export const AddRoutine = ({shouldShow = false}) => {
                     value={projectName}
                     onChange={(e) => setProjectName(e.target.value)}
                     placeholder="Routine Name"
-                    onKeyDown={handleKeypress}
+                    onKeyDown={(e) => handleKeypress(e)}
                   />
                 </div>
 
@@ -147,14 +148,14 @@ export const AddRoutine = ({shouldShow = false}) => {
                   <button
                     type="button"
                     className="m-auto inline-flex justify-center px-4 py-2 text-sm font-medium text-red-900 bg-red-100 border border-transparent rounded-md hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-red-500"
-                    onClick={closeModal}
+                    onClick={() => closeModal()}
                   >
                     Cancel
                   </button>
                   <button
                     type="button"
                     className="m-auto inline-flex justify-center px-4 py-2 text-sm font-medium text-green-900 bg-green-100 border border-transparent rounded-md hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-green-500"
-                    onClick={addTrack}
+                    onClick={() => addTrack()}
                   >
                     Add Routine
                   </button>

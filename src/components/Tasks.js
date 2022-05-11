@@ -1,4 +1,5 @@
 import React, {useEffect, useState, useRef, useCallback} from "react";
+import update from "immutability-helper";
 
 import {useTasks} from "../hooks";
 import {collatedTasks} from "../constants";
@@ -26,27 +27,23 @@ export const Tasks = () => {
   const [showChat, setShowChat] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
-  const moveTaskListItem = useCallback((dragIndex, hoverIndex, tasks) => {
-    const dragTask = tasks[dragIndex].id;
-    const hoverTask = tasks[hoverIndex].id;
 
-    // setTasks((prevTasks) =>
-    //   update(prevTasks, {
-    //     $splice: [
-    //       [dragIndex, 1],
-    //       [hoverIndex, 0, prevTasks[dragIndex]],
-    //     ],
-    //   })
-    // );
-    db.collection("tasks").doc(dragTask).update({
-      index: hoverIndex,
-    });
-    db.collection("tasks").doc(hoverTask).update({
-      index: dragIndex,
-    });
+  const tasksRef = useRef(tasks);
+
+  const moveTaskListItem = useCallback((dragIndex, hoverIndex) => {
+    setTasks((prevTasks) =>
+      update(prevTasks, {
+        $splice: [
+          [dragIndex, 1],
+          [hoverIndex, 0, prevTasks[dragIndex]],
+        ],
+      })
+
+    );
+
   }, []);
 
-  const renderTask = useCallback((task) => {
+  const renderTask = useCallback((task, tasks) => {
     return (
       <li key={task.id}>
         <IndividualTask
@@ -54,6 +51,7 @@ export const Tasks = () => {
           key={task.id}
           index={task.index}
           moveListItem={moveTaskListItem}
+          tasks={tasks}
         />
       </li>
     );
@@ -126,7 +124,7 @@ export const Tasks = () => {
                 <div className="relative shadow ring-2 p-1 bg-white ring-black ring-opacity-5 md:rounded-lg ">
                   <div className="min-w-full divide-y divide-gray-300">
                     <div className="divide-y divide-gray-200 bg-white">
-                      <ul>{tasks.map((task) => renderTask(task))}</ul>
+                      <ul>{tasks.map((task) => renderTask(task, tasks))}</ul>
                     </div>
                   </div>
                 </div>

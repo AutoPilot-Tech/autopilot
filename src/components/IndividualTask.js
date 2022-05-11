@@ -46,12 +46,11 @@ export default function OutsideAlerter(props) {
   return <div ref={wrapperRef}>{props.children}</div>;
 }
 
-export function IndividualTask({task, index, moveListItem}) {
+export function IndividualTask({task, index, moveListItem, tasks}) {
   const [isOpen, setIsOpen] = useState(false);
   const [openSettings, setOpenSettings] = useState(false);
   const [showSettingsIcon, setShowSettingsIcon] = useState(false);
   const {selectedTrack} = useTracksValue();
-  const {tasks} = useTasks(selectedTrack);
 
   const ref = useRef(null);
 
@@ -67,6 +66,16 @@ export function IndividualTask({task, index, moveListItem}) {
   // This item task is also a drop area for other tasks
   const [{handlerId}, dropRef] = useDrop({
     accept: "task",
+    drop: function (item) {
+      console.log(tasks);
+      // db.collection("tasks").doc(dragTask).update({
+      //   index: hoverIndex,
+      // });
+      // db.collection("tasks").doc(hoverTask).update({
+      //   index: dragIndex,
+      // });
+    },
+
     collect(monitor) {
       return {
         handlerId: monitor.getHandlerId(),
@@ -102,7 +111,7 @@ export function IndividualTask({task, index, moveListItem}) {
         return;
       }
 
-      moveListItem(dragIndex, hoverIndex, tasks);
+      moveListItem(dragIndex, hoverIndex);
       item.index = hoverIndex;
     },
   });
@@ -273,7 +282,7 @@ export function IndividualTask({task, index, moveListItem}) {
           <Dialog
             as="div"
             className="absolute inset-0 z-10 overflow-y-auto"
-            onClose={closeModal}
+            onClose={() => closeModal()}
           >
             <div className="min-h-screen px-4 text-center">
               <Transition.Child
@@ -322,7 +331,7 @@ export function IndividualTask({task, index, moveListItem}) {
                     <button
                       type="button"
                       className="m-auto inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
-                      onClick={closeModal}
+                      onClick={() => closeModal()}
                     >
                       Cancel
                     </button>
