@@ -11,6 +11,9 @@ import {LandingNew} from "./pages/LandingNew";
 import {LoadingProvider} from "./context/loading-context";
 import {DndProvider} from "react-dnd";
 import {HTML5Backend} from "react-dnd-html5-backend";
+import {CalendarHome} from "./components/layout/CalendarHome";
+import {CalendarWeekView} from "./components/layout/CalendarWeekView";
+import {CalendarMonthView} from "./components/layout/CalendarMonthView";
 
 export const App = () => {
   return (
@@ -23,6 +26,9 @@ export const App = () => {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/login" element={<LoginNew />} />
+            <Route path="/calendar/home" element={<CalendarHome />} />
+            <Route path="/calendar/week" element={<CalendarWeekView />} />
+            <Route path="/calendar/month" element={<CalendarMonthView />} />
           </Routes>
         </Router>
       </LoadingProvider>

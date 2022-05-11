@@ -57,18 +57,18 @@ export const Dashboard = ({darkModeDefault = true}) => {
   ) : (
     <LocalizationProvider dateAdapter={AdapterMoment}>
       <TracksProvider>
-        <Scrollbars
+        {/* <Scrollbars
           autoHide
           autoHeight
           autoHeightMin={0}
           autoHeightMax={"100vh"}
-        >
+        > */}
           <Header darkMode={darkMode} setDarkMode={setDarkMode} />
           <div>
             {showBanner ? <Banner setShowBanner={setShowBanner} /> : null}
             <Content />
           </div>
-        </Scrollbars>
+        {/* </Scrollbars> */}
       </TracksProvider>
     </LocalizationProvider>
   );
