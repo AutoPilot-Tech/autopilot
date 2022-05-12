@@ -1,4 +1,4 @@
-import {Fragment, useEffect, useRef, useState} from "react";
+import React, {Fragment, useEffect, useRef, useState} from "react";
 import {
   ChevronDownIcon,
   ChevronLeftIcon,
@@ -6,16 +6,46 @@ import {
   DotsHorizontalIcon,
 } from "@heroicons/react/solid";
 import {BellIcon, MenuIcon, XIcon} from "@heroicons/react/outline";
-import {Menu, Transition, Popover} from "@headlessui/react";
+import {Menu, Transition, Popover, Dialog} from "@headlessui/react";
 import {Sidebar} from "./Sidebar";
 import {IndividualCalendarRow} from "../functional/IndividualCalendarRow";
+import moment from "moment";
+import {SmallCalendar} from "../functional/SmallCalendar";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
+// make a unique key
+function generateKey() {
+  return (
+    Math.random().toString(36).substring(2, 15) +
+    Math.random().toString(36).substring(2, 15)
+  );
+}
+
+const handleKeypress = (e) => {
+  //it triggers by pressing the enter key
+  if (e.keyCode === 13) {
+    addTrack();
+    closeModal();
+  }
+};
+
 export function CalendarHome() {
   const [openSidebar, setOpenSidebar] = useState(false);
+  const [isOpenEventModal, setIsOpenEventModal] = useState(false);
+  const [eventName, setEventName] = useState("");
+  const [showSmallCalendar, setShowSmallCalendar] = useState(false);
+
+  function closeModal() {
+    setIsOpenEventModal(false);
+  }
+
+  function openModal() {
+    setIsOpenEventModal(true);
+  }
+
   return (
     <div className="flex h-full flex-col">
       <header className="relative z-20 flex flex-none items-center justify-between border-b border-gray-200 py-1 px-6">
@@ -258,6 +288,91 @@ export function CalendarHome() {
         </div>
       </header>
       <div className="flex flex-auto overflow-hidden bg-white">
+        <Transition appear show={isOpenEventModal} as={Fragment}>
+          <Dialog
+            as="div"
+            className="fixed inset-0 z-50 overflow-y-auto"
+            onClose={closeModal}
+          >
+            <div className="min-h-screen px-4 text-center">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0"
+                enterTo="opacity-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100"
+                leaveTo="opacity-0"
+              >
+                <Dialog.Overlay className="fixed inset-0" />
+              </Transition.Child>
+
+              {/* This element is to trick the browser into centering the modal contents. */}
+              <span
+                className="inline-block h-screen align-middle"
+                aria-hidden="true"
+              >
+                &#8203;
+              </span>
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+                <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+                  {/* <Dialog.Title
+                    as="h3"
+                    className="text-lg font-medium leading-6 text-gray-900"
+                  >
+                    New Event
+                  </Dialog.Title> */}
+
+                  <div className="flex flex-col mb-4">
+                    <input
+                      className=" mt-3 w-full p-1 text-gray-900 placeholder-gray-500 focus:rounded-md focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out border-0 border-b border-gray-300"
+                      type="text"
+                      value={eventName}
+                      onChange={(e) => setEventName(e.target.value)}
+                      placeholder="Add title"
+                      onKeyDown={(e) => handleKeypress(e)}
+                    />
+                    <div className="flex flex-row gap-3">
+                      <div
+                        onClick={() => {
+                          setShowSmallCalendar(!showSmallCalendar);
+                        }}
+                      >
+                        <p>Calendar</p>
+                      </div>
+
+                      <SmallCalendar showSmallCalendar={showSmallCalendar} setShowSmallCalendar={setShowSmallCalendar} />
+                      <div >
+                        <p>Initial Time</p>
+                      </div>
+                      <div >
+                        <p>Final Time</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex justify-end">
+                    <button
+                      type="button"
+                      className=" inline-flex px-4 py-2 text-sm font-medium text-green-900 bg-green-100 border border-transparent rounded-md hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-green-500"
+                      onClick={() => addTrack()}
+                    >
+                      Save
+                    </button>
+                  </div>
+                </div>
+              </Transition.Child>
+            </div>
+          </Dialog>
+        </Transition>
         <div className="flex flex-auto flex-col overflow-auto">
           <div className="flex w-full flex-auto">
             <div className="w-14 flex-none bg-white ring-1 ring-gray-100" />
@@ -270,10 +385,10 @@ export function CalendarHome() {
                 <div className="row-end-1 h-7"></div>
                 {/* render <IndividualCalendarRow /> 23 times. */}
                 {[...Array(24)].map((_, i) => (
-                  <>
-                    <IndividualCalendarRow key={i} time={i} />
+                  <React.Fragment key={generateKey()}>
+                    <IndividualCalendarRow time={i} />
                     <div />
-                  </>
+                  </React.Fragment>
                 ))}
               </div>
 
@@ -295,10 +410,11 @@ export function CalendarHome() {
                       gridRow: `${i * 12 + 2} / span 12`,
                       gridColumn: `1 / span 1`,
                     }}
+                    key={generateKey()}
                   >
                     <a
                       href="#"
-                      onClick={() => alert("Clicked a row")}
+                      onClick={() => setIsOpenEventModal(true)}
                       className="cursor-default group absolute inset-0.5 flex flex-col overflow-y-auto rounded-lg pl-2 pt-1 bg-blue-100"
                     ></a>
                   </li>
@@ -308,6 +424,7 @@ export function CalendarHome() {
                 <li
                   className="z-50 relative mt-px flex"
                   style={{gridRow: "74 / span 12", gridColumn: "1 / span 1"}}
+                  key={generateKey()}
                 >
                   <a
                     href="#"
@@ -322,6 +439,7 @@ export function CalendarHome() {
                 <li
                   className="relative mt-px flex"
                   style={{gridRow: "92 / span 30", gridColumn: "1 / span 1"}}
+                  key={generateKey()}
                 >
                   <a
                     href="#"
@@ -341,6 +459,7 @@ export function CalendarHome() {
                 <li
                   className="relative mt-px flex"
                   style={{gridRow: "134 / span 18", gridColumn: "1 / span 1"}}
+                  key={generateKey()}
                 >
                   <a
                     href="#"
