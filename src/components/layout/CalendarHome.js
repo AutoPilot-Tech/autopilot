@@ -8,6 +8,7 @@ import {
 import {BellIcon, MenuIcon, XIcon} from "@heroicons/react/outline";
 import {Menu, Transition, Popover} from "@headlessui/react";
 import {Sidebar} from "./Sidebar";
+import {IndividualCalendarRow} from "../functional/IndividualCalendarRow";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -23,7 +24,7 @@ export function CalendarHome() {
             className="h-6 w-8 rounded-md hover:bg-gray-100 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 hover:cursor-pointer"
             aria-hidden="true"
             onClick={() => {
-                setOpenSidebar(true);
+              setOpenSidebar(true);
             }}
           />
           <a className="" href="/dashboard">
@@ -138,7 +139,6 @@ export function CalendarHome() {
                 </Menu.Items>
               </Transition>
             </Menu>
-            
           </div>
           <Menu as="div" className="relative ml-6 md:hidden">
             <Menu.Button className="-mx-2 flex items-center rounded-full border border-transparent p-2 text-gray-400 hover:text-gray-500">
@@ -268,162 +268,46 @@ export function CalendarHome() {
                 style={{gridTemplateRows: "repeat(48, minmax(1.5rem, 1fr))"}}
               >
                 <div className="row-end-1 h-7"></div>
-                <div>
-                  <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    12AM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    1AM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    2AM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    3AM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    4AM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    5AM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    6AM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    7AM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    8AM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    9AM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    10AM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    11AM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    12PM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    1PM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    2PM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    3PM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    4PM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    5PM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    6PM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    7PM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    8PM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    9PM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    10PM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    11PM
-                  </div>
-                </div>
-                <div />
+                {/* render <IndividualCalendarRow /> 23 times. */}
+                {[...Array(24)].map((_, i) => (
+                  <>
+                    <IndividualCalendarRow key={i} time={i} />
+                    <div />
+                  </>
+                ))}
               </div>
 
-              {/* Events */}
+              {/* Events grid */}
               <ol
                 className="col-start-1 col-end-2 row-start-1 grid grid-cols-1"
+                // onClick={() => {
+                //     alert('Clicked a row');
+                // }}
                 style={{
                   gridTemplateRows: "1.75rem repeat(288, minmax(0, 1fr)) auto",
                 }}
               >
+                {/* render 24 clickable rows */}
+                {[...Array(24)].map((_, i) => (
+                  <li
+                    className="z-0 relative mt-px flex opacity-0"
+                    style={{
+                      gridRow: `${i * 12 + 2} / span 12`,
+                      gridColumn: `1 / span 1`,
+                    }}
+                  >
+                    <a
+                      href="#"
+                      onClick={() => alert("Clicked a row")}
+                      className="cursor-default group absolute inset-0.5 flex flex-col overflow-y-auto rounded-lg pl-2 pt-1 bg-blue-100"
+                    ></a>
+                  </li>
+                ))}
+
+                {/* Render the individual events */}
                 <li
-                  className="relative mt-px flex"
-                  style={{gridRow: "74 / span 12"}}
+                  className="z-50 relative mt-px flex"
+                  style={{gridRow: "74 / span 12", gridColumn: "1 / span 1"}}
                 >
                   <a
                     href="#"
@@ -437,7 +321,7 @@ export function CalendarHome() {
                 </li>
                 <li
                   className="relative mt-px flex"
-                  style={{gridRow: "92 / span 30"}}
+                  style={{gridRow: "92 / span 30", gridColumn: "1 / span 1"}}
                 >
                   <a
                     href="#"
@@ -456,7 +340,7 @@ export function CalendarHome() {
                 </li>
                 <li
                   className="relative mt-px flex"
-                  style={{gridRow: "134 / span 18"}}
+                  style={{gridRow: "134 / span 18", gridColumn: "1 / span 1"}}
                 >
                   <a
                     href="#"
