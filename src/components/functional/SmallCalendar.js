@@ -83,7 +83,7 @@ export function SmallCalendar({
   showSmallCalendar,
   setShowSmallCalendar,
   setSelectedDate,
-  toggle
+  toggle,
 }) {
   const [calendar, setCalendar] = useState([]);
   const [value, setValue] = useState(moment());
@@ -153,7 +153,7 @@ export function SmallCalendar({
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 hover:bg-gray-100 cursor-pointer rounded-sm"
+                className="h-6 w-6 hover:bg-gray-100 cursor-pointer rounded-sm text-blue-500"
                 viewBox="0 0 20 20"
                 fill="currentColor"
               >
@@ -173,7 +173,7 @@ export function SmallCalendar({
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 hover:bg-gray-100 cursor-pointer rounded-md"
+                className="h-6 w-6 hover:bg-gray-100 cursor-pointer rounded-md text-blue-500"
                 viewBox="0 0 20 20"
                 fill="currentColor"
               >
@@ -210,7 +210,7 @@ export function SmallCalendar({
               // center items in the grid
               justifyItems: "center",
               // add lines to the grid
-              gridGap: "2px",
+              gridGap: "1px",
               // add a color to the gaps
               background: "rgba(0,0,0,0.05)",
               // this is to make the calendar look cleaner
@@ -218,15 +218,30 @@ export function SmallCalendar({
           >
             {calendar.map((week, i) => {
               return week.map((day, j) => {
+                let bgColor =
+                  day.month() !== value.month()
+                    ? "transparent"
+                    : day.date() === moment().date() &&
+                      day.month() === moment().month()
+                    ? "blue-500"
+                    : "white";
+                let color =
+                  day.date() === moment().date() &&
+                  day.month() === moment().month()
+                    ? "white"
+                    : "black";
                 return (
                   <div key={generateKey()}>
-                    <button className="bg-white w-6 hover:bg-gray-100 " onClick={() => {
-                      setSelectedDate(day);
-                      setShowSmallCalendar(false);
-                      toggle();
-                    }}>
+                    <button
+                      className={`w-6  cursor-pointer text-center bg-${bgColor} text-${color} hover:bg-opacity-75`}
+                      onClick={() => {
+                        setSelectedDate(day);
+                        setShowSmallCalendar(false);
+                        toggle();
+                      }}
+                      
+                    >
                       {moment(day).format("D")}
-
                     </button>
                   </div>
                 );
