@@ -40,6 +40,9 @@ export function CalendarHome() {
   const [eventName, setEventName] = useState("");
   const [showSmallCalendar, setShowSmallCalendar] = useState(false);
   const [modalSettingOpen, setModalSettingOpen] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(
+    moment().format("YYYY-MM-DD")
+  );
 
   const toggle = () => {
     let modalElement = document.getElementById("modal");
@@ -430,8 +433,8 @@ export function CalendarHome() {
                           toggle();
                         }}
                       >
-                        <p className="p-0.5 border-b border-b-gray-300 cursor-pointer hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100">
-                          Date
+                        <p className=" p-0.5 border-b border-b-gray-300 cursor-pointer hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100 text-gray-400">
+                          {selectedDate}
                         </p>
                       </div>
 
@@ -441,25 +444,40 @@ export function CalendarHome() {
                         setShowSmallCalendar={setShowSmallCalendar}
                       />
                       <div>
-                        <p className="p-0.5 border-b border-b-gray-300 cursor-pointer hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100">
+                        <p className="p-0.5 border-b border-b-gray-300 cursor-pointer hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100 text-gray-400">
                           Initial Time
                         </p>
                       </div>
                       <div>
-                        <p className="p-0.5 border-b border-b-gray-300 cursor-pointer hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100">
+                        <p className="p-0.5 border-b border-b-gray-300 cursor-pointer hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100 text-gray-400">
                           Final Time
                         </p>
                       </div>
-                      <div>
-                        <p className="p-0.5 border-b border-b-gray-300 cursor-pointer hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100">
-                          Routine
+                    </div>
+                    {/* id="save-button" was originally on the button element but i needed to add more layout, and since i was already targetting this id somewhere, i just gave the id to the div */}
+                    <div
+                      id="save-button"
+                      className="flex flex-row justify-end gap-3"
+                    >
+                      <div className="flex gap-2 items-center">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-5 w-5"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path d="M4 3a2 2 0 100 4h12a2 2 0 100-4H4z" />
+                          <path
+                            fillRule="evenodd"
+                            d="M3 8h14v7a2 2 0 01-2 2H5a2 2 0 01-2-2V8zm5 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                        <p className=" p-0.5 border-b border-b-gray-300 cursor-pointer hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100 text-gray-400">
+                          Inbox
                         </p>
                       </div>
-                    </div>
-
-                    <div className="flex justify-end">
                       <button
-                        id="save-button"
                         type="button"
                         className=" inline-flex px-4 py-2 text-sm font-medium text-green-900 bg-green-100 border border-transparent rounded-md hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-green-500"
                       >

@@ -121,7 +121,7 @@ export function SmallCalendar({
       className={
         !showSmallCalendar
           ? "hidden"
-          : "absolute border-2 z-50 rounded-sm shadow-md top-28 flex-col bg-white"
+          : "absolute border-2 z-50 rounded-sm shadow-md top-28 bg-white"
       }
     >
       <OutsideAlerter
@@ -129,87 +129,98 @@ export function SmallCalendar({
         showSmallCalendar={true}
         setShowSmallCalendar={setShowSmallCalendar}
       >
-        <div id="month-indicator" className="flex">
+        <div className="flex flex-col" style={{
+          background: "rgba(0,0,0,0.05)",
+          gridGap: "2px",
+        }}>
+          <div id="month-indicator" className="flex bg-white justify-between" style={{
+            alignItems: "center",
+          }}>
+            <div
+              id="chevron-left"
+              onClick={() => {
+                setValue(moment(value).subtract(1, "month"));
+              }}
+    
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6 hover:bg-gray-100 cursor-pointer rounded-sm"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </div>
+            <p className="">{value.format("MMMM YYYY")}</p>
+            <div
+              id="chevron-right"
+      
+              onClick={() => {
+                setValue(moment(value).add(1, "month"));
+              }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6 hover:bg-gray-100 cursor-pointer rounded-md"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </div>
+          </div>
           <div
-            id="chevron-left"
-            onClick={() => {
-              setValue(moment(value).subtract(1, "month"));
+            id="day-of-week"
+            className="text-xs grid bg-white"
+            style={{
+              // content border box
+              gridTemplateColumns: `repeat(7, 1fr)`,
+              justifyItems: "center",
             }}
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fillRule="evenodd"
-                d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                clipRule="evenodd"
-              />
-            </svg>
+            <div>Su</div>
+            <div>Mo</div>
+            <div>Tu</div>
+            <div>We</div>
+            <div>Th</div>
+            <div>Fr</div>
+            <div>Sa</div>
           </div>
-          <p className="m-auto">{value.format("MMMM YYYY")}</p>
           <div
-            id="chevron-right"
-            onClick={() => {
-              setValue(moment(value).add(1, "month"));
+            id="date-grid"
+            className=" grid"
+            style={{
+              gridTemplateColumns: `repeat(7, 1fr)`,
+              // center items in the grid
+              justifyItems: "center",
+              // add lines to the grid
+              gridGap: "2px",
+              // add a color to the gaps
+              background: "rgba(0,0,0,0.05)",
+              // this is to make the calendar look cleaner
             }}
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fillRule="evenodd"
-                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                clipRule="evenodd"
-              />
-            </svg>
+            {calendar.map((week, i) => {
+              return week.map((day, j) => {
+                return (
+                  <div key={generateKey()}>
+                    <button className="bg-white w-6 hover:bg-gray-100 hover:rounded-md">
+                      {moment(day).format("D")}
+                    </button>
+                  </div>
+                );
+              });
+            })}
           </div>
-        </div>
-        <div
-          id="day-of-week"
-          className="text-xs grid"
-          style={{
-            gridTemplateColumns: `repeat(7, 1fr)`,
-          }}
-        >
-          <div>Su</div>
-          <div>Mo</div>
-          <div>Tu</div>
-          <div>We</div>
-          <div>Th</div>
-          <div>Fr</div>
-          <div>Sa</div>
-        </div>
-        <div
-          id="date-grid"
-          className="mt-1 grid"
-          style={{
-            gridTemplateColumns: `repeat(7, 1fr)`,
-          }}
-        >
-          {calendar.map((week, i) => {
-            return week.map((day, j) => {
-              return (
-                <div key={generateKey()}>
-                  <button>{moment(day).format("D")}</button>
-                </div>
-              );
-            });
-          })}
-
-          {/* {[...Array(daysInCurrentMonth)].map((_, i) => (
-          <div
-            key={generateKey()}
-            style={i === 0 ? {gridColumn: firstDayOfMonthNumber} : {}}
-          >
-            <button>{i + 1}</button>
-          </div>
-        ))} */}
         </div>
       </OutsideAlerter>
     </div>
