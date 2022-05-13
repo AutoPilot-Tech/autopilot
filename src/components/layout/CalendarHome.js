@@ -426,16 +426,30 @@ export function CalendarHome() {
                       onKeyDown={(e) => handleKeypress(e)}
                       variant="standard"
                     />
-                    <div className="flex flex-row gap-3">
-                      <div
-                        onClick={() => {
-                          setShowSmallCalendar(!showSmallCalendar);
-                          toggle();
-                        }}
-                      >
-                        <p className=" p-0.5 border-b border-b-gray-300 cursor-pointer hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100 text-gray-400">
-                          {moment(selectedDate).format("MM/DD/YYYY")}
-                        </p>
+                    <div className="flex flex-col gap-3">
+                      <div className="flex flex-row items-center gap-2">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-5 w-5 text-gray-300"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                        <div
+                          onClick={() => {
+                            setShowSmallCalendar(!showSmallCalendar);
+                            toggle();
+                          }}
+                        >
+                          <p className=" p-0.5 border-b border-b-gray-300 cursor-pointer hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100 text-gray-600 w-24">
+                            {moment(selectedDate).format("MM/DD/YYYY")}
+                          </p>
+                        </div>
                       </div>
 
                       <SmallCalendar
@@ -445,16 +459,35 @@ export function CalendarHome() {
                         setSelectedDate={setSelectedDate}
                         toggle={toggle}
                       />
-                      <div>
-                        <p className="p-0.5 border-b border-b-gray-300 cursor-pointer hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100 text-gray-400">
-                          Initial Time
-                        </p>
+                      <div className="flex flex-row items-center gap-2">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-5 w-5 text-gray-300"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                        <div>
+                          <p className="p-0.5 border-b border-b-gray-300 cursor-pointer hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100 text-gray-600 w-24">
+                            Initial Time
+                          </p>
+                        </div>
+                        <div>
+                            <p className="text-gray-300">-</p>
+                        </div>
+                        <div>
+                          <p className="p-0.5 border-b border-b-gray-300 cursor-pointer hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100 text-gray-600 w-24">
+                            Final Time
+                          </p>
+                        </div>
                       </div>
-                      <div>
-                        <p className="p-0.5 border-b border-b-gray-300 cursor-pointer hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100 text-gray-400">
-                          Final Time
-                        </p>
-                      </div>
+
+                    
                     </div>
                     {/* id="save-button" was originally on the button element but i needed to add more layout, and since i was already targetting this id somewhere, i just gave the id to the div */}
                     <div
@@ -464,7 +497,7 @@ export function CalendarHome() {
                       <div className="flex gap-2 items-center">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
-                          className="h-5 w-5"
+                          className="h-5 w-5 text-gray-300"
                           viewBox="0 0 20 20"
                           fill="currentColor"
                         >
@@ -475,7 +508,7 @@ export function CalendarHome() {
                             clipRule="evenodd"
                           />
                         </svg>
-                        <p className=" p-0.5 border-b border-b-gray-300 cursor-pointer hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100 text-gray-400">
+                        <p className=" p-0.5 border-b border-b-gray-300 cursor-pointer hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100 text-gray-600">
                           Inbox
                         </p>
                       </div>
