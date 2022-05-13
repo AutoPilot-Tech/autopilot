@@ -63,24 +63,21 @@ export function CalendarHome() {
           fill: "forwards",
         }
       );
-        let saveButtonMarginTop = saveButtonElement.style.marginTop;
-        saveButtonElement.animate(
-            [
-                {
-                    
-                        marginTop: `${saveButtonMarginTop}`,
-                },
-                {
-                    
-                        marginTop: `${saveButtonMarginTop + 170}px`,
-                    
-                },
-            ],
-            {
-                duration: 300,
-                fill: "forwards",
-            }
-        );
+      let saveButtonMarginTop = saveButtonElement.style.marginTop;
+      saveButtonElement.animate(
+        [
+          {
+            marginTop: `${saveButtonMarginTop}`,
+          },
+          {
+            marginTop: `${saveButtonMarginTop + 170}px`,
+          },
+        ],
+        {
+          duration: 300,
+          fill: "forwards",
+        }
+      );
 
       setModalSettingOpen(true);
     } else {
@@ -104,21 +101,18 @@ export function CalendarHome() {
       );
       saveButtonElement.animate(
         [
-            {
-                
-                    marginTop: `${saveButtonMarginTop}px`,
-            },
-            {
-                
-                    marginTop: `0`,
-                
-            },
+          {
+            marginTop: `${saveButtonMarginTop}`,
+          },
+          {
+            marginTop: 0,
+          },
         ],
         {
-            duration: 300,
-            fill: "forwards",
+          duration: 300,
+          fill: "forwards",
         }
-    );
+      );
       setModalSettingOpen(false);
     }
   };
@@ -442,6 +436,7 @@ export function CalendarHome() {
                       </div>
 
                       <SmallCalendar
+                        setModalSettingOpen={setModalSettingOpen}
                         showSmallCalendar={showSmallCalendar}
                         setShowSmallCalendar={setShowSmallCalendar}
                       />
