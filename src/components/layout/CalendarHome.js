@@ -11,6 +11,7 @@ import {Sidebar} from "./Sidebar";
 import {IndividualCalendarRow} from "../functional/IndividualCalendarRow";
 import moment from "moment";
 import {SmallCalendar} from "../functional/SmallCalendar";
+import TextField from "@mui/material/TextField";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -304,7 +305,7 @@ export function CalendarHome() {
                 leaveFrom="opacity-100"
                 leaveTo="opacity-0"
               >
-                <Dialog.Overlay className="fixed inset-0" />
+                <Dialog.Overlay className="fixed inset-0 " />
               </Transition.Child>
 
               {/* This element is to trick the browser into centering the modal contents. */}
@@ -323,7 +324,7 @@ export function CalendarHome() {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+                <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl h-72">
                   {/* <Dialog.Title
                     as="h3"
                     className="text-lg font-medium leading-6 text-gray-900"
@@ -331,14 +332,15 @@ export function CalendarHome() {
                     New Event
                   </Dialog.Title> */}
 
-                  <div className="flex flex-col mb-4">
-                    <input
-                      className=" mt-3 w-full p-1 text-gray-900 placeholder-gray-500 focus:rounded-md focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out border-0 border-b border-gray-300"
+                  <div className="flex flex-col mb-4 gap-3">
+                    <TextField
+                      className=" mt-3 w-full  text-gray-900 placeholder-gray-500 focus:rounded-md focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out border-0 border-b border-gray-300"
                       type="text"
                       value={eventName}
                       onChange={(e) => setEventName(e.target.value)}
                       placeholder="Add title"
                       onKeyDown={(e) => handleKeypress(e)}
+                      variant="standard"
                     />
                     <div className="flex flex-row gap-3">
                       <div
@@ -346,27 +348,41 @@ export function CalendarHome() {
                           setShowSmallCalendar(!showSmallCalendar);
                         }}
                       >
-                        <p>Calendar</p>
+                        <p className="p-0.5 border-b border-b-gray-300 cursor-pointer hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100">
+                          Date
+                        </p>
                       </div>
 
-                      <SmallCalendar showSmallCalendar={showSmallCalendar} setShowSmallCalendar={setShowSmallCalendar} />
-                      <div >
-                        <p>Initial Time</p>
+                      <SmallCalendar
+                        showSmallCalendar={showSmallCalendar}
+                        setShowSmallCalendar={setShowSmallCalendar}
+                      />
+                      <div>
+                        <p className="p-0.5 border-b border-b-gray-300 cursor-pointer hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100">
+                          Initial Time
+                        </p>
                       </div>
-                      <div >
-                        <p>Final Time</p>
+                      <div>
+                        <p className="p-0.5 border-b border-b-gray-300 cursor-pointer hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100">
+                          Final Time
+                        </p>
+                      </div>
+                      <div>
+                        <p className="p-0.5 border-b border-b-gray-300 cursor-pointer hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100">
+                          Routine
+                        </p>
                       </div>
                     </div>
-                  </div>
-
-                  <div className="flex justify-end">
-                    <button
-                      type="button"
-                      className=" inline-flex px-4 py-2 text-sm font-medium text-green-900 bg-green-100 border border-transparent rounded-md hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-green-500"
-                      onClick={() => addTrack()}
-                    >
-                      Save
-                    </button>
+                    
+                    <div className="flex justify-end align-bottom mt-20">
+                      <button
+                        type="button"
+                        className=" inline-flex px-4 py-2 text-sm font-medium text-green-900 bg-green-100 border border-transparent rounded-md hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-green-500"
+                        onClick={() => addTrack()}
+                      >
+                        Save
+                      </button>
+                    </div>
                   </div>
                 </div>
               </Transition.Child>
