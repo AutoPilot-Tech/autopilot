@@ -17,7 +17,7 @@ function useOutsideAlerter(
      * Alert if clicked on outside of element
      */
     function handleClickOutside(event) {
-      if (ref.current && !ref.current.contains(event.target) && !modalSettingButtonRef.current.contains(event.target)) {
+      if (ref.current && !ref.current.contains(event.target) && modalSettingOpen && !modalSettingButtonRef.current.contains(event.target)) {
         setShowSmallCalendar(false);
         const modalElement = document.getElementById("modal");
         const saveButtonElement = document.getElementById("save-button");
