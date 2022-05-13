@@ -12,6 +12,7 @@ import {IndividualCalendarRow} from "../functional/IndividualCalendarRow";
 import moment from "moment";
 import {SmallCalendar} from "../functional/SmallCalendar";
 import TextField from "@mui/material/TextField";
+import AnimateHeight from "react-animate-height";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -38,6 +39,89 @@ export function CalendarHome() {
   const [isOpenEventModal, setIsOpenEventModal] = useState(false);
   const [eventName, setEventName] = useState("");
   const [showSmallCalendar, setShowSmallCalendar] = useState(false);
+  const [modalSettingOpen, setModalSettingOpen] = useState(false);
+
+  const toggle = () => {
+    let modalElement = document.getElementById("modal");
+    let saveButtonElement = document.getElementById("save-button");
+
+    // animate the height change in the modal
+    if (modalSettingOpen === false) {
+      let modalHeight = modalElement.clientHeight;
+      modalElement.animate(
+        [
+          {
+            height: `${modalHeight}px`,
+          },
+          {
+            height: `${modalHeight + 170}px`,
+          },
+        ],
+
+        {
+          duration: 300,
+          fill: "forwards",
+        }
+      );
+        let saveButtonMarginTop = saveButtonElement.style.marginTop;
+        saveButtonElement.animate(
+            [
+                {
+                    
+                        marginTop: `${saveButtonMarginTop}`,
+                },
+                {
+                    
+                        marginTop: `${saveButtonMarginTop + 170}px`,
+                    
+                },
+            ],
+            {
+                duration: 300,
+                fill: "forwards",
+            }
+        );
+
+      setModalSettingOpen(true);
+    } else {
+      let modalHeight = modalElement.clientHeight;
+      let saveButtonMarginTop = saveButtonElement.style.marginTop;
+
+      modalElement.animate(
+        [
+          {
+            height: `${modalHeight}px`,
+          },
+          {
+            height: `${modalHeight - 170}px`,
+          },
+        ],
+
+        {
+          duration: 300,
+          fill: "forwards",
+        }
+      );
+      saveButtonElement.animate(
+        [
+            {
+                
+                    marginTop: `${saveButtonMarginTop}px`,
+            },
+            {
+                
+                    marginTop: `0`,
+                
+            },
+        ],
+        {
+            duration: 300,
+            fill: "forwards",
+        }
+    );
+      setModalSettingOpen(false);
+    }
+  };
 
   function closeModal() {
     setIsOpenEventModal(false);
@@ -288,6 +372,7 @@ export function CalendarHome() {
           </Menu>
         </div>
       </header>
+
       <div className="flex flex-auto overflow-hidden bg-white">
         <Transition appear show={isOpenEventModal} as={Fragment}>
           <Dialog
@@ -324,17 +409,19 @@ export function CalendarHome() {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl h-72">
+                <div
+                  id="modal"
+                  className="inline-block w-full max-w-md p-3 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl"
+                >
                   {/* <Dialog.Title
                     as="h3"
                     className="text-lg font-medium leading-6 text-gray-900"
                   >
                     New Event
                   </Dialog.Title> */}
-
-                  <div className="flex flex-col mb-4 gap-3">
+                  <div className="flex flex-col mb-4 gap-3 content-between">
                     <TextField
-                      className=" mt-3 w-full  text-gray-900 placeholder-gray-500 focus:rounded-md focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out border-0 border-b border-gray-300"
+                      className="mt-3 w-full  text-gray-900 placeholder-gray-500 focus:rounded-md focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out border-0 border-b border-gray-300"
                       type="text"
                       value={eventName}
                       onChange={(e) => setEventName(e.target.value)}
@@ -346,6 +433,7 @@ export function CalendarHome() {
                       <div
                         onClick={() => {
                           setShowSmallCalendar(!showSmallCalendar);
+                          toggle();
                         }}
                       >
                         <p className="p-0.5 border-b border-b-gray-300 cursor-pointer hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100">
@@ -373,12 +461,12 @@ export function CalendarHome() {
                         </p>
                       </div>
                     </div>
-                    
-                    <div className="flex justify-end align-bottom mt-20">
+
+                    <div className="flex justify-end">
                       <button
+                        id="save-button"
                         type="button"
                         className=" inline-flex px-4 py-2 text-sm font-medium text-green-900 bg-green-100 border border-transparent rounded-md hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-green-500"
-                        onClick={() => addTrack()}
                       >
                         Save
                       </button>

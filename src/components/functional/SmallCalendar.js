@@ -1,16 +1,40 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import moment from "moment";
 
 export function SmallCalendar({showSmallCalendar, setShowSmallCalendar}) {
-  const [daysInMonth, setDaysInMonth] = React.useState(moment().daysInMonth());
-  const getDaysInMonth = (month) => {
-    const daysInMonth = moment(month, "MMMM").daysInMonth();
-    setDaysInMonth(daysInMonth);
-  };
-  // Get the first day of the month in number (0-6)
-  const firstDayOfMonth = moment().startOf("month").format("d");
-  // add 1 day to the first day of the month to get the correct day of the week
-  const firstDayOfMonthNumber = parseInt(firstDayOfMonth) + 1;
+  const [calendar, setCalendar] = useState([]);
+  const [value, setValue] = useState(moment());
+
+  const startDay = value.clone().startOf("month").startOf("week");
+  const endDay = value.clone().endOf("month").endOf("week");
+
+  useEffect(() => {
+      console.log("useEffect triggered")
+    const day = startDay.clone().subtract(1, "day");
+    const temp = [];
+    while (day.isBefore(endDay, "day")) {
+      temp.push(
+        Array(7)
+          .fill(0)
+          .map(() => day.add(1, "day").clone())
+      );
+    }
+    setCalendar(temp);
+  }, [value]);
+
+  
+
+  function generateKey() {
+    return (
+      Math.random().toString(36).substring(2, 15) +
+      Math.random().toString(36).substring(2, 15)
+    );
+  }
+
+  //   // Get the first day of the month in number (0-6)
+  //   const firstDayOfMonth = moment().startOf("month").format("d");
+  //   // add 1 day to the first day of the month to get the correct day of the week
+  //   const firstDayOfMonthNumber = parseInt(firstDayOfMonth) + 1;
 
   return (
     <div
@@ -21,8 +45,12 @@ export function SmallCalendar({showSmallCalendar, setShowSmallCalendar}) {
       }
     >
       <div id="month-indicator" className="flex">
-        {/* chevron left */}
-        <div>
+        <div
+          id="chevron-left"
+          onClick={() => {
+            setValue(moment(value).subtract(1, "month"));
+          }}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-5 w-5"
@@ -36,8 +64,13 @@ export function SmallCalendar({showSmallCalendar, setShowSmallCalendar}) {
             />
           </svg>
         </div>
-        <p className="m-auto">{moment().format("MMMM YYYY")}</p>
-        <div>
+        <p className="m-auto">{value.format("MMMM YYYY")}</p>
+        <div
+          id="chevron-right"
+          onClick={() => {
+            setValue(moment(value).add(1, "month"));
+          }}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-5 w-5"
@@ -74,11 +107,26 @@ export function SmallCalendar({showSmallCalendar, setShowSmallCalendar}) {
           gridTemplateColumns: `repeat(7, 1fr)`,
         }}
       >
-        {[...Array(daysInMonth)].map((_, i) => (
-          <div style={i === 0 ? {gridColumn: firstDayOfMonthNumber} : {}}>
+        {calendar.map((week, i) => {
+            return week.map((day, j) => {
+                return (
+                    <div
+                        key={generateKey()}
+                    >
+                        <button>{moment(day).format("D")}</button>
+                    </div>
+                )
+            })
+        })}
+
+        {/* {[...Array(daysInCurrentMonth)].map((_, i) => (
+          <div
+            key={generateKey()}
+            style={i === 0 ? {gridColumn: firstDayOfMonthNumber} : {}}
+          >
             <button>{i + 1}</button>
           </div>
-        ))}
+        ))} */}
       </div>
     </div>
   );
