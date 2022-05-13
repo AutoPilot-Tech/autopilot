@@ -41,8 +41,9 @@ export function CalendarHome() {
   const [showSmallCalendar, setShowSmallCalendar] = useState(false);
   const [modalSettingOpen, setModalSettingOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(
-    moment().format("MM/DD/YYYY")
+    moment().format("MM-DD-YYYY")
   );
+  const modalSettingButtonRef = useRef(null);
 
   const toggle = () => {
     let modalElement = document.getElementById("modal");
@@ -455,9 +456,10 @@ export function CalendarHome() {
                             setModalSettingOpen(!modalSettingOpen);
                             toggle();
                           }}
+                          ref={modalSettingButtonRef}
                         >
                           <p className=" p-0.5  cursor-pointer hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100 text-gray-600 w-24">
-                            {moment(selectedDate).format("MM/DD/YYYY")}
+                            {moment(selectedDate).format("MM-DD-YYYY")}
                           </p>
                         </div>
                       </div>
@@ -471,6 +473,7 @@ export function CalendarHome() {
                         setShowSmallCalendar={setShowSmallCalendar}
                         setSelectedDate={setSelectedDate}
                         toggle={toggle}
+                        modalSettingButtonRef={modalSettingButtonRef}
                       />
                       <div className="flex flex-row items-center gap-2 border-b border-b-gray-300 w-56">
                         <svg

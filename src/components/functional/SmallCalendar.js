@@ -9,15 +9,15 @@ function useOutsideAlerter(
   showSmallCalendar,
   setShowSmallCalendar,
   setModalSettingOpen,
-  modalSettingOpen
+  modalSettingOpen,
+  modalSettingButtonRef,
 ) {
   useEffect(() => {
     /**
      * Alert if clicked on outside of element
      */
     function handleClickOutside(event) {
-      console.log('clicked')
-      if (ref.current && !ref.current.contains(event.target) && modalSettingOpen) {
+      if (ref.current && !ref.current.contains(event.target) && !modalSettingButtonRef.current.contains(event.target)) {
         setShowSmallCalendar(false);
         const modalElement = document.getElementById("modal");
         const saveButtonElement = document.getElementById("save-button");
@@ -75,13 +75,15 @@ export default function OutsideAlerter(props) {
     props.showSmallCalendar,
     props.setShowSmallCalendar,
     props.setModalSettingOpen,
-    props.modalSettingOpen
+    props.modalSettingOpen,
+    props.modalSettingButtonRef
   );
 
   return <div ref={wrapperRef}>{props.children}</div>;
 }
 
 export function SmallCalendar({
+  modalSettingButtonRef,
   modalSettingOpen,
   setModalSettingOpen,
   showSmallCalendar,
@@ -96,8 +98,6 @@ export function SmallCalendar({
   const endDay = value.clone().endOf("month").endOf("week");
 
   useEffect(() => {
-    console.log("useEffect triggered");
-    console.log("showSmallCalendar from useEffect", showSmallCalendar);
     const day = startDay.clone().subtract(1, "day");
     const temp = [];
     while (day.isBefore(endDay, "day")) {
@@ -131,6 +131,7 @@ export function SmallCalendar({
       }
     >
       <OutsideAlerter
+        modalSettingButtonRef={modalSettingButtonRef}
         setModalSettingOpen={setModalSettingOpen}
         showSmallCalendar={true}
         setShowSmallCalendar={setShowSmallCalendar}
