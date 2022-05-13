@@ -425,6 +425,15 @@ export function CalendarHome() {
                       placeholder="Add title"
                       onKeyDown={(e) => handleKeypress(e)}
                       variant="standard"
+                      id="event-name"
+                      inputProps={{
+                        style: {
+                          padding: "0.5rem",
+                          ":focus": {
+                            outline: "none",
+                          },
+                        },
+                      }}
                     />
                     <div className="flex flex-col gap-3">
                       <div className="flex flex-row items-center gap-2 border-b border-b-gray-300 w-32 hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100">
@@ -443,6 +452,7 @@ export function CalendarHome() {
                         <div
                           onClick={() => {
                             setShowSmallCalendar(!showSmallCalendar);
+                            setModalSettingOpen(!modalSettingOpen);
                             toggle();
                           }}
                         >
@@ -453,6 +463,9 @@ export function CalendarHome() {
                       </div>
 
                       <SmallCalendar
+                        //   The key is required to update the calendar when the selected date changes.
+                        key={modalSettingOpen}
+                        modalSettingOpen={modalSettingOpen}
                         setModalSettingOpen={setModalSettingOpen}
                         showSmallCalendar={showSmallCalendar}
                         setShowSmallCalendar={setShowSmallCalendar}

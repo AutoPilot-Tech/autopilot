@@ -8,14 +8,16 @@ function useOutsideAlerter(
   ref,
   showSmallCalendar,
   setShowSmallCalendar,
-  setModalSettingOpen
+  setModalSettingOpen,
+  modalSettingOpen
 ) {
   useEffect(() => {
     /**
      * Alert if clicked on outside of element
      */
     function handleClickOutside(event) {
-      if (ref.current && !ref.current.contains(event.target)) {
+      console.log('clicked')
+      if (ref.current && !ref.current.contains(event.target) && modalSettingOpen) {
         setShowSmallCalendar(false);
         const modalElement = document.getElementById("modal");
         const saveButtonElement = document.getElementById("save-button");
@@ -72,13 +74,15 @@ export default function OutsideAlerter(props) {
     wrapperRef,
     props.showSmallCalendar,
     props.setShowSmallCalendar,
-    props.setModalSettingOpen
+    props.setModalSettingOpen,
+    props.modalSettingOpen
   );
 
   return <div ref={wrapperRef}>{props.children}</div>;
 }
 
 export function SmallCalendar({
+  modalSettingOpen,
   setModalSettingOpen,
   showSmallCalendar,
   setShowSmallCalendar,
@@ -130,6 +134,7 @@ export function SmallCalendar({
         setModalSettingOpen={setModalSettingOpen}
         showSmallCalendar={true}
         setShowSmallCalendar={setShowSmallCalendar}
+        modalSettingOpen={modalSettingOpen}
       >
         <div
           className="flex flex-col"
