@@ -41,7 +41,7 @@ export function CalendarHome() {
   const [showSmallCalendar, setShowSmallCalendar] = useState(false);
   const [modalSettingOpen, setModalSettingOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(
-    moment().format("YYYY-MM-DD")
+    moment().format("MM/DD/YYYY")
   );
 
   const toggle = () => {
@@ -434,7 +434,7 @@ export function CalendarHome() {
                         }}
                       >
                         <p className=" p-0.5 border-b border-b-gray-300 cursor-pointer hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100 text-gray-400">
-                          {selectedDate}
+                          {moment(selectedDate).format("MM/DD/YYYY")}
                         </p>
                       </div>
 
@@ -442,6 +442,8 @@ export function CalendarHome() {
                         setModalSettingOpen={setModalSettingOpen}
                         showSmallCalendar={showSmallCalendar}
                         setShowSmallCalendar={setShowSmallCalendar}
+                        setSelectedDate={setSelectedDate}
+                        toggle={toggle}
                       />
                       <div>
                         <p className="p-0.5 border-b border-b-gray-300 cursor-pointer hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100 text-gray-400">

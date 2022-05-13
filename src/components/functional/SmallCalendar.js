@@ -82,6 +82,8 @@ export function SmallCalendar({
   setModalSettingOpen,
   showSmallCalendar,
   setShowSmallCalendar,
+  setSelectedDate,
+  toggle
 }) {
   const [calendar, setCalendar] = useState([]);
   const [value, setValue] = useState(moment());
@@ -129,19 +131,25 @@ export function SmallCalendar({
         showSmallCalendar={true}
         setShowSmallCalendar={setShowSmallCalendar}
       >
-        <div className="flex flex-col" style={{
-          background: "rgba(0,0,0,0.05)",
-          gridGap: "2px",
-        }}>
-          <div id="month-indicator" className="flex bg-white justify-between" style={{
-            alignItems: "center",
-          }}>
+        <div
+          className="flex flex-col"
+          style={{
+            background: "rgba(0,0,0,0.05)",
+            gridGap: "2px",
+          }}
+        >
+          <div
+            id="month-indicator"
+            className="flex bg-white justify-between"
+            style={{
+              alignItems: "center",
+            }}
+          >
             <div
               id="chevron-left"
               onClick={() => {
                 setValue(moment(value).subtract(1, "month"));
               }}
-    
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -156,10 +164,9 @@ export function SmallCalendar({
                 />
               </svg>
             </div>
-            <p className="">{value.format("MMMM YYYY")}</p>
+            <p className="cursor-default">{value.format("MMMM YYYY")}</p>
             <div
               id="chevron-right"
-      
               onClick={() => {
                 setValue(moment(value).add(1, "month"));
               }}
@@ -180,7 +187,7 @@ export function SmallCalendar({
           </div>
           <div
             id="day-of-week"
-            className="text-xs grid bg-white"
+            className="text-xs grid bg-white cursor-default"
             style={{
               // content border box
               gridTemplateColumns: `repeat(7, 1fr)`,
@@ -213,8 +220,13 @@ export function SmallCalendar({
               return week.map((day, j) => {
                 return (
                   <div key={generateKey()}>
-                    <button className="bg-white w-6 hover:bg-gray-100 hover:rounded-md">
+                    <button className="bg-white w-6 hover:bg-gray-100 " onClick={() => {
+                      setSelectedDate(day);
+                      setShowSmallCalendar(false);
+                      toggle();
+                    }}>
                       {moment(day).format("D")}
+
                     </button>
                   </div>
                 );
