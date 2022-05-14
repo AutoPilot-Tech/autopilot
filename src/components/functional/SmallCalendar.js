@@ -17,7 +17,6 @@ function useOutsideAlerter(
      * Alert if clicked on outside of element
      */
     function handleClickOutside(event) {
-
       if (
         ref.current &&
         !ref.current.contains(event.target) &&
@@ -44,8 +43,9 @@ function useOutsideAlerter(
 /**
  * Component that alerts if you click outside of it
  */
-export default function OutsideAlerter(props) {
+export default function OutsideAlerter(props, ref) {
   const wrapperRef = useRef(null);
+
   useOutsideAlerter(
     wrapperRef,
     props.showSmallCalendar,

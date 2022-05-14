@@ -21,8 +21,9 @@ function useOutsideAlerter(
       if (
         ref.current &&
         !ref.current.contains(event.target) &&
-        showRoutinesList
-      ) {        
+        showRoutinesList &&
+        !routinePickerButtonRef.current.contains(event.target)
+      ) {
         setShowRoutinesList(false);
         setRoutineSetterOpen(false);
       }
@@ -85,7 +86,7 @@ export function RoutinePicker({
       }
     >
       <OutsideAlerter
-        showRoutinesList={showRoutinesList}
+        showRoutinesList={true}
         setShowRoutinesList={setShowRoutinesList}
         routinePickerButtonRef={routinePickerButtonRef}
         setRoutineSetterOpen={setRoutineSetterOpen}
