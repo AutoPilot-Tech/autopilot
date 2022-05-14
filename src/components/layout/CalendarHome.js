@@ -40,10 +40,12 @@ export function CalendarHome() {
   const [eventName, setEventName] = useState("");
   const [showSmallCalendar, setShowSmallCalendar] = useState(false);
   const [modalSettingOpen, setModalSettingOpen] = useState(false);
+  const [routineSetterOpen, setRoutineSetterOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(
     moment().format("MM-DD-YYYY")
   );
   const modalSettingButtonRef = useRef(null);
+  const routinePickerButtonRef = useRef(null);
   const [gridRowClicked, setGridRowClicked] = useState("");
   const [showRoutinesList, setShowRoutinesList] = useState(false);
   const [selectedRoutine, setSelectedRoutine] = useState(null);
@@ -120,54 +122,6 @@ export function CalendarHome() {
           fill: "forwards",
         }
       );
-      setModalSettingOpen(false);
-    }
-  };
-
-  const toggleRoutinesListHeight = () => {
-    let modalElement = document.getElementById("modal");
-    let saveButtonElement = document.getElementById("save-button");
-
-    // animate the height change in the modal
-    if (modalSettingOpen === false) {
-      let modalHeight = modalElement.clientHeight;
-      modalElement.animate(
-        [
-          {
-            height: `${modalHeight}px`,
-          },
-          {
-            height: `${modalHeight + 170}px`,
-          },
-        ],
-
-        {
-          duration: 300,
-          fill: "forwards",
-        }
-      );
-
-      setModalSettingOpen(true);
-    } else {
-      let modalHeight = modalElement.clientHeight;
-      let saveButtonMarginTop = saveButtonElement.style.marginTop;
-
-      modalElement.animate(
-        [
-          {
-            height: `${modalHeight}px`,
-          },
-          {
-            height: `${modalHeight - 170}px`,
-          },
-        ],
-
-        {
-          duration: 300,
-          fill: "forwards",
-        }
-      );
-
       setModalSettingOpen(false);
     }
   };
@@ -505,7 +459,6 @@ export function CalendarHome() {
                           onClick={() => {
                             setShowSmallCalendar(!showSmallCalendar);
                             setModalSettingOpen(!modalSettingOpen);
-                            // toggle();
                           }}
                           ref={modalSettingButtonRef}
                         >
@@ -523,7 +476,6 @@ export function CalendarHome() {
                         showSmallCalendar={showSmallCalendar}
                         setShowSmallCalendar={setShowSmallCalendar}
                         setSelectedDate={setSelectedDate}
-                        toggle={toggle}
                         modalSettingButtonRef={modalSettingButtonRef}
                       />
                       <div className="flex flex-row items-center gap-2 border-b border-b-gray-300 w-56">
@@ -571,7 +523,10 @@ export function CalendarHome() {
                       id="save-button"
                       className="flex flex-row gap-2 justify-end items-center"
                     >
-                      <div className="cursor-pointer flex flex-row items-center gap-2 border-b border-b-gray-300 w-32 hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100">
+                      <div
+                        className="cursor-pointer flex flex-row items-center gap-2 border-b border-b-gray-300 w-32 hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100"
+                        ref={routinePickerButtonRef}
+                      >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           className="h-5 w-5 text-gray-300 ml-1"
@@ -588,7 +543,7 @@ export function CalendarHome() {
                         <div
                           onClick={() => {
                             setShowRoutinesList(!showRoutinesList);
-                            setModalSettingOpen(!modalSettingOpen);
+                            setRoutineSetterOpen(!routineSetterOpen);
                           }}
                         >
                           <p className=" p-0.5 hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100 text-gray-600 w-24">
@@ -599,9 +554,12 @@ export function CalendarHome() {
                         </div>
                       </div>
                       <RoutinePicker
-                        setSelectedRoutine={setSelectedRoutine}
                         showRoutinesList={showRoutinesList}
+                        setSelectedRoutine={setSelectedRoutine}
                         setShowRoutinesList={setShowRoutinesList}
+                        routinePickerButtonRef={routinePickerButtonRef}
+                        routineSetterOpen={routineSetterOpen}
+                        setRoutineSetterOpen={setRoutineSetterOpen}
                       />
                       <button
                         type="button"

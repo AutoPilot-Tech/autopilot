@@ -17,6 +17,7 @@ function useOutsideAlerter(
      * Alert if clicked on outside of element
      */
     function handleClickOutside(event) {
+
       if (
         ref.current &&
         !ref.current.contains(event.target) &&
@@ -64,7 +65,6 @@ export function SmallCalendar({
   showSmallCalendar,
   setShowSmallCalendar,
   setSelectedDate,
-  toggle,
 }) {
   const [calendar, setCalendar] = useState([]);
   const [value, setValue] = useState(moment());
@@ -218,7 +218,6 @@ export function SmallCalendar({
                       onClick={() => {
                         setSelectedDate(day);
                         setShowSmallCalendar(false);
-                        toggle();
                       }}
                     >
                       {moment(day).format("D")}
