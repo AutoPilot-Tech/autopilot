@@ -44,6 +44,7 @@ export function CalendarHome() {
     moment().format("MM-DD-YYYY")
   );
   const modalSettingButtonRef = useRef(null);
+  const [gridRowClicked, setGridRowClicked] = useState("");
 
   const toggle = () => {
     let modalElement = document.getElementById("modal");
@@ -490,7 +491,10 @@ export function CalendarHome() {
                         </svg>
                         <div>
                           <p className="p-0.5 cursor-pointer hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100 text-gray-600">
-                            Initial Time
+                            {moment()
+                              .hour((gridRowClicked - 2) / 12)
+                              .minute(0)
+                              .format("h:mm A")}
                           </p>
                         </div>
                         <div>
@@ -498,7 +502,10 @@ export function CalendarHome() {
                         </div>
                         <div>
                           <p className="p-0.5  cursor-pointer hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100 text-gray-600">
-                            Final Time
+                            {moment()
+                              .hour((gridRowClicked - 2) / 12 + 1)
+                              .minute(0)
+                              .format("h:mm A")}
                           </p>
                         </div>
                       </div>
@@ -582,7 +589,10 @@ export function CalendarHome() {
                   >
                     <a
                       href="#"
-                      onClick={() => setIsOpenEventModal(true)}
+                      onClick={() => {
+                        setGridRowClicked(i * 12 + 2);
+                        setIsOpenEventModal(true);
+                      }}
                       className="cursor-default group absolute inset-0.5 flex flex-col overflow-y-auto rounded-lg pl-2 pt-1 bg-blue-100"
                     ></a>
                   </li>

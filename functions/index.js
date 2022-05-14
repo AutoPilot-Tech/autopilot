@@ -122,6 +122,8 @@ exports.onCreateUser = functions.auth.user().onCreate((user) => {
   const userRef = db.collection("users").doc(user.uid);
   let parts = user.displayName.split("\\s+");
   let firstName = parts[0];
+
+  
   let lastname = parts[1];
   return userRef.set({
     email: user.email,

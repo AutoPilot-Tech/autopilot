@@ -10,14 +10,19 @@ function useOutsideAlerter(
   setShowSmallCalendar,
   setModalSettingOpen,
   modalSettingOpen,
-  modalSettingButtonRef,
+  modalSettingButtonRef
 ) {
   useEffect(() => {
     /**
      * Alert if clicked on outside of element
      */
     function handleClickOutside(event) {
-      if (ref.current && !ref.current.contains(event.target) && modalSettingOpen && !modalSettingButtonRef.current.contains(event.target)) {
+      if (
+        ref.current &&
+        !ref.current.contains(event.target) &&
+        modalSettingOpen &&
+        !modalSettingButtonRef.current.contains(event.target)
+      ) {
         setShowSmallCalendar(false);
         const modalElement = document.getElementById("modal");
         const saveButtonElement = document.getElementById("save-button");
@@ -127,7 +132,7 @@ export function SmallCalendar({
       className={
         !showSmallCalendar
           ? "hidden"
-          : "absolute border-2 z-50 rounded-sm shadow-md top-28 bg-white"
+          : "left-5 absolute border-2 z-50 rounded-sm shadow-lg top-24 bg-white select-none"
       }
     >
       <OutsideAlerter
@@ -245,7 +250,6 @@ export function SmallCalendar({
                         setShowSmallCalendar(false);
                         toggle();
                       }}
-                      
                     >
                       {moment(day).format("D")}
                     </button>
