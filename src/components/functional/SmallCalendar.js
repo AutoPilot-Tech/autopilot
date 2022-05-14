@@ -28,36 +28,6 @@ function useOutsideAlerter(
         const saveButtonElement = document.getElementById("save-button");
         let saveButtonMarginTop = saveButtonElement.style.marginTop;
 
-        let modalHeight = modalElement.clientHeight;
-        modalElement.animate(
-          [
-            {
-              height: `${modalHeight}px`,
-            },
-            {
-              height: `${modalHeight - 170}px`,
-            },
-          ],
-
-          {
-            duration: 300,
-            fill: "forwards",
-          }
-        );
-        saveButtonElement.animate(
-          [
-            {
-              marginTop: `${saveButtonMarginTop}`,
-            },
-            {
-              marginTop: 0,
-            },
-          ],
-          {
-            duration: 300,
-            fill: "forwards",
-          }
-        );
         setModalSettingOpen(false);
       }
     }

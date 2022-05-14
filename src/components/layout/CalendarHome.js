@@ -5,14 +5,14 @@ import {
   ChevronRightIcon,
   DotsHorizontalIcon,
 } from "@heroicons/react/solid";
-import {BellIcon, MenuIcon, XIcon} from "@heroicons/react/outline";
+import {MenuIcon} from "@heroicons/react/outline";
 import {Menu, Transition, Popover, Dialog} from "@headlessui/react";
 import {Sidebar} from "./Sidebar";
 import {IndividualCalendarRow} from "../functional/IndividualCalendarRow";
 import moment from "moment";
 import {SmallCalendar} from "../functional/SmallCalendar";
 import TextField from "@mui/material/TextField";
-import AnimateHeight from "react-animate-height";
+import {RoutinePicker} from "../functional/RoutinePicker";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -45,6 +45,8 @@ export function CalendarHome() {
   );
   const modalSettingButtonRef = useRef(null);
   const [gridRowClicked, setGridRowClicked] = useState("");
+  const [showRoutinesList, setShowRoutinesList] = useState(false);
+  const [selectedRoutine, setSelectedRoutine] = useState(null);
 
   const toggle = () => {
     let modalElement = document.getElementById("modal");
@@ -118,6 +120,54 @@ export function CalendarHome() {
           fill: "forwards",
         }
       );
+      setModalSettingOpen(false);
+    }
+  };
+
+  const toggleRoutinesListHeight = () => {
+    let modalElement = document.getElementById("modal");
+    let saveButtonElement = document.getElementById("save-button");
+
+    // animate the height change in the modal
+    if (modalSettingOpen === false) {
+      let modalHeight = modalElement.clientHeight;
+      modalElement.animate(
+        [
+          {
+            height: `${modalHeight}px`,
+          },
+          {
+            height: `${modalHeight + 170}px`,
+          },
+        ],
+
+        {
+          duration: 300,
+          fill: "forwards",
+        }
+      );
+
+      setModalSettingOpen(true);
+    } else {
+      let modalHeight = modalElement.clientHeight;
+      let saveButtonMarginTop = saveButtonElement.style.marginTop;
+
+      modalElement.animate(
+        [
+          {
+            height: `${modalHeight}px`,
+          },
+          {
+            height: `${modalHeight - 170}px`,
+          },
+        ],
+
+        {
+          duration: 300,
+          fill: "forwards",
+        }
+      );
+
       setModalSettingOpen(false);
     }
   };
@@ -376,7 +426,7 @@ export function CalendarHome() {
         <Transition appear show={isOpenEventModal} as={Fragment}>
           <Dialog
             as="div"
-            className="fixed inset-0 z-50 overflow-y-auto"
+            className="fixed inset-0 z-50 overflow-y-auto overflow-visible"
             onClose={closeModal}
           >
             <div className="min-h-screen px-4 text-center">
@@ -410,7 +460,7 @@ export function CalendarHome() {
               >
                 <div
                   id="modal"
-                  className="inline-block w-full max-w-md p-3 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl"
+                  className="inline-block w-full max-w-md p-3 text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl overflow-visible"
                 >
                   {/* <Dialog.Title
                     as="h3"
@@ -438,7 +488,7 @@ export function CalendarHome() {
                       }}
                     />
                     <div className="flex flex-col gap-3">
-                      <div className="flex flex-row items-center gap-2 border-b border-b-gray-300 w-32 hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100">
+                      <div className="cursor-pointer flex flex-row items-center gap-2 border-b border-b-gray-300 w-32 hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           className="h-5 w-5 text-gray-300 ml-1"
@@ -455,11 +505,11 @@ export function CalendarHome() {
                           onClick={() => {
                             setShowSmallCalendar(!showSmallCalendar);
                             setModalSettingOpen(!modalSettingOpen);
-                            toggle();
+                            // toggle();
                           }}
                           ref={modalSettingButtonRef}
                         >
-                          <p className=" p-0.5  cursor-pointer hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100 text-gray-600 w-24">
+                          <p className="select-none p-0.5 hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100 text-gray-600 w-24">
                             {moment(selectedDate).format("MM-DD-YYYY")}
                           </p>
                         </div>
@@ -490,7 +540,10 @@ export function CalendarHome() {
                           />
                         </svg>
                         <div>
-                          <p className="p-0.5 cursor-pointer hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100 text-gray-600">
+                          <p
+                            id="time-suggestion"
+                            className="select-none p-0.5 cursor-pointer hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100 text-gray-600"
+                          >
                             {moment()
                               .hour((gridRowClicked - 2) / 12)
                               .minute(0)
@@ -501,7 +554,10 @@ export function CalendarHome() {
                           <p className="text-gray-300">-</p>
                         </div>
                         <div>
-                          <p className="p-0.5  cursor-pointer hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100 text-gray-600">
+                          <p
+                            id="time-sugggestion"
+                            className="p-0.5 select-none cursor-pointer hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100 text-gray-600"
+                          >
                             {moment()
                               .hour((gridRowClicked - 2) / 12 + 1)
                               .minute(0)
@@ -515,7 +571,7 @@ export function CalendarHome() {
                       id="save-button"
                       className="flex flex-row gap-2 justify-end items-center"
                     >
-                      <div className="flex flex-row items-center gap-2 border-b border-b-gray-300 w-32 hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100">
+                      <div className="cursor-pointer flex flex-row items-center gap-2 border-b border-b-gray-300 w-32 hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           className="h-5 w-5 text-gray-300 ml-1"
@@ -529,12 +585,24 @@ export function CalendarHome() {
                             clipRule="evenodd"
                           />
                         </svg>
-                        <div>
-                          <p className=" p-0.5  cursor-pointer hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100 text-gray-600 w-24">
-                            Inbox
+                        <div
+                          onClick={() => {
+                            setShowRoutinesList(!showRoutinesList);
+                            setModalSettingOpen(!modalSettingOpen);
+                          }}
+                        >
+                          <p className=" p-0.5 hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100 text-gray-600 w-24">
+                            {selectedRoutine
+                              ? selectedRoutine.name
+                              : "Set Routine"}
                           </p>
                         </div>
                       </div>
+                      <RoutinePicker
+                        setSelectedRoutine={setSelectedRoutine}
+                        showRoutinesList={showRoutinesList}
+                        setShowRoutinesList={setShowRoutinesList}
+                      />
                       <button
                         type="button"
                         className=" inline-flex px-4 py-2 text-sm font-medium text-green-900 bg-green-100 border border-transparent rounded-md hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-green-500"
