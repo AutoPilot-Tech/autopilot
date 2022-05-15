@@ -99,10 +99,7 @@ export const Tasks = () => {
   // if setCalendar is true, then we will show the calendar
 
   return (
-    <div
-      className="ml-80 pl-1 pr-1 flex-col grow h-fit mr-28"
-      data-testid="tasks"
-    >
+    <div className="pl-10 pr-1 flex-col grow h-fit mr-28" data-testid="tasks">
       <TaskHeader trackName={trackName} />
       {/* <ColorSettings /> */}
       {isRoutine ? <RoutineSettings /> : <></>}
@@ -112,7 +109,7 @@ export const Tasks = () => {
         <EmptyStateTasks />
       ) : (
         <>
-          <div className="relative shadow ring-2 p-1 bg-white ring-black ring-opacity-5 md:rounded-lg ">
+          <div className=" shadow ring-2 p-1 bg-white ring-black ring-opacity-5 md:rounded-lg ">
             <div className="min-w-full divide-y divide-gray-300">
               <div className="divide-y divide-gray-200 bg-white">
                 <ul>{tasks.map((task) => renderTask(task, tasks))}</ul>

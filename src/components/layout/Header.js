@@ -54,7 +54,7 @@ export function Header() {
             setOpenSideBar(!openSideBar);
           }}
         />
-        <a className="" href="/dashboard">
+        <a className="" href="/app/calendar/home">
           <img
             className="block w-auto h-14"
             src="../../images/autopilot_alpha.png"

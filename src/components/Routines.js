@@ -33,6 +33,9 @@ export const Routines = ({active, setActive}) => {
                 setActive(track.trackId);
                 setSelectedTrack(track.trackId);
                 setIsRoutine(false);
+                if (!window.location.href.includes("tasks")) {
+                  window.location.assign(`/app/tasks`);
+                }
               }}
             >
               <IndividualRoutine track={track} />

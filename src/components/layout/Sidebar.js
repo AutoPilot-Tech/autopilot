@@ -75,6 +75,11 @@ export const Sidebar = () => {
             setSelectedTrack("INBOX");
             logClick("sideBarInboxClick");
             setIsRoutine(false);
+            // if the current route does not contain tasks, navigate
+            // to /app/inbox/home
+            if (!window.location.href.includes("tasks")) {
+              window.location.assign(`/app/tasks`);
+            }
           }}
         >
           <span className="mr-2">
@@ -140,6 +145,9 @@ export const Sidebar = () => {
             setSelectedTrack("SETTINGS");
             logClick("sideBarClickSettings");
             setIsRoutine(false);
+            if (!window.location.href.includes("tasks")) {
+              window.location.assign(`/app/tasks`);
+            }
           }}
         >
           <span className="mr-2">
