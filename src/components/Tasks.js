@@ -100,7 +100,7 @@ export const Tasks = () => {
 
   return (
     <div
-      className="ml-80 pt-20 pl-1 pr-1 flex-col grow h-fit mr-28"
+      className="ml-80 pl-1 pr-1 flex-col grow h-fit mr-28"
       data-testid="tasks"
     >
       <TaskHeader trackName={trackName} />

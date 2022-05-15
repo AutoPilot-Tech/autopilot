@@ -41,6 +41,8 @@ export const Sidebar = () => {
             setSelectedTrack("CALENDAR");
             logClick("sideBarCalendarClick");
             setIsRoutine(false);
+            // navigate to /app/calendar/home
+            window.location.assign(`/app/calendar/home`);
           }}
         >
           <span className="mr-2">
