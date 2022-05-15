@@ -8,7 +8,7 @@ export function LoginNew() {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
-        window.location.href = "/dashboard";
+        window.location.href = "/app/calendar/home";
       }
     });
     return unsubscribe;

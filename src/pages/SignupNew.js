@@ -23,7 +23,7 @@ export function SignupNew() {
           .set({
             displayName: `${firstName}`,
           })
-          .then(() => (window.location.href = "/dashboard"));
+          .then(() => (window.location.href = "/app/calendar/home"));
       })
       .catch((error) => {
         var errorCode = error.code;

@@ -56,7 +56,7 @@ export const TaskView = () => {
         <Header />
         <div>
           {showBanner ? <Banner setShowBanner={setShowBanner} /> : null}
-          <div className="relative grow flex-row" id="content">
+          <div className="relative grow flex-row justify-between" id="content">
             <Sidebar />
             <Tasks />
           </div>

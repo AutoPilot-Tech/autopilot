@@ -21,7 +21,6 @@ export const App = () => {
           <Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/signup" element={<SignupNew />} />
-            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/login" element={<LoginNew />} />
             <Route path="/app/calendar/home" element={<CalendarHomeView />} />

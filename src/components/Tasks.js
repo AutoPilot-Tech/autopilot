@@ -21,7 +21,7 @@ function classNames(...classes) {
 
 // this just gets the tasks and renders them
 export const Tasks = () => {
-  const {tracks, selectedTrack, isRoutine} = useTracksValue();
+  const {tracks, selectedTrack, isRoutine, openSideBar} = useTracksValue();
   let {tasks, setTasks} = useTasks(selectedTrack);
   const [showCalendar, setShowCalendar] = useState(false);
   const [showChat, setShowChat] = useState(false);
@@ -72,25 +72,9 @@ export const Tasks = () => {
     trackName = getTitle(tracks, selectedTrack);
   }
 
-  // When selectedTrack changes, we want to check to see if it's the calendar
   useEffect(() => {
-    if (selectedTrack === "CALENDAR") {
-      setShowCalendar(true);
-      setShowChat(false);
-      setShowSettings(false);
-    } else if (selectedTrack === "ASSISTANT") {
-      // this is for the future.
-      setShowChat(true);
-      setShowSettings(false);
-    } else if (selectedTrack === "SETTINGS") {
-      setShowCalendar(false);
-      setShowChat(false);
-      setShowSettings(true);
-    } else {
-      setShowCalendar(false);
-      setShowSettings(false);
-    }
-  }, [selectedTrack]);
+    console.log("selectedTrack", selectedTrack);
+  }, []);
 
   useEffect(() => {
     document.title = `Autopilot: ${trackName}`;
@@ -99,7 +83,7 @@ export const Tasks = () => {
   // if setCalendar is true, then we will show the calendar
 
   return (
-    <div className="pl-10 pr-1 flex-col grow h-fit mr-28" data-testid="tasks">
+    <div className={"pl-24 pr-1 flex-col grow h-fit mr-28"} data-testid="tasks">
       <TaskHeader trackName={trackName} />
       {/* <ColorSettings /> */}
       {isRoutine ? <RoutineSettings /> : <></>}
@@ -109,7 +93,13 @@ export const Tasks = () => {
         <EmptyStateTasks />
       ) : (
         <>
-          <div className=" shadow ring-2 p-1 bg-white ring-black ring-opacity-5 md:rounded-lg ">
+          <div
+            className={
+              openSideBar
+                ? " ml-10 shadow ring-2 p-1 bg-white ring-black ring-opacity-5 md:rounded-lg "
+                : " shadow ring-2 p-1 bg-white ring-black ring-opacity-5 md:rounded-lg "
+            }
+          >
             <div className="min-w-full divide-y divide-gray-300">
               <div className="divide-y divide-gray-200 bg-white">
                 <ul>{tasks.map((task) => renderTask(task, tasks))}</ul>
