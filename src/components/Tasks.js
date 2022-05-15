@@ -38,9 +38,7 @@ export const Tasks = () => {
           [hoverIndex, 0, prevTasks[dragIndex]],
         ],
       })
-
     );
-
   }, []);
 
   const renderTask = useCallback((task, tasks) => {
@@ -101,40 +99,31 @@ export const Tasks = () => {
   // if setCalendar is true, then we will show the calendar
 
   return (
-    <>
-      {
-        showCalendar ? (
-          <Calendar />
-        ) : showSettings ? (
-          <AutopilotSettings />
-        ) : (
-          <div
-            className="ml-80 pt-20 pl-1 pr-1 flex-col grow h-fit mr-28"
-            data-testid="tasks"
-          >
-            <TaskHeader trackName={trackName} />
-            {/* <ColorSettings /> */}
-            {isRoutine ? <RoutineSettings /> : <></>}
+    <div
+      className="ml-80 pt-20 pl-1 pr-1 flex-col grow h-fit mr-28"
+      data-testid="tasks"
+    >
+      <TaskHeader trackName={trackName} />
+      {/* <ColorSettings /> */}
+      {isRoutine ? <RoutineSettings /> : <></>}
 
-            {/* if there are no tasks, show the emptystate component, otherwise render them */}
-            {tasks.length === 0 ? (
-              <EmptyStateTasks />
-            ) : (
-              <>
-                <div className="relative shadow ring-2 p-1 bg-white ring-black ring-opacity-5 md:rounded-lg ">
-                  <div className="min-w-full divide-y divide-gray-300">
-                    <div className="divide-y divide-gray-200 bg-white">
-                      <ul>{tasks.map((task) => renderTask(task, tasks))}</ul>
-                    </div>
-                  </div>
-                </div>
-              </>
-            )}
+      {/* if there are no tasks, show the emptystate component, otherwise render them */}
+      {tasks.length === 0 ? (
+        <EmptyStateTasks />
+      ) : (
+        <>
+          <div className="relative shadow ring-2 p-1 bg-white ring-black ring-opacity-5 md:rounded-lg ">
+            <div className="min-w-full divide-y divide-gray-300">
+              <div className="divide-y divide-gray-200 bg-white">
+                <ul>{tasks.map((task) => renderTask(task, tasks))}</ul>
+              </div>
+            </div>
           </div>
-        ) // if showSettings is true, show settings
-      }
-    </>
-  );
+        </>
+      )}
+    </div>
+  ); // if showSettings is true, show settings
+
   //     <h2 data-testid="track-name">{trackName}</h2>
 
   //     <ul className="tasks__list">
