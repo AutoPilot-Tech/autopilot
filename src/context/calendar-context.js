@@ -29,10 +29,22 @@ TrackContext: showSideBar = true or false
 
 pages:
 app/calendar/today
+  <Header />
+  <SideBar />
+  <CalendarHome />
 app/calendar/week
+  <Header />
+  <SideBar />
+  <CalendarWeekView />
 app/calendar/month
+    <Header />
+    <SideBar />
+    <CalendarMonthView />
 
 app/folder/:folderId
+    <Header />
+    <SideBar />
+    <Tasks />
 
 
 *each page will load the sidebar based on the track context.
