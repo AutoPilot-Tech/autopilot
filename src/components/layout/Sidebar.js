@@ -6,7 +6,8 @@ import {auth} from "../../firebase";
 import {AddRoutine} from "../AddRoutine";
 
 export const Sidebar = () => {
-  const {setSelectedTrack, setIsRoutine} = useTracksValue();
+  const {setSelectedTrack, setIsRoutine, openSideBar, setOpenSideBar} =
+    useTracksValue();
   const [showTracks, setShowTracks] = useState(true);
   const [active, setActive] = useState("calendar");
 
@@ -20,7 +21,13 @@ export const Sidebar = () => {
   }
 
   return (
-    <nav className="fixed space-y-1 float-left flex flex-col pl-6 shadow pt-2 h-screen w-72">
+    <nav
+      className={
+        openSideBar
+          ? "space-y-1 float-left flex flex-col pl-6 shadow pt-2 h-screen w-72 bg-white"
+          : "hidden"
+      }
+    >
       <ul className="pt-2 pr-1">
         <li
           className={classNames(

@@ -216,7 +216,7 @@ export function SmallCalendar({
                     <button
                       className={`w-6  cursor-pointer text-center bg-${bgColor} text-${color} hover:bg-opacity-75`}
                       onClick={() => {
-                        setSelectedDate(day);
+                        setSelectedDate(moment(day).format("YYYY-MM-DD"));
                         setShowSmallCalendar(false);
                       }}
                     >

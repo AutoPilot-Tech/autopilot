@@ -4,12 +4,13 @@ import {Tasks} from "../Tasks";
 import {Calendar} from "../Calendar";
 import {useTracksValue} from "../../context/tracks-context";
 import {Banner} from "./Banner";
+import {CalendarHome} from "./CalendarHome";
 
 export const Content = () => {
   return (
-    <div className="relative grow flex-row mb-48 order-2 top-14" id="content">
+    <div className="relative grow flex-row" id="content">
       <Sidebar />
-      <Tasks />
+      <CalendarHome />
     </div>
   );
 };
