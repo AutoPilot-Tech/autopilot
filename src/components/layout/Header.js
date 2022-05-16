@@ -120,7 +120,7 @@ export function Header() {
                   <Menu.Item>
                     {({active}) => (
                       <a
-                        href="/calendar/home"
+                        href="app/calendar/home"
                         className={classNames(
                           active
                             ? "bg-gray-100 text-gray-900"
@@ -135,7 +135,7 @@ export function Header() {
                   <Menu.Item>
                     {({active}) => (
                       <a
-                        href="/calendar/week"
+                        href="app/calendar/week"
                         className={classNames(
                           active
                             ? "bg-gray-100 text-gray-900"
@@ -150,7 +150,7 @@ export function Header() {
                   <Menu.Item>
                     {({active}) => (
                       <a
-                        href="/calendar/month"
+                        href="app/calendar/month"
                         className={classNames(
                           active
                             ? "bg-gray-100 text-gray-900"
