@@ -11,6 +11,7 @@ import {auth, db} from "../../firebase";
 import {CircularButton} from "../CircularButton";
 import {useLoadingValue} from "../../context/loading-context";
 import {useTracksValue} from "../../context/tracks-context";
+import moment from "moment";
 
 const logOut = () => {
   auth
@@ -64,10 +65,12 @@ export function Header() {
       </div>
       <div className="flex">
         <h1 className="text-lg font-semibold text-gray-900 mr-2">
-          <time className="sm:hidden">Jan 22, 2022</time>
-          <time className="hidden sm:inline">January 22, 2022</time>
+          <time className="sm:hidden">{moment().format("MM Do, YYYY")}</time>
+          <time className="hidden sm:inline">
+            {moment().format("MMMM Do, YYYY")}
+          </time>
         </h1>
-        <p className="mt-1 text-sm text-gray-500">Saturday</p>
+        <p className="mt-1 text-sm text-gray-500">{moment().format("dddd")}</p>
       </div>
       <div className="flex items-center">
         <div className="flex items-center rounded-md shadow-sm md:items-stretch">
