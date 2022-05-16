@@ -24,7 +24,7 @@ export const Sidebar = () => {
     <nav
       className={
         openSideBar
-          ? "space-y-1 float-left flex flex-col pl-6 shadow pt-2 h-screen w-72 bg-white"
+          ? "space-y-1 float-left flex flex-col pl-6 shadow pt-2 h-screen w-72 bg-white mr-20"
           : "hidden"
       }
     >

@@ -83,23 +83,17 @@ export const Tasks = () => {
   // if setCalendar is true, then we will show the calendar
 
   return (
-    <div className={"pl-24 pr-1 flex-col grow h-fit mr-28"} data-testid="tasks">
+    <div className={openSideBar ? " pr-1 flex-col grow h-fit mr-28" : "pl-24 pr-1 flex-col grow h-fit mr-28"} data-testid="tasks">
       <TaskHeader trackName={trackName} />
       {/* <ColorSettings /> */}
-      {isRoutine ? <RoutineSettings /> : <></>}
+      {/* {isRoutine ? <RoutineSettings /> : <></>} */}
 
       {/* if there are no tasks, show the emptystate component, otherwise render them */}
       {tasks.length === 0 ? (
         <EmptyStateTasks />
       ) : (
         <>
-          <div
-            className={
-              openSideBar
-                ? " ml-10 shadow ring-2 p-1 bg-white ring-black ring-opacity-5 md:rounded-lg "
-                : " shadow ring-2 p-1 bg-white ring-black ring-opacity-5 md:rounded-lg "
-            }
-          >
+          <div className="shadow ring-2 p-1 bg-white ring-black ring-opacity-5 md:rounded-lg ">
             <div className="min-w-full divide-y divide-gray-300">
               <div className="divide-y divide-gray-200 bg-white">
                 <ul>{tasks.map((task) => renderTask(task, tasks))}</ul>
@@ -109,19 +103,5 @@ export const Tasks = () => {
         </>
       )}
     </div>
-  ); // if showSettings is true, show settings
-
-  //     <h2 data-testid="track-name">{trackName}</h2>
-
-  //     <ul className="tasks__list">
-  //       {tasks.map((task) => (
-  //         <li key={`${task.id}`}>
-  //           <Checkbox id={task.id} />
-  //           <span>{task.task}</span>
-  //         </li>
-  //       ))}
-  //     </ul>
-  //     <AddTask />
-  //   </div>
-  // );
+  );
 };
