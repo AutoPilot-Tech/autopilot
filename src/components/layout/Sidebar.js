@@ -165,12 +165,7 @@ export const Sidebar = () => {
           <span>Autopilot Settings</span>
         </li> */}
       </ul>
-      <div
-        onClick={() => {
-          setShowTracks(!showTracks);
-          logClick("sideBarShowTracksClick");
-        }}
-      >
+      <div>
         <div className="grid grid-cols-2 mt-5 mb-2 pr-1">
           <p className="pl-2 float-left text-gray-400 font-medium">Routines</p>
           <AddRoutine />

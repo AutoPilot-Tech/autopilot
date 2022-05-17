@@ -71,7 +71,7 @@ export const AddRoutine = ({shouldShow = false}) => {
         });
   };
   return (
-    <div className="mr-5 mt-0.5 cursor-pointer">
+    <div className="mr-5 mt-0.5">
       <span
         className="p-0 float-right text-gray-400 cursor-pointer  hover:rounded-md hover:text-gray-900 hover:bg-gray-200 text-lg"
         onClick={() => openModal()}
