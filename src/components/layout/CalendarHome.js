@@ -424,7 +424,7 @@ export function CalendarHome({year, month, day}) {
                             setGridRowClicked(i * 12 + 2);
                             setIsOpenEventModal(true);
                           }}
-                          className="cursor-default group absolute inset-0.5 flex flex-col overflow-y-auto rounded-lg pl-2 pt-1 bg-transparent"
+                          className="cursor-pointer group absolute inset-0.5 flex flex-col overflow-y-auto rounded-lg pl-2 pt-1 bg-transparent"
                         ></a>
                       </li>
                     );
