@@ -118,7 +118,10 @@ export function CalendarHome() {
 
   return (
     <div className="flex flex-row">
-      <AddEvent setIsOpenEventModal={setIsOpenEventModal} isOpenEventModal={isOpenEventModal}/>
+      <AddEvent
+        setIsOpenEventModal={setIsOpenEventModal}
+        isOpenEventModal={isOpenEventModal}
+      />
       <div className="flex h-full w-full flex-col">
         <div className="flex flex-auto overflow-hidden bg-white">
           <Transition appear show={isOpenEventModal} as={Fragment}>
@@ -376,7 +379,7 @@ export function CalendarHome() {
                   {/* Render the individual events */}
                   {todaysEvents.map((block) => (
                     <li
-                      className="z-50 relative mt-px flex"
+                      className="relative mt-px flex z-40"
                       style={{
                         gridRow: `${block.gridRow} / span 12`,
                         gridColumn: "1 / span 1",
