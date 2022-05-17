@@ -6,6 +6,11 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
+// async function for setting state
+async function setState(setter, value) {
+  setter(value);
+}
+
 export const Routines = ({active, setActive}) => {
   const {tracks, setSelectedTrack, isRoutine, setIsRoutine} = useTracksValue();
   return (

@@ -15,8 +15,7 @@ import {Tasks} from "../components/Tasks";
 // top level, we are using it here in App. This can be replaced
 // with Redux, later.
 export const TaskView = () => {
-  // const {loading, setLoading} = useLoadingValue();
-  const [userLoading, setUserLoading] = useState(true);
+  const {loading, setLoading} = useLoadingValue();
   const {setDisplayName, setPhotoUrl} = useLoadingValue();
   const [showBanner, setShowBanner] = useState(true);
   // const {tracksLoading, setTracksLoading} = useLoadingValue();
@@ -38,7 +37,7 @@ export const TaskView = () => {
         setDisplayName(user.displayName);
         setPhotoUrl(user.photoURL);
         // check to see if the user's tracks are loaded
-        setUserLoading(false);
+        setLoading(false);
       } else {
         console.log("User is not signed in");
       }
@@ -46,7 +45,7 @@ export const TaskView = () => {
     return unsubscribe;
   }, []);
 
-  return userLoading ? (
+  return loading ? (
     <div className="grid place-items-center h-screen">
       <SyncLoader loading={true} size={15} speedMultiplier={2} />
     </div>
@@ -56,7 +55,10 @@ export const TaskView = () => {
         <Header />
         <div>
           {showBanner ? <Banner setShowBanner={setShowBanner} /> : null}
-          <div className="flex relative grow flex-row justify-between" id="content">
+          <div
+            className="flex relative grow flex-row justify-between"
+            id="content"
+          >
             <Sidebar />
             <Tasks />
           </div>

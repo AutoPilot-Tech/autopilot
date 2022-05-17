@@ -15,6 +15,7 @@ import TextField from "@mui/material/TextField";
 import {RoutinePicker} from "../functional/RoutinePicker";
 import {auth, db} from "../../firebase";
 import {useTracksValue} from "../../context/tracks-context";
+import {AddEvent} from "../functional/AddEvent";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -117,6 +118,7 @@ export function CalendarHome() {
 
   return (
     <div className="flex flex-row">
+      <AddEvent setIsOpenEventModal={setIsOpenEventModal} isOpenEventModal={isOpenEventModal}/>
       <div className="flex h-full w-full flex-col">
         <div className="flex flex-auto overflow-hidden bg-white">
           <Transition appear show={isOpenEventModal} as={Fragment}>

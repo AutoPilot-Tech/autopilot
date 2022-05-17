@@ -3,6 +3,7 @@ import {FaTrash, FaTrashAlt} from "react-icons/fa";
 import {useTracksValue} from "../context/tracks-context";
 import {db} from "../firebase";
 import {Menu, Transition, Dialog} from "@headlessui/react";
+import {useLoadingValue} from "../context/loading-context";
 
 /**
  * Hook that alerts clicks outside of the passed ref
@@ -46,6 +47,7 @@ export const IndividualRoutine = ({track}) => {
   const {tracks, setTracks, setSelectedTrack} = useTracksValue();
   const [openSettings, setOpenSettings] = useState(false);
   const [showSettingsIcon, setShowSettingsIcon] = useState(false);
+  const {userLoading, setUserLoading} = useLoadingValue();
 
   function closeModal() {
     setIsOpen(false);

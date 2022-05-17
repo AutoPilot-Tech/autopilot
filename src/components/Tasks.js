@@ -21,6 +21,7 @@ function classNames(...classes) {
 
 // this just gets the tasks and renders them
 export const Tasks = () => {
+  const [userLoading, setUserLoading] = useState(true);
   const {tracks, selectedTrack, isRoutine, openSideBar} = useTracksValue();
   let {tasks, setTasks} = useTasks(selectedTrack);
   const [showCalendar, setShowCalendar] = useState(false);
@@ -83,7 +84,14 @@ export const Tasks = () => {
   // if setCalendar is true, then we will show the calendar
 
   return (
-    <div className={openSideBar ? " pr-1 flex-col grow h-fit mr-28" : "pl-24 pr-1 flex-col grow h-fit mr-28"} data-testid="tasks">
+    <div
+      className={
+        openSideBar
+          ? " pr-1 flex-col grow h-fit mr-28"
+          : "pl-24 pr-1 flex-col grow h-fit mr-28"
+      }
+      data-testid="tasks"
+    >
       <TaskHeader trackName={trackName} />
       {/* <ColorSettings /> */}
       {/* {isRoutine ? <RoutineSettings /> : <></>} */}

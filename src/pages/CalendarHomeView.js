@@ -15,10 +15,11 @@ import {CalendarHome} from "../components/layout/CalendarHome";
 // top level, we are using it here in App. This can be replaced
 // with Redux, later.
 export const CalendarHomeView = () => {
-  // const {loading, setLoading} = useLoadingValue();
+  // This is a global state provided by loading Context
+  const {loading, setLoading} = useLoadingValue();
   const [userLoading, setUserLoading] = useState(true);
   const {setDisplayName, setPhotoUrl} = useLoadingValue();
-  const [showBanner, setShowBanner] = useState(true);
+  const [showBanner, setShowBanner] = useState(false);
   // const {tracksLoading, setTracksLoading} = useLoadingValue();
   // get user from context
 
@@ -38,7 +39,7 @@ export const CalendarHomeView = () => {
         setDisplayName(user.displayName);
         setPhotoUrl(user.photoURL);
         // check to see if the user's tracks are loaded
-        setUserLoading(false);
+        setLoading(false);
       } else {
         console.log("User is not signed in");
       }
@@ -46,7 +47,7 @@ export const CalendarHomeView = () => {
     return unsubscribe;
   }, []);
 
-  return userLoading ? (
+  return loading ? (
     <div className="grid place-items-center h-screen">
       <SyncLoader loading={true} size={15} speedMultiplier={2} />
     </div>

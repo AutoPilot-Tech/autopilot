@@ -57,7 +57,7 @@ export function Header() {
         />
         <a className="" href="/app/calendar/home">
           <img
-            className="block w-auto h-14"
+            className="select-none block w-auto h-14"
             src="../../images/autopilot_alpha.png"
             alt="Autopilot"
           />
@@ -65,12 +65,16 @@ export function Header() {
       </div>
       <div className="flex">
         <h1 className="text-lg font-semibold text-gray-900 mr-2">
-          <time className="sm:hidden">{moment().format("MM Do, YYYY")}</time>
-          <time className="hidden sm:inline">
+          <time className="select-none sm:hidden">
+            {moment().format("MM Do, YYYY")}
+          </time>
+          <time className="select-none hidden sm:inline">
             {moment().format("MMMM Do, YYYY")}
           </time>
         </h1>
-        <p className="mt-1 text-sm text-gray-500">{moment().format("dddd")}</p>
+        <p className="select-none mt-1 text-sm text-gray-500">
+          {moment().format("dddd")}
+        </p>
       </div>
       <div className="flex items-center">
         <div className="flex items-center rounded-md shadow-sm md:items-stretch">

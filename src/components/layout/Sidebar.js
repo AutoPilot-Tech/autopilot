@@ -24,7 +24,7 @@ export const Sidebar = () => {
     <nav
       className={
         openSideBar
-          ? "space-y-1 float-left flex flex-col pl-6 shadow pt-2 h-screen w-72 bg-white mr-20"
+          ? "space-y-1 float-left flex flex-col pl-6 pt-2 h-screen w-72 bg-white border-r-2 border-slate-100"
           : "hidden"
       }
     >
@@ -37,9 +37,9 @@ export const Sidebar = () => {
             "flex items-center px-2 py-1.5 font-medium rounded-md cursor-pointer text-sm subpixel-antialiased"
           )}
           onClick={() => {
+            logClick("sideBarCalendarClick");
             setActive("calendar");
             setSelectedTrack("CALENDAR");
-            logClick("sideBarCalendarClick");
             setIsRoutine(false);
             // navigate to /app/calendar/home
             window.location.assign(`/app/calendar/home`);
