@@ -81,16 +81,13 @@ export function Header() {
           <button
             type="button"
             className="flex items-center justify-center rounded-l-md border border-r-0 border-gray-300 bg-white py-2 pl-3 pr-4 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-gray-50"
+            onClick={() => {
+              // subtract 1 day from the nowValue
+              setNowValue(moment(nowValue).subtract(1, "day").toDate());
+            }}
           >
             <span className="sr-only">Previous month</span>
-            <ChevronLeftIcon
-              className="h-5 w-5"
-              aria-hidden="true"
-              onClick={() => {
-                // subtract 1 day from the nowValue
-                setNowValue(moment(nowValue).subtract(1, "day").toDate());
-              }}
-            />
+            <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
           </button>
           <button
             type="button"
@@ -105,16 +102,13 @@ export function Header() {
           <button
             type="button"
             className="flex items-center justify-center rounded-r-md border border-l-0 border-gray-300 bg-white py-2 pl-4 pr-3 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-gray-50"
+            onClick={() => {
+              // add 1 day from the nowValue
+              setNowValue(moment(nowValue).add(1, "day").toDate());
+            }}
           >
             <span className="sr-only">Next month</span>
-            <ChevronRightIcon
-              className="h-5 w-5"
-              aria-hidden="true"
-              onClick={() => {
-                // add 1 day from the nowValue
-                setNowValue(moment(nowValue).add(1, "day").toDate());
-              }}
-            />
+            <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
           </button>
         </div>
         {/* <div className="hidden md:ml-4 md:flex md:items-center">
