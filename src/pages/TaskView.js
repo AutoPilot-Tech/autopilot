@@ -17,7 +17,7 @@ import {Tasks} from "../components/Tasks";
 export const TaskView = () => {
   const {loading, setLoading} = useLoadingValue();
   const {setDisplayName, setPhotoUrl} = useLoadingValue();
-  const [showBanner, setShowBanner] = useState(true);
+  const [showBanner, setShowBanner] = useState(false);
   // const {tracksLoading, setTracksLoading} = useLoadingValue();
   // get user from context
 
@@ -56,7 +56,7 @@ export const TaskView = () => {
         <div>
           {showBanner ? <Banner setShowBanner={setShowBanner} /> : null}
           <div
-            className="flex relative grow flex-row justify-between"
+            className="flex relative grow flex-row justify-between gap-10"
             id="content"
           >
             <Sidebar />
