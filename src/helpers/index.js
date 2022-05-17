@@ -1,11 +1,11 @@
-import { collatedTasks } from '../constants';
-import { colorsList } from '../constants';
+import {collatedTasks} from "../constants";
+import {colorsList} from "../constants";
+import {db} from "../firebase";
 
 export const getRandomColor = () => {
   const randomIndex = Math.floor(Math.random() * colorsList.length);
   return colorsList[randomIndex];
-}
-
+};
 
 export const getTitle = (tracks, selectedTrackId) => {
   let track = tracks.find((track) => track.trackId === selectedTrackId);
@@ -13,7 +13,6 @@ export const getTitle = (tracks, selectedTrackId) => {
 };
 
 export const getCollatedTitle = (tracks, key) => {
-
   let track = tracks.find((track) => track.key === key);
   return track.name;
 };
@@ -24,17 +23,17 @@ export const collatedTasksExist = (selectedTrack) => {
 
 export const getRoutines = (tracks) => {
   return tracks.filter((track) => track.routine);
-}
+};
 
 export const findRoutineName = (routines, trackName) => {
   let routine = routines.find((routine) => routine.name === trackName);
   return routine.name;
-}
+};
 
 // this is just taken from online, its similar to how firebase does it
 export const generatePushId = (() => {
   const PUSH_CHARS =
-    '-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz';
+    "-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz";
 
   const lastRandChars = [];
 
@@ -47,7 +46,7 @@ export const generatePushId = (() => {
       now = Math.floor(now / 64);
     }
 
-    let id = timeStampChars.join('');
+    let id = timeStampChars.join("");
 
     for (i = 0; i < 12; i++) {
       id += PUSH_CHARS.charAt(lastRandChars[i]);
@@ -57,12 +56,12 @@ export const generatePushId = (() => {
   };
 })();
 
-
-export const sortedObject = unordered => {
-  return Object.keys(unordered).sort().reduce(
-    (obj, key) => {
+export const sortedObject = (unordered) => {
+  return Object.keys(unordered)
+    .sort()
+    .reduce((obj, key) => {
       obj[key] = unordered[key];
-      return obj
+      return obj;
     }, {});
 };
 
@@ -71,4 +70,16 @@ export const sortArrayOfObjects = (array) => {
   return array.sort((a, b) => {
     return a.index - b.index;
   });
-}
+};
+
+export const getTasksLength = (trackId) => {
+  const unsubscribe = db
+    .collection("tasks")
+    .where("trackId", "==", trackId)
+    .get()
+    .then((snapshot) => {
+      let tasksLength = snapshot.docs.length;
+      return tasksLength;
+    });
+  return unsubscribe;
+};
