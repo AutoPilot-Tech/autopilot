@@ -67,7 +67,13 @@ export function CalendarHome() {
             snapshot.forEach((doc) => {
               let event = doc.data();
               event.id = doc.id;
-              eventsArray.push(event);
+              // if the event is scheduled for today push it
+              if (
+                moment(event.start).format("MM-DD-YYYY") ===
+                moment().format("MM-DD-YYYY")
+              ) {
+                eventsArray.push(event);
+              }
             });
             setTodaysEvents(eventsArray);
           });
