@@ -367,7 +367,7 @@ export function CalendarHome({year, month, day}) {
               <div
                 className="w-14 flex-none bg-white "
                 style={{
-                  borderRight: "1px solid #e5e7eb",
+                  borderRight: "1px solid #f3f4f6",
                 }}
               />
               <div className="grid flex-auto grid-cols-1 grid-rows-1">
