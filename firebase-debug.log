@@ -1,0 +1,263 @@
+[debug] [2022-05-17T05:30:59.441Z] ----------------------------------------------------------------------
+[debug] [2022-05-17T05:30:59.443Z] Command:       /usr/local/bin/node /usr/local/bin/firebase emulators:start
+[debug] [2022-05-17T05:30:59.444Z] CLI Version:   10.6.0
+[debug] [2022-05-17T05:30:59.444Z] Platform:      darwin
+[debug] [2022-05-17T05:30:59.444Z] Node Version:  v14.15.1
+[debug] [2022-05-17T05:30:59.444Z] Time:          Tue May 17 2022 00:30:59 GMT-0500 (Central Daylight Time)
+[debug] [2022-05-17T05:30:59.445Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2022-05-17T05:30:59.499Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2022-05-17T05:30:59.499Z] > authorizing via signed-in user (matthew.a.molinar@gmail.com)
+[debug] [2022-05-17T05:30:59.929Z] java version "14.0.2" 2020-07-14
+Java(TM) SE Runtime Environment (build 14.0.2+12-46)
+
+[debug] [2022-05-17T05:30:59.930Z] Java HotSpot(TM) 64-Bit Server VM (build 14.0.2+12-46, mixed mode, sharing)
+
+[debug] [2022-05-17T05:30:59.934Z] Parsed Java major version: 14
+[info] i  emulators: Starting emulators: auth, functions, firestore, hosting {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: auth, functions, firestore, hosting"}}
+[warn] ⚠  emulators: It seems that you are running multiple instances of the emulator suite for project autopilot-7ab12. This may result in unexpected behavior. 
+[debug] [2022-05-17T05:30:59.960Z] [hub] writing locator at /var/folders/jr/g8tj0fl15551wsjfnl8_k6940000gn/T/hub-autopilot-7ab12.json
+[warn] ⚠  functions: The following emulators are not running, calls to these services from the Functions emulator will affect production: database, pubsub, storage {"metadata":{"emulator":{"name":"functions"},"message":"The following emulators are not running, calls to these services from the Functions emulator will affect production: \u001b[1mdatabase, pubsub, storage\u001b[22m"}}
+[warn] ⚠  Your requested "node" version "16" doesn't match your global version "14". Using node@14 from host. {"metadata":{"emulator":{"name":"functions"},"message":"Your requested \"node\" version \"16\" doesn't match your global version \"14\". Using node@14 from host."}}
+[debug] [2022-05-17T05:31:00.256Z] defaultcredentials: writing to file /Users/matthewmolinar/.config/firebase/matthew_a.molinar_gmail.com_application_default_credentials.json
+[debug] [2022-05-17T05:31:00.259Z] Setting GAC to /Users/matthewmolinar/.config/firebase/matthew_a.molinar_gmail.com_application_default_credentials.json {"metadata":{"emulator":{"name":"functions"},"message":"Setting GAC to /Users/matthewmolinar/.config/firebase/matthew_a.molinar_gmail.com_application_default_credentials.json"}}
+[debug] [2022-05-17T05:31:00.262Z] > refreshing access token with scopes: []
+[debug] [2022-05-17T05:31:00.262Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2022-05-17T05:31:00.377Z] <<< HTTP RESPONSE 200 {"pragma":"no-cache","date":"Tue, 17 May 2022 05:31:00 GMT","cache-control":"no-cache, no-store, max-age=0, must-revalidate","expires":"Mon, 01 Jan 1990 00:00:00 GMT","content-type":"application/json; charset=utf-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","server":"scaffolding on HTTPServer2","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2022-05-17T05:31:00.431Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/autopilot-7ab12/adminSdkConfig [none]
+[debug] [2022-05-17T05:31:00.686Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/autopilot-7ab12/adminSdkConfig 200
+[debug] [2022-05-17T05:31:00.687Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/autopilot-7ab12/adminSdkConfig {"projectId":"autopilot-7ab12","storageBucket":"autopilot-7ab12.appspot.com","locationId":"us-central"}
+[warn] ⚠  firestore: Did not find a Cloud Firestore rules file specified in a firebase.json config file. {"metadata":{"emulator":{"name":"firestore"},"message":"Did not find a Cloud Firestore rules file specified in a firebase.json config file."}}
+[warn] ⚠  firestore: The emulator will default to allowing all reads and writes. Learn more about this option: https://firebase.google.com/docs/emulator-suite/install_and_configure#security_rules_configuration. {"metadata":{"emulator":{"name":"firestore"},"message":"The emulator will default to allowing all reads and writes. Learn more about this option: https://firebase.google.com/docs/emulator-suite/install_and_configure#security_rules_configuration."}}
+[debug] [2022-05-17T05:31:00.983Z] Ignoring unsupported arg: projectId {"metadata":{"emulator":{"name":"firestore"},"message":"Ignoring unsupported arg: projectId"}}
+[debug] [2022-05-17T05:31:00.983Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"firestore"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2022-05-17T05:31:00.984Z] Starting Firestore Emulator with command {"binary":"java","args":["-Dgoogle.cloud_firestore.debug_log_level=FINE","-Duser.language=en","-jar","/Users/matthewmolinar/.cache/firebase/emulators/cloud-firestore-emulator-v1.14.1.jar","--host","localhost","--port",8080,"--functions_emulator","localhost:5001"],"optionalArgs":["port","webchannel_port","host","rules","functions_emulator","seed_from_export"],"joinArgs":false} {"metadata":{"emulator":{"name":"firestore"},"message":"Starting Firestore Emulator with command {\"binary\":\"java\",\"args\":[\"-Dgoogle.cloud_firestore.debug_log_level=FINE\",\"-Duser.language=en\",\"-jar\",\"/Users/matthewmolinar/.cache/firebase/emulators/cloud-firestore-emulator-v1.14.1.jar\",\"--host\",\"localhost\",\"--port\",8080,\"--functions_emulator\",\"localhost:5001\"],\"optionalArgs\":[\"port\",\"webchannel_port\",\"host\",\"rules\",\"functions_emulator\",\"seed_from_export\"],\"joinArgs\":false}"}}
+[info] i  firestore: Firestore Emulator logging to firestore-debug.log {"metadata":{"emulator":{"name":"firestore"},"message":"Firestore Emulator logging to \u001b[1mfirestore-debug.log\u001b[22m"}}
+[debug] [2022-05-17T05:31:02.347Z] May 17, 2022 12:31:02 AM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketServer start
+INFO: Started WebSocket server on ws://localhost:60455
+ {"metadata":{"emulator":{"name":"firestore"},"message":"May 17, 2022 12:31:02 AM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketServer start\nINFO: Started WebSocket server on ws://localhost:60455\n"}}
+[debug] [2022-05-17T05:31:02.373Z] API endpoint: http://localhost:8080
+ {"metadata":{"emulator":{"name":"firestore"},"message":"API endpoint: http://localhost:8080\n"}}
+[debug] [2022-05-17T05:31:02.373Z] If you are using a library that supports the FIRESTORE_EMULATOR_HOST environment variable, run:
+
+   export FIRESTORE_EMULATOR_HOST=localhost:8080
+
+Dev App Server is now running.
+
+ {"metadata":{"emulator":{"name":"firestore"},"message":"If you are using a library that supports the FIRESTORE_EMULATOR_HOST environment variable, run:\n\n   export FIRESTORE_EMULATOR_HOST=localhost:8080\n\nDev App Server is now running.\n\n"}}
+[debug] [2022-05-17T05:31:09.563Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/autopilot-7ab12/sites 
+[debug] [2022-05-17T05:31:09.896Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/autopilot-7ab12/sites 200
+[debug] [2022-05-17T05:31:09.896Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/autopilot-7ab12/sites {"sites":[{"name":"projects/autopilot-7ab12/sites/autopilot-7ab12","defaultUrl":"https://autopilot-7ab12.web.app","type":"DEFAULT_SITE"}]}
+[debug] [2022-05-17T05:31:09.896Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/autopilot-7ab12/webApps/-/config [none]
+[debug] [2022-05-17T05:31:10.277Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/autopilot-7ab12/webApps/-/config 200
+[debug] [2022-05-17T05:31:10.277Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/autopilot-7ab12/webApps/-/config {"projectId":"autopilot-7ab12","appId":"1:39033041323:web:e9ab1b2b69a46ce91b62ee","storageBucket":"autopilot-7ab12.appspot.com","locationId":"us-central","apiKey":"AIzaSyByQ9uymQz0xR06INhjGTIQPFlYAaE-Rgg","authDomain":"autopilot-7ab12.firebaseapp.com","messagingSenderId":"39033041323","measurementId":"G-TG33L88W6V"}
+[info] i  hosting: Serving hosting files from: build {"metadata":{"emulator":{"name":"hosting"},"message":"Serving hosting files from: \u001b[1mbuild\u001b[22m"}}
+[info] ✔  hosting: Local server: http://localhost:5002 {"metadata":{"emulator":{"name":"hosting"},"message":"Local server: \u001b[4m\u001b[1mhttp://localhost:5002\u001b[22m\u001b[24m"}}
+[debug] [2022-05-17T05:31:10.583Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2022-05-17T05:31:10.583Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: port"}}
+[debug] [2022-05-17T05:31:10.583Z] Starting Emulator UI with command {"binary":"node","args":["/Users/matthewmolinar/.cache/firebase/emulators/ui-v1.6.5/server.bundle.js"],"optionalArgs":[],"joinArgs":false} {"metadata":{"emulator":{"name":"ui"},"message":"Starting Emulator UI with command {\"binary\":\"node\",\"args\":[\"/Users/matthewmolinar/.cache/firebase/emulators/ui-v1.6.5/server.bundle.js\"],\"optionalArgs\":[],\"joinArgs\":false}"}}
+[info] i  ui: Emulator UI logging to ui-debug.log {"metadata":{"emulator":{"name":"ui"},"message":"Emulator UI logging to \u001b[1mui-debug.log\u001b[22m"}}
+[debug] [2022-05-17T05:31:10.710Z] Web / API server started at localhost:4000
+ {"metadata":{"emulator":{"name":"ui"},"message":"Web / API server started at localhost:4000\n"}}
+[info] i  functions: Watching "/Users/matthewmolinar/athios-saas/functions" for Cloud Functions... {"metadata":{"emulator":{"name":"functions"},"message":"Watching \"/Users/matthewmolinar/athios-saas/functions\" for Cloud Functions..."}}
+[debug] [2022-05-17T05:31:10.864Z] Validating nodejs source
+[warn] ⚠  functions: package.json indicates an outdated version of firebase-functions. Please upgrade using npm install --save firebase-functions@latest in your functions directory. 
+[debug] [2022-05-17T05:31:12.106Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "16"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "firebase-admin": "^10.0.2",
+    "firebase-functions": "^3.18.0",
+    "moment": "^2.29.2",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "firebase-functions-test": "^0.2.0"
+  },
+  "private": true
+}
+[debug] [2022-05-17T05:31:12.107Z] Building nodejs source
+[debug] [2022-05-17T05:31:12.107Z] Analyzing nodejs backend spec
+[debug] [2022-05-17T05:31:12.469Z] addAuthTrigger {"eventTrigger":{"eventType":"providers/firebase.auth/eventTypes/user.create","resource":"projects/autopilot-7ab12"}}
+[info] ✔  functions[us-central1-onCreateUser]: auth function initialized. {"metadata":{"emulator":{"name":"functions"},"message":"\u001b[1mauth\u001b[22m function initialized."}}
+[debug] [2022-05-17T05:31:12.470Z] addFirestoreTrigger "{\"eventTrigger\":{\"eventType\":\"providers/cloud.firestore/eventTypes/document.write\",\"resource\":\"projects/autopilot-7ab12/databases/(default)/documents/events/{eventId}\",\"service\":\"firestore.googleapis.com\"}}"
+[debug] [2022-05-17T05:31:12.471Z] >>> HTTP REQUEST PUT http://localhost:8080/emulator/v1/projects/autopilot-7ab12/triggers/us-central1-initialScheduleFill-0  
+ {"eventTrigger":{"eventType":"providers/cloud.firestore/eventTypes/document.write","resource":"projects/autopilot-7ab12/databases/(default)/documents/events/{eventId}","service":"firestore.googleapis.com"}}
+[debug] [2022-05-17T05:31:12.494Z] May 17, 2022 12:31:12 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"May 17, 2022 12:31:12 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2022-05-17T05:31:12.705Z] May 17, 2022 12:31:12 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"May 17, 2022 12:31:12 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected HTTP/2 connection.\n"}}
+[debug] [2022-05-17T05:31:13.288Z] <<< HTTP RESPONSE 200 {"content-type":"application/json","content-length":"4"}
+[info] ✔  functions[us-central1-initialScheduleFill]: firestore function initialized. {"metadata":{"emulator":{"name":"functions"},"message":"\u001b[1mfirestore\u001b[22m function initialized."}}
+[info] 
+┌─────────────────────────────────────────────────────────────┐
+│ ✔  All emulators ready! It is now safe to connect your app. │
+│ i  View Emulator UI at http://localhost:4000                │
+└─────────────────────────────────────────────────────────────┘
+
+┌────────────────┬────────────────┬─────────────────────────────────┐
+│ Emulator       │ Host:Port      │ View in Emulator UI             │
+├────────────────┼────────────────┼─────────────────────────────────┤
+│ Authentication │ localhost:9099 │ http://localhost:4000/auth      │
+├────────────────┼────────────────┼─────────────────────────────────┤
+│ Functions      │ localhost:5001 │ http://localhost:4000/functions │
+├────────────────┼────────────────┼─────────────────────────────────┤
+│ Firestore      │ localhost:8080 │ http://localhost:4000/firestore │
+├────────────────┼────────────────┼─────────────────────────────────┤
+│ Hosting        │ localhost:5002 │ n/a                             │
+└────────────────┴────────────────┴─────────────────────────────────┘
+  Emulator Hub running at localhost:4400
+  Other reserved ports: 4500
+
+Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
+ 
+[debug] [2022-05-17T05:31:16.714Z] >>> [apiv2][query] POST http://localhost:5001/functions/projects/autopilot-7ab12/trigger_multicast [none]
+[debug] [2022-05-17T05:31:16.714Z] >>> [apiv2][body] POST http://localhost:5001/functions/projects/autopilot-7ab12/trigger_multicast {"eventId":"b7a85079-650b-48a5-a806-410330fe37eb","eventType":"providers/firebase.auth/eventTypes/user.create","resource":{"name":"projects/autopilot-7ab12","service":"firebaseauth.googleapis.com"},"params":{},"timestamp":"2022-05-17T05:31:16.714Z","data":{"uid":"U1FGCL97CFwodCltZoRx8X4Dob19","email":"otter.algae.610@example.com","emailVerified":true,"displayName":"Otter Algae","metadata":{"creationTime":"1652765476713","lastSignInTime":"1652765476713"},"customClaims":{},"providerData":[{"providerId":"google.com","rawId":"3056839380248666075769708113994045092043","federatedId":"3056839380248666075769708113994045092043","displayName":"Otter Algae","email":"otter.algae.610@example.com","screenName":"algae_otter"}]}}
+[debug] [2022-05-17T05:31:16.728Z] [work-queue] {"queueLength":1,"workRunningCount":0}
+[debug] [2022-05-17T05:31:16.731Z] [work-queue] {"queueLength":0,"workRunningCount":1}
+[debug] [2022-05-17T05:31:16.731Z] Accepted multicast request POST /functions/projects/autopilot-7ab12/trigger_multicast --> us-central1-onCreateUser-0 {"metadata":{"emulator":{"name":"functions"},"message":"Accepted multicast request POST /functions/projects/autopilot-7ab12/trigger_multicast --> us-central1-onCreateUser-0"}}
+[debug] [2022-05-17T05:31:16.741Z] [worker-pool] addWorker(us-central1-onCreateUser) {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] addWorker(us-central1-onCreateUser)"}}
+[debug] [2022-05-17T05:31:16.742Z] [worker-pool] Adding worker with key us-central1-onCreateUser, total=1 {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] Adding worker with key us-central1-onCreateUser, total=1"}}
+[debug] [2022-05-17T05:31:16.742Z] [worker-pool] submitWork(triggerId=us-central1-onCreateUser) {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] submitWork(triggerId=us-central1-onCreateUser)"}}
+[debug] [2022-05-17T05:31:16.742Z] [worker-us-central1-onCreateUser-db4dfa05-fecf-42be-9e0a-b55e811154c9]: Assigning socketPath: /var/folders/jr/g8tj0fl15551wsjfnl8_k6940000gn/T/fire_emu_64127.sock {"metadata":{"emulator":{"name":"functions"},"message":"[worker-us-central1-onCreateUser-db4dfa05-fecf-42be-9e0a-b55e811154c9]: Assigning socketPath: /var/folders/jr/g8tj0fl15551wsjfnl8_k6940000gn/T/fire_emu_64127.sock"}}
+[debug] [2022-05-17T05:31:16.743Z] [worker-us-central1-onCreateUser-db4dfa05-fecf-42be-9e0a-b55e811154c9]: BUSY {"metadata":{"emulator":{"name":"functions"},"message":"[worker-us-central1-onCreateUser-db4dfa05-fecf-42be-9e0a-b55e811154c9]: BUSY"}}
+[debug] [2022-05-17T05:31:16.748Z] <<< [apiv2][status] POST http://localhost:5001/functions/projects/autopilot-7ab12/trigger_multicast 200
+[debug] [2022-05-17T05:31:16.748Z] <<< [apiv2][body] POST http://localhost:5001/functions/projects/autopilot-7ab12/trigger_multicast {"status":"multicast_acknowledged"}
+[debug] [2022-05-17T05:31:17.622Z] May 17, 2022 12:31:17 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"May 17, 2022 12:31:17 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2022-05-17T05:31:18.107Z] May 17, 2022 12:31:18 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"May 17, 2022 12:31:18 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2022-05-17T05:31:18.161Z] May 17, 2022 12:31:18 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"May 17, 2022 12:31:18 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2022-05-17T05:31:18.449Z] [runtime-status] [64127] Functions runtime initialized. {"cwd":"/Users/matthewmolinar/athios-saas/functions","node_version":"14.15.1"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-onCreateUser"},"extension":{},"message":"[runtime-status] [64127] Functions runtime initialized. {\"cwd\":\"/Users/matthewmolinar/athios-saas/functions\",\"node_version\":\"14.15.1\"}"}}
+[debug] [2022-05-17T05:31:18.449Z] [runtime-status] [64127] Disabled runtime features: undefined {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-onCreateUser"},"extension":{},"message":"[runtime-status] [64127] Disabled runtime features: undefined"}}
+[debug] [2022-05-17T05:31:18.451Z] [runtime-status] [64127] Resolved module firebase-admin {"declared":true,"installed":true,"version":"10.0.2","resolution":"/Users/matthewmolinar/athios-saas/functions/node_modules/firebase-admin/lib/index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-onCreateUser"},"extension":{},"message":"[runtime-status] [64127] Resolved module firebase-admin {\"declared\":true,\"installed\":true,\"version\":\"10.0.2\",\"resolution\":\"/Users/matthewmolinar/athios-saas/functions/node_modules/firebase-admin/lib/index.js\"}"}}
+[debug] [2022-05-17T05:31:18.453Z] [runtime-status] [64127] Resolved module firebase-functions {"declared":true,"installed":true,"version":"3.20.1","resolution":"/Users/matthewmolinar/athios-saas/functions/node_modules/firebase-functions/lib/index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-onCreateUser"},"extension":{},"message":"[runtime-status] [64127] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"3.20.1\",\"resolution\":\"/Users/matthewmolinar/athios-saas/functions/node_modules/firebase-functions/lib/index.js\"}"}}
+[debug] [2022-05-17T05:31:18.453Z] [runtime-status] [64127] Found local functions config: /Users/matthewmolinar/athios-saas/functions/.runtimeconfig.json {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-onCreateUser"},"extension":{},"message":"[runtime-status] [64127] Found local functions config: /Users/matthewmolinar/athios-saas/functions/.runtimeconfig.json"}}
+[debug] [2022-05-17T05:31:18.454Z] [runtime-status] [64127] Outgoing network have been stubbed. [{"name":"http","status":"mocked"},{"name":"http","status":"mocked"},{"name":"https","status":"mocked"},{"name":"https","status":"mocked"},{"name":"net","status":"mocked"}] {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-onCreateUser"},"extension":{},"message":"[runtime-status] [64127] Outgoing network have been stubbed. [{\"name\":\"http\",\"status\":\"mocked\"},{\"name\":\"http\",\"status\":\"mocked\"},{\"name\":\"https\",\"status\":\"mocked\"},{\"name\":\"https\",\"status\":\"mocked\"},{\"name\":\"net\",\"status\":\"mocked\"}]"}}
+[debug] [2022-05-17T05:31:18.455Z] [runtime-status] [64127] Resolved module firebase-functions {"declared":true,"installed":true,"version":"3.20.1","resolution":"/Users/matthewmolinar/athios-saas/functions/node_modules/firebase-functions/lib/index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-onCreateUser"},"extension":{},"message":"[runtime-status] [64127] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"3.20.1\",\"resolution\":\"/Users/matthewmolinar/athios-saas/functions/node_modules/firebase-functions/lib/index.js\"}"}}
+[debug] [2022-05-17T05:31:18.536Z] [runtime-status] [64127] Checked functions.config() {"config":{"client":{"email":"firebase-adminsdk-6k3hc@autopilot-7ab12.iam.gserviceaccount.com"},"private":{"key":"-----BEGIN PRIVATE KEY-----\\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDC8a2oOurxi6Wy\\nvejJE3RetuqhltvpJ9McFC6NMcdvPSLgJUfWt6x8xhw9KxkoZmGIewTSYZ7qAaXN\\nBB+B8T1b4APsAQdBEwHxQ/TCAfIs+Ul660agsg1kje1zyUOKNUzrtShSMLZ9ceYG\\nLnxViAIm8jfGhHLb8WQDMdXxW8l/54K3J8XkvrsIUBMm0yJ8r+s/fyyH7ptuVZuE\\nGLG32T4SFceQvg92WEEKnNvl0DaQg85zOhj5CG90FRVm8/RMaLtddaEUjStBYAeN\\nTfgcbJFJ4hxNrP0K5VIKtRh/skhy9vjePEtY+RPvzL0x/nBvzxlejCPCQLkKeYJW\\n7hKxzashAgMBAAECggEAASfeu5JOLwcrdkaHtScj6nAAxAXm0R2tiTC0m3KbJUrP\\nnymoFhWXRKibMCt7nf3oZV9Jq/0h7Jl8prKNRMS96ZfnsgwfWMM19gds/FhNBnem\\nYr+3FsVjd1rbjeiN2X7fe+oXqSVqiY5wWo2clVhlyd5nq/9q8RNKlbXDjXzPB6P1\\n3fwtVVxmiqa7de2JmdEVvcKeIj2UClZTf4hhZoZIeegQWq7MSrusqpxiURUL0GoY\\n6Ln7gGDmfLMG4xv0M5S8IJa3OKlUKPiAj8p1Ga32HvFXi3UuMPPaBm1XagB0avps\\nRDy+pHU+q+QVFRW1hYAATF9D90XlOC0LRF/oYgbBqQKBgQDxywapWZIUD0Csuv4p\\nUfqe/5yvwtFrSzNBSgkjmC250iAhyqRhTsSqN+OMrTzHZ7JI0kHkTyPhFRvhAe89\\nqCKNm5bCOLLcSsVCMGkbYEIx9sqpZdivix8gGlecb6XciDBlClD6HmoMJ8ct73Rk\\nQOQ2geBrymjw9VUWifNj0aOWyQKBgQDOZfbl/yybTHJnjRQtx9ZJI7p5yeNvD3u9\\nA3tMMGe8BPbEHJZHbp6p/VNCVxyabIx03HoZy9yu62oI5s++cVz2/qw8JJkPboXG\\ng9ZbOx9wtetzJbmTOYVdmQrfhMh5I4QsASeL2ETEUnAKTeesyIexnL7Sp5RAf+0H\\n5cqbl5GlmQKBgAQBt0SLJW6LqiiymI+auip0VeZbthivEFReo7QhS3Cu2LV2pC6w\\nnXWso2qrXDx5rWyjf1AHN7L9JI8f9xTwelIaZ+8j/WLFImusXbGEcNRfIJCaDXMr\\nPQLNLPJ8ryTuZM7n0tuyMVOuPRC3zRf0M1Pr5woiOobzqctL0eqviKRxAoGAVDt0\\nqaScFbz7K5t90rktkKfOIInuEZMmEptrJErU6vyzoJFyGzDf+8vwwLBAch0+rSqV\\nghWauKBGo99ehQBKylpg/CKLfKrEWaHQR2c3i44SyulodNcSwIIG1/WewyFlfXfz\\nJbVbSyvBodLta6xjBG9NyTau4CvVFlYHe7w9qnECgYEAiISPOiWHrdGkkDsL8qd3\\nt6uuuRl6axQ1LeDQTtGh93rcq4PwpYZvBtBkAN5LNeeVuUaW9OiFh0JO1Dit/oBz\\n8x/DdCPEyV2LfYWhw3MskbSve2Y704cwmxEizPnkq76JoQcNrLO8X6Z/9LK6yasM\\nqZSqSc1Pseq3v/hjsq91qck=\\n-----END PRIVATE KEY-----\\n"},"project":{"id":"autopilot-7ab12"}}} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-onCreateUser"},"extension":{},"message":"[runtime-status] [64127] Checked functions.config() {\"config\":{\"client\":{\"email\":\"firebase-adminsdk-6k3hc@autopilot-7ab12.iam.gserviceaccount.com\"},\"private\":{\"key\":\"-----BEGIN PRIVATE KEY-----\\\\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDC8a2oOurxi6Wy\\\\nvejJE3RetuqhltvpJ9McFC6NMcdvPSLgJUfWt6x8xhw9KxkoZmGIewTSYZ7qAaXN\\\\nBB+B8T1b4APsAQdBEwHxQ/TCAfIs+Ul660agsg1kje1zyUOKNUzrtShSMLZ9ceYG\\\\nLnxViAIm8jfGhHLb8WQDMdXxW8l/54K3J8XkvrsIUBMm0yJ8r+s/fyyH7ptuVZuE\\\\nGLG32T4SFceQvg92WEEKnNvl0DaQg85zOhj5CG90FRVm8/RMaLtddaEUjStBYAeN\\\\nTfgcbJFJ4hxNrP0K5VIKtRh/skhy9vjePEtY+RPvzL0x/nBvzxlejCPCQLkKeYJW\\\\n7hKxzashAgMBAAECggEAASfeu5JOLwcrdkaHtScj6nAAxAXm0R2tiTC0m3KbJUrP\\\\nnymoFhWXRKibMCt7nf3oZV9Jq/0h7Jl8prKNRMS96ZfnsgwfWMM19gds/FhNBnem\\\\nYr+3FsVjd1rbjeiN2X7fe+oXqSVqiY5wWo2clVhlyd5nq/9q8RNKlbXDjXzPB6P1\\\\n3fwtVVxmiqa7de2JmdEVvcKeIj2UClZTf4hhZoZIeegQWq7MSrusqpxiURUL0GoY\\\\n6Ln7gGDmfLMG4xv0M5S8IJa3OKlUKPiAj8p1Ga32HvFXi3UuMPPaBm1XagB0avps\\\\nRDy+pHU+q+QVFRW1hYAATF9D90XlOC0LRF/oYgbBqQKBgQDxywapWZIUD0Csuv4p\\\\nUfqe/5yvwtFrSzNBSgkjmC250iAhyqRhTsSqN+OMrTzHZ7JI0kHkTyPhFRvhAe89\\\\nqCKNm5bCOLLcSsVCMGkbYEIx9sqpZdivix8gGlecb6XciDBlClD6HmoMJ8ct73Rk\\\\nQOQ2geBrymjw9VUWifNj0aOWyQKBgQDOZfbl/yybTHJnjRQtx9ZJI7p5yeNvD3u9\\\\nA3tMMGe8BPbEHJZHbp6p/VNCVxyabIx03HoZy9yu62oI5s++cVz2/qw8JJkPboXG\\\\ng9ZbOx9wtetzJbmTOYVdmQrfhMh5I4QsASeL2ETEUnAKTeesyIexnL7Sp5RAf+0H\\\\n5cqbl5GlmQKBgAQBt0SLJW6LqiiymI+auip0VeZbthivEFReo7QhS3Cu2LV2pC6w\\\\nnXWso2qrXDx5rWyjf1AHN7L9JI8f9xTwelIaZ+8j/WLFImusXbGEcNRfIJCaDXMr\\\\nPQLNLPJ8ryTuZM7n0tuyMVOuPRC3zRf0M1Pr5woiOobzqctL0eqviKRxAoGAVDt0\\\\nqaScFbz7K5t90rktkKfOIInuEZMmEptrJErU6vyzoJFyGzDf+8vwwLBAch0+rSqV\\\\nghWauKBGo99ehQBKylpg/CKLfKrEWaHQR2c3i44SyulodNcSwIIG1/WewyFlfXfz\\\\nJbVbSyvBodLta6xjBG9NyTau4CvVFlYHe7w9qnECgYEAiISPOiWHrdGkkDsL8qd3\\\\nt6uuuRl6axQ1LeDQTtGh93rcq4PwpYZvBtBkAN5LNeeVuUaW9OiFh0JO1Dit/oBz\\\\n8x/DdCPEyV2LfYWhw3MskbSve2Y704cwmxEizPnkq76JoQcNrLO8X6Z/9LK6yasM\\\\nqZSqSc1Pseq3v/hjsq91qck=\\\\n-----END PRIVATE KEY-----\\\\n\"},\"project\":{\"id\":\"autopilot-7ab12\"}}}"}}
+[debug] [2022-05-17T05:31:18.536Z] [runtime-status] [64127] firebase-functions has been stubbed. {"functionsResolution":{"declared":true,"installed":true,"version":"3.20.1","resolution":"/Users/matthewmolinar/athios-saas/functions/node_modules/firebase-functions/lib/index.js"}} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-onCreateUser"},"extension":{},"message":"[runtime-status] [64127] firebase-functions has been stubbed. {\"functionsResolution\":{\"declared\":true,\"installed\":true,\"version\":\"3.20.1\",\"resolution\":\"/Users/matthewmolinar/athios-saas/functions/node_modules/firebase-functions/lib/index.js\"}}"}}
+[debug] [2022-05-17T05:31:18.537Z] [runtime-status] [64127] Resolved module firebase-functions {"declared":true,"installed":true,"version":"3.20.1","resolution":"/Users/matthewmolinar/athios-saas/functions/node_modules/firebase-functions/lib/index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-onCreateUser"},"extension":{},"message":"[runtime-status] [64127] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"3.20.1\",\"resolution\":\"/Users/matthewmolinar/athios-saas/functions/node_modules/firebase-functions/lib/index.js\"}"}}
+[debug] [2022-05-17T05:31:18.538Z] [runtime-status] [64127] Resolved module firebase-admin {"declared":true,"installed":true,"version":"10.0.2","resolution":"/Users/matthewmolinar/athios-saas/functions/node_modules/firebase-admin/lib/index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-onCreateUser"},"extension":{},"message":"[runtime-status] [64127] Resolved module firebase-admin {\"declared\":true,\"installed\":true,\"version\":\"10.0.2\",\"resolution\":\"/Users/matthewmolinar/athios-saas/functions/node_modules/firebase-admin/lib/index.js\"}"}}
+[debug] [2022-05-17T05:31:18.538Z] [runtime-status] [64127] Resolved module firebase-functions {"declared":true,"installed":true,"version":"3.20.1","resolution":"/Users/matthewmolinar/athios-saas/functions/node_modules/firebase-functions/lib/index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-onCreateUser"},"extension":{},"message":"[runtime-status] [64127] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"3.20.1\",\"resolution\":\"/Users/matthewmolinar/athios-saas/functions/node_modules/firebase-functions/lib/index.js\"}"}}
+[debug] [2022-05-17T05:31:18.538Z] [runtime-status] [64127] firebase-admin has been stubbed. {"adminResolution":{"declared":true,"installed":true,"version":"10.0.2","resolution":"/Users/matthewmolinar/athios-saas/functions/node_modules/firebase-admin/lib/index.js"}} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-onCreateUser"},"extension":{},"message":"[runtime-status] [64127] firebase-admin has been stubbed. {\"adminResolution\":{\"declared\":true,\"installed\":true,\"version\":\"10.0.2\",\"resolution\":\"/Users/matthewmolinar/athios-saas/functions/node_modules/firebase-admin/lib/index.js\"}}"}}
+[debug] [2022-05-17T05:31:18.624Z] [runtime-status] [64127] initializeApp(DEFAULT) {"credential":{"implicit":false,"projectId":"autopilot-7ab12","privateKey":"-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDC8a2oOurxi6Wy\nvejJE3RetuqhltvpJ9McFC6NMcdvPSLgJUfWt6x8xhw9KxkoZmGIewTSYZ7qAaXN\nBB+B8T1b4APsAQdBEwHxQ/TCAfIs+Ul660agsg1kje1zyUOKNUzrtShSMLZ9ceYG\nLnxViAIm8jfGhHLb8WQDMdXxW8l/54K3J8XkvrsIUBMm0yJ8r+s/fyyH7ptuVZuE\nGLG32T4SFceQvg92WEEKnNvl0DaQg85zOhj5CG90FRVm8/RMaLtddaEUjStBYAeN\nTfgcbJFJ4hxNrP0K5VIKtRh/skhy9vjePEtY+RPvzL0x/nBvzxlejCPCQLkKeYJW\n7hKxzashAgMBAAECggEAASfeu5JOLwcrdkaHtScj6nAAxAXm0R2tiTC0m3KbJUrP\nnymoFhWXRKibMCt7nf3oZV9Jq/0h7Jl8prKNRMS96ZfnsgwfWMM19gds/FhNBnem\nYr+3FsVjd1rbjeiN2X7fe+oXqSVqiY5wWo2clVhlyd5nq/9q8RNKlbXDjXzPB6P1\n3fwtVVxmiqa7de2JmdEVvcKeIj2UClZTf4hhZoZIeegQWq7MSrusqpxiURUL0GoY\n6Ln7gGDmfLMG4xv0M5S8IJa3OKlUKPiAj8p1Ga32HvFXi3UuMPPaBm1XagB0avps\nRDy+pHU+q+QVFRW1hYAATF9D90XlOC0LRF/oYgbBqQKBgQDxywapWZIUD0Csuv4p\nUfqe/5yvwtFrSzNBSgkjmC250iAhyqRhTsSqN+OMrTzHZ7JI0kHkTyPhFRvhAe89\nqCKNm5bCOLLcSsVCMGkbYEIx9sqpZdivix8gGlecb6XciDBlClD6HmoMJ8ct73Rk\nQOQ2geBrymjw9VUWifNj0aOWyQKBgQDOZfbl/yybTHJnjRQtx9ZJI7p5yeNvD3u9\nA3tMMGe8BPbEHJZHbp6p/VNCVxyabIx03HoZy9yu62oI5s++cVz2/qw8JJkPboXG\ng9ZbOx9wtetzJbmTOYVdmQrfhMh5I4QsASeL2ETEUnAKTeesyIexnL7Sp5RAf+0H\n5cqbl5GlmQKBgAQBt0SLJW6LqiiymI+auip0VeZbthivEFReo7QhS3Cu2LV2pC6w\nnXWso2qrXDx5rWyjf1AHN7L9JI8f9xTwelIaZ+8j/WLFImusXbGEcNRfIJCaDXMr\nPQLNLPJ8ryTuZM7n0tuyMVOuPRC3zRf0M1Pr5woiOobzqctL0eqviKRxAoGAVDt0\nqaScFbz7K5t90rktkKfOIInuEZMmEptrJErU6vyzoJFyGzDf+8vwwLBAch0+rSqV\nghWauKBGo99ehQBKylpg/CKLfKrEWaHQR2c3i44SyulodNcSwIIG1/WewyFlfXfz\nJbVbSyvBodLta6xjBG9NyTau4CvVFlYHe7w9qnECgYEAiISPOiWHrdGkkDsL8qd3\nt6uuuRl6axQ1LeDQTtGh93rcq4PwpYZvBtBkAN5LNeeVuUaW9OiFh0JO1Dit/oBz\n8x/DdCPEyV2LfYWhw3MskbSve2Y704cwmxEizPnkq76JoQcNrLO8X6Z/9LK6yasM\nqZSqSc1Pseq3v/hjsq91qck=\n-----END PRIVATE KEY-----\n","clientEmail":"firebase-adminsdk-6k3hc@autopilot-7ab12.iam.gserviceaccount.com","httpClient":{"retry":{"maxRetries":4,"statusCodes":[503],"ioErrorCodes":["ECONNRESET","ETIMEDOUT"],"backOffFactor":0.5,"maxDelayInMillis":60000}}},"databaseURL":"https://autopilot-7ab12.firebaseio.com"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-onCreateUser"},"extension":{},"message":"[runtime-status] [64127] initializeApp(DEFAULT) {\"credential\":{\"implicit\":false,\"projectId\":\"autopilot-7ab12\",\"privateKey\":\"-----BEGIN PRIVATE KEY-----\\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDC8a2oOurxi6Wy\\nvejJE3RetuqhltvpJ9McFC6NMcdvPSLgJUfWt6x8xhw9KxkoZmGIewTSYZ7qAaXN\\nBB+B8T1b4APsAQdBEwHxQ/TCAfIs+Ul660agsg1kje1zyUOKNUzrtShSMLZ9ceYG\\nLnxViAIm8jfGhHLb8WQDMdXxW8l/54K3J8XkvrsIUBMm0yJ8r+s/fyyH7ptuVZuE\\nGLG32T4SFceQvg92WEEKnNvl0DaQg85zOhj5CG90FRVm8/RMaLtddaEUjStBYAeN\\nTfgcbJFJ4hxNrP0K5VIKtRh/skhy9vjePEtY+RPvzL0x/nBvzxlejCPCQLkKeYJW\\n7hKxzashAgMBAAECggEAASfeu5JOLwcrdkaHtScj6nAAxAXm0R2tiTC0m3KbJUrP\\nnymoFhWXRKibMCt7nf3oZV9Jq/0h7Jl8prKNRMS96ZfnsgwfWMM19gds/FhNBnem\\nYr+3FsVjd1rbjeiN2X7fe+oXqSVqiY5wWo2clVhlyd5nq/9q8RNKlbXDjXzPB6P1\\n3fwtVVxmiqa7de2JmdEVvcKeIj2UClZTf4hhZoZIeegQWq7MSrusqpxiURUL0GoY\\n6Ln7gGDmfLMG4xv0M5S8IJa3OKlUKPiAj8p1Ga32HvFXi3UuMPPaBm1XagB0avps\\nRDy+pHU+q+QVFRW1hYAATF9D90XlOC0LRF/oYgbBqQKBgQDxywapWZIUD0Csuv4p\\nUfqe/5yvwtFrSzNBSgkjmC250iAhyqRhTsSqN+OMrTzHZ7JI0kHkTyPhFRvhAe89\\nqCKNm5bCOLLcSsVCMGkbYEIx9sqpZdivix8gGlecb6XciDBlClD6HmoMJ8ct73Rk\\nQOQ2geBrymjw9VUWifNj0aOWyQKBgQDOZfbl/yybTHJnjRQtx9ZJI7p5yeNvD3u9\\nA3tMMGe8BPbEHJZHbp6p/VNCVxyabIx03HoZy9yu62oI5s++cVz2/qw8JJkPboXG\\ng9ZbOx9wtetzJbmTOYVdmQrfhMh5I4QsASeL2ETEUnAKTeesyIexnL7Sp5RAf+0H\\n5cqbl5GlmQKBgAQBt0SLJW6LqiiymI+auip0VeZbthivEFReo7QhS3Cu2LV2pC6w\\nnXWso2qrXDx5rWyjf1AHN7L9JI8f9xTwelIaZ+8j/WLFImusXbGEcNRfIJCaDXMr\\nPQLNLPJ8ryTuZM7n0tuyMVOuPRC3zRf0M1Pr5woiOobzqctL0eqviKRxAoGAVDt0\\nqaScFbz7K5t90rktkKfOIInuEZMmEptrJErU6vyzoJFyGzDf+8vwwLBAch0+rSqV\\nghWauKBGo99ehQBKylpg/CKLfKrEWaHQR2c3i44SyulodNcSwIIG1/WewyFlfXfz\\nJbVbSyvBodLta6xjBG9NyTau4CvVFlYHe7w9qnECgYEAiISPOiWHrdGkkDsL8qd3\\nt6uuuRl6axQ1LeDQTtGh93rcq4PwpYZvBtBkAN5LNeeVuUaW9OiFh0JO1Dit/oBz\\n8x/DdCPEyV2LfYWhw3MskbSve2Y704cwmxEizPnkq76JoQcNrLO8X6Z/9LK6yasM\\nqZSqSc1Pseq3v/hjsq91qck=\\n-----END PRIVATE KEY-----\\n\",\"clientEmail\":\"firebase-adminsdk-6k3hc@autopilot-7ab12.iam.gserviceaccount.com\",\"httpClient\":{\"retry\":{\"maxRetries\":4,\"statusCodes\":[503],\"ioErrorCodes\":[\"ECONNRESET\",\"ETIMEDOUT\"],\"backOffFactor\":0.5,\"maxDelayInMillis\":60000}}},\"databaseURL\":\"https://autopilot-7ab12.firebaseio.com\"}"}}
+[debug] [2022-05-17T05:31:18.660Z] [runtime-status] [64127] Beginning invocation function onCreateUser! {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-onCreateUser"},"extension":{},"message":"[runtime-status] [64127] Beginning invocation function onCreateUser!"}}
+[info] i  functions: Beginning execution of "onCreateUser" {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-onCreateUser"},"extension":{},"message":"Beginning execution of \"onCreateUser\""}}
+[debug] [2022-05-17T05:31:18.661Z] [runtime-status] [64127] Running onCreateUser in signature event {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-onCreateUser"},"extension":{},"message":"[runtime-status] [64127] Running onCreateUser in signature event"}}
+[debug] [2022-05-17T05:31:18.662Z] [runtime-status] [64127] ProcessBackground {"eventId":"b7a85079-650b-48a5-a806-410330fe37eb","eventType":"providers/firebase.auth/eventTypes/user.create","resource":{"name":"projects/autopilot-7ab12","service":"firebaseauth.googleapis.com"},"params":{},"timestamp":"2022-05-17T05:31:16.714Z","data":{"uid":"U1FGCL97CFwodCltZoRx8X4Dob19","email":"otter.algae.610@example.com","emailVerified":true,"displayName":"Otter Algae","metadata":{"creationTime":"1652765476713","lastSignInTime":"1652765476713"},"customClaims":{},"providerData":[{"providerId":"google.com","rawId":"3056839380248666075769708113994045092043","federatedId":"3056839380248666075769708113994045092043","displayName":"Otter Algae","email":"otter.algae.610@example.com","screenName":"algae_otter"}]}} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-onCreateUser"},"extension":{},"message":"[runtime-status] [64127] ProcessBackground {\"eventId\":\"b7a85079-650b-48a5-a806-410330fe37eb\",\"eventType\":\"providers/firebase.auth/eventTypes/user.create\",\"resource\":{\"name\":\"projects/autopilot-7ab12\",\"service\":\"firebaseauth.googleapis.com\"},\"params\":{},\"timestamp\":\"2022-05-17T05:31:16.714Z\",\"data\":{\"uid\":\"U1FGCL97CFwodCltZoRx8X4Dob19\",\"email\":\"otter.algae.610@example.com\",\"emailVerified\":true,\"displayName\":\"Otter Algae\",\"metadata\":{\"creationTime\":\"1652765476713\",\"lastSignInTime\":\"1652765476713\"},\"customClaims\":{},\"providerData\":[{\"providerId\":\"google.com\",\"rawId\":\"3056839380248666075769708113994045092043\",\"federatedId\":\"3056839380248666075769708113994045092043\",\"displayName\":\"Otter Algae\",\"email\":\"otter.algae.610@example.com\",\"screenName\":\"algae_otter\"}]}}"}}
+[debug] [2022-05-17T05:31:18.662Z] [runtime-status] [64127] ProcessBackground: lifting resource.name from resource {"name":"projects/autopilot-7ab12","service":"firebaseauth.googleapis.com"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-onCreateUser"},"extension":{},"message":"[runtime-status] [64127] ProcessBackground: lifting resource.name from resource {\"name\":\"projects/autopilot-7ab12\",\"service\":\"firebaseauth.googleapis.com\"}"}}
+[debug] [2022-05-17T05:31:18.662Z] [runtime-status] [64127] RunBackground {"data":{"uid":"U1FGCL97CFwodCltZoRx8X4Dob19","email":"otter.algae.610@example.com","emailVerified":true,"displayName":"Otter Algae","metadata":{"creationTime":"1652765476713","lastSignInTime":"1652765476713"},"customClaims":{},"providerData":[{"providerId":"google.com","rawId":"3056839380248666075769708113994045092043","federatedId":"3056839380248666075769708113994045092043","displayName":"Otter Algae","email":"otter.algae.610@example.com","screenName":"algae_otter"}]},"context":{"eventId":"b7a85079-650b-48a5-a806-410330fe37eb","eventType":"providers/firebase.auth/eventTypes/user.create","resource":"projects/autopilot-7ab12","params":{},"timestamp":"2022-05-17T05:31:16.714Z"}} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-onCreateUser"},"extension":{},"message":"[runtime-status] [64127] RunBackground {\"data\":{\"uid\":\"U1FGCL97CFwodCltZoRx8X4Dob19\",\"email\":\"otter.algae.610@example.com\",\"emailVerified\":true,\"displayName\":\"Otter Algae\",\"metadata\":{\"creationTime\":\"1652765476713\",\"lastSignInTime\":\"1652765476713\"},\"customClaims\":{},\"providerData\":[{\"providerId\":\"google.com\",\"rawId\":\"3056839380248666075769708113994045092043\",\"federatedId\":\"3056839380248666075769708113994045092043\",\"displayName\":\"Otter Algae\",\"email\":\"otter.algae.610@example.com\",\"screenName\":\"algae_otter\"}]},\"context\":{\"eventId\":\"b7a85079-650b-48a5-a806-410330fe37eb\",\"eventType\":\"providers/firebase.auth/eventTypes/user.create\",\"resource\":\"projects/autopilot-7ab12\",\"params\":{},\"timestamp\":\"2022-05-17T05:31:16.714Z\"}}"}}
+[debug] [2022-05-17T05:31:19.083Z] May 17, 2022 12:31:19 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"May 17, 2022 12:31:19 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected HTTP/2 connection.\n"}}
+[debug] [2022-05-17T05:31:19.238Z] [runtime-status] [64127] Ephemeral server survived. {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-onCreateUser"},"extension":{},"message":"[runtime-status] [64127] Ephemeral server survived."}}
+[info] i  functions: Finished "onCreateUser" in ~1s {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-onCreateUser"},"extension":{},"message":"Finished \"onCreateUser\" in ~1s"}}
+[debug] [2022-05-17T05:31:19.239Z] [worker-us-central1-onCreateUser-db4dfa05-fecf-42be-9e0a-b55e811154c9]: IDLE {"metadata":{"emulator":{"name":"functions"},"message":"[worker-us-central1-onCreateUser-db4dfa05-fecf-42be-9e0a-b55e811154c9]: IDLE"}}
+[debug] [2022-05-17T05:31:19.239Z] [work-queue] {"queueLength":0,"workRunningCount":0}
+[debug] [2022-05-17T05:31:20.738Z] May 17, 2022 12:31:20 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"May 17, 2022 12:31:20 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2022-05-17T05:31:22.357Z] May 17, 2022 12:31:22 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"May 17, 2022 12:31:22 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2022-05-17T05:32:21.749Z] May 17, 2022 12:32:21 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"May 17, 2022 12:32:21 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2022-05-17T05:32:21.804Z] May 17, 2022 12:32:21 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"May 17, 2022 12:32:21 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2022-05-17T05:32:21.844Z] May 17, 2022 12:32:21 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"May 17, 2022 12:32:21 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2022-05-17T05:32:29.874Z] May 17, 2022 12:32:29 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"May 17, 2022 12:32:29 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2022-05-17T05:32:35.151Z] May 17, 2022 12:32:35 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"May 17, 2022 12:32:35 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2022-05-17T05:33:35.221Z] May 17, 2022 12:33:35 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"May 17, 2022 12:33:35 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2022-05-17T05:33:48.173Z] File /Users/matthewmolinar/athios-saas/functions/index.js changed, reloading triggers {"metadata":{"emulator":{"name":"functions"},"message":"File /Users/matthewmolinar/athios-saas/functions/index.js changed, reloading triggers"}}
+[debug] [2022-05-17T05:33:49.174Z] [worker-pool] Shutting down IDLE worker (us-central1-onCreateUser) {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] Shutting down IDLE worker (us-central1-onCreateUser)"}}
+[debug] [2022-05-17T05:33:49.175Z] [worker-us-central1-onCreateUser-db4dfa05-fecf-42be-9e0a-b55e811154c9]: FINISHING {"metadata":{"emulator":{"name":"functions"},"message":"[worker-us-central1-onCreateUser-db4dfa05-fecf-42be-9e0a-b55e811154c9]: FINISHING"}}
+[debug] [2022-05-17T05:33:49.177Z] Validating nodejs source
+[warn] ⚠  functions: package.json indicates an outdated version of firebase-functions. Please upgrade using npm install --save firebase-functions@latest in your functions directory. 
+[debug] [2022-05-17T05:33:50.361Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "16"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "firebase-admin": "^10.0.2",
+    "firebase-functions": "^3.18.0",
+    "moment": "^2.29.2",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "firebase-functions-test": "^0.2.0"
+  },
+  "private": true
+}
+[debug] [2022-05-17T05:33:50.362Z] Building nodejs source
+[debug] [2022-05-17T05:33:50.362Z] Analyzing nodejs backend spec
+[debug] [2022-05-17T05:33:50.367Z] File /Users/matthewmolinar/athios-saas/functions/index.js changed, reloading triggers {"metadata":{"emulator":{"name":"functions"},"message":"File /Users/matthewmolinar/athios-saas/functions/index.js changed, reloading triggers"}}
+[debug] [2022-05-17T05:33:50.368Z] [worker-us-central1-onCreateUser-db4dfa05-fecf-42be-9e0a-b55e811154c9]: exited {"metadata":{"emulator":{"name":"functions"},"message":"[worker-us-central1-onCreateUser-db4dfa05-fecf-42be-9e0a-b55e811154c9]: exited"}}
+[debug] [2022-05-17T05:33:50.369Z] [worker-us-central1-onCreateUser-db4dfa05-fecf-42be-9e0a-b55e811154c9]: FINISHED {"metadata":{"emulator":{"name":"functions"},"message":"[worker-us-central1-onCreateUser-db4dfa05-fecf-42be-9e0a-b55e811154c9]: FINISHED"}}
+[debug] [2022-05-17T05:33:51.372Z] Validating nodejs source
+[warn] ⚠  functions: package.json indicates an outdated version of firebase-functions. Please upgrade using npm install --save firebase-functions@latest in your functions directory. 
+[debug] [2022-05-17T05:33:52.313Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "16"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "firebase-admin": "^10.0.2",
+    "firebase-functions": "^3.18.0",
+    "moment": "^2.29.2",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "firebase-functions-test": "^0.2.0"
+  },
+  "private": true
+}
+[debug] [2022-05-17T05:33:52.314Z] Building nodejs source
+[debug] [2022-05-17T05:33:52.314Z] Analyzing nodejs backend spec
