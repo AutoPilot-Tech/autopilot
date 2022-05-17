@@ -1,6 +1,8 @@
+import {left} from "@popperjs/core";
 import React, {useState, useEffect, useRef} from "react";
 import {useTracksValue} from "../../context/tracks-context";
 import {db, auth} from "../../firebase";
+import {AddRoutine} from "../AddRoutine";
 
 /**
  * Hook that alerts clicks outside of the passed ref
@@ -93,23 +95,39 @@ export function RoutinePicker({
         routineSetterOpen={routineSetterOpen}
       >
         <div className="flex flex-col gap-3">
-          {tracks.map((track) => (
-            <div key={track.id}>
-              <div
-                className="cursor-pointer flex p-2 justify-between rounded-md hover:bg-gray-100"
-                onClick={() => {
-                  setSelectedRoutine(track);
-                  setShowRoutinesList(false);
-                }}
-              >
-                <div className="flex-1">
-                  <p className="text-gray-700 text-sm font-medium">
-                    {track.name}
-                  </p>
-                </div>
+          {tracks.length === 0 ? (
+            <div className="text-center flex-col flex">
+              <div className="text-gray-500">
+                <p>You don't have any routines yet.</p>
+                <br />
+                <button
+        type="button"
+        className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+      >
+        Add one
+      </button>
               </div>
             </div>
-          ))}
+          ) : (
+            tracks.map((track) => (
+              <div key={track.id}>
+                <div
+                  className="cursor-pointer flex p-2 justify-between rounded-md hover:bg-gray-100"
+                  onClick={() => {
+                    setSelectedRoutine(track);
+                    setShowRoutinesList(false);
+                  }}
+                >
+                  <div className="flex-1">
+                    <p className="text-gray-700 text-sm font-medium">
+                      {track.name}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
+          {}
         </div>
       </OutsideAlerter>
     </div>
