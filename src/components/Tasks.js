@@ -1,22 +1,65 @@
-import React, { useEffect } from 'react';
-import { collection, getDocs } from 'firebase/firestore';
-import { Checkbox } from './Checkbox';
-import { useTasks } from '../hooks';
-import { collatedTasks } from '../constants';
-import { getTitle, getCollatedTitle, collatedTasksExist } from '../helpers';
-import { useTracksValue } from '../context/tracks-context';
-import { AddTask } from './AddTask';
-import { auth } from '../firebase';
+import React, {useEffect, useState, useRef, useCallback} from "react";
+import update from "immutability-helper";
+
+import {useTasks} from "../hooks";
+import {collatedTasks} from "../constants";
+import {getTitle, getCollatedTitle, collatedTasksExist} from "../helpers";
+import {useTracksValue} from "../context/tracks-context";
+
+import {Calendar} from "../../src/components/Calendar";
+
+import {RoutineSettings} from "./RoutineSettings";
+import {db} from "../firebase";
+import {TaskHeader} from "./TaskHeader";
+import {EmptyStateTasks} from "./EmptyStateTasks";
+import {AutopilotSettings} from "./AutopilotSettings";
+import {IndividualTask} from "./IndividualTask";
+
+function classNames(...classes) {
+  return classes.filter(Boolean).join(" ");
+}
 
 // this just gets the tasks and renders them
 export const Tasks = () => {
-  const { tracks, selectedTrack } = useTracksValue();
-  let { tasks } = useTasks(selectedTrack);
+  const [userLoading, setUserLoading] = useState(true);
+  const {tracks, selectedTrack, isRoutine, openSideBar} = useTracksValue();
+  let {tasks, setTasks} = useTasks(selectedTrack);
+  const [showCalendar, setShowCalendar] = useState(false);
+  const [showChat, setShowChat] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
 
-  let trackName = '';
+  const tasksRef = useRef(tasks);
+
+  const moveTaskListItem = useCallback((dragIndex, hoverIndex) => {
+    setTasks((prevTasks) =>
+      update(prevTasks, {
+        $splice: [
+          [dragIndex, 1],
+          [hoverIndex, 0, prevTasks[dragIndex]],
+        ],
+      })
+    );
+  }, []);
+
+  const renderTask = useCallback((task, tasks) => {
+    return (
+      <li key={task.id}>
+        <IndividualTask
+          task={task}
+          key={task.id}
+          index={task.index}
+          moveListItem={moveTaskListItem}
+          tasks={tasks}
+        />
+      </li>
+    );
+  }, []);
+
+  let trackName = "";
 
   if (collatedTasksExist(selectedTrack) && selectedTrack) {
-    // if the selected track is a collated track (i.e. TODAY, NEXT_7, etc)
+    // if the selected track is a collated track (i.e. TODAY, CALENDAR, etc)
     trackName = getCollatedTitle(collatedTasks, selectedTrack);
   }
 
@@ -31,27 +74,42 @@ export const Tasks = () => {
   }
 
   useEffect(() => {
-    // This shows the selected track in the tab on the browser
-    document.title = `${trackName}: Autopilot`;
+    console.log("selectedTrack", selectedTrack);
   }, []);
 
-  
-    
-  
+  useEffect(() => {
+    document.title = `Autopilot: ${trackName}`;
+  }, [trackName]);
+
+  // if setCalendar is true, then we will show the calendar
 
   return (
-    <div className="tasks" data-testid="tasks">
-      <h2 data-testid="track-name">{trackName}</h2>
+    <div
+      className={
+        openSideBar
+          ? " pr-1 flex-col grow h-fit mr-28"
+          : "pl-24 pr-1 flex-col grow h-fit mr-28"
+      }
+      data-testid="tasks"
+    >
+      <TaskHeader trackName={trackName} />
+      {/* <ColorSettings /> */}
+      {/* {isRoutine ? <RoutineSettings /> : <></>} */}
 
-      <ul className="tasks__list">
-        {tasks.map((task) => (
-          <li key={`${task.id}`}>
-            <Checkbox id={task.id} />
-            <span>{task.task}</span>
-          </li>
-        ))}
-      </ul>
-      <AddTask />
+      {/* if there are no tasks, show the emptystate component, otherwise render them */}
+      {tasks.length === 0 ? (
+        <EmptyStateTasks />
+      ) : (
+        <>
+          <div className="shadow ring-2 p-1 bg-white ring-black ring-opacity-5 md:rounded-lg ">
+            <div className="min-w-full divide-y divide-gray-300">
+              <div className="divide-y divide-gray-200 bg-white">
+                <ul>{tasks.map((task) => renderTask(task, tasks))}</ul>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };

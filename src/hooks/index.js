@@ -1,30 +1,126 @@
-import { useState, useEffect } from 'react';
-import { db, auth } from '../firebase';
-import { collatedTasksExist } from '../helpers';
-import moment from 'moment';
-import { sortedObject } from '../helpers';
-import { useTracksValue } from '../context/tracks-context';
+import {useState, useEffect} from "react";
+import {db, auth} from "../firebase";
+import {collatedTasksExist} from "../helpers";
+import moment from "moment";
+import {sortedObject, sortArrayOfObjects} from "../helpers";
+import {useLoadingValue} from "../context/loading-context";
+
+// AutoFill Algorithm ( Not a Hook)
+// Iteration 1: Random Fill
+export const useAutoFill = (events) => {
+  // get the events with today's start date formatted YYYY-MM-DD
+  const todayEvents = events.filter((event) => {
+    return (
+      moment(event.startDate).format("YYYY-MM-DD") ===
+      moment().format("YYYY-MM-DD")
+    );
+  });
+
+  // The total amount of time that the user has in their daily schedule
+  const scheduleArray = Array(288).fill(null);
+
+  // go through today's events and get the gridRow for each event
+  todayEvents.forEach((event) => {
+    const startGridRow = event.gridRow;
+    const endGridRow = event.gridRow + (event.span - 1);
+    for (let i = startGridRow - 1; i <= endGridRow; i++) {
+      scheduleArray[i] = 1;
+    }
+  });
+
+  console.log(scheduleArray);
+
+  let dayStart = 61;
+  let dayEnd = 275;
+
+  //
+
+  // iterate through the scheduleArray
+  for (let i = dayStart; i <= dayEnd; i++) {
+    // need to check if there are 24 consecutive indices that are null then fill them with a 2
+    let consecutiveNulls = 0;
+    let consecutiveNullsStart = 0;
+    let consecutiveNullsEnd = 0;
+    for (let j = i; j <= i + 23; j++) {
+      // if this is the first index that is null then set the start index
+      if (j === i && scheduleArray[j] === null) {
+        consecutiveNullsStart = j;
+      }
+      if (scheduleArray[j] === null) {
+        consecutiveNulls++;
+      }
+    }
+    if (consecutiveNulls === 24) {
+      // set consecutiveNullsEnd to the last index that is null
+      consecutiveNullsEnd = consecutiveNullsStart + 23;
+      let randomNumber = Math.floor(Math.random() * 24);
+      for (let k = i; k <= i + 23; k++) {
+        scheduleArray[k] = randomNumber;
+      }
+
+      // Now make an event in firebase
+      let userId = auth.currentUser.uid;
+      let maintenanceRequired = false;
+      db.collection("events").add({
+        archived: false,
+        trackId: null,
+        routineId: null,
+        title: null,
+        start: null,
+        end: null,
+        userId: userId,
+        maintenanceRequired: maintenanceRequired,
+        gridRow: consecutiveNullsStart,
+        span: 24,
+      });
+    }
+  }
+  console.log("filled in scheduleArray:", scheduleArray);
+};
+
+// this is constantly getting new events for the calendar
+export const useEvents = () => {
+  const [events, setEvents] = useState([]);
+  // listen for changes to tasks collection in firebase
+  useEffect(() => {
+    let userId = auth.currentUser.uid;
+    // when there is a new document in collection
+    let unsubscribe = db.collection("events").where("userId", "==", userId);
+    // set events with tasks
+    unsubscribe = unsubscribe.onSnapshot((snapshot) => {
+      const newEvents = snapshot.docs.map((event) => ({
+        id: event.id,
+        ...event.data(),
+      }));
+      setEvents(newEvents);
+    });
+    return () => unsubscribe();
+  }, []);
+  return {events, setEvents};
+};
 
 // this is constantly getting new tracks
 export const useTasks = (selectedTrack) => {
+  console.log("use tasks");
   const [tasks, setTasks] = useState([]);
   const [archivedTasks, setArchivedTasks] = useState([]);
+  const [tasksLength, setTasksLength] = useState(0);
 
   useEffect(() => {
     let userId = auth.currentUser.uid;
-    let unsubscribe = db.collection('tasks').where('userId', '==', userId);
+    let unsubscribe = db.collection("tasks").where("userId", "==", userId);
 
     unsubscribe =
       selectedTrack && !collatedTasksExist(selectedTrack)
-        ? (unsubscribe = unsubscribe.where('trackId', '==', selectedTrack))
-        : selectedTrack === 'TODAY'
+        ? (unsubscribe = unsubscribe.where("trackId", "==", selectedTrack))
+        : selectedTrack === "TODAY"
         ? (unsubscribe = unsubscribe.where(
-            'date',
-            '==',
-            moment().format('DD/MM/YYYY')
+            "date",
+            "==",
+            moment().format("YYYY-MM-DD")
           ))
-        : selectedTrack === 'INBOX' || selectedTrack === 0
-        ? (unsubscribe = unsubscribe.where('date', '==', ''))
+        : selectedTrack === "INBOX" || selectedTrack === 0
+        ? (unsubscribe = unsubscribe.where("date", "==", ""))
         : unsubscribe;
 
     unsubscribe = unsubscribe.onSnapshot((snapshot) => {
@@ -33,37 +129,55 @@ export const useTasks = (selectedTrack) => {
         ...task.data(),
       }));
 
+      // go through newTasks and sort them by index property
+      const sortedTasksByIndex = sortArrayOfObjects(newTasks);
+
       setTasks(
-        selectedTrack === 'NEXT_7'
-          ? newTasks.filter(
+        selectedTrack === "NEXT_7"
+          ? sortedTasksByIndex.filter(
               (task) =>
-                moment(task.date, 'DD-MM-YYYY').diff(moment(), 'days') <= 7 &&
+                moment(task.date, "YYYY-MM-DD").diff(moment(), "days") <= 7 &&
                 task.archived !== true
             )
-          : newTasks.filter((task) => task.archived !== true)
+          : sortedTasksByIndex.filter((task) => task.archived !== true)
       );
 
       // Set all tasks that are archived
-      setArchivedTasks(newTasks.filter((task) => task.archived !== false));
+      setArchivedTasks(
+        sortedTasksByIndex.filter((task) => task.archived !== false)
+      );
+      // See how many tasks are in the tasks array
+      setTasksLength(newTasks.length);
     });
+
     // don't want to be checking for tracks all the time, only when there is a new
     // track
     return () => unsubscribe();
   }, [selectedTrack]);
 
-  return { tasks, archivedTasks };
+  return {tasks, archivedTasks, tasksLength, setTasks};
+};
+
+export const useActive = () => {
+  const [active, setActive] = useState("inbox");
+
+  useEffect(() => {
+    active = active;
+  }, [active]);
 };
 
 // this one will be pulling tracks only once, and only changes
 // when there is new tracks
 export const useTracks = () => {
+  console.log("use tracks");
   const [tracks, setTracks] = useState([]);
+  const {setTracksLoading} = useLoadingValue();
 
   useEffect(() => {
     let userId = auth.currentUser.uid;
-    db.collection('tracks')
-      .where('userId', '==', userId)
-      .orderBy('trackId')
+    db.collection("tracks")
+      .where("userId", "==", userId)
+      .orderBy("trackId")
       // this required an index in firebase
       .get()
       .then((snapshot) => {
@@ -71,6 +185,8 @@ export const useTracks = () => {
           ...track.data(),
           docId: track.id,
         }));
+
+        // if all tracks length is more than 0, set loading to false
 
         // firebase is weird about giving us the same order fields in objects, so we
         // need to sort it first.
@@ -96,5 +212,5 @@ export const useTracks = () => {
       });
   }, [tracks]);
 
-  return { tracks, setTracks };
+  return {tracks, setTracks};
 };

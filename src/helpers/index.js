@@ -1,4 +1,11 @@
 import { collatedTasks } from '../constants';
+import { colorsList } from '../constants';
+
+export const getRandomColor = () => {
+  const randomIndex = Math.floor(Math.random() * colorsList.length);
+  return colorsList[randomIndex];
+}
+
 
 export const getTitle = (tracks, selectedTrackId) => {
   let track = tracks.find((track) => track.trackId === selectedTrackId);
@@ -14,6 +21,15 @@ export const getCollatedTitle = (tracks, key) => {
 export const collatedTasksExist = (selectedTrack) => {
   return collatedTasks.find((task) => task.key === selectedTrack);
 };
+
+export const getRoutines = (tracks) => {
+  return tracks.filter((track) => track.routine);
+}
+
+export const findRoutineName = (routines, trackName) => {
+  let routine = routines.find((routine) => routine.name === trackName);
+  return routine.name;
+}
 
 // this is just taken from online, its similar to how firebase does it
 export const generatePushId = (() => {
@@ -49,3 +65,10 @@ export const sortedObject = unordered => {
       return obj
     }, {});
 };
+
+// sort array of objects by key value pair index
+export const sortArrayOfObjects = (array) => {
+  return array.sort((a, b) => {
+    return a.index - b.index;
+  });
+}

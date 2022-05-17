@@ -1,41 +1,62 @@
-import React, { useState, useEffect } from 'react';
-
-import { Header } from '../components/layout/Header';
-import { Content } from '../components/layout/Content';
-import { TracksProvider, useTracksValue } from '../context/tracks-context';
-import { Loading } from './Loading';
-import { auth } from '../firebase';
+import React, {useState, useEffect} from "react";
+import AdapterMoment from "@mui/lab/AdapterMoment";
+import {LocalizationProvider} from "@mui/lab";
+import {Header} from "../components/layout/Header";
+import {Content} from "../components/layout/Content";
+import {TracksProvider} from "../context/tracks-context";
+import {auth, db} from "../firebase";
+import SyncLoader from "react-spinners/SyncLoader";
+import {useLoadingValue} from "../context/loading-context";
+import {Banner} from "../components/layout/Banner";
 
 // note: see src/context. Since we want to use tracksprovider at the
 // top level, we are using it here in App. This can be replaced
 // with Redux, later.
-export const Dashboard = ({darkModeDefault = true }) => {
-  const [darkMode, setDarkMode] = useState(darkModeDefault);
-  const [loading, setLoading] = useState(true);
+export const Dashboard = () => {
+  // const {loading, setLoading} = useLoadingValue();
+  const [userLoading, setUserLoading] = useState(true);
+  const {setDisplayName, setPhotoUrl} = useLoadingValue();
+  const [showBanner, setShowBanner] = useState(true);
+  // const {tracksLoading, setTracksLoading} = useLoadingValue();
   // get user from context
 
+  // if the user isnt signed in send them back to login page
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(user => {
-      if (user) {
-        console.log('user logged in', user)
-        
-        setLoading(false);
+    auth.onAuthStateChanged((user) => {
+      if (!user) {
+        window.location.href = "/login";
       }
-    })
-    return unsubscribe
-  }, [])
+    });
+  }, []);
 
-  return (
-    // if loading is true, show loading component
-    loading ? <Loading /> : (
-      
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        // get the user's name from db
+        setDisplayName(user.displayName);
+        setPhotoUrl(user.photoURL);
+        // check to see if the user's tracks are loaded
+        setUserLoading(false);
+      } else {
+        console.log("User is not signed in");
+      }
+    });
+    return unsubscribe;
+  }, []);
+
+  return userLoading ? (
+    <div className="grid place-items-center h-screen">
+      <SyncLoader loading={true} size={15} speedMultiplier={2} />
+    </div>
+  ) : (
+    <LocalizationProvider dateAdapter={AdapterMoment}>
       <TracksProvider>
-        <main data-testid="application"
-        className={darkMode ? 'darkmode' : undefined}>
-          <Header darkMode={darkMode} setDarkMode={setDarkMode} />
+        <Header />
+        <div>
+          {showBanner ? <Banner setShowBanner={setShowBanner} /> : null}
           <Content />
-        </main>
-       </TracksProvider>
-    )
+        </div>
+      </TracksProvider>
+    </LocalizationProvider>
   );
 };
