@@ -23,18 +23,7 @@ export const CalendarHomeView = () => {
   const {setDisplayName, setPhotoUrl} = useLoadingValue();
   const [showBanner, setShowBanner] = useState(false);
   // const {tracksLoading, setTracksLoading} = useLoadingValue();
-  useEffect(() => {
-    // if year, month or day are undefined, set them to -1
-    if (!year) {
-      year = -1;
-    }
-    if (!month) {
-      month = -1;
-    }
-    if (!day) {
-      day = -1;
-    }
-  });
+
   // if the user isnt signed in send them back to login page
   useEffect(() => {
     auth.onAuthStateChanged((user) => {

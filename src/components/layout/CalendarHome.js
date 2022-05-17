@@ -57,13 +57,7 @@ export function CalendarHome({year, month, day}) {
 
   useEffect(() => {
     // if year month or day are -1, set to today
-    if (year === -1) {
-      setNowValue(moment());
-    } else if (month === -1) {
-      setNowValue(moment());
-    } else if (day === -1) {
-      setNowValue(moment());
-    } else {
+    if (year != undefined || month != undefined || day != undefined) {
       setNowValue(moment(`${year}-${month}-${day}`));
     }
   }, []);
@@ -84,7 +78,7 @@ export function CalendarHome({year, month, day}) {
               // if the event is scheduled for today push it
               if (
                 moment(event.start).format("MM-DD-YYYY") ===
-                moment().format("MM-DD-YYYY")
+                moment(nowValue).format("MM-DD-YYYY")
               ) {
                 eventsArray.push(event);
               }
@@ -96,7 +90,7 @@ export function CalendarHome({year, month, day}) {
         };
       }
     });
-  }, []);
+  }, [nowValue]);
 
   function closeModal() {
     setIsOpenEventModal(false);
