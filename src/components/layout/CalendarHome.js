@@ -158,7 +158,7 @@ export function CalendarHome({year, month, day}) {
     <div
       className={
         openSideBar
-          ? "transform transition ease-in-out delay-75 absolute w-full flex flex-row translate-x-72"
+          ? "transform transition ease-in-out delay-75 absolute w-full flex flex-row translate-x-72 "
           : "transform transition ease-in-out delay-75 flex flex-row"
       }
     >

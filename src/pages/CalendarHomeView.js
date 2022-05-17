@@ -56,7 +56,7 @@ export const CalendarHomeView = () => {
     <LocalizationProvider dateAdapter={AdapterMoment}>
       <TracksProvider>
         <Header />
-        <div>
+        <div className="overflow-x-hidden">
           {showBanner ? <Banner setShowBanner={setShowBanner} /> : null}
           <div className="relative" id="content">
             <Sidebar />
