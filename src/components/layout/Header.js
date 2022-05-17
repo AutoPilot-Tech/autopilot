@@ -43,7 +43,7 @@ function classNames(...classes) {
 
 export function Header() {
   // const {photoUrl} = useLoadingValue();
-  const {openSideBar, setOpenSideBar} = useTracksValue();
+  const {openSideBar, setOpenSideBar, nowValue, setNowValue} = useTracksValue();
 
   return (
     <header className="relative z-20 flex flex-none items-center justify-between border-b border-gray-200 py-1 px-6">
@@ -66,14 +66,14 @@ export function Header() {
       <div className="flex">
         <h1 className="text-lg font-semibold text-gray-900 mr-2">
           <time className="select-none sm:hidden">
-            {moment().format("MM Do, YYYY")}
+            {moment(nowValue).format("MM Do, YYYY")}
           </time>
           <time className="select-none hidden sm:inline">
-            {moment().format("MMMM Do, YYYY")}
+            {moment(nowValue).format("MMMM Do, YYYY")}
           </time>
         </h1>
         <p className="select-none mt-1 text-sm text-gray-500">
-          {moment().format("dddd")}
+          {moment(nowValue).format("dddd")}
         </p>
       </div>
       <div className="flex items-center">
@@ -83,11 +83,21 @@ export function Header() {
             className="flex items-center justify-center rounded-l-md border border-r-0 border-gray-300 bg-white py-2 pl-3 pr-4 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-gray-50"
           >
             <span className="sr-only">Previous month</span>
-            <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
+            <ChevronLeftIcon
+              className="h-5 w-5"
+              aria-hidden="true"
+              onClick={() => {
+                // subtract 1 day from the nowValue
+                setNowValue(moment(nowValue).subtract(1, "day").toDate());
+              }}
+            />
           </button>
           <button
             type="button"
             className="hidden border-t border-b border-gray-300 bg-white px-3.5 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900 focus:relative md:block"
+            onClick={() => {
+              setNowValue(moment().toDate());
+            }}
           >
             Today
           </button>
@@ -97,10 +107,17 @@ export function Header() {
             className="flex items-center justify-center rounded-r-md border border-l-0 border-gray-300 bg-white py-2 pl-4 pr-3 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-gray-50"
           >
             <span className="sr-only">Next month</span>
-            <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
+            <ChevronRightIcon
+              className="h-5 w-5"
+              aria-hidden="true"
+              onClick={() => {
+                // add 1 day from the nowValue
+                setNowValue(moment(nowValue).add(1, "day").toDate());
+              }}
+            />
           </button>
         </div>
-        <div className="hidden md:ml-4 md:flex md:items-center">
+        {/* <div className="hidden md:ml-4 md:flex md:items-center">
           <Menu as="div" className="relative">
             <Menu.Button
               type="button"
@@ -173,8 +190,8 @@ export function Header() {
               </Menu.Items>
             </Transition>
           </Menu>
-        </div>
-        <Menu as="div" className="relative ml-6 md:hidden">
+        </div> */}
+        {/* <Menu as="div" className="relative ml-6 md:hidden">
           <Menu.Button className="-mx-2 flex items-center rounded-full border border-transparent p-2 text-gray-400 hover:text-gray-500">
             <span className="sr-only">Open menu</span>
             <DotsHorizontalIcon className="h-5 w-5" aria-hidden="true" />
@@ -276,7 +293,7 @@ export function Header() {
               </div>
             </Menu.Items>
           </Transition>
-        </Menu>
+        </Menu> */}
       </div>
     </header>
   );

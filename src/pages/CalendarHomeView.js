@@ -10,18 +10,19 @@ import {useLoadingValue} from "../context/loading-context";
 import {Banner} from "../components/layout/Banner";
 import {Sidebar} from "../components/layout/Sidebar";
 import {CalendarHome} from "../components/layout/CalendarHome";
+import {useParams} from "react-router-dom";
 
 // note: see src/context. Since we want to use tracksprovider at the
 // top level, we are using it here in App. This can be replaced
 // with Redux, later.
 export const CalendarHomeView = () => {
+  let {year, month, day} = useParams();
   // This is a global state provided by loading Context
   const {loading, setLoading} = useLoadingValue();
   const [userLoading, setUserLoading] = useState(true);
   const {setDisplayName, setPhotoUrl} = useLoadingValue();
   const [showBanner, setShowBanner] = useState(false);
   // const {tracksLoading, setTracksLoading} = useLoadingValue();
-  // get user from context
 
   // if the user isnt signed in send them back to login page
   useEffect(() => {
@@ -59,7 +60,7 @@ export const CalendarHomeView = () => {
           {showBanner ? <Banner setShowBanner={setShowBanner} /> : null}
           <div className="relative grow flex-row" id="content">
             <Sidebar />
-            <CalendarHome />
+            <CalendarHome year={year} month={month} day={day} />
           </div>
         </div>
       </TracksProvider>
