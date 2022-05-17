@@ -19,6 +19,7 @@ import {AddEvent} from "../functional/AddEvent";
 import {useCalendarValue} from "../../context/calendar-context";
 import {useTasks} from "../../hooks/index";
 import {getTasksLength} from "../../helpers/index";
+import {translateRect} from "@fullcalendar/react";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -154,7 +155,13 @@ export function CalendarHome({year, month, day}) {
   }
 
   return (
-    <div className="flex flex-row">
+    <div
+      className={
+        openSideBar
+          ? "transform transition ease-in-out delay-75 absolute w-full flex flex-row translate-x-72"
+          : "transform transition ease-in-out delay-75 flex flex-row"
+      }
+    >
       <AddEvent
         setIsOpenEventModal={setIsOpenEventModal}
         isOpenEventModal={isOpenEventModal}
