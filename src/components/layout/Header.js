@@ -43,7 +43,7 @@ function classNames(...classes) {
 
 export function Header() {
   // const {photoUrl} = useLoadingValue();
-  const {openSideBar, setOpenSideBar} = useTracksValue();
+  const {openSideBar, setOpenSideBar, nowValue} = useTracksValue();
 
   return (
     <header className="relative z-20 flex flex-none items-center justify-between border-b border-gray-200 py-1 px-6">
@@ -66,14 +66,14 @@ export function Header() {
       <div className="flex">
         <h1 className="text-lg font-semibold text-gray-900 mr-2">
           <time className="select-none sm:hidden">
-            {moment().format("MM Do, YYYY")}
+            {moment(nowValue).format("MM Do, YYYY")}
           </time>
           <time className="select-none hidden sm:inline">
-            {moment().format("MMMM Do, YYYY")}
+            {moment(nowValue).format("MMMM Do, YYYY")}
           </time>
         </h1>
         <p className="select-none mt-1 text-sm text-gray-500">
-          {moment().format("dddd")}
+          {moment(nowValue).format("dddd")}
         </p>
       </div>
       <div className="flex items-center">

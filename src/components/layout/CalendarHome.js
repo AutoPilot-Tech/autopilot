@@ -16,6 +16,7 @@ import {RoutinePicker} from "../functional/RoutinePicker";
 import {auth, db} from "../../firebase";
 import {useTracksValue} from "../../context/tracks-context";
 import {AddEvent} from "../functional/AddEvent";
+import {useCalendarValue} from "../../context/calendar-context";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -37,8 +38,8 @@ const handleKeypress = (e) => {
   }
 };
 
-export function CalendarHome() {
-  const {openSideBar, setOpenSideBar} = useTracksValue();
+export function CalendarHome({year, month, day}) {
+  const {openSideBar, setOpenSideBar, nowValue, setNowValue} = useTracksValue();
   const [isOpenEventModal, setIsOpenEventModal] = useState(false);
   const [eventName, setEventName] = useState("");
   const [showSmallCalendar, setShowSmallCalendar] = useState(false);
@@ -53,6 +54,19 @@ export function CalendarHome() {
   const [showRoutinesList, setShowRoutinesList] = useState(false);
   const [selectedRoutine, setSelectedRoutine] = useState(null);
   const [todaysEvents, setTodaysEvents] = useState([]);
+
+  useEffect(() => {
+    // if year month or day are -1, set to today
+    if (year === -1) {
+      setNowValue(moment());
+    } else if (month === -1) {
+      setNowValue(moment());
+    } else if (day === -1) {
+      setNowValue(moment());
+    } else {
+      setNowValue(moment(`${year}-${month}-${day}`));
+    }
+  }, []);
 
   useEffect(() => {
     // if the user is signed in
