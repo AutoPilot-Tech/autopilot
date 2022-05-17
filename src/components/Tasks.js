@@ -92,7 +92,7 @@ export const Tasks = ({trackId}) => {
       }
       data-testid="tasks"
     >
-      <TaskHeader trackName={trackName} trackId={trackId}/>
+      <TaskHeader trackName={trackName} trackId={trackId} />
       {/* <ColorSettings /> */}
       {/* {isRoutine ? <RoutineSettings /> : <></>} */}
 

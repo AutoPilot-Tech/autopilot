@@ -77,9 +77,7 @@ export const Sidebar = () => {
             setIsRoutine(false);
             // if the current route does not contain tasks, navigate
             // to /app/inbox/home
-            if (!window.location.href.includes("tasks")) {
-              window.location.assign(`/app/tasks/inbox`);
-            }
+            window.location.assign(`/app/tasks/INBOX`);
           }}
         >
           <span className="mr-2">
@@ -132,7 +130,7 @@ export const Sidebar = () => {
           </span>
           <span>Today</span>
         </li> */}
-        <li
+        {/* <li
           data-testid="today"
           className={classNames(
             active === "Settings"
@@ -145,9 +143,7 @@ export const Sidebar = () => {
             setSelectedTrack("SETTINGS");
             logClick("sideBarClickSettings");
             setIsRoutine(false);
-            if (!window.location.href.includes("tasks")) {
-              window.location.assign(`/app/tasks/settings`);
-            }
+            window.location.assign(`/app/tasks/SETTINGS`);
           }}
         >
           <span className="mr-2">
@@ -167,7 +163,7 @@ export const Sidebar = () => {
             </svg>
           </span>
           <span>Autopilot Settings</span>
-        </li>
+        </li> */}
       </ul>
       <div
         onClick={() => {
