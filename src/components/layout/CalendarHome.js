@@ -364,11 +364,16 @@ export function CalendarHome({year, month, day}) {
           </Transition>
           <div className="flex flex-auto flex-col overflow-auto">
             <div className="flex w-full flex-auto">
-              <div className="w-14 flex-none bg-white ring-1 ring-gray-100" />
+              <div
+                className="w-14 flex-none bg-white "
+                style={{
+                  borderRight: "1px solid #e5e7eb",
+                }}
+              />
               <div className="grid flex-auto grid-cols-1 grid-rows-1">
                 {/* Horizontal lines */}
                 <div
-                  className="col-start-1 col-end-2 row-start-1 grid divide-y divide-gray-100"
+                  className="col-start-1 col-end-2 row-start-1 grid"
                   style={{gridTemplateRows: "repeat(48, minmax(1.5rem, 1fr))"}}
                 >
                   <div className="row-end-1 h-7"></div>
@@ -393,25 +398,30 @@ export function CalendarHome({year, month, day}) {
                   }}
                 >
                   {/* render 24 clickable rows */}
-                  {[...Array(24)].map((_, i) => (
-                    <li
-                      className="z-0 relative mt-px flex opacity-0"
-                      style={{
-                        gridRow: `${i * 12 + 2} / span 12`,
-                        gridColumn: `1 / span 1`,
-                      }}
-                      key={generateKey()}
-                    >
-                      <a
-                        href="#"
-                        onClick={() => {
-                          setGridRowClicked(i * 12 + 2);
-                          setIsOpenEventModal(true);
+                  {[...Array(24)].map((_, i) => {
+                    let borderTopVal = i === 0 ? "1px solid #f3f4f6" : "none";
+                    return (
+                      <li
+                        className="z-0 relative mt-px flex opacity-"
+                        style={{
+                          gridRow: `${i * 12 + 2} / span 12`,
+                          gridColumn: `1 / span 1`,
+                          borderTop: borderTopVal,
+                          borderBottom: "1px solid #f3f4f6",
                         }}
-                        className="cursor-default group absolute inset-0.5 flex flex-col overflow-y-auto rounded-lg pl-2 pt-1 bg-blue-100"
-                      ></a>
-                    </li>
-                  ))}
+                        key={generateKey()}
+                      >
+                        <a
+                          href="#"
+                          onClick={() => {
+                            setGridRowClicked(i * 12 + 2);
+                            setIsOpenEventModal(true);
+                          }}
+                          className="cursor-default group absolute inset-0.5 flex flex-col overflow-y-auto rounded-lg pl-2 pt-1 bg-transparent"
+                        ></a>
+                      </li>
+                    );
+                  })}
 
                   {/* Render the individual events */}
                   {todaysEvents.map((block) => (
