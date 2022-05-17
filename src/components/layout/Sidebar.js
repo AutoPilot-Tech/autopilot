@@ -78,7 +78,7 @@ export const Sidebar = () => {
             // if the current route does not contain tasks, navigate
             // to /app/inbox/home
             if (!window.location.href.includes("tasks")) {
-              window.location.assign(`/app/tasks`);
+              window.location.assign(`/app/tasks/inbox`);
             }
           }}
         >
@@ -146,7 +146,7 @@ export const Sidebar = () => {
             logClick("sideBarClickSettings");
             setIsRoutine(false);
             if (!window.location.href.includes("tasks")) {
-              window.location.assign(`/app/tasks`);
+              window.location.assign(`/app/tasks/settings`);
             }
           }}
         >
