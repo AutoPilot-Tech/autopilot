@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from "react";
+import {useParams} from "react-router-dom";
 import AdapterMoment from "@mui/lab/AdapterMoment";
 import {LocalizationProvider} from "@mui/lab";
 import {Header} from "../components/layout/Header";
@@ -17,7 +18,8 @@ import {Tasks} from "../components/Tasks";
 export const TaskView = () => {
   const {loading, setLoading} = useLoadingValue();
   const {setDisplayName, setPhotoUrl} = useLoadingValue();
-  const [showBanner, setShowBanner] = useState(true);
+  const [showBanner, setShowBanner] = useState(false);
+  const {id} = useParams();
   // const {tracksLoading, setTracksLoading} = useLoadingValue();
   // get user from context
 
@@ -56,11 +58,11 @@ export const TaskView = () => {
         <div>
           {showBanner ? <Banner setShowBanner={setShowBanner} /> : null}
           <div
-            className="flex relative grow flex-row justify-between"
+            className="flex relative grow flex-row justify-between gap-10"
             id="content"
           >
             <Sidebar />
-            <Tasks />
+            <Tasks trackId={id}/>
           </div>
         </div>
       </TracksProvider>

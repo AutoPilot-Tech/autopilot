@@ -26,7 +26,7 @@ export const App = () => {
             <Route path="/app/calendar/home" element={<CalendarHomeView />} />
             <Route path="/app/calendar/week" element={<CalendarWeekView />} />
             <Route path="/app/calendar/month" element={<CalendarMonthView />} />
-            <Route path="/app/tasks" element={<TaskView />} />
+            <Route path="/app/tasks/:id" element={<TaskView />} />
           </Routes>
         </Router>
       </LoadingProvider>

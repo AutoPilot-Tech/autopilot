@@ -1,4 +1,7 @@
 const functions = require("firebase-functions");
+const express = require("express");
+const cors = require("cors");
+
 const admin = require("firebase-admin");
 const moment = require("moment");
 const {v4: uuidv4} = require("uuid");
@@ -8,10 +11,6 @@ if (process.env.FUNCTIONS_EMULATOR === true) {
 } else {
   useEmulator = false;
 }
-
-
-
-
 
 if (useEmulator) {
   process.env["FIRESTORE_EMULATOR_HOST"] = "localhost:8080";
@@ -26,7 +25,42 @@ admin.initializeApp({
   databaseURL: "https://autopilot-7ab12.firebaseio.com",
 });
 
+// const app = express();
 const db = admin.firestore();
+
+/*
+EXPRESS SERVER ROUTES
+*/
+
+// // Get the tasks for the Tasks Component to show
+// app.get("/app/**", async (req, res) => {
+//   res.status(200).send("KYS LOL");
+// });
+
+// app.get("/app/calculator/xd/gottem", (req, res) => {
+//   const date = new Date();
+//   const hours = (date.getHours() % 12) + 1; // London is UTC + 1hr;
+//   res.json({bongs: "BONG ".repeat(hours)});
+// });
+
+// app.get("/tasks/:id", async (req, res) => {
+//   const trackId = req.params.id;
+//   const querySnapshot = await db
+//     .collection("tasks")
+//     .where("trackId", "==", trackId)
+//     .get();
+//   let tasks = [];
+//   querySnapshot.forEach((task) => {
+//     tasks.push(task.data());
+//   });
+//   res.status(200).send(tasks);
+// });
+
+// exports.app = functions.https.onRequest(app);
+
+/*
+FUNCTIONS
+*/
 
 // Stores element and its priority
 class QElement {
@@ -123,7 +157,6 @@ exports.onCreateUser = functions.auth.user().onCreate((user) => {
   let parts = user.displayName.split("\\s+");
   let firstName = parts[0];
 
-  
   let lastname = parts[1];
   return userRef.set({
     email: user.email,

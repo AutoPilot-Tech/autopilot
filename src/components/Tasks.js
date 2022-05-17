@@ -20,10 +20,10 @@ function classNames(...classes) {
 }
 
 // this just gets the tasks and renders them
-export const Tasks = () => {
+export const Tasks = ({trackId}) => {
   const [userLoading, setUserLoading] = useState(true);
-  const {tracks, selectedTrack, isRoutine, openSideBar} = useTracksValue();
-  let {tasks, setTasks} = useTasks(selectedTrack);
+  const {tracks, setSelectedTrack, isRoutine, openSideBar} = useTracksValue();
+  let {tasks, setTasks} = useTasks(trackId);
   const [showCalendar, setShowCalendar] = useState(false);
   const [showChat, setShowChat] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -58,23 +58,23 @@ export const Tasks = () => {
 
   let trackName = "";
 
-  if (collatedTasksExist(selectedTrack) && selectedTrack) {
+  if (collatedTasksExist(trackId) && trackId) {
     // if the selected track is a collated track (i.e. TODAY, CALENDAR, etc)
-    trackName = getCollatedTitle(collatedTasks, selectedTrack);
+    trackName = getCollatedTitle(collatedTasks, trackId);
   }
 
   if (
     // if the selected track is not a collated track (i.e. a specific track)
     tracks &&
     tracks.length > 0 &&
-    selectedTrack &&
-    !collatedTasksExist(selectedTrack)
+    trackId &&
+    !collatedTasksExist(trackId)
   ) {
-    trackName = getTitle(tracks, selectedTrack);
+    trackName = getTitle(tracks, trackId);
   }
 
   useEffect(() => {
-    console.log("selectedTrack", selectedTrack);
+    setSelectedTrack(trackId);
   }, []);
 
   useEffect(() => {
@@ -92,7 +92,7 @@ export const Tasks = () => {
       }
       data-testid="tasks"
     >
-      <TaskHeader trackName={trackName} />
+      <TaskHeader trackName={trackName} trackId={trackId} />
       {/* <ColorSettings /> */}
       {/* {isRoutine ? <RoutineSettings /> : <></>} */}
 
