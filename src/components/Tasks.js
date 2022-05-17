@@ -87,29 +87,26 @@ export const Tasks = ({trackId}) => {
     <div
       className={
         openSideBar
-          ? " pr-1 flex-col grow h-fit mr-28"
-          : "pl-24 pr-1 flex-col grow h-fit mr-28"
+          ? "transform transition ease-in-out absolute w-full h-screen bg-white translate-x-72 pr-72"
+          : "transform transition ease-in-out h-screen flex flex-col bg-white"
       }
-      data-testid="tasks"
     >
-      <TaskHeader trackName={trackName} trackId={trackId} />
-      {/* <ColorSettings /> */}
-      {/* {isRoutine ? <RoutineSettings /> : <></>} */}
+      <div className="flex h-full w-full flex-col ml-24 pr-32">
+        <TaskHeader trackName={trackName} trackId={trackId} />
+        {/* <ColorSettings /> */}
+        {/* {isRoutine ? <RoutineSettings /> : <></>} */}
 
-      {/* if there are no tasks, show the emptystate component, otherwise render them */}
-      {tasks.length === 0 ? (
-        <EmptyStateTasks />
-      ) : (
-        <>
-          <div className="shadow ring-2 p-1 bg-white ring-black ring-opacity-5 md:rounded-lg ">
-            <div className="min-w-full divide-y divide-gray-300">
-              <div className="divide-y divide-gray-200 bg-white">
-                <ul>{tasks.map((task) => renderTask(task, tasks))}</ul>
-              </div>
+        {/* if there are no tasks, show the emptystate component, otherwise render them */}
+        {tasks.length === 0 ? (
+          <EmptyStateTasks />
+        ) : (
+          <>
+            <div className="flex flex-col shadow ring-2 p-1 bg-white ring-black ring-opacity-5 md:rounded-lg ">
+              <ul>{tasks.map((task) => renderTask(task, tasks))}</ul>
             </div>
-          </div>
-        </>
-      )}
+          </>
+        )}
+      </div>
     </div>
   );
 };

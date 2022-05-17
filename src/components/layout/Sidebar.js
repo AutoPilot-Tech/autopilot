@@ -25,7 +25,7 @@ export const Sidebar = () => {
       className={
         openSideBar
           ? "transform transition ease-in-out duration-75 space-y-1 float-left flex flex-col pl-6 pt-2 h-screen w-72 bg-white border-r-2 border-slate-100 "
-          : " flex flex-col float-left space-y-1 absolute pl-6 pt-2 h-screen w-72 bg-white border-r-2 border-slate-100 "
+          : "flex flex-col float-left space-y-1 absolute pl-6 pt-2 h-screen w-72 bg-white border-r-2 border-slate-100 "
       }
     >
       <ul className="pt-2 pr-1">
