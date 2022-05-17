@@ -19,6 +19,7 @@ export const TaskView = () => {
   const {loading, setLoading} = useLoadingValue();
   const {setDisplayName, setPhotoUrl} = useLoadingValue();
   const [showBanner, setShowBanner] = useState(false);
+
   const {id} = useParams();
   // const {tracksLoading, setTracksLoading} = useLoadingValue();
   // get user from context
@@ -57,12 +58,9 @@ export const TaskView = () => {
         <Header />
         <div>
           {showBanner ? <Banner setShowBanner={setShowBanner} /> : null}
-          <div
-            className="flex relative grow flex-row justify-between gap-10"
-            id="content"
-          >
+          <div className="overflow-x-hidden" id="content">
             <Sidebar />
-            <Tasks trackId={id}/>
+            <Tasks trackId={id} />
           </div>
         </div>
       </TracksProvider>

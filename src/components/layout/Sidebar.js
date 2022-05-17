@@ -24,8 +24,8 @@ export const Sidebar = () => {
     <nav
       className={
         openSideBar
-          ? "space-y-1 float-left flex flex-col pl-6 pt-2 h-screen w-72 bg-white border-r-2 border-slate-100"
-          : "hidden"
+          ? "transform transition ease-in-out duration-75 space-y-1 float-left flex flex-col pl-6 pt-2 h-screen w-72 bg-white border-r-2 border-slate-100 "
+          : "flex flex-col float-left space-y-1 absolute pl-6 pt-2 h-screen w-72 bg-white border-r-2 border-slate-100 "
       }
     >
       <ul className="pt-2 pr-1">
@@ -165,12 +165,7 @@ export const Sidebar = () => {
           <span>Autopilot Settings</span>
         </li> */}
       </ul>
-      <div
-        onClick={() => {
-          setShowTracks(!showTracks);
-          logClick("sideBarShowTracksClick");
-        }}
-      >
+      <div>
         <div className="grid grid-cols-2 mt-5 mb-2 pr-1">
           <p className="pl-2 float-left text-gray-400 font-medium">Routines</p>
           <AddRoutine />
