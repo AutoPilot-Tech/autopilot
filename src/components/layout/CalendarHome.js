@@ -16,6 +16,7 @@ import {RoutinePicker} from "../functional/RoutinePicker";
 import {auth, db} from "../../firebase";
 import {useTracksValue} from "../../context/tracks-context";
 import {AddEvent} from "../functional/AddEvent";
+import {useCalendarValue} from "../../context/calendar-context";
 import {useTasks} from "../../hooks/index";
 import {getTasksLength} from "../../helpers/index";
 
@@ -39,8 +40,8 @@ const handleKeypress = (e) => {
   }
 };
 
-export function CalendarHome() {
-  const {openSideBar, setOpenSideBar} = useTracksValue();
+export function CalendarHome({year, month, day}) {
+  const {openSideBar, setOpenSideBar, nowValue, setNowValue} = useTracksValue();
   const [isOpenEventModal, setIsOpenEventModal] = useState(false);
   const [eventName, setEventName] = useState("");
   const [showSmallCalendar, setShowSmallCalendar] = useState(false);
@@ -57,6 +58,13 @@ export function CalendarHome() {
   const [todaysEvents, setTodaysEvents] = useState([]);
 
   useEffect(() => {
+    // if year month or day are -1, set to today
+    if (year != undefined || month != undefined || day != undefined) {
+      setNowValue(moment(`${year}-${month}-${day}`));
+    }
+  }, []);
+
+  useEffect(() => {
     // if the user is signed in
     auth.onAuthStateChanged((user) => {
       if (user) {
@@ -69,7 +77,13 @@ export function CalendarHome() {
             snapshot.forEach((doc) => {
               let event = doc.data();
               event.id = doc.id;
-              eventsArray.push(event);
+              // if the event is scheduled for today push it
+              if (
+                moment(event.start).format("MM-DD-YYYY") ===
+                moment(nowValue).format("MM-DD-YYYY")
+              ) {
+                eventsArray.push(event);
+              }
             });
             setTodaysEvents(eventsArray);
           });
@@ -78,7 +92,7 @@ export function CalendarHome() {
         };
       }
     });
-  }, []);
+  }, [nowValue]);
 
   function closeModal() {
     setIsOpenEventModal(false);

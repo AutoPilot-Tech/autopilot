@@ -4,7 +4,7 @@ import moment from "moment";
 export const CalendarContext = createContext();
 
 export const CalendarProvider = ({children}) => {
-  const [nowValue, setNowValue] = useState(moment());
+  const [nowValue, setNowValue] = useState("");
 
   return (
     <CalendarContext.Provider
