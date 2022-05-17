@@ -16,6 +16,8 @@ import {RoutinePicker} from "../functional/RoutinePicker";
 import {auth, db} from "../../firebase";
 import {useTracksValue} from "../../context/tracks-context";
 import {AddEvent} from "../functional/AddEvent";
+import {useTasks} from "../../hooks/index";
+import {getTasksLength} from "../../helpers/index";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -86,7 +88,7 @@ export function CalendarHome() {
     setIsOpenEventModal(true);
   }
 
-  const addEvent = () => {
+  function addEvent() {
     const userId = auth.currentUser.uid;
     // use date and time to make a moment object
     const startTime = moment()
@@ -114,7 +116,28 @@ export function CalendarHome() {
       bgColor: "bg-blue-50",
       key: generateKey(),
     });
-  };
+
+    const tasksLength = db
+      .collection("tasks")
+      .where("trackId", "==", selectedRoutine.trackId)
+      .get()
+      .then(function (querySnapshot) {
+        return querySnapshot.size;
+      })
+      .then((tasksLength) => {
+        db.collection("tasks").add({
+          archived: false,
+          trackId: selectedRoutine.trackId,
+          title: eventName,
+          task: eventName,
+          date: selectedDate,
+          startTime: startTime,
+          endTime: endTime,
+          index: tasksLength,
+          userId: auth.currentUser.uid,
+        });
+      });
+  }
 
   return (
     <div className="flex flex-row">
