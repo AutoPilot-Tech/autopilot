@@ -170,14 +170,26 @@ export function CalendarHome({year, month, day}) {
         return querySnapshot.size;
       })
       .then((tasksLength) => {
+        let taskStartTime;
+        let taskEndTime;
+        let taskDate;
+        if (routineIdForEvent === "INBOX") {
+          taskStartTime = "";
+          taskEndTime = "";
+          taskDate = "";
+        } else {
+          taskStartTime = moment(eventStartTime).format("YYYY-MM-DDTHH:mm:ss");
+          taskEndTime = moment(eventEndTime).format("YYYY-MM-DDTHH:mm:ss");
+          taskDate = selectedDate;
+        }
         db.collection("tasks").add({
           archived: false,
           trackId: routineIdForEvent,
           title: eventName,
           task: eventName,
-          date: selectedDate,
-          startTime: moment(eventStartTime).format("YYYY-MM-DDTHH:mm:ss"),
-          endTime: moment(eventEndTime).format("YYYY-MM-DDTHH:mm:ss"),
+          date: taskDate,
+          start: taskStartTime,
+          end: taskEndTime,
           index: tasksLength,
           userId: auth.currentUser.uid,
         });
