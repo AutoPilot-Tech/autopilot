@@ -204,10 +204,6 @@ export function CalendarHome({year, month, day}) {
           : "transform transition ease-in-out delay-75 flex flex-row"
       }
     >
-      <AddEvent
-        setIsOpenEventModal={setIsOpenEventModal}
-        isOpenEventModal={isOpenEventModal}
-      />
       <div className="flex h-full w-full flex-col">
         <div className="flex flex-auto overflow-hidden bg-white">
           <Transition appear show={isOpenEventModal} as={Fragment}>
@@ -447,7 +443,7 @@ export function CalendarHome({year, month, day}) {
           <div className="flex flex-auto flex-col overflow-auto">
             <div className="flex w-full flex-auto">
               <div
-                className="w-14 flex-none bg-white "
+                className="w-12 flex-none bg-white sm:w-14"
                 style={{
                   borderRight: "1px solid #f3f4f6",
                 }}
@@ -531,7 +527,7 @@ export function CalendarHome({year, month, day}) {
                   {/* Render the individual events */}
                   {todaysEvents.map((block) => (
                     <li
-                      className="relative mt-px flex z-40"
+                      className="relative mt-px flex z-40 w-52 sm:w-auto"
                       style={{
                         gridRow: `${block.gridRow} / span ${block.span}`,
                         gridColumn: "1 / span 1",
@@ -564,6 +560,10 @@ export function CalendarHome({year, month, day}) {
           </div>
         </div>
       </div>
+      <AddEvent
+        setIsOpenEventModal={setIsOpenEventModal}
+        isOpenEventModal={isOpenEventModal}
+      />
     </div>
   );
 }

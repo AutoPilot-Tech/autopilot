@@ -24,10 +24,8 @@ export function IndividualCalendarRow({time}) {
   }
   let timeString = `${adjustedTime} ${pmOrAm}`;
   return (
-    <div>
-      <div className="sticky left-0 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-        {timeString}
-      </div>
+    <div className="sticky w-10 -ml-14 left-0 -mt-2.5 text-right text-xs leading-5 text-gray-400 sm:-ml-14 sm:pr-2 sm:w-14">
+      {timeString}
     </div>
   );
 }

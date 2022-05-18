@@ -11,6 +11,7 @@ import {Banner} from "../components/layout/Banner";
 import {Sidebar} from "../components/layout/Sidebar";
 import {CalendarHome} from "../components/layout/CalendarHome";
 import {useParams} from "react-router-dom";
+import {PlusSmIcon as PlusSmIconOutline} from "@heroicons/react/outline";
 
 // note: see src/context. Since we want to use tracksprovider at the
 // top level, we are using it here in App. This can be replaced
@@ -61,6 +62,17 @@ export const CalendarHomeView = () => {
           <div className="relative" id="content">
             <Sidebar />
             <CalendarHome year={year} month={month} day={day} />
+            <button
+              type="button"
+              className={
+                "z-50 p-3 fixed bottom-3 right-3 inline-flex items-center border border-transparent rounded-full shadow-lg  text-white bg-fuchsia-600 hover:bg-fuchsia-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:p-3 sm:left-20 sm:top-1 sm:hidden"
+              }
+            >
+              <PlusSmIconOutline
+                className="h-10 w-10 sm:h-7 sm:w-7"
+                aria-hidden="true"
+              />
+            </button>
           </div>
         </div>
       </TracksProvider>
