@@ -42,7 +42,7 @@ function classNames(...classes) {
 }
 
 export function Header() {
-  // const {photoUrl} = useLoadingValue(); 
+  // const {photoUrl} = useLoadingValue();
   const {openSideBar, setOpenSideBar, nowValue, setNowValue} = useTracksValue();
 
   return (
@@ -55,7 +55,7 @@ export function Header() {
             setOpenSideBar(!openSideBar);
           }}
         />
-        <a className="" href="/app/calendar/home">
+        <a className="hidden md:block" href="/app/calendar/home">
           <img
             className="select-none block w-auto h-14"
             src="../../images/autopilot_alpha.png"
@@ -66,14 +66,17 @@ export function Header() {
       <div className="flex">
         <h1 className="text-lg font-semibold text-gray-900 mr-2">
           <time className="select-none sm:hidden">
-            {moment(nowValue).format("MM Do, YYYY")}
+            {moment(nowValue).format("MMM Do")}
           </time>
           <time className="select-none hidden sm:inline">
             {moment(nowValue).format("MMMM Do, YYYY")}
           </time>
         </h1>
-        <p className="select-none mt-1 text-sm text-gray-500">
+        <p className="select-none mt-1 text-sm text-gray-500 hidden sm:inline">
           {moment(nowValue).format("dddd")}
+        </p>
+        <p className="select-none mt-1 text-sm font-light text-gray-500 sm:hidden">
+          {moment(nowValue).format("ddd")}
         </p>
       </div>
       <div className="flex items-center">
