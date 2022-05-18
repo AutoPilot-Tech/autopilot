@@ -37,9 +37,14 @@ function generateKey() {
   );
 }
 
-export function CalendarHome({year, month, day}) {
+export function CalendarHome({
+  year,
+  month,
+  day,
+  isOpenEventModal,
+  setIsOpenEventModal,
+}) {
   const {openSideBar, setOpenSideBar, nowValue, setNowValue} = useTracksValue();
-  const [isOpenEventModal, setIsOpenEventModal] = useState(false);
   const [eventName, setEventName] = useState("");
   const [showSmallCalendar, setShowSmallCalendar] = useState(false);
   const [modalSettingOpen, setModalSettingOpen] = useState(false);
@@ -560,10 +565,7 @@ export function CalendarHome({year, month, day}) {
           </div>
         </div>
       </div>
-      <AddEvent
-        setIsOpenEventModal={setIsOpenEventModal}
-        isOpenEventModal={isOpenEventModal}
-      />
+      
     </div>
   );
 }
