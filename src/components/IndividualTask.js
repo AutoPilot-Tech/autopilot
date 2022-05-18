@@ -209,8 +209,8 @@ export function IndividualTask({task, index, moveListItem}) {
 
         <div className="py-4 pr-3 text-sm font-medium w-fit ">{task.task}</div>
         <div className="w-fit font-light gap-3 flex items-center text-lime-700">
-          <p>{moment(task.start).format("h:mm A")}</p>
-          <p>{moment(task.start).format("MMMM Do")}</p>
+          <p>{task.start ? moment(task.start).format("h:mm A") : "Today"}</p>
+          <p>{task.start ? moment(task.start).format("MMMM Do") : ""}</p>
         </div>
         <div className="w-14 flex-auto">
           <Menu
