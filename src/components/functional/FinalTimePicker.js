@@ -69,7 +69,6 @@ export function FinalTimePicker({
 
               setModalEndTimeValue(finalTimeValueString);
               setEventEndTime(finalTimeObject);
-              setFinalTimeValue("");
               setShowFinalTimePicker(false);
             }}
           >

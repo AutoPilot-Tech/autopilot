@@ -130,7 +130,6 @@ export function InitialTimePicker({
                 );
                 setModalInitialTimeValue(initialTimeValueString);
                 setEventStartTime(initialTimeObject);
-                setInitialTimeValue("");
                 setShowInitialTimePicker(false);
               }}
             >
