@@ -40,13 +40,10 @@ export const Tasks = ({trackId}) => {
     //     ],
     //   })
     // );
-    console.log("dragIndex", dragIndex);
-    console.log("hoverIndex", hoverIndex);
-    console.log("tasks", tasks);
+   
     const dragTask = tasks[dragIndex].id;
     const hoverTask = tasks[hoverIndex].id;
-    console.log("dragTask", dragTask);
-    console.log("hoverTask", hoverTask);
+    
 
     db.collection("tasks").doc(dragTask).update({
       index: hoverIndex,

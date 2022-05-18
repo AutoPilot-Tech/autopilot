@@ -1,6 +1,7 @@
 import {collatedTasks} from "../constants";
 import {colorsList} from "../constants";
 import {db} from "../firebase";
+import moment from "moment";
 
 export const getRandomColor = () => {
   const randomIndex = Math.floor(Math.random() * colorsList.length);
@@ -82,4 +83,57 @@ export const getTasksLength = (trackId) => {
       return tasksLength;
     });
   return unsubscribe;
+};
+
+export const handleTimeValueStringProcessing = (timeValue) => {
+  // get hour and minute from finalTimeValue string
+  // if ":" is not in the string, then it is a single digit
+  // if ":" is in the string, then it is a double digit
+  let hour =
+    timeValue.indexOf(":") === -1
+      ? parseInt(timeValue)
+      : parseInt(timeValue.split(":")[0]);
+  let minute =
+    timeValue.indexOf(":") === -1 ? 0 : parseInt(timeValue.split(":")[1]);
+  // set modalEndTimeValue to the final time
+  // if pm is in the string, add 12 hours to the hour
+  if (timeValue.indexOf("pm") !== -1) {
+    hour += 12;
+  }
+  let timeString = moment().hour(hour).minute(minute).format("h:mm A");
+  return timeString;
+};
+
+export const handleTimeValueToObject = (timeValue) => {
+  // get hour and minute from finalTimeValue string
+  // if ":" is not in the string, then it is a single digit
+  // if ":" is in the string, then it is a double digit
+  let hour =
+    timeValue.indexOf(":") === -1
+      ? parseInt(timeValue)
+      : parseInt(timeValue.split(":")[0]);
+  let minute =
+    timeValue.indexOf(":") === -1 ? 0 : parseInt(timeValue.split(":")[1]);
+  // set modalEndTimeValue to the final time
+  // if pm is in the string, add 12 hours to the hour
+  if (timeValue.indexOf("pm") !== -1) {
+    hour += 12;
+  }
+  let timeObject = moment().hour(hour).minute(minute);
+  return timeObject;
+};
+
+export const getGridRowFromTime = (time) => {
+  let startHour = moment(time).hours();
+  let startMinute = moment(time).minutes();
+  let fractionalHour = startMinute / 60;
+  let startTimeInHoursDecimal = startHour + fractionalHour;
+  let gridRowForCalendar = Math.floor(startTimeInHoursDecimal * 12) + 2;
+  return gridRowForCalendar;
+};
+
+export const getGridSpanFromTime = (startTime, endTime) => {
+  let durationInMinutes = moment(endTime).diff(moment(startTime), "minutes");
+  let durationInHoursDecimal = Math.round((durationInMinutes / 60) * 12);
+  return durationInHoursDecimal;
 };

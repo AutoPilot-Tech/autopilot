@@ -20,6 +20,10 @@ import {useCalendarValue} from "../../context/calendar-context";
 import {useTasks} from "../../hooks/index";
 import {getTasksLength} from "../../helpers/index";
 import {translateRect} from "@fullcalendar/react";
+import {InitialTimePicker} from "../functional/InitialTimePicker";
+import {FinalTimePicker} from "../functional/FinalTimePicker";
+import {getGridRowFromTime} from "../../helpers/index";
+import {getGridSpanFromTime} from "../../helpers/index";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -53,10 +57,24 @@ export function CalendarHome({year, month, day}) {
   );
   const modalSettingButtonRef = useRef(null);
   const routinePickerButtonRef = useRef(null);
+  const initialTimePickerButtonRef = useRef(null);
+  const finalTimePickerButtonRef = useRef(null);
   const [gridRowClicked, setGridRowClicked] = useState("");
   const [showRoutinesList, setShowRoutinesList] = useState(false);
   const [selectedRoutine, setSelectedRoutine] = useState(null);
   const [todaysEvents, setTodaysEvents] = useState([]);
+  const [showInitialTimePicker, setShowInitialTimePicker] = useState(false);
+  const [showFinalTimePicker, setShowFinalTimePicker] = useState(false);
+  const [initialTimeValue, setInitialTimeValue] = useState(moment());
+  const [finalTimeValue, setFinalTimeValue] = useState(moment().add(1, "hour"));
+  const [modalInitialTimeValue, setModalInitialTimeValue] = useState(
+    moment().format("h:mm a")
+  );
+  const [modalEndTimeValue, setModalEndTimeValue] = useState(
+    moment().add(1, "hour").format("h:mm a")
+  );
+  const [eventStartTime, setEventStartTime] = useState(moment());
+  const [eventEndTime, setEventEndTime] = useState(moment().add(1, "hour"));
 
   useEffect(() => {
     // if year month or day are -1, set to today
@@ -106,31 +124,29 @@ export function CalendarHome({year, month, day}) {
   function addEvent() {
     const userId = auth.currentUser.uid;
     // use date and time to make a moment object
-    const startTime = moment()
-      .hour((gridRowClicked - 2) / 12)
-      .minute(0)
-      .format("h:mm A");
-    const endTime = moment()
-      .hour((gridRowClicked - 2) / 12 + 1)
-      .minute(0)
-      .format("h:mm A");
-    const dateTimeStart = moment(selectedDate + " " + startTime).format();
-    const dateTimeEnd = moment(selectedDate + " " + endTime).format();
+    const gridRowForCalendar = getGridRowFromTime(eventStartTime);
+    const gridSpanForCalendar = getGridSpanFromTime(
+      eventStartTime,
+      eventEndTime
+    );
 
-    db.collection("users").doc(auth.currentUser.uid).collection("events").add({
-      archived: false,
-      routineId: selectedRoutine.trackId,
-      title: eventName,
-      start: dateTimeStart,
-      end: dateTimeEnd,
-      userId: userId,
-      maintenanceRequired: false,
-      gridRow: gridRowClicked,
-      span: 12,
-      textColor: "text-blue-500",
-      bgColor: "bg-blue-50",
-      key: generateKey(),
-    });
+    db.collection("users")
+      .doc(auth.currentUser.uid)
+      .collection("events")
+      .add({
+        archived: false,
+        routineId: selectedRoutine.trackId,
+        title: eventName,
+        start: moment(eventStartTime).format("YYYY-MM-DDTHH:mm:ss"),
+        end: moment(eventEndTime).format("YYYY-MM-DDTHH:mm:ss"),
+        userId: userId,
+        maintenanceRequired: false,
+        gridRow: gridRowForCalendar,
+        span: gridSpanForCalendar,
+        textColor: "text-blue-500",
+        bgColor: "bg-blue-50",
+        key: generateKey(),
+      });
 
     const tasksLength = db
       .collection("tasks")
@@ -146,8 +162,8 @@ export function CalendarHome({year, month, day}) {
           title: eventName,
           task: eventName,
           date: selectedDate,
-          startTime: startTime,
-          endTime: endTime,
+          startTime: moment(eventStartTime).format("YYYY-MM-DDTHH:mm:ss"),
+          endTime: moment(eventEndTime).format("YYYY-MM-DDTHH:mm:ss"),
           index: tasksLength,
           userId: auth.currentUser.uid,
         });
@@ -284,13 +300,17 @@ export function CalendarHome({year, month, day}) {
                           </svg>
                           <div>
                             <p
+                              ref={initialTimePickerButtonRef}
                               id="time-suggestion"
                               className="select-none p-0.5 cursor-pointer hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100 text-gray-600"
+                              onClick={() => {
+                                setShowInitialTimePicker(
+                                  !showInitialTimePicker
+                                );
+                                setModalSettingOpen(!modalSettingOpen);
+                              }}
                             >
-                              {moment()
-                                .hour((gridRowClicked - 2) / 12)
-                                .minute(0)
-                                .format("h:mm A")}
+                              {modalInitialTimeValue}
                             </p>
                           </div>
                           <div>
@@ -298,70 +318,99 @@ export function CalendarHome({year, month, day}) {
                           </div>
                           <div>
                             <p
+                              ref={finalTimePickerButtonRef}
                               id="time-sugggestion"
                               className="p-0.5 select-none cursor-pointer hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100 text-gray-600"
+                              onClick={() => {
+                                setShowFinalTimePicker(!showFinalTimePicker);
+                                setModalSettingOpen(!modalSettingOpen);
+                              }}
                             >
-                              {moment()
-                                .hour((gridRowClicked - 2) / 12 + 1)
-                                .minute(0)
-                                .format("h:mm A")}
+                              {modalEndTimeValue}
                             </p>
                           </div>
                         </div>
-                      </div>
-                      {/* id="save-button" was originally on the button element but i needed to add more layout, and since i was already targetting this id somewhere, i just gave the id to the div */}
-                      <div
-                        id="save-button"
-                        className="flex flex-row gap-2 justify-end items-center"
-                      >
+                        <InitialTimePicker
+                          showInitialTimePicker={showInitialTimePicker}
+                          setShowInitialTimePicker={setShowInitialTimePicker}
+                          initialTimePickerButtonRef={
+                            initialTimePickerButtonRef
+                          }
+                          modalSettingOpen={modalSettingOpen}
+                          setModalSettingOpen={setModalSettingOpen}
+                          initialTimeValue={initialTimeValue}
+                          setInitialTimeValue={setInitialTimeValue}
+                          modalInitialTimeValue={modalInitialTimeValue}
+                          setModalInitialTimeValue={setModalInitialTimeValue}
+                          setEventStartTime={setEventStartTime}
+                        />
+                        <FinalTimePicker
+                          showFinalTimePicker={showFinalTimePicker}
+                          setShowFinalTimePicker={setShowFinalTimePicker}
+                          finalTimePickerButtonRef={finalTimePickerButtonRef}
+                          modalSettingOpen={modalSettingOpen}
+                          setModalSettingOpen={setModalSettingOpen}
+                          finalTimeValue={finalTimeValue}
+                          setFinalTimeValue={setFinalTimeValue}
+                          modalEndTimeValue={modalEndTimeValue}
+                          setModalEndTimeValue={setModalEndTimeValue}
+                          setEventEndTime={setEventEndTime}
+                        />
+                        {/* id="save-button" was originally on the button element but i needed to add more layout, and since i was already targetting this id somewhere, i just gave the id to the div */}
                         <div
-                          className="cursor-pointer flex flex-row items-center gap-2 border-b border-b-gray-300 w-32 hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100"
-                          ref={routinePickerButtonRef}
+                          id="save-button"
+                          className="flex flex-row gap-2 justify-end items-center"
                         >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-5 w-5 text-gray-300 ml-1"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                          >
-                            <path d="M4 3a2 2 0 100 4h12a2 2 0 100-4H4z" />
-                            <path
-                              fillRule="evenodd"
-                              d="M3 8h14v7a2 2 0 01-2 2H5a2 2 0 01-2-2V8zm5 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
                           <div
+                            className="cursor-pointer flex flex-row items-center gap-2 border-b border-b-gray-300 w-32 hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100"
+                            ref={routinePickerButtonRef}
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-5 w-5 text-gray-300 ml-1"
+                              viewBox="0 0 20 20"
+                              fill="currentColor"
+                            >
+                              <path d="M4 3a2 2 0 100 4h12a2 2 0 100-4H4z" />
+                              <path
+                                fillRule="evenodd"
+                                d="M3 8h14v7a2 2 0 01-2 2H5a2 2 0 01-2-2V8zm5 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"
+                                clipRule="evenodd"
+                              />
+                            </svg>
+                            <div
+                              onClick={() => {
+                                setShowRoutinesList(!showRoutinesList);
+                                setRoutineSetterOpen(!routineSetterOpen);
+                              }}
+                            >
+                              <p className=" p-0.5 hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100 text-gray-600 w-24">
+                                {selectedRoutine
+                                  ? selectedRoutine.name
+                                  : "Set Routine"}
+                              </p>
+                            </div>
+                          </div>
+                          <RoutinePicker
+                            showRoutinesList={showRoutinesList}
+                            setSelectedRoutine={setSelectedRoutine}
+                            setShowRoutinesList={setShowRoutinesList}
+                            routinePickerButtonRef={routinePickerButtonRef}
+                            routineSetterOpen={routineSetterOpen}
+                            setRoutineSetterOpen={setRoutineSetterOpen}
+                          />
+                          <button
+                            type="button"
+                            className=" inline-flex px-4 py-2 text-sm font-medium text-green-900 bg-green-100 border border-transparent rounded-md hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-green-500"
                             onClick={() => {
-                              setShowRoutinesList(!showRoutinesList);
-                              setRoutineSetterOpen(!routineSetterOpen);
+                              addEvent();
+                              setEventName("");
+                              closeModal();
                             }}
                           >
-                            <p className=" p-0.5 hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100 text-gray-600 w-24">
-                              {selectedRoutine
-                                ? selectedRoutine.name
-                                : "Set Routine"}
-                            </p>
-                          </div>
+                            Save
+                          </button>
                         </div>
-                        <RoutinePicker
-                          showRoutinesList={showRoutinesList}
-                          setSelectedRoutine={setSelectedRoutine}
-                          setShowRoutinesList={setShowRoutinesList}
-                          routinePickerButtonRef={routinePickerButtonRef}
-                          routineSetterOpen={routineSetterOpen}
-                          setRoutineSetterOpen={setRoutineSetterOpen}
-                        />
-                        <button
-                          type="button"
-                          className=" inline-flex px-4 py-2 text-sm font-medium text-green-900 bg-green-100 border border-transparent rounded-md hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-green-500"
-                          onClick={() => {
-                            addEvent();
-                            closeModal();
-                          }}
-                        >
-                          Save
-                        </button>
                       </div>
                     </div>
                   </div>
@@ -422,6 +471,29 @@ export function CalendarHome({year, month, day}) {
                           href="#"
                           onClick={() => {
                             setGridRowClicked(i * 12 + 2);
+                            setModalInitialTimeValue(
+                              moment()
+                                .hour((i * 12 + 2 - 2) / 12)
+                                .minute(0)
+                                .format("h:mm A")
+                            );
+                            setModalEndTimeValue(
+                              moment()
+                                .hour((i * 12 + 2 - 2) / 12 + 1)
+                                .minute(0)
+                                .format("h:mm A")
+                            );
+                            setEventStartTime(
+                              moment()
+                                .hour((i * 12 + 2 - 2) / 12)
+                                .minute(0)
+                            );
+                            setEventEndTime(
+                              moment()
+                                .hour((i * 12 + 2 - 2) / 12 + 1)
+                                .minute(0)
+                            );
+
                             setIsOpenEventModal(true);
                           }}
                           className="cursor-pointer group absolute inset-0.5 flex flex-col overflow-y-auto rounded-lg pl-2 pt-1 bg-transparent"
@@ -435,7 +507,7 @@ export function CalendarHome({year, month, day}) {
                     <li
                       className="relative mt-px flex z-40"
                       style={{
-                        gridRow: `${block.gridRow} / span 12`,
+                        gridRow: `${block.gridRow} / span ${block.span}`,
                         gridColumn: "1 / span 1",
                       }}
                       key={block.key}
