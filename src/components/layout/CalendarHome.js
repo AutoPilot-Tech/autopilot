@@ -517,8 +517,9 @@ export function CalendarHome({year, month, day}) {
                         href={`/app/tasks/${block.routineId}`}
                         className="group absolute inset-1 flex flex-col overflow-y-auto rounded-lg bg-blue-50 pl-2 pt-1 text-xs leading-4 hover:bg-blue-100"
                       >
-                        <div className="flex flex-row">
+                        <div className="flex flex-row content-end">
                           <p className=" font-semibold text-blue-700 w-fit">{`${block.title}`}</p>
+                          <p className="ml-3 mr-2 text-gray-400">|</p>
                           <p className="ml-2 font-normal text-gray-600">
                             {` ${block.routineName}`}
                           </p>
