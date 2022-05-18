@@ -65,16 +65,16 @@ export function CalendarHome({year, month, day}) {
   const [todaysEvents, setTodaysEvents] = useState([]);
   const [showInitialTimePicker, setShowInitialTimePicker] = useState(false);
   const [showFinalTimePicker, setShowFinalTimePicker] = useState(false);
-  const [initialTimeValue, setInitialTimeValue] = useState(null);
-  const [finalTimeValue, setFinalTimeValue] = useState(null);
+  const [initialTimeValue, setInitialTimeValue] = useState(moment());
+  const [finalTimeValue, setFinalTimeValue] = useState(moment().add(1, "hour"));
   const [modalInitialTimeValue, setModalInitialTimeValue] = useState(
     moment().format("h:mm a")
   );
   const [modalEndTimeValue, setModalEndTimeValue] = useState(
     moment().add(1, "hour").format("h:mm a")
   );
-  const [eventStartTime, setEventStartTime] = useState(null);
-  const [eventEndTime, setEventEndTime] = useState(null);
+  const [eventStartTime, setEventStartTime] = useState(moment());
+  const [eventEndTime, setEventEndTime] = useState(moment().add(1, "hour"));
 
   useEffect(() => {
     // if year month or day are -1, set to today
