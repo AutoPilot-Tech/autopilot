@@ -40,10 +40,9 @@ export const Tasks = ({trackId}) => {
     //     ],
     //   })
     // );
-   
+
     const dragTask = tasks[dragIndex].id;
     const hoverTask = tasks[hoverIndex].id;
-    
 
     db.collection("tasks").doc(dragTask).update({
       index: hoverIndex,
@@ -71,6 +70,8 @@ export const Tasks = ({trackId}) => {
   if (collatedTasksExist(trackId) && trackId) {
     // if the selected track is a collated track (i.e. TODAY, CALENDAR, etc)
     trackName = getCollatedTitle(collatedTasks, trackId);
+    console.log(trackId);
+    console.log(trackName);
   }
 
   if (

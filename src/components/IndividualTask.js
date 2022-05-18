@@ -4,6 +4,7 @@ import {useTracksValue} from "../context/tracks-context";
 import {Menu, Transition, Dialog} from "@headlessui/react";
 import {useDrag, useDrop} from "react-dnd";
 import {useTasks} from "../hooks/index";
+import moment from "moment";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -206,8 +207,10 @@ export function IndividualTask({task, index, moveListItem}) {
           />
         </div>
 
-        <div className="py-4 pr-3 text-sm font-medium w-64 flex-auto ">
-          {task.task}
+        <div className="py-4 pr-3 text-sm font-medium w-fit ">{task.task}</div>
+        <div className="w-fit font-light gap-3 flex items-center text-lime-700">
+          <p>{task.start ? moment(task.start).format("h:mm A") : "Today"}</p>
+          <p>{task.start ? moment(task.start).format("MMMM Do") : ""}</p>
         </div>
         <div className="w-14 flex-auto">
           <Menu

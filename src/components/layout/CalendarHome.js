@@ -37,14 +37,6 @@ function generateKey() {
   );
 }
 
-const handleKeypress = (e) => {
-  //it triggers by pressing the enter key
-  if (e.keyCode === 13) {
-    addTrack();
-    closeModal();
-  }
-};
-
 export function CalendarHome({year, month, day}) {
   const {openSideBar, setOpenSideBar, nowValue, setNowValue} = useTracksValue();
   const [isOpenEventModal, setIsOpenEventModal] = useState(false);
@@ -65,8 +57,8 @@ export function CalendarHome({year, month, day}) {
   const [todaysEvents, setTodaysEvents] = useState([]);
   const [showInitialTimePicker, setShowInitialTimePicker] = useState(false);
   const [showFinalTimePicker, setShowFinalTimePicker] = useState(false);
-  const [initialTimeValue, setInitialTimeValue] = useState(moment());
-  const [finalTimeValue, setFinalTimeValue] = useState(moment().add(1, "hour"));
+  const [initialTimeValue, setInitialTimeValue] = useState("");
+  const [finalTimeValue, setFinalTimeValue] = useState("");
   const [modalInitialTimeValue, setModalInitialTimeValue] = useState(
     moment().format("h:mm a")
   );
@@ -113,6 +105,15 @@ export function CalendarHome({year, month, day}) {
     });
   }, [nowValue]);
 
+  const handleKeypress = (e) => {
+    //it triggers by pressing the enter key
+    if (e.keyCode === 13) {
+      addEvent();
+      setEventName("");
+      closeModal();
+    }
+  };
+
   function closeModal() {
     setIsOpenEventModal(false);
   }
@@ -129,13 +130,25 @@ export function CalendarHome({year, month, day}) {
       eventStartTime,
       eventEndTime
     );
+    let routineIdForEvent;
+    try {
+      routineIdForEvent = selectedRoutine.trackId;
+    } catch (e) {
+      routineIdForEvent = "INBOX";
+    }
+    let routineNameForEvent;
+    try {
+      routineNameForEvent = selectedRoutine.name;
+    } catch (e) {
+      routineNameForEvent = "Inbox";
+    }
 
     db.collection("users")
       .doc(auth.currentUser.uid)
       .collection("events")
       .add({
         archived: false,
-        routineId: selectedRoutine.trackId,
+        routineId: routineIdForEvent,
         title: eventName,
         start: moment(eventStartTime).format("YYYY-MM-DDTHH:mm:ss"),
         end: moment(eventEndTime).format("YYYY-MM-DDTHH:mm:ss"),
@@ -146,24 +159,37 @@ export function CalendarHome({year, month, day}) {
         textColor: "text-blue-500",
         bgColor: "bg-blue-50",
         key: generateKey(),
+        routineName: routineNameForEvent,
       });
 
     const tasksLength = db
       .collection("tasks")
-      .where("trackId", "==", selectedRoutine.trackId)
+      .where("trackId", "==", routineIdForEvent)
       .get()
       .then(function (querySnapshot) {
         return querySnapshot.size;
       })
       .then((tasksLength) => {
+        let taskStartTime;
+        let taskEndTime;
+        let taskDate;
+        if (routineIdForEvent === "INBOX") {
+          taskStartTime = "";
+          taskEndTime = "";
+          taskDate = "";
+        } else {
+          taskStartTime = moment(eventStartTime).format("YYYY-MM-DDTHH:mm:ss");
+          taskEndTime = moment(eventEndTime).format("YYYY-MM-DDTHH:mm:ss");
+          taskDate = selectedDate;
+        }
         db.collection("tasks").add({
           archived: false,
-          trackId: selectedRoutine.trackId,
+          trackId: routineIdForEvent,
           title: eventName,
           task: eventName,
-          date: selectedDate,
-          startTime: moment(eventStartTime).format("YYYY-MM-DDTHH:mm:ss"),
-          endTime: moment(eventEndTime).format("YYYY-MM-DDTHH:mm:ss"),
+          date: taskDate,
+          start: taskStartTime,
+          end: taskEndTime,
           index: tasksLength,
           userId: auth.currentUser.uid,
         });
@@ -387,7 +413,7 @@ export function CalendarHome({year, month, day}) {
                               <p className=" p-0.5 hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100 text-gray-600 w-24">
                                 {selectedRoutine
                                   ? selectedRoutine.name
-                                  : "Set Routine"}
+                                  : "Inbox"}
                               </p>
                             </div>
                           </div>
@@ -516,7 +542,14 @@ export function CalendarHome({year, month, day}) {
                         href={`/app/tasks/${block.routineId}`}
                         className="group absolute inset-1 flex flex-col overflow-y-auto rounded-lg bg-blue-50 pl-2 pt-1 text-xs leading-4 hover:bg-blue-100"
                       >
-                        <p className=" font-semibold text-blue-700">{`${block.title}`}</p>
+                        <div className="flex flex-row content-end">
+                          <p className=" font-semibold text-blue-700 w-fit">{`${block.title}`}</p>
+                          <p className="ml-3 mr-2 text-gray-400">|</p>
+                          <p className="ml-2 font-normal text-gray-600">
+                            {` ${block.routineName}`}
+                          </p>
+                        </div>
+
                         <p className="text-blue-500 group-hover:text-blue-700">
                           <time dateTime="2022-01-22T06:00">{`${moment(
                             block.start

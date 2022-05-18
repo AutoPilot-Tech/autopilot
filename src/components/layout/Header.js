@@ -42,7 +42,7 @@ function classNames(...classes) {
 }
 
 export function Header() {
-  // const {photoUrl} = useLoadingValue();
+  // const {photoUrl} = useLoadingValue(); 
   const {openSideBar, setOpenSideBar, nowValue, setNowValue} = useTracksValue();
 
   return (
