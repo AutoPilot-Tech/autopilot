@@ -46,11 +46,12 @@ export default function OutsideAlerter(props) {
   return <div ref={wrapperRef}>{props.children}</div>;
 }
 
-export function IndividualTask({task, index, moveListItem, tasks}) {
+export function IndividualTask({task, index, moveListItem}) {
   const [isOpen, setIsOpen] = useState(false);
   const [openSettings, setOpenSettings] = useState(false);
   const [showSettingsIcon, setShowSettingsIcon] = useState(false);
   const {selectedTrack} = useTracksValue();
+  const {tasks} = useTasks(selectedTrack);
 
   const ref = useRef(null);
 
@@ -111,7 +112,7 @@ export function IndividualTask({task, index, moveListItem, tasks}) {
         return;
       }
 
-      moveListItem(dragIndex, hoverIndex);
+      moveListItem(dragIndex, hoverIndex, tasks);
       item.index = hoverIndex;
     },
   });
