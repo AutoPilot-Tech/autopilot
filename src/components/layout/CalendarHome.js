@@ -37,14 +37,6 @@ function generateKey() {
   );
 }
 
-const handleKeypress = (e) => {
-  //it triggers by pressing the enter key
-  if (e.keyCode === 13) {
-    addTrack();
-    closeModal();
-  }
-};
-
 export function CalendarHome({year, month, day}) {
   const {openSideBar, setOpenSideBar, nowValue, setNowValue} = useTracksValue();
   const [isOpenEventModal, setIsOpenEventModal] = useState(false);
@@ -113,6 +105,15 @@ export function CalendarHome({year, month, day}) {
     });
   }, [nowValue]);
 
+  const handleKeypress = (e) => {
+    //it triggers by pressing the enter key
+    if (e.keyCode === 13) {
+      addEvent();
+      setEventName("");
+      closeModal();
+    }
+  };
+
   function closeModal() {
     setIsOpenEventModal(false);
   }
@@ -129,13 +130,25 @@ export function CalendarHome({year, month, day}) {
       eventStartTime,
       eventEndTime
     );
+    let routineIdForEvent;
+    try {
+      routineIdForEvent = selectedRoutine.trackId;
+    } catch (e) {
+      routineIdForEvent = "INBOX";
+    }
+    let routineNameForEvent;
+    try {
+      routineNameForEvent = selectedRoutine.name;
+    } catch (e) {
+      routineNameForEvent = "Inbox";
+    }
 
     db.collection("users")
       .doc(auth.currentUser.uid)
       .collection("events")
       .add({
         archived: false,
-        routineId: selectedRoutine.trackId,
+        routineId: routineIdForEvent,
         title: eventName,
         start: moment(eventStartTime).format("YYYY-MM-DDTHH:mm:ss"),
         end: moment(eventEndTime).format("YYYY-MM-DDTHH:mm:ss"),
@@ -146,12 +159,12 @@ export function CalendarHome({year, month, day}) {
         textColor: "text-blue-500",
         bgColor: "bg-blue-50",
         key: generateKey(),
-        routineName: selectedRoutine.name,
+        routineName: routineNameForEvent,
       });
 
     const tasksLength = db
       .collection("tasks")
-      .where("trackId", "==", selectedRoutine.trackId)
+      .where("trackId", "==", routineIdForEvent)
       .get()
       .then(function (querySnapshot) {
         return querySnapshot.size;
@@ -159,7 +172,7 @@ export function CalendarHome({year, month, day}) {
       .then((tasksLength) => {
         db.collection("tasks").add({
           archived: false,
-          trackId: selectedRoutine.trackId,
+          trackId: routineIdForEvent,
           title: eventName,
           task: eventName,
           date: selectedDate,
@@ -388,7 +401,7 @@ export function CalendarHome({year, month, day}) {
                               <p className=" p-0.5 hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100 text-gray-600 w-24">
                                 {selectedRoutine
                                   ? selectedRoutine.name
-                                  : "Set Routine"}
+                                  : "Inbox"}
                               </p>
                             </div>
                           </div>
