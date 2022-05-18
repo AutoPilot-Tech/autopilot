@@ -145,7 +145,6 @@ export function RoutinePicker({
                   <div className="flex flex-col">
                     <input
                       className="mt-3 w-full p-2 rounded-md text-gray-900 placeholder-gray-500 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out"
-                      data-testid="add-task-content"
                       type="text"
                       value={newRoutineName}
                       onChange={(e) => setNewRoutineName(e.target.value)}

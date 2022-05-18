@@ -57,6 +57,10 @@ export function CalendarHome({year, month, day}) {
   const [showRoutinesList, setShowRoutinesList] = useState(false);
   const [selectedRoutine, setSelectedRoutine] = useState(null);
   const [todaysEvents, setTodaysEvents] = useState([]);
+  const [showInitialTimePicker, setShowInitialTimePicker] = useState(false);
+  const [showFinalTimePicker, setShowFinalTimePicker] = useState(false);
+  const [initialTimeValue, setInitialTimeValue] = useState(null);
+  const [finalTimeValue, setFinalTimeValue] = useState(null);
 
   useEffect(() => {
     // if year month or day are -1, set to today
@@ -286,6 +290,12 @@ export function CalendarHome({year, month, day}) {
                             <p
                               id="time-suggestion"
                               className="select-none p-0.5 cursor-pointer hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100 text-gray-600"
+                              onClick={() => {
+                                setShowInitialTimePicker(
+                                  !showInitialTimePicker
+                                );
+                                setModalSettingOpen(!modalSettingOpen);
+                              }}
                             >
                               {moment()
                                 .hour((gridRowClicked - 2) / 12)
@@ -300,6 +310,10 @@ export function CalendarHome({year, month, day}) {
                             <p
                               id="time-sugggestion"
                               className="p-0.5 select-none cursor-pointer hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100 text-gray-600"
+                              onClick={() => {
+                                setShowFinalTimePicker(!showFinalTimePicker);
+                                setModalSettingOpen(!modalSettingOpen);
+                              }}
                             >
                               {moment()
                                 .hour((gridRowClicked - 2) / 12 + 1)
@@ -308,60 +322,156 @@ export function CalendarHome({year, month, day}) {
                             </p>
                           </div>
                         </div>
-                      </div>
-                      {/* id="save-button" was originally on the button element but i needed to add more layout, and since i was already targetting this id somewhere, i just gave the id to the div */}
-                      <div
-                        id="save-button"
-                        className="flex flex-row gap-2 justify-end items-center"
-                      >
                         <div
-                          className="cursor-pointer flex flex-row items-center gap-2 border-b border-b-gray-300 w-32 hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100"
-                          ref={routinePickerButtonRef}
+                          className={
+                            showInitialTimePicker
+                              ? "cursor-default z-50 absolute inline-block max-w-md p-3 text-left align-middle transition-all transform bg-gray-700 shadow-xl rounded-2xl overflow-visible left-9 w-48 text-white top-36"
+                              : "hidden"
+                          }
                         >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-5 w-5 text-gray-300 ml-1"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                          >
-                            <path d="M4 3a2 2 0 100 4h12a2 2 0 100-4H4z" />
-                            <path
-                              fillRule="evenodd"
-                              d="M3 8h14v7a2 2 0 01-2 2H5a2 2 0 01-2-2V8zm5 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                          <div
-                            onClick={() => {
-                              setShowRoutinesList(!showRoutinesList);
-                              setRoutineSetterOpen(!routineSetterOpen);
-                            }}
-                          >
-                            <p className=" p-0.5 hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100 text-gray-600 w-24">
-                              {selectedRoutine
-                                ? selectedRoutine.name
-                                : "Set Routine"}
-                            </p>
+                          <div className="flex flex-col gap-3">
+                            <div className="flex flex-row gap-3">
+                              <h3>Time</h3>
+                              <TextField
+                                className="mt-3 w-full p-2 rounded-md text-gray-900 placeholder-gray-500 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out"
+                                type="text"
+                                value={initialTimeValue}
+                                onChange={(e) =>
+                                  setInitialTimeValue(e.target.value)
+                                }
+                                placeholder="Add time"
+                                onKeyDown={(e) => handleKeypress(e)}
+                                inputProps={{
+                                  style: {
+                                    padding: "0.25rem",
+                                    color: "black",
+                                    backgroundColor: "white",
+                                    borderRadius: "0.25rem",
+                                  },
+                                }}
+                              />
+                            </div>
+                            <div className="flex flex-row justify-end">
+                              {/* checkbox button */}
+                              <button className="flex flex-row ">
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  className="h-7 w-7"
+                                  viewBox="0 0 20 20"
+                                  fill="currentColor"
+                                >
+                                  <path
+                                    fillRule="evenodd"
+                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                    clipRule="evenodd"
+                                  />
+                                </svg>
+                              </button>
+                            </div>
                           </div>
                         </div>
-                        <RoutinePicker
-                          showRoutinesList={showRoutinesList}
-                          setSelectedRoutine={setSelectedRoutine}
-                          setShowRoutinesList={setShowRoutinesList}
-                          routinePickerButtonRef={routinePickerButtonRef}
-                          routineSetterOpen={routineSetterOpen}
-                          setRoutineSetterOpen={setRoutineSetterOpen}
-                        />
-                        <button
-                          type="button"
-                          className=" inline-flex px-4 py-2 text-sm font-medium text-green-900 bg-green-100 border border-transparent rounded-md hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-green-500"
-                          onClick={() => {
-                            addEvent();
-                            closeModal();
-                          }}
+                        <div
+                          className={
+                            showFinalTimePicker
+                              ? "cursor-default z-50 absolute inline-block max-w-md p-3 text-left align-middle transition-all transform bg-gray-700 shadow-xl rounded-2xl overflow-visible left-9 w-48 text-white top-36"
+                              : "hidden"
+                          }
                         >
-                          Save
-                        </button>
+                          <div className="flex flex-col gap-3">
+                            <div className="flex flex-row gap-3">
+                              <h3>Time</h3>
+                              <TextField
+                                className="mt-3 w-full p-2 rounded-md text-gray-900 placeholder-gray-500 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out"
+                                type="text"
+                                value={finalTimeValue}
+                                onChange={(e) =>
+                                  setFinalTimeValue(e.target.value)
+                                }
+                                placeholder="Add time"
+                                onKeyDown={(e) => handleKeypress(e)}
+                                inputProps={{
+                                  style: {
+                                    padding: "0.25rem",
+                                    color: "black",
+                                    backgroundColor: "white",
+                                    borderRadius: "0.25rem",
+                                  },
+                                }}
+                              />
+                            </div>
+                            <div className="flex flex-row justify-end">
+                              {/* checkbox button */}
+                              <button className="flex flex-row ">
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  className="h-7 w-7"
+                                  viewBox="0 0 20 20"
+                                  fill="currentColor"
+                                >
+                                  <path
+                                    fillRule="evenodd"
+                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                    clipRule="evenodd"
+                                  />
+                                </svg>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                        {/* id="save-button" was originally on the button element but i needed to add more layout, and since i was already targetting this id somewhere, i just gave the id to the div */}
+                        <div
+                          id="save-button"
+                          className="flex flex-row gap-2 justify-end items-center"
+                        >
+                          <div
+                            className="cursor-pointer flex flex-row items-center gap-2 border-b border-b-gray-300 w-32 hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100"
+                            ref={routinePickerButtonRef}
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-5 w-5 text-gray-300 ml-1"
+                              viewBox="0 0 20 20"
+                              fill="currentColor"
+                            >
+                              <path d="M4 3a2 2 0 100 4h12a2 2 0 100-4H4z" />
+                              <path
+                                fillRule="evenodd"
+                                d="M3 8h14v7a2 2 0 01-2 2H5a2 2 0 01-2-2V8zm5 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"
+                                clipRule="evenodd"
+                              />
+                            </svg>
+                            <div
+                              onClick={() => {
+                                setShowRoutinesList(!showRoutinesList);
+                                setRoutineSetterOpen(!routineSetterOpen);
+                              }}
+                            >
+                              <p className=" p-0.5 hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100 text-gray-600 w-24">
+                                {selectedRoutine
+                                  ? selectedRoutine.name
+                                  : "Set Routine"}
+                              </p>
+                            </div>
+                          </div>
+                          <RoutinePicker
+                            showRoutinesList={showRoutinesList}
+                            setSelectedRoutine={setSelectedRoutine}
+                            setShowRoutinesList={setShowRoutinesList}
+                            routinePickerButtonRef={routinePickerButtonRef}
+                            routineSetterOpen={routineSetterOpen}
+                            setRoutineSetterOpen={setRoutineSetterOpen}
+                          />
+                          <button
+                            type="button"
+                            className=" inline-flex px-4 py-2 text-sm font-medium text-green-900 bg-green-100 border border-transparent rounded-md hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-green-500"
+                            onClick={() => {
+                              addEvent();
+                              closeModal();
+                            }}
+                          >
+                            Save
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
