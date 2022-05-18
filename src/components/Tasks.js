@@ -31,15 +31,29 @@ export const Tasks = ({trackId}) => {
 
   const tasksRef = useRef(tasks);
 
-  const moveTaskListItem = useCallback((dragIndex, hoverIndex) => {
-    setTasks((prevTasks) =>
-      update(prevTasks, {
-        $splice: [
-          [dragIndex, 1],
-          [hoverIndex, 0, prevTasks[dragIndex]],
-        ],
-      })
-    );
+  const moveTaskListItem = useCallback((dragIndex, hoverIndex, tasks) => {
+    // setTasks((prevTasks) =>
+    //   update(prevTasks, {
+    //     $splice: [
+    //       [dragIndex, 1],
+    //       [hoverIndex, 0, prevTasks[dragIndex]],
+    //     ],
+    //   })
+    // );
+    console.log("dragIndex", dragIndex);
+    console.log("hoverIndex", hoverIndex);
+    console.log("tasks", tasks);
+    const dragTask = tasks[dragIndex].id;
+    const hoverTask = tasks[hoverIndex].id;
+    console.log("dragTask", dragTask);
+    console.log("hoverTask", hoverTask);
+
+    db.collection("tasks").doc(dragTask).update({
+      index: hoverIndex,
+    });
+    db.collection("tasks").doc(hoverTask).update({
+      index: dragIndex,
+    });
   }, []);
 
   const renderTask = useCallback((task, tasks) => {
@@ -50,7 +64,6 @@ export const Tasks = ({trackId}) => {
           key={task.id}
           index={task.index}
           moveListItem={moveTaskListItem}
-          tasks={tasks}
         />
       </li>
     );
