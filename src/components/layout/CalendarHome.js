@@ -67,8 +67,12 @@ export function CalendarHome({year, month, day}) {
   const [showFinalTimePicker, setShowFinalTimePicker] = useState(false);
   const [initialTimeValue, setInitialTimeValue] = useState(null);
   const [finalTimeValue, setFinalTimeValue] = useState(null);
-  const [modalInitialTimeValue, setModalInitialTimeValue] = useState(null);
-  const [modalEndTimeValue, setModalEndTimeValue] = useState(null);
+  const [modalInitialTimeValue, setModalInitialTimeValue] = useState(
+    moment().format("h:mm a")
+  );
+  const [modalEndTimeValue, setModalEndTimeValue] = useState(
+    moment().add(1, "hour").format("h:mm a")
+  );
   const [eventStartTime, setEventStartTime] = useState(null);
   const [eventEndTime, setEventEndTime] = useState(null);
 
