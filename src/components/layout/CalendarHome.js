@@ -22,6 +22,8 @@ import {getTasksLength} from "../../helpers/index";
 import {translateRect} from "@fullcalendar/react";
 import {InitialTimePicker} from "../functional/InitialTimePicker";
 import {FinalTimePicker} from "../functional/FinalTimePicker";
+import {getGridRowFromTime} from "../../helpers/index";
+import {getGridSpanFromTime} from "../../helpers/index";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -118,16 +120,11 @@ export function CalendarHome({year, month, day}) {
   function addEvent() {
     const userId = auth.currentUser.uid;
     // use date and time to make a moment object
-    const startTime = moment()
-      .hour((gridRowClicked - 2) / 12)
-      .minute(0)
-      .format("h:mm A");
-    const endTime = moment()
-      .hour((gridRowClicked - 2) / 12 + 1)
-      .minute(0)
-      .format("h:mm A");
-    const dateTimeStart = moment(selectedDate + " " + startTime).format();
-    const dateTimeEnd = moment(selectedDate + " " + endTime).format();
+    const gridRowForCalendar = getGridRowFromTime(eventStartTime);
+    const gridSpanForCalendar = getGridSpanFromTime(
+      eventStartTime,
+      eventEndTime
+    );
 
     db.collection("users")
       .doc(auth.currentUser.uid)
@@ -140,8 +137,8 @@ export function CalendarHome({year, month, day}) {
         end: moment(eventEndTime).format("YYYY-MM-DDTHH:mm:ss"),
         userId: userId,
         maintenanceRequired: false,
-        gridRow: gridRowClicked,
-        span: 12,
+        gridRow: gridRowForCalendar,
+        span: gridSpanForCalendar,
         textColor: "text-blue-500",
         bgColor: "bg-blue-50",
         key: generateKey(),
@@ -481,6 +478,16 @@ export function CalendarHome({year, month, day}) {
                                 .minute(0)
                                 .format("h:mm A")
                             );
+                            setEventStartTime(
+                              moment()
+                                .hour((i * 12 + 2 - 2) / 12)
+                                .minute(0)
+                            );
+                            setEventEndTime(
+                              moment()
+                                .hour((i * 12 + 2 - 2) / 12 + 1)
+                                .minute(0)
+                            );
 
                             setIsOpenEventModal(true);
                           }}
@@ -495,7 +502,7 @@ export function CalendarHome({year, month, day}) {
                     <li
                       className="relative mt-px flex z-40"
                       style={{
-                        gridRow: `${block.gridRow} / span 12`,
+                        gridRow: `${block.gridRow} / span ${block.span}`,
                         gridColumn: "1 / span 1",
                       }}
                       key={block.key}

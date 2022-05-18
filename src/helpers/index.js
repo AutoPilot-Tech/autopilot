@@ -122,3 +122,18 @@ export const handleTimeValueToObject = (timeValue) => {
   let timeObject = moment().hour(hour).minute(minute);
   return timeObject;
 };
+
+export const getGridRowFromTime = (time) => {
+  let startHour = moment(time).hours();
+  let startMinute = moment(time).minutes();
+  let fractionalHour = startMinute / 60;
+  let startTimeInHoursDecimal = startHour + fractionalHour;
+  let gridRowForCalendar = Math.floor(startTimeInHoursDecimal * 12) + 2;
+  return gridRowForCalendar;
+};
+
+export const getGridSpanFromTime = (startTime, endTime) => {
+  let durationInMinutes = moment(endTime).diff(moment(startTime), "minutes");
+  let durationInHoursDecimal = Math.round((durationInMinutes / 60) * 12);
+  return durationInHoursDecimal;
+};
