@@ -146,6 +146,7 @@ export function CalendarHome({year, month, day}) {
         textColor: "text-blue-500",
         bgColor: "bg-blue-50",
         key: generateKey(),
+        routineName: selectedRoutine.name,
       });
 
     const tasksLength = db
@@ -516,7 +517,13 @@ export function CalendarHome({year, month, day}) {
                         href={`/app/tasks/${block.routineId}`}
                         className="group absolute inset-1 flex flex-col overflow-y-auto rounded-lg bg-blue-50 pl-2 pt-1 text-xs leading-4 hover:bg-blue-100"
                       >
-                        <p className=" font-semibold text-blue-700">{`${block.title}`}</p>
+                        <div className="flex flex-row">
+                          <p className=" font-semibold text-blue-700 w-fit">{`${block.title}`}</p>
+                          <p className="ml-2 font-normal text-gray-600">
+                            {` ${block.routineName}`}
+                          </p>
+                        </div>
+
                         <p className="text-blue-500 group-hover:text-blue-700">
                           <time dateTime="2022-01-22T06:00">{`${moment(
                             block.start
