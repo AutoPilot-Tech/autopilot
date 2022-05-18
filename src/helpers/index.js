@@ -133,10 +133,6 @@ export const getGridRowFromTime = (time) => {
 };
 
 export const getGridSpanFromTime = (startTime, endTime) => {
-  console.log("startTime", startTime);
-  console.log("endTime", endTime);
-  console.log("startTime", moment(startTime).format());
-  console.log("endTime", moment(endTime).format());
   let durationInMinutes = moment(endTime).diff(moment(startTime), "minutes");
   let durationInHoursDecimal = Math.round((durationInMinutes / 60) * 12);
   return durationInHoursDecimal;
