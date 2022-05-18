@@ -20,6 +20,8 @@ import {useCalendarValue} from "../../context/calendar-context";
 import {useTasks} from "../../hooks/index";
 import {getTasksLength} from "../../helpers/index";
 import {translateRect} from "@fullcalendar/react";
+import {InitialTimePicker} from "../functional/InitialTimePicker";
+import {FinalTimePicker} from "../functional/FinalTimePicker";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -53,6 +55,8 @@ export function CalendarHome({year, month, day}) {
   );
   const modalSettingButtonRef = useRef(null);
   const routinePickerButtonRef = useRef(null);
+  const initialTimePickerButtonRef = useRef(null);
+  const finalTimePickerButtonRef = useRef(null);
   const [gridRowClicked, setGridRowClicked] = useState("");
   const [showRoutinesList, setShowRoutinesList] = useState(false);
   const [selectedRoutine, setSelectedRoutine] = useState(null);
@@ -61,6 +65,10 @@ export function CalendarHome({year, month, day}) {
   const [showFinalTimePicker, setShowFinalTimePicker] = useState(false);
   const [initialTimeValue, setInitialTimeValue] = useState(null);
   const [finalTimeValue, setFinalTimeValue] = useState(null);
+  const [modalInitialTimeValue, setModalInitialTimeValue] = useState(null);
+  const [modalEndTimeValue, setModalEndTimeValue] = useState(null);
+  const [eventStartTime, setEventStartTime] = useState(null);
+  const [eventEndTime, setEventEndTime] = useState(null);
 
   useEffect(() => {
     // if year month or day are -1, set to today
@@ -121,20 +129,23 @@ export function CalendarHome({year, month, day}) {
     const dateTimeStart = moment(selectedDate + " " + startTime).format();
     const dateTimeEnd = moment(selectedDate + " " + endTime).format();
 
-    db.collection("users").doc(auth.currentUser.uid).collection("events").add({
-      archived: false,
-      routineId: selectedRoutine.trackId,
-      title: eventName,
-      start: dateTimeStart,
-      end: dateTimeEnd,
-      userId: userId,
-      maintenanceRequired: false,
-      gridRow: gridRowClicked,
-      span: 12,
-      textColor: "text-blue-500",
-      bgColor: "bg-blue-50",
-      key: generateKey(),
-    });
+    db.collection("users")
+      .doc(auth.currentUser.uid)
+      .collection("events")
+      .add({
+        archived: false,
+        routineId: selectedRoutine.trackId,
+        title: eventName,
+        start: moment(eventStartTime).format("YYYY-MM-DDTHH:mm:ss"),
+        end: moment(eventEndTime).format("YYYY-MM-DDTHH:mm:ss"),
+        userId: userId,
+        maintenanceRequired: false,
+        gridRow: gridRowClicked,
+        span: 12,
+        textColor: "text-blue-500",
+        bgColor: "bg-blue-50",
+        key: generateKey(),
+      });
 
     const tasksLength = db
       .collection("tasks")
@@ -150,8 +161,8 @@ export function CalendarHome({year, month, day}) {
           title: eventName,
           task: eventName,
           date: selectedDate,
-          startTime: startTime,
-          endTime: endTime,
+          startTime: moment(eventStartTime).format("YYYY-MM-DDTHH:mm:ss"),
+          endTime: moment(eventEndTime).format("YYYY-MM-DDTHH:mm:ss"),
           index: tasksLength,
           userId: auth.currentUser.uid,
         });
@@ -288,6 +299,7 @@ export function CalendarHome({year, month, day}) {
                           </svg>
                           <div>
                             <p
+                              ref={initialTimePickerButtonRef}
                               id="time-suggestion"
                               className="select-none p-0.5 cursor-pointer hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100 text-gray-600"
                               onClick={() => {
@@ -297,10 +309,7 @@ export function CalendarHome({year, month, day}) {
                                 setModalSettingOpen(!modalSettingOpen);
                               }}
                             >
-                              {moment()
-                                .hour((gridRowClicked - 2) / 12)
-                                .minute(0)
-                                .format("h:mm A")}
+                              {modalInitialTimeValue}
                             </p>
                           </div>
                           <div>
@@ -308,6 +317,7 @@ export function CalendarHome({year, month, day}) {
                           </div>
                           <div>
                             <p
+                              ref={finalTimePickerButtonRef}
                               id="time-sugggestion"
                               className="p-0.5 select-none cursor-pointer hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100 text-gray-600"
                               onClick={() => {
@@ -315,109 +325,36 @@ export function CalendarHome({year, month, day}) {
                                 setModalSettingOpen(!modalSettingOpen);
                               }}
                             >
-                              {moment()
-                                .hour((gridRowClicked - 2) / 12 + 1)
-                                .minute(0)
-                                .format("h:mm A")}
+                              {modalEndTimeValue}
                             </p>
                           </div>
                         </div>
-                        <div
-                          className={
-                            showInitialTimePicker
-                              ? "cursor-default z-50 absolute inline-block max-w-md p-3 text-left align-middle transition-all transform bg-gray-700 shadow-xl rounded-2xl overflow-visible left-9 w-48 text-white top-36"
-                              : "hidden"
+                        <InitialTimePicker
+                          showInitialTimePicker={showInitialTimePicker}
+                          setShowInitialTimePicker={setShowInitialTimePicker}
+                          initialTimePickerButtonRef={
+                            initialTimePickerButtonRef
                           }
-                        >
-                          <div className="flex flex-col gap-3">
-                            <div className="flex flex-row gap-3">
-                              <h3>Time</h3>
-                              <TextField
-                                className="mt-3 w-full p-2 rounded-md text-gray-900 placeholder-gray-500 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out"
-                                type="text"
-                                value={initialTimeValue}
-                                onChange={(e) =>
-                                  setInitialTimeValue(e.target.value)
-                                }
-                                placeholder="Add time"
-                                onKeyDown={(e) => handleKeypress(e)}
-                                inputProps={{
-                                  style: {
-                                    padding: "0.25rem",
-                                    color: "black",
-                                    backgroundColor: "white",
-                                    borderRadius: "0.25rem",
-                                  },
-                                }}
-                              />
-                            </div>
-                            <div className="flex flex-row justify-end">
-                              {/* checkbox button */}
-                              <button className="flex flex-row ">
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  className="h-7 w-7"
-                                  viewBox="0 0 20 20"
-                                  fill="currentColor"
-                                >
-                                  <path
-                                    fillRule="evenodd"
-                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                    clipRule="evenodd"
-                                  />
-                                </svg>
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                        <div
-                          className={
-                            showFinalTimePicker
-                              ? "cursor-default z-50 absolute inline-block max-w-md p-3 text-left align-middle transition-all transform bg-gray-700 shadow-xl rounded-2xl overflow-visible left-9 w-48 text-white top-36"
-                              : "hidden"
-                          }
-                        >
-                          <div className="flex flex-col gap-3">
-                            <div className="flex flex-row gap-3">
-                              <h3>Time</h3>
-                              <TextField
-                                className="mt-3 w-full p-2 rounded-md text-gray-900 placeholder-gray-500 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out"
-                                type="text"
-                                value={finalTimeValue}
-                                onChange={(e) =>
-                                  setFinalTimeValue(e.target.value)
-                                }
-                                placeholder="Add time"
-                                onKeyDown={(e) => handleKeypress(e)}
-                                inputProps={{
-                                  style: {
-                                    padding: "0.25rem",
-                                    color: "black",
-                                    backgroundColor: "white",
-                                    borderRadius: "0.25rem",
-                                  },
-                                }}
-                              />
-                            </div>
-                            <div className="flex flex-row justify-end">
-                              {/* checkbox button */}
-                              <button className="flex flex-row ">
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  className="h-7 w-7"
-                                  viewBox="0 0 20 20"
-                                  fill="currentColor"
-                                >
-                                  <path
-                                    fillRule="evenodd"
-                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                    clipRule="evenodd"
-                                  />
-                                </svg>
-                              </button>
-                            </div>
-                          </div>
-                        </div>
+                          modalSettingOpen={modalSettingOpen}
+                          setModalSettingOpen={setModalSettingOpen}
+                          initialTimeValue={initialTimeValue}
+                          setInitialTimeValue={setInitialTimeValue}
+                          modalInitialTimeValue={modalInitialTimeValue}
+                          setModalInitialTimeValue={setModalInitialTimeValue}
+                          setEventStartTime={setEventStartTime}
+                        />
+                        <FinalTimePicker
+                          showFinalTimePicker={showFinalTimePicker}
+                          setShowFinalTimePicker={setShowFinalTimePicker}
+                          finalTimePickerButtonRef={finalTimePickerButtonRef}
+                          modalSettingOpen={modalSettingOpen}
+                          setModalSettingOpen={setModalSettingOpen}
+                          finalTimeValue={finalTimeValue}
+                          setFinalTimeValue={setFinalTimeValue}
+                          modalEndTimeValue={modalEndTimeValue}
+                          setModalEndTimeValue={setModalEndTimeValue}
+                          setEventEndTime={setEventEndTime}
+                        />
                         {/* id="save-button" was originally on the button element but i needed to add more layout, and since i was already targetting this id somewhere, i just gave the id to the div */}
                         <div
                           id="save-button"
@@ -532,6 +469,19 @@ export function CalendarHome({year, month, day}) {
                           href="#"
                           onClick={() => {
                             setGridRowClicked(i * 12 + 2);
+                            setModalInitialTimeValue(
+                              moment()
+                                .hour((i * 12 + 2 - 2) / 12)
+                                .minute(0)
+                                .format("h:mm A")
+                            );
+                            setModalEndTimeValue(
+                              moment()
+                                .hour((i * 12 + 2 - 2) / 12 + 1)
+                                .minute(0)
+                                .format("h:mm A")
+                            );
+
                             setIsOpenEventModal(true);
                           }}
                           className="cursor-pointer group absolute inset-0.5 flex flex-col overflow-y-auto rounded-lg pl-2 pt-1 bg-transparent"
