@@ -513,7 +513,7 @@ export function CalendarHome({year, month, day}) {
                       key={block.key}
                     >
                       <a
-                        href="#"
+                        href={`/app/tasks/${block.routineId}`}
                         className="group absolute inset-1 flex flex-col overflow-y-auto rounded-lg bg-blue-50 pl-2 pt-1 text-xs leading-4 hover:bg-blue-100"
                       >
                         <p className=" font-semibold text-blue-700">{`${block.title}`}</p>
