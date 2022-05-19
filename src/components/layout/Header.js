@@ -55,9 +55,9 @@ export function Header() {
             setOpenSideBar(!openSideBar);
           }}
         />
-        <a className="hidden md:block" href="/app/calendar/home">
+        <a className="hidden lg:block" href="/app/calendar/home">
           <img
-            className="select-none block w-auto h-14"
+            className="select-none block w-auto h-14 sm:w-32 sm:h-10"
             src="../../images/autopilot_alpha.png"
             alt="Autopilot"
           />
@@ -72,10 +72,10 @@ export function Header() {
             {moment(nowValue).format("MMMM Do, YYYY")}
           </time>
         </h1>
-        <p className="select-none mt-1 text-sm text-gray-500 hidden sm:inline">
+        <p className="select-none mt-1 text-sm text-gray-500 hidden md:inline">
           {moment(nowValue).format("dddd")}
         </p>
-        <p className="select-none mt-1 text-sm font-light text-gray-500 sm:hidden">
+        <p className="select-none mt-1 text-sm font-light text-gray-500 md:hidden">
           {moment(nowValue).format("ddd")}
         </p>
       </div>
