@@ -47,6 +47,7 @@ export function ModalAdd({
   addEvent,
   currentRoutinePage,
   currentRoutinePageName,
+  currentRoutinePageId,
 }) {
   return (
     <Transition appear show={isOpenEventModal} as={Fragment}>
@@ -246,7 +247,7 @@ export function ModalAdd({
                         }}
                       >
                         <p className=" p-0.5 hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100 text-gray-600 w-24">
-                          {currentRoutinePage
+                          {currentRoutinePage && !selectedRoutine
                             ? currentRoutinePageName
                             : selectedRoutine
                             ? selectedRoutine.name
@@ -266,6 +267,12 @@ export function ModalAdd({
                       type="button"
                       className=" inline-flex px-4 py-2 text-sm font-medium text-green-900 bg-green-100 border border-transparent rounded-md hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-green-500"
                       onClick={() => {
+                        if (!selectedRoutine && currentRoutinePage) {
+                          setSelectedRoutine({
+                            trackId: currentRoutinePageId,
+                            name: currentRoutinePageName,
+                          });
+                        }
                         addEvent();
                         setEventName("");
                         closeModal();

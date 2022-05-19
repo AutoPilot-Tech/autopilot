@@ -87,6 +87,12 @@ export const Tasks = ({trackId, isOpenEventModal, setIsOpenEventModal}) => {
   const handleKeypress = (e) => {
     //it triggers by pressing the enter key
     if (e.keyCode === 13) {
+      if (!selectedRoutine) {
+        setSelectedRoutine({
+          trackId: trackId,
+          name: trackName,
+        });
+      }
       addEvent();
       setEventName("");
       closeModal();
@@ -263,6 +269,7 @@ export const Tasks = ({trackId, isOpenEventModal, setIsOpenEventModal}) => {
           addEvent={addEvent}
           currentRoutinePage={true}
           currentRoutinePageName={trackName}
+          currentRoutinePageId={trackId}
         />
         <TaskHeader trackName={trackName} trackId={trackId} />
         {/* <ColorSettings /> */}
