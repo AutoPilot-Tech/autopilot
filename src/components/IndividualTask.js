@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef, Fragment} from "react";
-import {db} from "../firebase";
+import {db, auth} from "../firebase";
 import {useTracksValue} from "../context/tracks-context";
 import {Menu, Transition, Dialog} from "@headlessui/react";
 import {useDrag, useDrop} from "react-dnd";
@@ -149,11 +149,26 @@ export function IndividualTask({task, index, moveListItem}) {
   }
 
   const deleteTask = (docId) => {
+    let eventId;
     db.collection("tasks")
       .doc(docId)
-      .delete()
+      .get()
+      .then((doc) => {
+        if (doc.exists) {
+          eventId = doc.data().eventId;
+        } else {
+          console.log("No document! IndividualTask.js line 160");
+        }
+      })
       .then(() => {
-        // setTasks([...tasks]);
+        db.collection("tasks").doc(docId).delete();
+      })
+      .then(() => {
+        db.collection("users")
+          .doc(auth.currentUser.uid)
+          .collection("events")
+          .doc(eventId)
+          .delete();
       });
   };
 

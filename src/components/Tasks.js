@@ -17,6 +17,8 @@ import moment from "moment";
 import {ModalAdd} from "./functional/ModalAdd";
 import {getGridRowFromTime} from "../helpers/index";
 import {getGridSpanFromTime} from "../helpers/index";
+import {generatePushId} from "../helpers/index";
+
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
@@ -102,8 +104,8 @@ export const Tasks = ({trackId, isOpenEventModal, setIsOpenEventModal}) => {
   }
 
   function addEvent() {
-    console.log("from within addEvent");
-    console.log("selectedRoutine", selectedRoutine);
+    const taskId = generatePushId();
+    const eventId = generatePushId();
     const userId = auth.currentUser.uid;
     // use date and time to make a moment object
     const gridRowForCalendar = getGridRowFromTime(eventStartTime);
@@ -127,7 +129,8 @@ export const Tasks = ({trackId, isOpenEventModal, setIsOpenEventModal}) => {
     db.collection("users")
       .doc(auth.currentUser.uid)
       .collection("events")
-      .add({
+      .doc(eventId)
+      .set({
         archived: false,
         routineId: routineIdForEvent,
         title: eventName,
@@ -141,39 +144,43 @@ export const Tasks = ({trackId, isOpenEventModal, setIsOpenEventModal}) => {
         bgColor: "bg-blue-50",
         key: generateKey(),
         routineName: routineNameForEvent,
-      });
-
-    const tasksLength = db
-      .collection("tasks")
-      .where("trackId", "==", routineIdForEvent)
-      .get()
-      .then(function (querySnapshot) {
-        return querySnapshot.size;
+        taskId: taskId,
       })
-      .then((tasksLength) => {
-        let taskStartTime;
-        let taskEndTime;
-        let taskDate;
-        if (routineIdForEvent === "INBOX") {
-          taskStartTime = "";
-          taskEndTime = "";
-          taskDate = "";
-        } else {
-          taskStartTime = moment(eventStartTime).format("YYYY-MM-DDTHH:mm:ss");
-          taskEndTime = moment(eventEndTime).format("YYYY-MM-DDTHH:mm:ss");
-          taskDate = selectedDate;
-        }
-        db.collection("tasks").add({
-          archived: false,
-          trackId: routineIdForEvent,
-          title: eventName,
-          task: eventName,
-          date: taskDate,
-          start: taskStartTime,
-          end: taskEndTime,
-          index: tasksLength,
-          userId: auth.currentUser.uid,
-        });
+      .then((docRef) => {
+        db.collection("tasks")
+          .where("trackId", "==", routineIdForEvent)
+          .get()
+          .then(function (querySnapshot) {
+            return querySnapshot.size;
+          })
+          .then((tasksLength) => {
+            let taskStartTime;
+            let taskEndTime;
+            let taskDate;
+            if (routineIdForEvent === "INBOX") {
+              taskStartTime = "";
+              taskEndTime = "";
+              taskDate = "";
+            } else {
+              taskStartTime = moment(eventStartTime).format(
+                "YYYY-MM-DDTHH:mm:ss"
+              );
+              taskEndTime = moment(eventEndTime).format("YYYY-MM-DDTHH:mm:ss");
+              taskDate = selectedDate;
+            }
+            db.collection("tasks").doc(taskId).set({
+              archived: false,
+              trackId: routineIdForEvent,
+              title: eventName,
+              task: eventName,
+              date: taskDate,
+              start: taskStartTime,
+              end: taskEndTime,
+              index: tasksLength,
+              userId: auth.currentUser.uid,
+              eventId: eventId,
+            });
+          });
       });
   }
 
