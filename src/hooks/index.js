@@ -177,8 +177,7 @@ export const useTracks = () => {
       .where("userId", "==", userId)
       .orderBy("trackId")
       // this required an index in firebase
-      .get()
-      .then((snapshot) => {
+      .onSnapshot((snapshot) => {
         const allTracks = snapshot.docs.map((track) => ({
           ...track.data(),
           docId: track.id,
