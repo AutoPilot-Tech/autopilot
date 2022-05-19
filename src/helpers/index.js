@@ -86,7 +86,6 @@ export const getTasksLength = (trackId) => {
 };
 
 export const handleTimeValueStringProcessing = (timeValue) => {
-  console.log("string time", timeValue);
   console.log(timeValue.indexOf("pm"));
   // get hour and minute from finalTimeValue string
   // if ":" is not in the string, then it is a single digit
@@ -101,7 +100,6 @@ export const handleTimeValueStringProcessing = (timeValue) => {
   // if pm is in the string, add 12 hours to the hour
   if (timeValue.indexOf("pm") !== -1) {
     hour += 12;
-    console.log("hour in string is now", hour);
   }
   let timeString = moment().hour(hour).minute(minute).format("h:mm A");
   return timeString;
@@ -123,10 +121,8 @@ export const handleTimeValueToObject = (timeValue) => {
   // if pm is in the string, add 12 hours to the hour
   if (timeValue.indexOf("pm") !== -1) {
     hour += 12;
-    console.log("hour is now", hour);
   }
-  console.log("hour", hour);
-  console.log("minute", minute);
+
   let timeObject = moment().hour(hour).minute(minute);
   return timeObject;
 };
