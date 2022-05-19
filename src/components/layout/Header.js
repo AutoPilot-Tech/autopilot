@@ -57,7 +57,7 @@ export function Header() {
         />
         <a className="hidden lg:block" href="/app/calendar/home">
           <img
-            className="select-none block w-auto h-14 sm:w-32 sm:h-10"
+            className="select-none block w-auto h-14 sm:w-32 sm:h-10 lg:w-auto lg:h-14"
             src="../../images/autopilot_alpha.png"
             alt="Autopilot"
           />
