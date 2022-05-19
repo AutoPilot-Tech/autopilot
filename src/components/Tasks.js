@@ -5,7 +5,6 @@ import {useTasks} from "../hooks";
 import {collatedTasks} from "../constants";
 import {getTitle, getCollatedTitle, collatedTasksExist} from "../helpers";
 import {useTracksValue} from "../context/tracks-context";
-
 import {Calendar} from "../../src/components/Calendar";
 
 import {RoutineSettings} from "./RoutineSettings";
@@ -14,22 +13,45 @@ import {TaskHeader} from "./TaskHeader";
 import {EmptyStateTasks} from "./EmptyStateTasks";
 import {AutopilotSettings} from "./AutopilotSettings";
 import {IndividualTask} from "./IndividualTask";
+import moment from "moment";
+import {ModalAdd} from "./functional/ModalAdd";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 // this just gets the tasks and renders them
-export const Tasks = ({trackId}) => {
-  const [userLoading, setUserLoading] = useState(true);
+export const Tasks = ({trackId, isOpenEventModal, setIsOpenEventModal}) => {
   const {tracks, setSelectedTrack, isRoutine, openSideBar} = useTracksValue();
   let {tasks, setTasks} = useTasks(trackId);
-  const [showCalendar, setShowCalendar] = useState(false);
-  const [showChat, setShowChat] = useState(false);
-  const [showConfirm, setShowConfirm] = useState(false);
-  const [showSettings, setShowSettings] = useState(false);
-
   const tasksRef = useRef(tasks);
+  const [eventName, setEventName] = useState("");
+  const [showSmallCalendar, setShowSmallCalendar] = useState(false);
+  const [modalSettingOpen, setModalSettingOpen] = useState(false);
+  const [routineSetterOpen, setRoutineSetterOpen] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(
+    moment().format("MM-DD-YYYY")
+  );
+  const modalSettingButtonRef = useRef(null);
+  const routinePickerButtonRef = useRef(null);
+  const initialTimePickerButtonRef = useRef(null);
+  const finalTimePickerButtonRef = useRef(null);
+  const [gridRowClicked, setGridRowClicked] = useState("");
+  const [showRoutinesList, setShowRoutinesList] = useState(false);
+  const [selectedRoutine, setSelectedRoutine] = useState(null);
+  const [todaysEvents, setTodaysEvents] = useState([]);
+  const [showInitialTimePicker, setShowInitialTimePicker] = useState(false);
+  const [showFinalTimePicker, setShowFinalTimePicker] = useState(false);
+  const [initialTimeValue, setInitialTimeValue] = useState("");
+  const [finalTimeValue, setFinalTimeValue] = useState("");
+  const [modalInitialTimeValue, setModalInitialTimeValue] = useState(
+    moment().format("h:mm a")
+  );
+  const [modalEndTimeValue, setModalEndTimeValue] = useState(
+    moment().add(1, "hour").format("h:mm a")
+  );
+  const [eventStartTime, setEventStartTime] = useState(moment());
+  const [eventEndTime, setEventEndTime] = useState(moment().add(1, "hour"));
 
   const moveTaskListItem = useCallback((dragIndex, hoverIndex, tasks) => {
     // setTasks((prevTasks) =>
@@ -52,6 +74,97 @@ export const Tasks = ({trackId}) => {
     });
   }, []);
 
+  const handleKeypress = (e) => {
+    //it triggers by pressing the enter key
+    if (e.keyCode === 13) {
+      addEvent();
+      setEventName("");
+      closeModal();
+    }
+  };
+
+  function closeModal() {
+    setIsOpenEventModal(false);
+  }
+
+  function openModal() {
+    setIsOpenEventModal(true);
+  }
+
+  function addEvent() {
+    const userId = auth.currentUser.uid;
+    // use date and time to make a moment object
+    const gridRowForCalendar = getGridRowFromTime(eventStartTime);
+    const gridSpanForCalendar = getGridSpanFromTime(
+      eventStartTime,
+      eventEndTime
+    );
+    let routineIdForEvent;
+    try {
+      routineIdForEvent = selectedRoutine.trackId;
+    } catch (e) {
+      routineIdForEvent = "INBOX";
+    }
+    let routineNameForEvent;
+    try {
+      routineNameForEvent = selectedRoutine.name;
+    } catch (e) {
+      routineNameForEvent = "Inbox";
+    }
+
+    db.collection("users")
+      .doc(auth.currentUser.uid)
+      .collection("events")
+      .add({
+        archived: false,
+        routineId: routineIdForEvent,
+        title: eventName,
+        start: moment(eventStartTime).format("YYYY-MM-DDTHH:mm:ss"),
+        end: moment(eventEndTime).format("YYYY-MM-DDTHH:mm:ss"),
+        userId: userId,
+        maintenanceRequired: false,
+        gridRow: gridRowForCalendar,
+        span: gridSpanForCalendar,
+        textColor: "text-blue-500",
+        bgColor: "bg-blue-50",
+        key: generateKey(),
+        routineName: routineNameForEvent,
+      });
+
+    const tasksLength = db
+      .collection("tasks")
+      .where("trackId", "==", routineIdForEvent)
+      .get()
+      .then(function (querySnapshot) {
+        return querySnapshot.size;
+      })
+      .then((tasksLength) => {
+        let taskStartTime;
+        let taskEndTime;
+        let taskDate;
+        if (routineIdForEvent === "INBOX") {
+          taskStartTime = "";
+          taskEndTime = "";
+          taskDate = "";
+        } else {
+          taskStartTime = moment(eventStartTime).format("YYYY-MM-DDTHH:mm:ss");
+          taskEndTime = moment(eventEndTime).format("YYYY-MM-DDTHH:mm:ss");
+          taskDate = selectedDate;
+        }
+        db.collection("tasks").add({
+          archived: false,
+          trackId: routineIdForEvent,
+          title: eventName,
+          task: eventName,
+          date: taskDate,
+          start: taskStartTime,
+          end: taskEndTime,
+          index: tasksLength,
+          userId: auth.currentUser.uid,
+        });
+      });
+  }
+
   const renderTask = useCallback((task, tasks) => {
     return (
       <li key={task.id}>
@@ -70,8 +183,6 @@ export const Tasks = ({trackId}) => {
   if (collatedTasksExist(trackId) && trackId) {
     // if the selected track is a collated track (i.e. TODAY, CALENDAR, etc)
     trackName = getCollatedTitle(collatedTasks, trackId);
-    console.log(trackId);
-    console.log(trackName);
   }
 
   if (
@@ -102,7 +213,45 @@ export const Tasks = ({trackId}) => {
           : "transform transition ease-in-out h-screen flex flex-col bg-white"
       }
     >
-      <div className="flex h-full w-full flex-col ml-24 pr-32">
+      <div className="flex h-full w-full flex-col ml-4 pr-8 sm:ml-24 sm:pr-32">
+        <ModalAdd
+          isOpenEventModal={isOpenEventModal}
+          eventName={eventName}
+          setEventName={setEventName}
+          handleKeypress={handleKeypress}
+          showSmallCalendar={showSmallCalendar}
+          setShowSmallCalendar={setShowSmallCalendar}
+          showInitialTimePicker={showInitialTimePicker}
+          setShowInitialTimePicker={setShowInitialTimePicker}
+          showFinalTimePicker={showFinalTimePicker}
+          setShowFinalTimePicker={setShowFinalTimePicker}
+          selectedDate={selectedDate}
+          setSelectedDate={setSelectedDate}
+          initialTimeValue={initialTimeValue}
+          setInitialTimeValue={setInitialTimeValue}
+          finalTimeValue={finalTimeValue}
+          setFinalTimeValue={setFinalTimeValue}
+          selectedRoutine={selectedRoutine}
+          setSelectedRoutine={setSelectedRoutine}
+          modalSettingOpen={modalSettingOpen}
+          setModalSettingOpen={setModalSettingOpen}
+          modalInitialTimeValue={modalInitialTimeValue}
+          setModalInitialTimeValue={setModalInitialTimeValue}
+          modalEndTimeValue={modalEndTimeValue}
+          setModalEndTimeValue={setModalEndTimeValue}
+          modalSettingButtonRef={modalSettingButtonRef}
+          initialTimePickerButtonRef={initialTimePickerButtonRef}
+          finalTimePickerButtonRef={finalTimePickerButtonRef}
+          routinePickerButtonRef={routinePickerButtonRef}
+          showRoutinesList={showRoutinesList}
+          setShowRoutinesList={setShowRoutinesList}
+          routineSetterOpen={routineSetterOpen}
+          setRoutineSetterOpen={setRoutineSetterOpen}
+          closeModal={closeModal}
+          setEventStartTime={setEventStartTime}
+          setEventEndTime={setEventEndTime}
+          addEvent={addEvent}
+        />
         <TaskHeader trackName={trackName} trackId={trackId} />
         {/* <ColorSettings /> */}
         {/* {isRoutine ? <RoutineSettings /> : <></>} */}

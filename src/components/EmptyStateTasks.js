@@ -22,7 +22,8 @@ export function EmptyStateTasks() {
       <p className="mt-1 text-sm text-gray-500">
         Get started by creating a new action.
       </p>
-      <div className="mt-6">
+      {/* This is currently hidden until further notice. */}
+      <div className="mt-6 hidden ">
         <CreateAction />
       </div>
     </div>
