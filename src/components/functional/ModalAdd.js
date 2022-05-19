@@ -18,20 +18,21 @@ const TIME_REGEX = /\b(?:[01]?[0-9]|2[0-3]):[0-5][0-9]\b/g;
 let individualKeywordsPath1 = ["today", "tomorrow", "weekend", "yesterday"];
 // regex for any type of date
 let DAYKeywordsPath1 = [
-  "mon",
   "monday",
-  "tue",
+  "mon",
   "tuesday",
-  "wed",
+  "tues",
   "wednesday",
-  "thu",
+  "wed",
   "thursday",
-  "fri",
+  "thurs",
+  "thu",
   "friday",
-  "sat",
+  "fri",
   "saturday",
-  "sun",
+  "sat",
   "sunday",
+  "sun",
 ];
 let NEXTKeywordsPath1 = ["week", "weekend", "month", "year", "weekday"];
 let ATKeywordsPath1 = ["getTime"];
@@ -145,11 +146,9 @@ const dateAndTimeSpan = ({children}) => {
 
 function findWithRegex(DAYKeywordsPath1, contentBlock, callback) {
   const text = contentBlock.getText();
-  console.log(text);
 
   DAYKeywordsPath1.forEach((word) => {
     const matches = [...text.matchAll(word)];
-    console.log(matches);
     matches.forEach((match) =>
       callback(match.index, match.index + match[0].length)
     );
