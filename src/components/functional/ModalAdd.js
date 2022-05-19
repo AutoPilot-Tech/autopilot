@@ -117,7 +117,7 @@ export function ModalAdd({
                   type="text"
                   value={eventName}
                   onChange={(e) => setEventName(e.target.value)}
-                  placeholder="Add title"
+                  placeholder={'"Study everyday at 12pm for 2 hours"'}
                   onKeyDown={(e) => handleKeypress(e)}
                   variant="standard"
                   id="event-name"
