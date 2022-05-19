@@ -87,12 +87,6 @@ export const Tasks = ({trackId, isOpenEventModal, setIsOpenEventModal}) => {
   const handleKeypress = (e) => {
     //it triggers by pressing the enter key
     if (e.keyCode === 13) {
-      if (!selectedRoutine) {
-        setSelectedRoutine({
-          trackId: trackId,
-          name: trackName,
-        });
-      }
       addEvent();
       setEventName("");
       closeModal();
@@ -108,6 +102,8 @@ export const Tasks = ({trackId, isOpenEventModal, setIsOpenEventModal}) => {
   }
 
   function addEvent() {
+    console.log("from within addEvent");
+    console.log("selectedRoutine", selectedRoutine);
     const userId = auth.currentUser.uid;
     // use date and time to make a moment object
     const gridRowForCalendar = getGridRowFromTime(eventStartTime);
@@ -217,6 +213,10 @@ export const Tasks = ({trackId, isOpenEventModal, setIsOpenEventModal}) => {
 
   useEffect(() => {
     document.title = `Autopilot: ${trackName}`;
+    setSelectedRoutine({
+      trackId: trackId,
+      name: trackName,
+    });
   }, [trackName]);
 
   // if setCalendar is true, then we will show the calendar

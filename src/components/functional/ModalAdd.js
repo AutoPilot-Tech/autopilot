@@ -49,6 +49,22 @@ export function ModalAdd({
   currentRoutinePageName,
   currentRoutinePageId,
 }) {
+  //   const [fireRoutineChecker, setFireRoutineChecker] = useState(false);
+
+  //   useEffect(() => {
+  //     if (fireRoutineChecker) {
+  //       if (!selectedRoutine && currentRoutinePage) {
+  //         console.log("Setting routine.. automitcally..");
+  //         console.log("currentRoutinePageId: ", currentRoutinePageId);
+  //         console.log("name: ", currentRoutinePageName);
+  //         setSelectedRoutine({
+  //           trackId: currentRoutinePageId,
+  //           name: currentRoutinePageName,
+  //         });
+  //       }
+  //       setFireRoutineChecker(false);
+  //     }
+  //   }, [fireRoutineChecker]);
   return (
     <Transition appear show={isOpenEventModal} as={Fragment}>
       <Dialog
@@ -247,11 +263,7 @@ export function ModalAdd({
                         }}
                       >
                         <p className=" p-0.5 hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100 text-gray-600 w-24">
-                          {currentRoutinePage && !selectedRoutine
-                            ? currentRoutinePageName
-                            : selectedRoutine
-                            ? selectedRoutine.name
-                            : "Inbox"}
+                          {selectedRoutine ? selectedRoutine.name : "Inbox"}
                         </p>
                       </div>
                     </div>
@@ -267,12 +279,6 @@ export function ModalAdd({
                       type="button"
                       className=" inline-flex px-4 py-2 text-sm font-medium text-green-900 bg-green-100 border border-transparent rounded-md hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-green-500"
                       onClick={() => {
-                        if (!selectedRoutine && currentRoutinePage) {
-                          setSelectedRoutine({
-                            trackId: currentRoutinePageId,
-                            name: currentRoutinePageName,
-                          });
-                        }
                         addEvent();
                         setEventName("");
                         closeModal();
