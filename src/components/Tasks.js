@@ -31,7 +31,8 @@ function generateKey() {
 
 // this just gets the tasks and renders them
 export const Tasks = ({trackId, isOpenEventModal, setIsOpenEventModal}) => {
-  const {tracks, setSelectedTrack, isRoutine, openSideBar} = useTracksValue();
+  const {tracks, selectedTrack, setSelectedTrack, isRoutine, openSideBar} =
+    useTracksValue();
   let {tasks, setTasks} = useTasks(trackId);
   const tasksRef = useRef(tasks);
   const [eventName, setEventName] = useState("");
@@ -260,6 +261,8 @@ export const Tasks = ({trackId, isOpenEventModal, setIsOpenEventModal}) => {
           setEventStartTime={setEventStartTime}
           setEventEndTime={setEventEndTime}
           addEvent={addEvent}
+          currentRoutinePage={true}
+          currentRoutinePageName={trackName}
         />
         <TaskHeader trackName={trackName} trackId={trackId} />
         {/* <ColorSettings /> */}

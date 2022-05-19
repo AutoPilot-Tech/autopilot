@@ -233,6 +233,7 @@ export function CalendarHome({
             setEventStartTime={setEventStartTime}
             setEventEndTime={setEventEndTime}
             addEvent={addEvent}
+            currentRoutinePage={true}
           />
           <div className="flex flex-auto flex-col overflow-auto">
             <div className="flex w-full flex-auto">

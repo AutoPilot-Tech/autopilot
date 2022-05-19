@@ -45,6 +45,8 @@ export function ModalAdd({
   setEventStartTime,
   setEventEndTime,
   addEvent,
+  currentRoutinePage,
+  currentRoutinePageName,
 }) {
   return (
     <Transition appear show={isOpenEventModal} as={Fragment}>
@@ -244,7 +246,11 @@ export function ModalAdd({
                         }}
                       >
                         <p className=" p-0.5 hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100 text-gray-600 w-24">
-                          {selectedRoutine ? selectedRoutine.name : "Inbox"}
+                          {currentRoutinePage
+                            ? currentRoutinePageName
+                            : selectedRoutine
+                            ? selectedRoutine.name
+                            : "Inbox"}
                         </p>
                       </div>
                     </div>
