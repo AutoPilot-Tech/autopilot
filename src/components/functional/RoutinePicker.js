@@ -204,7 +204,21 @@ export function RoutinePicker({
               </div>
             ))
           )}
-          {}
+          {tracks && tracks.length > 0 && (
+            <div>
+              <div
+                className="cursor-pointer flex p-2 justify-between rounded-md hover:bg-gray-100"
+                onClick={() => {
+                  setSelectedRoutine({name: "Inbox", trackId: "INBOX"});
+                  setShowRoutinesList(false);
+                }}
+              >
+                <div className="flex-1">
+                  <p className="text-gray-700 text-sm font-medium">{"Inbox"}</p>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </OutsideAlerter>
     </div>
