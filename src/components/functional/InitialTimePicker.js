@@ -74,7 +74,7 @@ export function InitialTimePicker({
     if (e.keyCode === 13) {
       const initialTimeValueString =
         handleTimeValueStringProcessing(initialTimeValue);
-      let initialTimeObject = handleTimeValueToObject(initialTimeValueString);
+      let initialTimeObject = handleTimeValueToObject(initialTimeValue);
       setModalInitialTimeValue(initialTimeValueString);
       setEventStartTime(initialTimeObject);
       setInitialTimeValue("");
@@ -125,9 +125,8 @@ export function InitialTimePicker({
               onClick={() => {
                 const initialTimeValueString =
                   handleTimeValueStringProcessing(initialTimeValue);
-                let initialTimeObject = handleTimeValueToObject(
-                  initialTimeValueString
-                );
+                let initialTimeObject =
+                  handleTimeValueToObject(initialTimeValue);
                 setModalInitialTimeValue(initialTimeValueString);
                 setEventStartTime(initialTimeObject);
                 setShowInitialTimePicker(false);
