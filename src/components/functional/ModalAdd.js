@@ -9,8 +9,64 @@ import {Editor, EditorState, CompositeDecorator, ContentState} from "draft-js";
 import "draft-js/dist/Draft.css";
 
 import moment from "moment";
+import {handleTimeValueStringProcessing} from "../../helpers";
 
-const words = ["everyday", "morning", "afternoon", "evening", "2 hours"];
+const TIME_REGEX = /\b(?:[01]?[0-9]|2[0-3]):[0-5][0-9]\b/g;
+
+// PATH 1: Pick up dates and times
+
+let individualKeywordsPath1 = ["today", "tomorrow", "weekend", "yesterday"];
+// regex for any type of date
+let DAYKeywordsPath1 = [
+  "mon",
+  "monday",
+  "tue",
+  "tuesday",
+  "wed",
+  "wednesday",
+  "thu",
+  "thursday",
+  "fri",
+  "friday",
+  "sat",
+  "saturday",
+  "sun",
+  "sunday",
+];
+let NEXTKeywordsPath1 = ["week", "weekend", "month", "year", "weekday"];
+let ATKeywordsPath1 = ["getTime"];
+let DATEKeywordsPath1 = [
+  "jan",
+  "january",
+  "feb",
+  "february",
+  "mar",
+  "march",
+  "apr",
+  "april",
+  "may",
+  "jun",
+  "june",
+  "jul",
+  "july",
+  "aug",
+  "august",
+  "sep",
+  "september",
+  "oct",
+  "october",
+  "nov",
+  "november",
+  "dec",
+  "december",
+];
+
+// PATH 2: Recurring
+let EVERYKeywordsPath2 = ["week", "weekend", "month", "year", "weekday"];
+let individualKeywordsPath2 = ["everyday", "recurring"];
+
+// PATH 3: Duration
+let individualKeywordsPath3 = ["for"];
 
 const Decorated = ({children}) => {
   return (
@@ -27,11 +83,73 @@ const Decorated = ({children}) => {
   );
 };
 
-function findWithRegex(words, contentBlock, callback) {
-  const text = contentBlock.getText();
+const timeSpan = ({children}) => {
+  return (
+    <span
+      style={{
+        background: "#86efac",
+        color: "#14532d",
+        padding: "0.2rem",
+        borderRadius: "0.2rem",
+      }}
+    >
+      {children}
+    </span>
+  );
+};
 
-  words.forEach((word) => {
+const durationSpan = ({children}) => {
+  return (
+    <span
+      style={{
+        background: "#86efac",
+        color: "#14532d",
+        padding: "0.2rem",
+        borderRadius: "0.2rem",
+      }}
+    >
+      {children}
+    </span>
+  );
+};
+
+const recurringSpan = ({children}) => {
+  return (
+    <span
+      style={{
+        background: "#86efac",
+        color: "#14532d",
+        padding: "0.2rem",
+        borderRadius: "0.2rem",
+      }}
+    >
+      {children}
+    </span>
+  );
+};
+
+const dateAndTimeSpan = ({children}) => {
+  return (
+    <span
+      style={{
+        background: "#86efac",
+        color: "#14532d",
+        padding: "0.2rem",
+        borderRadius: "0.2rem",
+      }}
+    >
+      {children}
+    </span>
+  );
+};
+
+function findWithRegex(DAYKeywordsPath1, contentBlock, callback) {
+  const text = contentBlock.getText();
+  console.log(text);
+
+  DAYKeywordsPath1.forEach((word) => {
     const matches = [...text.matchAll(word)];
+    console.log(matches);
     matches.forEach((match) =>
       callback(match.index, match.index + match[0].length)
     );
@@ -49,7 +167,23 @@ const styles = {
 };
 
 function handleStrategy(contentBlock, callback) {
-  findWithRegex(words, contentBlock, callback);
+  findWithRegex(DAYKeywordsPath1, contentBlock, callback);
+}
+
+function timeStrategy(contentBlock, callback, contentState) {
+  findWithRegex(TIME_REGEX, contentBlock, callback);
+}
+
+function durationStrategy(contentBlock, callback, contentState) {
+  findWithRegex(DURATION_REGEX, contentBlock, callback);
+}
+
+function recurringStrategy(contentBlock, callback, contentState) {
+  findWithRegex(RECURRING_REGEX, contentBlock, callback);
+}
+
+function dateAndTimeStrategy(contentBlock, callback, contentState) {
+  findWithRegex(DATE_AND_TIME_REGEX, contentBlock, callback);
 }
 
 const createDecorator = () =>
@@ -58,6 +192,22 @@ const createDecorator = () =>
       strategy: handleStrategy,
       component: Decorated,
     },
+    // {
+    //   strategy: timeStrategy,
+    //   component: timeSpan,
+    // },
+    // {
+    //   strategy: durationStrategy,
+    //   component: durationSpan,
+    // },
+    // {
+    //   strategy: recurringStrategy,
+    //   component: recurringSpan,
+    // },
+    // {
+    //   strategy: dateAndTimeStrategy,
+    //   component: dateAndTimeSpan,
+    // },
   ]);
 
 export function ModalAdd({
