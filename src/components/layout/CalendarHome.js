@@ -82,7 +82,8 @@ export function CalendarHome({
               // if the event is scheduled for today push it
               if (
                 moment(event.start).format("MM-DD-YYYY") ===
-                moment(nowValue).format("MM-DD-YYYY")
+                  moment(nowValue).format("MM-DD-YYYY") &&
+                !event.archived
               ) {
                 eventsArray.push(event);
               }

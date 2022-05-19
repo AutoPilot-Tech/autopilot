@@ -172,10 +172,32 @@ export function IndividualTask({task, index, moveListItem}) {
       });
   };
 
-  const archiveTask = (id) => {
-    db.collection("tasks").doc(id).update({
-      archived: true,
-    });
+  const archiveTask = (docId) => {
+    let eventId;
+    db.collection("tasks")
+      .doc(docId)
+      .get()
+      .then((doc) => {
+        if (doc.exists) {
+          eventId = doc.data().eventId;
+        } else {
+          console.log("No document! IndividualTask.js line 160");
+        }
+      })
+      .then(() => {
+        db.collection("tasks").doc(docId).update({
+          archived: true,
+        });
+      })
+      .then(() => {
+        db.collection("users")
+          .doc(auth.currentUser.uid)
+          .collection("events")
+          .doc(eventId)
+          .update({
+            archived: true,
+          });
+      });
   };
   return (
     <>
