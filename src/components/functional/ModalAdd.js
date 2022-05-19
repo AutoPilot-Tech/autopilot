@@ -5,8 +5,59 @@ import {InitialTimePicker} from "./InitialTimePicker";
 import {FinalTimePicker} from "./FinalTimePicker";
 import {SmallCalendar} from "./SmallCalendar";
 import {Transition, Dialog} from "@headlessui/react";
+import {Editor, EditorState, CompositeDecorator} from "draft-js";
 
 import moment from "moment";
+
+const words = ["everyday", "morning", "afternoon", "evening"];
+
+const Decorated = ({children}) => {
+  return (
+    <span
+      style={{
+        background: "#86efac",
+        color: "#14532d",
+        padding: "0.2rem",
+        borderRadius: "0.2rem",
+      }}
+    >
+      {children}
+    </span>
+  );
+};
+
+function findWithRegex(words, contentBlock, callback) {
+  const text = contentBlock.getText();
+
+  words.forEach((word) => {
+    const matches = [...text.matchAll(word)];
+    matches.forEach((match) =>
+      callback(match.index, match.index + match[0].length)
+    );
+  });
+}
+
+const styles = {
+  editor: {
+    borderBottom: "1px solid gray",
+    paddingTop: "0.2rem",
+    paddingBottom: "0.2rem",
+    paddingLeft: "0.2rem",
+    paddingRight: "0.2rem",
+  },
+};
+
+function handleStrategy(contentBlock, callback) {
+  findWithRegex(words, contentBlock, callback);
+}
+
+const createDecorator = () =>
+  new CompositeDecorator([
+    {
+      strategy: handleStrategy,
+      component: Decorated,
+    },
+  ]);
 
 export function ModalAdd({
   isOpenEventModal,
@@ -49,22 +100,21 @@ export function ModalAdd({
   currentRoutinePageName,
   currentRoutinePageId,
 }) {
-  //   const [fireRoutineChecker, setFireRoutineChecker] = useState(false);
+  const [editorState, setEditorState] = React.useState(
+    EditorState.createEmpty(createDecorator())
+  );
+  const editor = React.useRef(null);
 
-  //   useEffect(() => {
-  //     if (fireRoutineChecker) {
-  //       if (!selectedRoutine && currentRoutinePage) {
-  //         console.log("Setting routine.. automitcally..");
-  //         console.log("currentRoutinePageId: ", currentRoutinePageId);
-  //         console.log("name: ", currentRoutinePageName);
-  //         setSelectedRoutine({
-  //           trackId: currentRoutinePageId,
-  //           name: currentRoutinePageName,
-  //         });
-  //       }
-  //       setFireRoutineChecker(false);
-  //     }
-  //   }, [fireRoutineChecker]);
+  function focusEditor() {
+    editor.current.focus();
+  }
+
+  // React.useEffect(() => {
+  //   if (isOpenEventModal) {
+  //     focusEditor();
+  //   }
+  // }, [isOpenEventModal]);
+
   return (
     <Transition appear show={isOpenEventModal} as={Fragment}>
       <Dialog
@@ -112,7 +162,7 @@ export function ModalAdd({
           New Event
         </Dialog.Title> */}
               <div className="flex flex-col mb-4 gap-3 content-between">
-                <TextField
+                {/* <TextField
                   className="mt-3 w-full  text-gray-900 placeholder-gray-500 focus:rounded-md focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out border-0 border-b border-gray-300"
                   type="text"
                   value={eventName}
@@ -129,7 +179,15 @@ export function ModalAdd({
                       },
                     },
                   }}
-                />
+                /> */}
+                <div style={styles.editor}>
+                  <Editor
+                    ref={editor}
+                    editorState={editorState}
+                    onChange={(editorState) => setEditorState(editorState)}
+                  />
+                </div>
+
                 <div className="flex flex-col gap-3">
                   <div className="cursor-pointer flex flex-row items-center gap-2 border-b border-b-gray-300 w-32 hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100">
                     <svg
