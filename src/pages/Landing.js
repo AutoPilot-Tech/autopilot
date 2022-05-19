@@ -351,9 +351,9 @@ export function Landing() {
                   <div className="px-5 pt-4 flex items-center justify-between">
                     <div>
                       <img
-                        className="h-8 w-auto"
-                        src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
-                        alt=""
+                        className="h-16 w-52"
+                        src="../../images/autopilot_alpha.png"
+                        alt="Autopilot logo"
                       />
                     </div>
                     <div className="-mr-2">
@@ -363,17 +363,8 @@ export function Landing() {
                       </Popover.Button>
                     </div>
                   </div>
-                  <div className="px-2 pt-2 pb-3 space-y-1">
-                    {navigation.map((item) => (
-                      <a
-                        key={item.name}
-                        href={item.href}
-                        className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
-                      >
-                        {item.name}
-                      </a>
-                    ))}
-                  </div>
+                  
+                  
                   <a
                     href="/login"
                     className="block w-full px-5 py-3 text-center font-medium text-indigo-600 bg-gray-50 hover:bg-gray-100 hover:text-indigo-700"

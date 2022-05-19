@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef, Fragment} from "react";
-import {db} from "../firebase";
+import {db, auth} from "../firebase";
 import {useTracksValue} from "../context/tracks-context";
 import {Menu, Transition, Dialog} from "@headlessui/react";
 import {useDrag, useDrop} from "react-dnd";
@@ -149,18 +149,55 @@ export function IndividualTask({task, index, moveListItem}) {
   }
 
   const deleteTask = (docId) => {
+    let eventId;
     db.collection("tasks")
       .doc(docId)
-      .delete()
+      .get()
+      .then((doc) => {
+        if (doc.exists) {
+          eventId = doc.data().eventId;
+        } else {
+          console.log("No document! IndividualTask.js line 160");
+        }
+      })
       .then(() => {
-        // setTasks([...tasks]);
+        db.collection("tasks").doc(docId).delete();
+      })
+      .then(() => {
+        db.collection("users")
+          .doc(auth.currentUser.uid)
+          .collection("events")
+          .doc(eventId)
+          .delete();
       });
   };
 
-  const archiveTask = (id) => {
-    db.collection("tasks").doc(id).update({
-      archived: true,
-    });
+  const archiveTask = (docId) => {
+    let eventId;
+    db.collection("tasks")
+      .doc(docId)
+      .get()
+      .then((doc) => {
+        if (doc.exists) {
+          eventId = doc.data().eventId;
+        } else {
+          console.log("No document! IndividualTask.js line 160");
+        }
+      })
+      .then(() => {
+        db.collection("tasks").doc(docId).update({
+          archived: true,
+        });
+      })
+      .then(() => {
+        db.collection("users")
+          .doc(auth.currentUser.uid)
+          .collection("events")
+          .doc(eventId)
+          .update({
+            archived: true,
+          });
+      });
   };
   return (
     <>
@@ -168,7 +205,7 @@ export function IndividualTask({task, index, moveListItem}) {
         className={
           isDragging
             ? "group flex text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded opacity-5"
-            : "opacity-100 group flex text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded"
+            : "opacity-100 group flex gap-1 text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded"
         }
         onMouseEnter={() => {
           setShowSettingsIcon(true);
@@ -181,7 +218,7 @@ export function IndividualTask({task, index, moveListItem}) {
         ref={preview}
         data-handler-id={handlerId}
       >
-        <div className="w-8" ref={ref}>
+        <div className="w-8  sm:w-3" ref={ref}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className={
@@ -195,7 +232,7 @@ export function IndividualTask({task, index, moveListItem}) {
             <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
           </svg>
         </div>
-        <div className="w-16">
+        <div className="sm:w-16">
           <input
             type="checkbox"
             className="cursor-pointer relative top-4 -mt-2 h-4 w-4 rounded border-gray-500 text-indigo-600 focus:ring-indigo-500 sm:left-6"
@@ -207,10 +244,10 @@ export function IndividualTask({task, index, moveListItem}) {
           />
         </div>
 
-        <div className="py-4 pr-3 text-sm font-medium w-fit ">{task.task}</div>
-        <div className="w-fit font-light gap-3 flex items-center text-lime-700">
+        <div className="py-4 pr-3 text-sm font-medium w-fit">{task.task}</div>
+        <div className="w-fit truncate font-light text-xs gap-3 flex items-center text-lime-700 ">
           <p>{task.start ? moment(task.start).format("h:mm A") : "Today"}</p>
-          <p>{task.start ? moment(task.start).format("MMMM Do") : ""}</p>
+          <p>{task.start ? moment(task.start).format("MMMM D") : ""}</p>
         </div>
         <div className="w-14 flex-auto">
           <Menu

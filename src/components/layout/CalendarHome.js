@@ -1,29 +1,15 @@
-import React, {Fragment, useEffect, useRef, useState} from "react";
-import {
-  ChevronDownIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  DotsHorizontalIcon,
-} from "@heroicons/react/solid";
-import {MenuIcon} from "@heroicons/react/outline";
-import {Menu, Transition, Popover, Dialog} from "@headlessui/react";
-import {Sidebar} from "./Sidebar";
+import React, {useEffect, useRef, useState} from "react";
+
 import {IndividualCalendarRow} from "../functional/IndividualCalendarRow";
 import moment from "moment";
-import {SmallCalendar} from "../functional/SmallCalendar";
-import TextField from "@mui/material/TextField";
-import {RoutinePicker} from "../functional/RoutinePicker";
+
 import {auth, db} from "../../firebase";
 import {useTracksValue} from "../../context/tracks-context";
-import {AddEvent} from "../functional/AddEvent";
-import {useCalendarValue} from "../../context/calendar-context";
-import {useTasks} from "../../hooks/index";
-import {getTasksLength} from "../../helpers/index";
-import {translateRect} from "@fullcalendar/react";
-import {InitialTimePicker} from "../functional/InitialTimePicker";
-import {FinalTimePicker} from "../functional/FinalTimePicker";
+
 import {getGridRowFromTime} from "../../helpers/index";
 import {getGridSpanFromTime} from "../../helpers/index";
+import {ModalAdd} from "../functional/ModalAdd";
+import {generatePushId} from "../../helpers/index";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -37,9 +23,14 @@ function generateKey() {
   );
 }
 
-export function CalendarHome({year, month, day}) {
+export function CalendarHome({
+  year,
+  month,
+  day,
+  isOpenEventModal,
+  setIsOpenEventModal,
+}) {
   const {openSideBar, setOpenSideBar, nowValue, setNowValue} = useTracksValue();
-  const [isOpenEventModal, setIsOpenEventModal] = useState(false);
   const [eventName, setEventName] = useState("");
   const [showSmallCalendar, setShowSmallCalendar] = useState(false);
   const [modalSettingOpen, setModalSettingOpen] = useState(false);
@@ -91,7 +82,8 @@ export function CalendarHome({year, month, day}) {
               // if the event is scheduled for today push it
               if (
                 moment(event.start).format("MM-DD-YYYY") ===
-                moment(nowValue).format("MM-DD-YYYY")
+                  moment(nowValue).format("MM-DD-YYYY") &&
+                !event.archived
               ) {
                 eventsArray.push(event);
               }
@@ -124,6 +116,8 @@ export function CalendarHome({year, month, day}) {
 
   function addEvent() {
     const userId = auth.currentUser.uid;
+    const taskId = generatePushId();
+    const eventId = generatePushId();
     // use date and time to make a moment object
     const gridRowForCalendar = getGridRowFromTime(eventStartTime);
     const gridSpanForCalendar = getGridSpanFromTime(
@@ -146,7 +140,8 @@ export function CalendarHome({year, month, day}) {
     db.collection("users")
       .doc(auth.currentUser.uid)
       .collection("events")
-      .add({
+      .doc(eventId)
+      .set({
         archived: false,
         routineId: routineIdForEvent,
         title: eventName,
@@ -160,39 +155,43 @@ export function CalendarHome({year, month, day}) {
         bgColor: "bg-blue-50",
         key: generateKey(),
         routineName: routineNameForEvent,
-      });
-
-    const tasksLength = db
-      .collection("tasks")
-      .where("trackId", "==", routineIdForEvent)
-      .get()
-      .then(function (querySnapshot) {
-        return querySnapshot.size;
+        taskId: taskId,
       })
-      .then((tasksLength) => {
-        let taskStartTime;
-        let taskEndTime;
-        let taskDate;
-        if (routineIdForEvent === "INBOX") {
-          taskStartTime = "";
-          taskEndTime = "";
-          taskDate = "";
-        } else {
-          taskStartTime = moment(eventStartTime).format("YYYY-MM-DDTHH:mm:ss");
-          taskEndTime = moment(eventEndTime).format("YYYY-MM-DDTHH:mm:ss");
-          taskDate = selectedDate;
-        }
-        db.collection("tasks").add({
-          archived: false,
-          trackId: routineIdForEvent,
-          title: eventName,
-          task: eventName,
-          date: taskDate,
-          start: taskStartTime,
-          end: taskEndTime,
-          index: tasksLength,
-          userId: auth.currentUser.uid,
-        });
+      .then((docRef) => {
+        db.collection("tasks")
+          .where("trackId", "==", routineIdForEvent)
+          .get()
+          .then(function (querySnapshot) {
+            return querySnapshot.size;
+          })
+          .then((tasksLength) => {
+            let taskStartTime;
+            let taskEndTime;
+            let taskDate;
+            if (routineIdForEvent === "INBOX") {
+              taskStartTime = "";
+              taskEndTime = "";
+              taskDate = "";
+            } else {
+              taskStartTime = moment(eventStartTime).format(
+                "YYYY-MM-DDTHH:mm:ss"
+              );
+              taskEndTime = moment(eventEndTime).format("YYYY-MM-DDTHH:mm:ss");
+              taskDate = selectedDate;
+            }
+            db.collection("tasks").doc(taskId).set({
+              archived: false,
+              trackId: routineIdForEvent,
+              title: eventName,
+              task: eventName,
+              date: taskDate,
+              start: taskStartTime,
+              end: taskEndTime,
+              index: tasksLength,
+              userId: auth.currentUser.uid,
+              eventId: eventId,
+            });
+          });
       });
   }
 
@@ -204,250 +203,51 @@ export function CalendarHome({year, month, day}) {
           : "transform transition ease-in-out delay-75 flex flex-row"
       }
     >
-      <AddEvent
-        setIsOpenEventModal={setIsOpenEventModal}
-        isOpenEventModal={isOpenEventModal}
-      />
       <div className="flex h-full w-full flex-col">
         <div className="flex flex-auto overflow-hidden bg-white">
-          <Transition appear show={isOpenEventModal} as={Fragment}>
-            <Dialog
-              as="div"
-              className="fixed inset-0 z-50 overflow-y-auto overflow-visible"
-              onClose={closeModal}
-            >
-              <div className="min-h-screen px-4 text-center">
-                <Transition.Child
-                  as={Fragment}
-                  enter="ease-out duration-300"
-                  enterFrom="opacity-0"
-                  enterTo="opacity-100"
-                  leave="ease-in duration-200"
-                  leaveFrom="opacity-100"
-                  leaveTo="opacity-0"
-                >
-                  <Dialog.Overlay className="fixed inset-0 " />
-                </Transition.Child>
-
-                {/* This element is to trick the browser into centering the modal contents. */}
-                <span
-                  className="inline-block h-screen align-middle"
-                  aria-hidden="true"
-                >
-                  &#8203;
-                </span>
-                <Transition.Child
-                  as={Fragment}
-                  enter="ease-out duration-300"
-                  enterFrom="opacity-0 scale-95"
-                  enterTo="opacity-100 scale-100"
-                  leave="ease-in duration-200"
-                  leaveFrom="opacity-100 scale-100"
-                  leaveTo="opacity-0 scale-95"
-                >
-                  <div
-                    id="modal"
-                    className="inline-block w-full max-w-md p-3 text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl overflow-visible"
-                  >
-                    {/* <Dialog.Title
-                    as="h3"
-                    className="text-lg font-medium leading-6 text-gray-900"
-                  >
-                    New Event
-                  </Dialog.Title> */}
-                    <div className="flex flex-col mb-4 gap-3 content-between">
-                      <TextField
-                        className="mt-3 w-full  text-gray-900 placeholder-gray-500 focus:rounded-md focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out border-0 border-b border-gray-300"
-                        type="text"
-                        value={eventName}
-                        onChange={(e) => setEventName(e.target.value)}
-                        placeholder="Add title"
-                        onKeyDown={(e) => handleKeypress(e)}
-                        variant="standard"
-                        id="event-name"
-                        inputProps={{
-                          style: {
-                            padding: "0.5rem",
-                            ":focus": {
-                              outline: "none",
-                            },
-                          },
-                        }}
-                      />
-                      <div className="flex flex-col gap-3">
-                        <div className="cursor-pointer flex flex-row items-center gap-2 border-b border-b-gray-300 w-32 hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-5 w-5 text-gray-300 ml-1"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                          <div
-                            onClick={() => {
-                              setShowSmallCalendar(!showSmallCalendar);
-                              setModalSettingOpen(!modalSettingOpen);
-                            }}
-                            ref={modalSettingButtonRef}
-                          >
-                            <p className="select-none p-0.5 hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100 text-gray-600 w-24">
-                              {moment(selectedDate).format("MM-DD-YYYY")}
-                            </p>
-                          </div>
-                        </div>
-
-                        <SmallCalendar
-                          //   The key is required to update the calendar when the selected date changes.
-                          key={modalSettingOpen}
-                          modalSettingOpen={modalSettingOpen}
-                          setModalSettingOpen={setModalSettingOpen}
-                          showSmallCalendar={showSmallCalendar}
-                          setShowSmallCalendar={setShowSmallCalendar}
-                          setSelectedDate={setSelectedDate}
-                          modalSettingButtonRef={modalSettingButtonRef}
-                        />
-                        <div className="flex flex-row items-center gap-2 border-b border-b-gray-300 w-56">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-5 w-5 text-gray-300 ml-1"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                          <div>
-                            <p
-                              ref={initialTimePickerButtonRef}
-                              id="time-suggestion"
-                              className="select-none p-0.5 cursor-pointer hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100 text-gray-600"
-                              onClick={() => {
-                                setShowInitialTimePicker(
-                                  !showInitialTimePicker
-                                );
-                                setModalSettingOpen(!modalSettingOpen);
-                              }}
-                            >
-                              {modalInitialTimeValue}
-                            </p>
-                          </div>
-                          <div>
-                            <p className="text-gray-300">-</p>
-                          </div>
-                          <div>
-                            <p
-                              ref={finalTimePickerButtonRef}
-                              id="time-sugggestion"
-                              className="p-0.5 select-none cursor-pointer hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100 text-gray-600"
-                              onClick={() => {
-                                setShowFinalTimePicker(!showFinalTimePicker);
-                                setModalSettingOpen(!modalSettingOpen);
-                              }}
-                            >
-                              {modalEndTimeValue}
-                            </p>
-                          </div>
-                        </div>
-                        <InitialTimePicker
-                          showInitialTimePicker={showInitialTimePicker}
-                          setShowInitialTimePicker={setShowInitialTimePicker}
-                          initialTimePickerButtonRef={
-                            initialTimePickerButtonRef
-                          }
-                          modalSettingOpen={modalSettingOpen}
-                          setModalSettingOpen={setModalSettingOpen}
-                          initialTimeValue={initialTimeValue}
-                          setInitialTimeValue={setInitialTimeValue}
-                          modalInitialTimeValue={modalInitialTimeValue}
-                          setModalInitialTimeValue={setModalInitialTimeValue}
-                          setEventStartTime={setEventStartTime}
-                        />
-                        <FinalTimePicker
-                          showFinalTimePicker={showFinalTimePicker}
-                          setShowFinalTimePicker={setShowFinalTimePicker}
-                          finalTimePickerButtonRef={finalTimePickerButtonRef}
-                          modalSettingOpen={modalSettingOpen}
-                          setModalSettingOpen={setModalSettingOpen}
-                          finalTimeValue={finalTimeValue}
-                          setFinalTimeValue={setFinalTimeValue}
-                          modalEndTimeValue={modalEndTimeValue}
-                          setModalEndTimeValue={setModalEndTimeValue}
-                          setEventEndTime={setEventEndTime}
-                        />
-                        {/* id="save-button" was originally on the button element but i needed to add more layout, and since i was already targetting this id somewhere, i just gave the id to the div */}
-                        <div
-                          id="save-button"
-                          className="flex flex-row gap-2 justify-end items-center"
-                        >
-                          <div
-                            className="cursor-pointer flex flex-row items-center gap-2 border-b border-b-gray-300 w-32 hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100"
-                            ref={routinePickerButtonRef}
-                          >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="h-5 w-5 text-gray-300 ml-1"
-                              viewBox="0 0 20 20"
-                              fill="currentColor"
-                            >
-                              <path d="M4 3a2 2 0 100 4h12a2 2 0 100-4H4z" />
-                              <path
-                                fillRule="evenodd"
-                                d="M3 8h14v7a2 2 0 01-2 2H5a2 2 0 01-2-2V8zm5 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
-                            <div
-                              onClick={() => {
-                                setShowRoutinesList(!showRoutinesList);
-                                setRoutineSetterOpen(!routineSetterOpen);
-                              }}
-                            >
-                              <p className=" p-0.5 hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100 text-gray-600 w-24">
-                                {selectedRoutine
-                                  ? selectedRoutine.name
-                                  : "Inbox"}
-                              </p>
-                            </div>
-                          </div>
-                          <RoutinePicker
-                            showRoutinesList={showRoutinesList}
-                            setSelectedRoutine={setSelectedRoutine}
-                            setShowRoutinesList={setShowRoutinesList}
-                            routinePickerButtonRef={routinePickerButtonRef}
-                            routineSetterOpen={routineSetterOpen}
-                            setRoutineSetterOpen={setRoutineSetterOpen}
-                          />
-                          <button
-                            type="button"
-                            className=" inline-flex px-4 py-2 text-sm font-medium text-green-900 bg-green-100 border border-transparent rounded-md hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-green-500"
-                            onClick={() => {
-                              addEvent();
-                              setEventName("");
-                              closeModal();
-                            }}
-                          >
-                            Save
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </Transition.Child>
-              </div>
-            </Dialog>
-          </Transition>
+          <ModalAdd
+            isOpenEventModal={isOpenEventModal}
+            eventName={eventName}
+            setEventName={setEventName}
+            handleKeypress={handleKeypress}
+            showSmallCalendar={showSmallCalendar}
+            setShowSmallCalendar={setShowSmallCalendar}
+            showInitialTimePicker={showInitialTimePicker}
+            setShowInitialTimePicker={setShowInitialTimePicker}
+            showFinalTimePicker={showFinalTimePicker}
+            setShowFinalTimePicker={setShowFinalTimePicker}
+            selectedDate={selectedDate}
+            setSelectedDate={setSelectedDate}
+            initialTimeValue={initialTimeValue}
+            setInitialTimeValue={setInitialTimeValue}
+            finalTimeValue={finalTimeValue}
+            setFinalTimeValue={setFinalTimeValue}
+            selectedRoutine={selectedRoutine}
+            setSelectedRoutine={setSelectedRoutine}
+            modalSettingOpen={modalSettingOpen}
+            setModalSettingOpen={setModalSettingOpen}
+            modalInitialTimeValue={modalInitialTimeValue}
+            setModalInitialTimeValue={setModalInitialTimeValue}
+            modalEndTimeValue={modalEndTimeValue}
+            setModalEndTimeValue={setModalEndTimeValue}
+            modalSettingButtonRef={modalSettingButtonRef}
+            initialTimePickerButtonRef={initialTimePickerButtonRef}
+            finalTimePickerButtonRef={finalTimePickerButtonRef}
+            routinePickerButtonRef={routinePickerButtonRef}
+            showRoutinesList={showRoutinesList}
+            setShowRoutinesList={setShowRoutinesList}
+            routineSetterOpen={routineSetterOpen}
+            setRoutineSetterOpen={setRoutineSetterOpen}
+            closeModal={closeModal}
+            setEventStartTime={setEventStartTime}
+            setEventEndTime={setEventEndTime}
+            addEvent={addEvent}
+            currentRoutinePage={false}
+          />
           <div className="flex flex-auto flex-col overflow-auto">
             <div className="flex w-full flex-auto">
               <div
-                className="w-14 flex-none bg-white "
+                className="w-12 flex-none bg-white sm:w-14"
                 style={{
                   borderRight: "1px solid #f3f4f6",
                 }}
@@ -531,7 +331,7 @@ export function CalendarHome({year, month, day}) {
                   {/* Render the individual events */}
                   {todaysEvents.map((block) => (
                     <li
-                      className="relative mt-px flex z-40"
+                      className="relative mt-px flex z-40 w-52 sm:w-auto"
                       style={{
                         gridRow: `${block.gridRow} / span ${block.span}`,
                         gridColumn: "1 / span 1",

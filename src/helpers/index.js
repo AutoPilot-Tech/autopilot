@@ -97,8 +97,11 @@ export const handleTimeValueStringProcessing = (timeValue) => {
     timeValue.indexOf(":") === -1 ? 0 : parseInt(timeValue.split(":")[1]);
   // set modalEndTimeValue to the final time
   // if pm is in the string, add 12 hours to the hour
-  if (timeValue.indexOf("pm") !== -1) {
+  if (timeValue.indexOf("pm") !== -1 && hour !== 12) {
     hour += 12;
+  }
+  if (hour === 12 && timeValue.indexOf("am") !== -1) {
+    hour = 0;
   }
   let timeString = moment().hour(hour).minute(minute).format("h:mm A");
   return timeString;
@@ -108,17 +111,20 @@ export const handleTimeValueToObject = (timeValue) => {
   // get hour and minute from finalTimeValue string
   // if ":" is not in the string, then it is a single digit
   // if ":" is in the string, then it is a double digit
-  let hour =
+  let hour;
+  let minute;
+  hour =
     timeValue.indexOf(":") === -1
       ? parseInt(timeValue)
       : parseInt(timeValue.split(":")[0]);
-  let minute =
+  minute =
     timeValue.indexOf(":") === -1 ? 0 : parseInt(timeValue.split(":")[1]);
   // set modalEndTimeValue to the final time
   // if pm is in the string, add 12 hours to the hour
-  if (timeValue.indexOf("pm") !== -1) {
+  if (timeValue.indexOf("pm") !== -1 && hour !== 12) {
     hour += 12;
   }
+
   let timeObject = moment().hour(hour).minute(minute);
   return timeObject;
 };

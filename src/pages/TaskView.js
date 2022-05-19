@@ -11,6 +11,7 @@ import {useLoadingValue} from "../context/loading-context";
 import {Banner} from "../components/layout/Banner";
 import {Sidebar} from "../components/layout/Sidebar";
 import {Tasks} from "../components/Tasks";
+import {AddEvent} from "../components/functional/AddEvent";
 
 // note: see src/context. Since we want to use tracksprovider at the
 // top level, we are using it here in App. This can be replaced
@@ -19,6 +20,7 @@ export const TaskView = () => {
   const {loading, setLoading} = useLoadingValue();
   const {setDisplayName, setPhotoUrl} = useLoadingValue();
   const [showBanner, setShowBanner] = useState(false);
+  const [isOpenEventModal, setIsOpenEventModal] = useState(false);
 
   const {id} = useParams();
   // const {tracksLoading, setTracksLoading} = useLoadingValue();
@@ -56,11 +58,19 @@ export const TaskView = () => {
     <LocalizationProvider dateAdapter={AdapterMoment}>
       <TracksProvider>
         <Header />
-        <div>
+        <div className="overflow-x-hidden">
           {showBanner ? <Banner setShowBanner={setShowBanner} /> : null}
-          <div className="overflow-x-hidden" id="content">
+          <div className="relative" id="content">
             <Sidebar />
-            <Tasks trackId={id} />
+            <Tasks
+              trackId={id}
+              isOpenEventModal={isOpenEventModal}
+              setIsOpenEventModal={setIsOpenEventModal}
+            />
+            <AddEvent
+              isOpenEventModal={isOpenEventModal}
+              setIsOpenEventModal={setIsOpenEventModal}
+            />
           </div>
         </div>
       </TracksProvider>

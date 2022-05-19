@@ -11,6 +11,8 @@ import {Banner} from "../components/layout/Banner";
 import {Sidebar} from "../components/layout/Sidebar";
 import {CalendarHome} from "../components/layout/CalendarHome";
 import {useParams} from "react-router-dom";
+import {PlusSmIcon as PlusSmIconOutline} from "@heroicons/react/outline";
+import {AddEvent} from "../components/functional/AddEvent";
 
 // note: see src/context. Since we want to use tracksprovider at the
 // top level, we are using it here in App. This can be replaced
@@ -22,6 +24,7 @@ export const CalendarHomeView = () => {
   const [userLoading, setUserLoading] = useState(true);
   const {setDisplayName, setPhotoUrl} = useLoadingValue();
   const [showBanner, setShowBanner] = useState(false);
+  const [isOpenEventModal, setIsOpenEventModal] = useState(false);
   // const {tracksLoading, setTracksLoading} = useLoadingValue();
 
   // if the user isnt signed in send them back to login page
@@ -60,7 +63,17 @@ export const CalendarHomeView = () => {
           {showBanner ? <Banner setShowBanner={setShowBanner} /> : null}
           <div className="relative" id="content">
             <Sidebar />
-            <CalendarHome year={year} month={month} day={day} />
+            <CalendarHome
+              year={year}
+              month={month}
+              day={day}
+              isOpenEventModal={isOpenEventModal}
+              setIsOpenEventModal={setIsOpenEventModal}
+            />
+            <AddEvent
+              isOpenEventModal={isOpenEventModal}
+              setIsOpenEventModal={setIsOpenEventModal}
+            />
           </div>
         </div>
       </TracksProvider>

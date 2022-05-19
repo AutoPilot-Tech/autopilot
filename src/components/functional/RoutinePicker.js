@@ -123,7 +123,7 @@ export function RoutinePicker({
     <div
       className={
         showRoutinesList
-          ? "cursor-default z-50 absolute inline-block max-w-md p-3 text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl overflow-visible w-72 top-48 left-64"
+          ? "cursor-default z-50 w-40 top-48 left-28 absolute inline-block max-w-md p-3 text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl overflow-visible sm:w-72 sm:top-48 sm:left-64"
           : "hidden"
       }
     >
@@ -204,7 +204,21 @@ export function RoutinePicker({
               </div>
             ))
           )}
-          {}
+          {tracks && tracks.length > 0 && (
+            <div>
+              <div
+                className="cursor-pointer flex p-2 justify-between rounded-md hover:bg-gray-100"
+                onClick={() => {
+                  setSelectedRoutine({name: "Inbox", trackId: "INBOX"});
+                  setShowRoutinesList(false);
+                }}
+              >
+                <div className="flex-1">
+                  <p className="text-gray-700 text-sm font-medium">{"Inbox"}</p>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </OutsideAlerter>
     </div>
