@@ -5,11 +5,12 @@ import {InitialTimePicker} from "./InitialTimePicker";
 import {FinalTimePicker} from "./FinalTimePicker";
 import {SmallCalendar} from "./SmallCalendar";
 import {Transition, Dialog} from "@headlessui/react";
-import {Editor, EditorState, CompositeDecorator} from "draft-js";
+import {Editor, EditorState, CompositeDecorator, ContentState} from "draft-js";
+import "draft-js/dist/Draft.css";
 
 import moment from "moment";
 
-const words = ["everyday", "morning", "afternoon", "evening"];
+const words = ["everyday", "morning", "afternoon", "evening", "2 hours"];
 
 const Decorated = ({children}) => {
   return (
@@ -184,7 +185,20 @@ export function ModalAdd({
                   <Editor
                     ref={editor}
                     editorState={editorState}
-                    onChange={(editorState) => setEditorState(editorState)}
+                    onChange={(editorState) => {
+                      setEditorState(editorState);
+                      setEventName(
+                        // remove all words from the words array
+                        editorState
+                          .getCurrentContent()
+                          .getPlainText()
+                          .replace(
+                            /\b(everyday|morning|afternoon|evening|2 hours|for)\b/g,
+                            ""
+                          )
+                      );
+                    }}
+                    placeholder="Study everyday at 12pm for 2 hours"
                   />
                 </div>
 
