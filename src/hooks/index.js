@@ -170,15 +170,13 @@ export const useActive = () => {
 export const useTracks = () => {
   const [tracks, setTracks] = useState([]);
   const {setTracksLoading} = useLoadingValue();
-
   useEffect(() => {
     let userId = auth.currentUser.uid;
     db.collection("tracks")
       .where("userId", "==", userId)
       .orderBy("trackId")
       // this required an index in firebase
-      .get()
-      .then((snapshot) => {
+      .onSnapshot((snapshot) => {
         const allTracks = snapshot.docs.map((track) => ({
           ...track.data(),
           docId: track.id,
