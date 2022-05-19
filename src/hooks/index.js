@@ -170,7 +170,6 @@ export const useActive = () => {
 export const useTracks = () => {
   const [tracks, setTracks] = useState([]);
   const {setTracksLoading} = useLoadingValue();
-
   useEffect(() => {
     let userId = auth.currentUser.uid;
     db.collection("tracks")
