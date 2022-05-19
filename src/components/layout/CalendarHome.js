@@ -1,27 +1,11 @@
-import React, {Fragment, useEffect, useRef, useState} from "react";
-import {
-  ChevronDownIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  DotsHorizontalIcon,
-} from "@heroicons/react/solid";
-import {MenuIcon} from "@heroicons/react/outline";
-import {Menu, Transition, Popover, Dialog} from "@headlessui/react";
-import {Sidebar} from "./Sidebar";
+import React, {useEffect, useRef, useState} from "react";
+
 import {IndividualCalendarRow} from "../functional/IndividualCalendarRow";
 import moment from "moment";
-import {SmallCalendar} from "../functional/SmallCalendar";
-import TextField from "@mui/material/TextField";
-import {RoutinePicker} from "../functional/RoutinePicker";
+
 import {auth, db} from "../../firebase";
 import {useTracksValue} from "../../context/tracks-context";
-import {AddEvent} from "../functional/AddEvent";
-import {useCalendarValue} from "../../context/calendar-context";
-import {useTasks} from "../../hooks/index";
-import {getTasksLength} from "../../helpers/index";
-import {translateRect} from "@fullcalendar/react";
-import {InitialTimePicker} from "../functional/InitialTimePicker";
-import {FinalTimePicker} from "../functional/FinalTimePicker";
+
 import {getGridRowFromTime} from "../../helpers/index";
 import {getGridSpanFromTime} from "../../helpers/index";
 import {ModalAdd} from "../functional/ModalAdd";

@@ -8,16 +8,25 @@ import {useTracksValue} from "../context/tracks-context";
 import {Calendar} from "../../src/components/Calendar";
 
 import {RoutineSettings} from "./RoutineSettings";
-import {db} from "../firebase";
+import {db, auth} from "../firebase";
 import {TaskHeader} from "./TaskHeader";
 import {EmptyStateTasks} from "./EmptyStateTasks";
 import {AutopilotSettings} from "./AutopilotSettings";
 import {IndividualTask} from "./IndividualTask";
 import moment from "moment";
 import {ModalAdd} from "./functional/ModalAdd";
-
+import {getGridRowFromTime} from "../helpers/index";
+import {getGridSpanFromTime} from "../helpers/index";
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
+}
+
+// make a unique key
+function generateKey() {
+  return (
+    Math.random().toString(36).substring(2, 15) +
+    Math.random().toString(36).substring(2, 15)
+  );
 }
 
 // this just gets the tasks and renders them
