@@ -11,7 +11,7 @@ import "draft-js/dist/Draft.css";
 import moment from "moment";
 import {handleTimeValueStringProcessing} from "../../helpers";
 
-const TIME_REGEX = /\b(?:[01]?[0-9]|2[0-3]):[0-5][0-9]\b/g;
+const TIME_REGEX = /((at){1}?\s*)?(\d\d?)\s?(pm)?(am)?/;
 
 // PATH 1: Pick up dates and times
 
@@ -144,15 +144,19 @@ const dateAndTimeSpan = ({children}) => {
   );
 };
 
-function findWithRegex(DAYKeywordsPath1, contentBlock, callback) {
+function findWithRegex(regex, contentBlock, callback) {
   const text = contentBlock.getText();
-
-  DAYKeywordsPath1.forEach((word) => {
-    const matches = [...text.matchAll(word)];
-    matches.forEach((match) =>
-      callback(match.index, match.index + match[0].length)
-    );
-  });
+  let matchArr, start;
+  // while there is a match and we have not seen this match before
+  while (
+    (matchArr = regex.exec(text)) !== null &&
+    start !== matchArr.index &&
+    start !== matchArr.index + matchArr[0].length - 1
+  ) {
+    console.log("iterated");
+    start = matchArr.index;
+    callback(start, start + matchArr[0].length);
+  }
 }
 
 const styles = {
@@ -165,7 +169,7 @@ const styles = {
   },
 };
 
-function handleStrategy(contentBlock, callback) {
+function dayStrategy(contentBlock, callback) {
   findWithRegex(DAYKeywordsPath1, contentBlock, callback);
 }
 
@@ -187,14 +191,14 @@ function dateAndTimeStrategy(contentBlock, callback, contentState) {
 
 const createDecorator = () =>
   new CompositeDecorator([
-    {
-      strategy: handleStrategy,
-      component: Decorated,
-    },
     // {
-    //   strategy: timeStrategy,
-    //   component: timeSpan,
+    //   strategy: dayStrategy,
+    //   component: Decorated,
     // },
+    {
+      strategy: timeStrategy,
+      component: timeSpan,
+    },
     // {
     //   strategy: durationStrategy,
     //   component: durationSpan,
