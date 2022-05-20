@@ -156,7 +156,6 @@ function findWithRegex(regex, contentBlock, callback) {
     start !== matchArr.index &&
     start !== matchArr.index + matchArr[0].length - 1
   ) {
-    console.log("iterated");
     start = matchArr.index;
     callback(start, start + matchArr[0].length);
   }
