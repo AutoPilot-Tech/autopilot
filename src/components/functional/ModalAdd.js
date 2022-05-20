@@ -11,7 +11,10 @@ import "draft-js/dist/Draft.css";
 import moment from "moment";
 import {handleTimeValueStringProcessing} from "../../helpers";
 
-const TIME_REGEX = /((at){1}?\s*)?(\d\d?)\s?(pm)?(am)?/;
+const TIME_REGEX = /(at\s)?(\d\d?)(?:(=?pm?)|(?!pm?)am?)/i;
+const DURATION_REGEX =
+  /(for)(\s)(\d\d?\d?\s)(?:(=?hours?)|(?!hours?)minutes?)/i;
+const RECURRING_REGEX = /(?:(=?everyday)|(?!everyday)recurring)/i;
 
 // PATH 1: Pick up dates and times
 
@@ -196,17 +199,18 @@ const createDecorator = () =>
     //   component: Decorated,
     // },
     {
+      strategy: durationStrategy,
+      component: durationSpan,
+    },
+    {
       strategy: timeStrategy,
       component: timeSpan,
     },
-    // {
-    //   strategy: durationStrategy,
-    //   component: durationSpan,
-    // },
-    // {
-    //   strategy: recurringStrategy,
-    //   component: recurringSpan,
-    // },
+
+    {
+      strategy: recurringStrategy,
+      component: recurringSpan,
+    },
     // {
     //   strategy: dateAndTimeStrategy,
     //   component: dateAndTimeSpan,
