@@ -224,7 +224,10 @@ export function ModalAdd({
     contentBlock,
     callback,
     typeOfRegex,
-    stateSetter
+    modalInitialStateSetter,
+    modalEndStateSetter,
+    calendarInitialStateSetter,
+    calendarEndStateSetter
   ) {
     const text = contentBlock.getText();
     let matchArr, start;
@@ -247,22 +250,37 @@ export function ModalAdd({
           match = match.replace("pm", "");
           // match to number
           hours = (parseInt(match) + 12).toString();
-          match = moment().hours(hours).minutes(0).format("h:mm a");
-          stateSetter(match);
+          match = moment().hours(hours).minutes(minutes);
+          let matchEndTime = moment().hours(hours).minutes(minutes);
+          matchEndTime.add(1, "hours");
+          modalInitialStateSetter(match.format("h:mm A"));
+          modalEndStateSetter(matchEndTime.format("h:mm A"));
+          calendarInitialStateSetter(match);
+          calendarEndStateSetter(matchEndTime);
         } else if (match.includes("am")) {
           match = match.replace("am", "");
           // match to number
           hours = match;
-          match = moment().hours(hours).minutes(0).format("h:mm a");
-          stateSetter(match);
+          match = moment().hours(hours).minutes(minutes);
+          let matchEndTime = moment().hours(hours).minutes(minutes);
+          matchEndTime.add(1, "hours");
+          modalInitialStateSetter(match.format("h:mm A"));
+          modalEndStateSetter(matchEndTime.format("h:mm A"));
+          calendarInitialStateSetter(match);
+          calendarEndStateSetter(matchEndTime);
         } else {
           // if no "pm or "am" is in the string
           // remove p or a in the string
           match = match.replace("p", "");
           match = match.replace("a", "");
           hours = match;
-          match = moment().hours(hours).minutes(0).format("h:mm a");
-          stateSetter(match);
+          match = moment().hours(hours).minutes(minutes);
+          let matchEndTime = moment().hours(hours).minutes(minutes);
+          matchEndTime.add(1, "hours");
+          modalInitialStateSetter(match.format("h:mm A"));
+          modalEndStateSetter(matchEndTime.format("h:mm A"));
+          calendarInitialStateSetter(match);
+          calendarEndStateSetter(matchEndTime);
         }
       }
       callback(start, start + matchArr[0].length);
@@ -290,7 +308,10 @@ export function ModalAdd({
       contentBlock,
       callback,
       typeOfRegex,
-      setModalInitialTimeValue
+      setModalInitialTimeValue,
+      setModalEndTimeValue,
+      setEventStartTime,
+      setEventEndTime
     );
   }
 

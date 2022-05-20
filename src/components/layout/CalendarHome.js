@@ -115,6 +115,10 @@ export function CalendarHome({
   }
 
   function addEvent() {
+    console.log("InitialTimeValue", initialTimeValue);
+    console.log("FinalTimeValue", finalTimeValue);
+    console.log("eventstartTime", eventStartTime);
+    console.log("eventEndTime", eventEndTime);
     const userId = auth.currentUser.uid;
     const taskId = generatePushId();
     const eventId = generatePushId();
