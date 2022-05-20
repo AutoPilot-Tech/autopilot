@@ -11,67 +11,6 @@ import "draft-js/dist/Draft.css";
 import moment from "moment";
 import {handleTimeValueStringProcessing} from "../../helpers";
 
-const TIME_REGEX = /(?:(=?(at\s)(\d\d?)(?:(=?\s?pm?)|(?!\s?pm?)\s?am?)?)|(?!(at\s)(\d\d?)(?:(=?\s?pm?)|(?!\s?pm?)\s?am?)?)\d\d?(?:(=?\s?pm?)|(?!\s?pm?)\s?am?))/i;
-const DURATION_REGEX =
-  /(for)(\s)(\d\d?\d?\s)(?:(=?hours?)|(?!hours?)minutes?)/i;
-const RECURRING_REGEX = /(?:(=?everyday)|(?!everyday)recurring)/i;
-
-// PATH 1: Pick up dates and times
-
-let individualKeywordsPath1 = ["today", "tomorrow", "weekend", "yesterday"];
-// regex for any type of date
-let DAYKeywordsPath1 = [
-  "monday",
-  "mon",
-  "tuesday",
-  "tues",
-  "wednesday",
-  "wed",
-  "thursday",
-  "thurs",
-  "thu",
-  "friday",
-  "fri",
-  "saturday",
-  "sat",
-  "sunday",
-  "sun",
-];
-let NEXTKeywordsPath1 = ["week", "weekend", "month", "year", "weekday"];
-let ATKeywordsPath1 = ["getTime"];
-let DATEKeywordsPath1 = [
-  "jan",
-  "january",
-  "feb",
-  "february",
-  "mar",
-  "march",
-  "apr",
-  "april",
-  "may",
-  "jun",
-  "june",
-  "jul",
-  "july",
-  "aug",
-  "august",
-  "sep",
-  "september",
-  "oct",
-  "october",
-  "nov",
-  "november",
-  "dec",
-  "december",
-];
-
-// PATH 2: Recurring
-let EVERYKeywordsPath2 = ["week", "weekend", "month", "year", "weekday"];
-let individualKeywordsPath2 = ["everyday", "recurring"];
-
-// PATH 3: Duration
-let individualKeywordsPath3 = ["for"];
-
 const Decorated = ({children}) => {
   return (
     <span
@@ -147,75 +86,6 @@ const dateAndTimeSpan = ({children}) => {
   );
 };
 
-function findWithRegex(regex, contentBlock, callback) {
-  const text = contentBlock.getText();
-  let matchArr, start;
-  // while there is a match and we have not seen this match before
-  while (
-    (matchArr = regex.exec(text)) !== null &&
-    start !== matchArr.index &&
-    start !== matchArr.index + matchArr[0].length - 1
-  ) {
-    start = matchArr.index;
-    callback(start, start + matchArr[0].length);
-  }
-}
-
-const styles = {
-  editor: {
-    borderBottom: "1px solid gray",
-    paddingTop: "0.2rem",
-    paddingBottom: "0.2rem",
-    paddingLeft: "0.2rem",
-    paddingRight: "0.2rem",
-  },
-};
-
-function dayStrategy(contentBlock, callback) {
-  findWithRegex(DAYKeywordsPath1, contentBlock, callback);
-}
-
-function timeStrategy(contentBlock, callback, contentState) {
-  findWithRegex(TIME_REGEX, contentBlock, callback);
-}
-
-function durationStrategy(contentBlock, callback, contentState) {
-  findWithRegex(DURATION_REGEX, contentBlock, callback);
-}
-
-function recurringStrategy(contentBlock, callback, contentState) {
-  findWithRegex(RECURRING_REGEX, contentBlock, callback);
-}
-
-function dateAndTimeStrategy(contentBlock, callback, contentState) {
-  findWithRegex(DATE_AND_TIME_REGEX, contentBlock, callback);
-}
-
-const createDecorator = () =>
-  new CompositeDecorator([
-    // {
-    //   strategy: dayStrategy,
-    //   component: Decorated,
-    // },
-    {
-      strategy: durationStrategy,
-      component: durationSpan,
-    },
-    {
-      strategy: timeStrategy,
-      component: timeSpan,
-    },
-
-    {
-      strategy: recurringStrategy,
-      component: recurringSpan,
-    },
-    // {
-    //   strategy: dateAndTimeStrategy,
-    //   component: dateAndTimeSpan,
-    // },
-  ]);
-
 export function ModalAdd({
   isOpenEventModal,
   eventName,
@@ -257,6 +127,36 @@ export function ModalAdd({
   currentRoutinePageName,
   currentRoutinePageId,
 }) {
+  const createDecorator = () =>
+    new CompositeDecorator([
+      // {
+      //   strategy: dayStrategy,
+      //   component: Decorated,
+      // },
+      {
+        strategy: durationStrategy,
+        component: durationSpan,
+      },
+      {
+        strategy: timeStrategy,
+        component: timeSpan,
+      },
+
+      {
+        strategy: recurringStrategy,
+        component: recurringSpan,
+      },
+      // {
+      //   strategy: dateAndTimeStrategy,
+      //   component: dateAndTimeSpan,
+      // },
+    ]);
+  // since Javascript doesn't support if|then|else regex, this is nested positive lookahead and reverse lookaheads
+  const TIME_REGEX =
+    /(?:(=?(at\s)(\d\d?)(?:(=?\s?pm?)|(?!\s?pm?)\s?am?)?)|(?!(at\s)(\d\d?)(?:(=?\s?pm?)|(?!\s?pm?)\s?am?)?)\d\d?(?:(=?\s?pm?)|(?!\s?pm?)\s?am?))/i;
+  const DURATION_REGEX =
+    /(for)(\s)(\d\d?\d?\s)(?:(=?hours?)|(?!hours?)minutes?)/i;
+  const RECURRING_REGEX = /(?:(=?everyday)|(?!everyday)recurring)/i;
   const [editorState, setEditorState] = React.useState(
     EditorState.createEmpty(createDecorator())
   );
@@ -264,6 +164,146 @@ export function ModalAdd({
 
   function focusEditor() {
     editor.current.focus();
+  }
+  let individualKeywordsPath1 = ["today", "tomorrow", "weekend", "yesterday"];
+  // regex for any type of date
+  let DAYKeywordsPath1 = [
+    "monday",
+    "mon",
+    "tuesday",
+    "tues",
+    "wednesday",
+    "wed",
+    "thursday",
+    "thurs",
+    "thu",
+    "friday",
+    "fri",
+    "saturday",
+    "sat",
+    "sunday",
+    "sun",
+  ];
+  let NEXTKeywordsPath1 = ["week", "weekend", "month", "year", "weekday"];
+  let ATKeywordsPath1 = ["getTime"];
+  let DATEKeywordsPath1 = [
+    "jan",
+    "january",
+    "feb",
+    "february",
+    "mar",
+    "march",
+    "apr",
+    "april",
+    "may",
+    "jun",
+    "june",
+    "jul",
+    "july",
+    "aug",
+    "august",
+    "sep",
+    "september",
+    "oct",
+    "october",
+    "nov",
+    "november",
+    "dec",
+    "december",
+  ];
+
+  // PATH 2: Recurring
+  let EVERYKeywordsPath2 = ["week", "weekend", "month", "year", "weekday"];
+  let individualKeywordsPath2 = ["everyday", "recurring"];
+
+  // PATH 3: Duration
+  let individualKeywordsPath3 = ["for"];
+
+  function findWithRegex(
+    regex,
+    contentBlock,
+    callback,
+    typeOfRegex,
+    stateSetter
+  ) {
+    const text = contentBlock.getText();
+    let matchArr, start;
+    // while there is a match and we have not seen this match before
+    while (
+      (matchArr = regex.exec(text)) !== null &&
+      start !== matchArr.index &&
+      start !== matchArr.index + matchArr[0].length - 1
+    ) {
+      start = matchArr.index;
+      if (typeOfRegex === "TIME") {
+        let hours;
+        let minutes = "0";
+        // make a copy of matchArr[0]
+        let match = matchArr[0];
+        // remove "at" from matchArr[0]
+        match = match.replace("at", "");
+        // if "pm or "am" is in the string remove it
+        if (match.includes("pm")) {
+          match = match.replace("pm", "");
+          // match to number
+          hours = (parseInt(match) + 12).toString();
+          match = moment().hours(hours).minutes(0).format("h:mm a");
+          stateSetter(match);
+        } else if (match.includes("am")) {
+          match = match.replace("am", "");
+          // match to number
+          hours = match;
+          match = moment().hours(hours).minutes(0).format("h:mm a");
+          stateSetter(match);
+        } else {
+          // if no "pm or "am" is in the string
+          // remove p or a in the string
+          match = match.replace("p", "");
+          match = match.replace("a", "");
+          hours = match;
+          match = moment().hours(hours).minutes(0).format("h:mm a");
+          stateSetter(match);
+        }
+      }
+      callback(start, start + matchArr[0].length);
+    }
+  }
+
+  const styles = {
+    editor: {
+      borderBottom: "1px solid gray",
+      paddingTop: "0.2rem",
+      paddingBottom: "0.2rem",
+      paddingLeft: "0.2rem",
+      paddingRight: "0.2rem",
+    },
+  };
+
+  function dayStrategy(contentBlock, callback) {
+    findWithRegex(DAYKeywordsPath1, contentBlock, callback);
+  }
+
+  function timeStrategy(contentBlock, callback, contentState) {
+    let typeOfRegex = "TIME";
+    findWithRegex(
+      TIME_REGEX,
+      contentBlock,
+      callback,
+      typeOfRegex,
+      setModalInitialTimeValue
+    );
+  }
+
+  function durationStrategy(contentBlock, callback, contentState) {
+    findWithRegex(DURATION_REGEX, contentBlock, callback);
+  }
+
+  function recurringStrategy(contentBlock, callback, contentState) {
+    findWithRegex(RECURRING_REGEX, contentBlock, callback);
+  }
+
+  function dateAndTimeStrategy(contentBlock, callback, contentState) {
+    findWithRegex(DATE_AND_TIME_REGEX, contentBlock, callback);
   }
 
   // React.useEffect(() => {
