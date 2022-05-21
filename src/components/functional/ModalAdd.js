@@ -221,7 +221,6 @@ export function ModalAdd({
 
   // PATH 3: Duration
   let individualKeywordsPath3 = ["for"];
-  
 
   function findWithRegex(
     regex,
@@ -292,6 +291,7 @@ export function ModalAdd({
           calendarEndStateSetter(matchEndTime);
         }
       } else if (typeOfRegex === "DURATION") {
+        // kind of a hack, this may be unnecessary after bug fixes, but im lazy to check
         let initialTimeString =
           document.getElementById("time-suggestion").innerHTML;
 
@@ -301,7 +301,7 @@ export function ModalAdd({
         let match = matchArr[0];
         // remove "for" from matchArr[0]
         match = match.replace("for", "");
-        if (match.includes("hours")) {
+        if (match.includes("hours") || match.includes("hour")) {
           let matchCopy = match;
           matchCopy = matchCopy.replace("hours", "");
           hours = matchCopy;
