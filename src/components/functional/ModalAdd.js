@@ -10,6 +10,7 @@ import "draft-js/dist/Draft.css";
 
 import moment from "moment";
 import {handleTimeValueStringProcessing} from "../../helpers";
+import {ConstructionOutlined} from "@mui/icons-material";
 
 const Decorated = ({children}) => {
   return (
@@ -134,12 +135,12 @@ export function ModalAdd({
       //   component: Decorated,
       // },
       {
-        strategy: durationStrategy,
-        component: durationSpan,
-      },
-      {
         strategy: timeStrategy,
         component: timeSpan,
+      },
+      {
+        strategy: durationStrategy,
+        component: durationSpan,
       },
 
       {
@@ -160,6 +161,8 @@ export function ModalAdd({
   const [editorState, setEditorState] = React.useState(
     EditorState.createEmpty(createDecorator())
   );
+  const [internalModalInitialState, setInternalModalInitialState] =
+    React.useState("");
   const editor = React.useRef(null);
 
   function focusEditor() {
@@ -218,6 +221,7 @@ export function ModalAdd({
 
   // PATH 3: Duration
   let individualKeywordsPath3 = ["for"];
+  
 
   function findWithRegex(
     regex,
@@ -227,7 +231,8 @@ export function ModalAdd({
     modalInitialStateSetter,
     modalEndStateSetter,
     calendarInitialStateSetter,
-    calendarEndStateSetter
+    calendarEndStateSetter,
+    initialEventTime
   ) {
     const text = contentBlock.getText();
     let matchArr, start;
@@ -254,6 +259,7 @@ export function ModalAdd({
           let matchEndTime = moment().hours(hours).minutes(minutes);
           matchEndTime.add(1, "hours");
           modalInitialStateSetter(match.format("h:mm A"));
+          setInternalModalInitialState(match.format("h:mm A"));
           modalEndStateSetter(matchEndTime.format("h:mm A"));
           calendarInitialStateSetter(match);
           calendarEndStateSetter(matchEndTime);
@@ -265,12 +271,14 @@ export function ModalAdd({
           let matchEndTime = moment().hours(hours).minutes(minutes);
           matchEndTime.add(1, "hours");
           modalInitialStateSetter(match.format("h:mm A"));
+          setInternalModalInitialState(match.format("h:mm A"));
           modalEndStateSetter(matchEndTime.format("h:mm A"));
           calendarInitialStateSetter(match);
           calendarEndStateSetter(matchEndTime);
         } else {
           // if no "pm or "am" is in the string
           // remove p or a in the string
+
           match = match.replace("p", "");
           match = match.replace("a", "");
           hours = match;
@@ -278,8 +286,33 @@ export function ModalAdd({
           let matchEndTime = moment().hours(hours).minutes(minutes);
           matchEndTime.add(1, "hours");
           modalInitialStateSetter(match.format("h:mm A"));
+          setInternalModalInitialState(match.format("h:mm A"));
           modalEndStateSetter(matchEndTime.format("h:mm A"));
           calendarInitialStateSetter(match);
+          calendarEndStateSetter(matchEndTime);
+        }
+      } else if (typeOfRegex === "DURATION") {
+        let initialTimeString =
+          document.getElementById("time-suggestion").innerHTML;
+
+        let hours;
+        let minutes = 0;
+        // make a copy of matchArr[0]
+        let match = matchArr[0];
+        // remove "for" from matchArr[0]
+        match = match.replace("for", "");
+        if (match.includes("hours")) {
+          let matchCopy = match;
+          matchCopy = matchCopy.replace("hours", "");
+          hours = matchCopy;
+          // remove whitespace from hours
+          hours = hours.replace(/\s/g, "");
+          let matchEndTime = moment(initialTimeString, "LT").add(
+            hours,
+            "hours"
+          );
+
+          modalEndStateSetter(matchEndTime.format("h:mm A"));
           calendarEndStateSetter(matchEndTime);
         }
       }
@@ -311,12 +344,24 @@ export function ModalAdd({
       setModalInitialTimeValue,
       setModalEndTimeValue,
       setEventStartTime,
-      setEventEndTime
+      setEventEndTime,
+      modalInitialTimeValue
     );
   }
 
   function durationStrategy(contentBlock, callback, contentState) {
-    findWithRegex(DURATION_REGEX, contentBlock, callback);
+    let typeOfRegex = "DURATION";
+    findWithRegex(
+      DURATION_REGEX,
+      contentBlock,
+      callback,
+      typeOfRegex,
+      setModalInitialTimeValue,
+      setModalEndTimeValue,
+      setEventStartTime,
+      setEventEndTime,
+      modalInitialTimeValue
+    );
   }
 
   function recurringStrategy(contentBlock, callback, contentState) {
