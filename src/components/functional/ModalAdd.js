@@ -5,8 +5,87 @@ import {InitialTimePicker} from "./InitialTimePicker";
 import {FinalTimePicker} from "./FinalTimePicker";
 import {SmallCalendar} from "./SmallCalendar";
 import {Transition, Dialog} from "@headlessui/react";
+import {Editor, EditorState, CompositeDecorator, ContentState} from "draft-js";
+import "draft-js/dist/Draft.css";
 
 import moment from "moment";
+import {handleTimeValueStringProcessing} from "../../helpers";
+import {ConstructionOutlined} from "@mui/icons-material";
+
+const Decorated = ({children}) => {
+  return (
+    <span
+      style={{
+        background: "#86efac",
+        color: "#14532d",
+        padding: "0.2rem",
+        borderRadius: "0.2rem",
+      }}
+    >
+      {children}
+    </span>
+  );
+};
+
+const timeSpan = ({children}) => {
+  return (
+    <span
+      style={{
+        background: "#86efac",
+        color: "#14532d",
+        padding: "0.2rem",
+        borderRadius: "0.2rem",
+      }}
+    >
+      {children}
+    </span>
+  );
+};
+
+const durationSpan = ({children}) => {
+  return (
+    <span
+      style={{
+        background: "#86efac",
+        color: "#14532d",
+        padding: "0.2rem",
+        borderRadius: "0.2rem",
+      }}
+    >
+      {children}
+    </span>
+  );
+};
+
+const recurringSpan = ({children}) => {
+  return (
+    <span
+      style={{
+        background: "#86efac",
+        color: "#14532d",
+        padding: "0.2rem",
+        borderRadius: "0.2rem",
+      }}
+    >
+      {children}
+    </span>
+  );
+};
+
+const dateAndTimeSpan = ({children}) => {
+  return (
+    <span
+      style={{
+        background: "#86efac",
+        color: "#14532d",
+        padding: "0.2rem",
+        borderRadius: "0.2rem",
+      }}
+    >
+      {children}
+    </span>
+  );
+};
 
 export function ModalAdd({
   isOpenEventModal,
@@ -48,23 +127,276 @@ export function ModalAdd({
   currentRoutinePage,
   currentRoutinePageName,
   currentRoutinePageId,
+  recurring,
+  setRecurring,
 }) {
-  //   const [fireRoutineChecker, setFireRoutineChecker] = useState(false);
+  const createDecorator = () =>
+    new CompositeDecorator([
+      // {
+      //   strategy: dayStrategy,
+      //   component: Decorated,
+      // },
+      {
+        strategy: timeStrategy,
+        component: timeSpan,
+      },
+      {
+        strategy: durationStrategy,
+        component: durationSpan,
+      },
 
-  //   useEffect(() => {
-  //     if (fireRoutineChecker) {
-  //       if (!selectedRoutine && currentRoutinePage) {
-  //         console.log("Setting routine.. automitcally..");
-  //         console.log("currentRoutinePageId: ", currentRoutinePageId);
-  //         console.log("name: ", currentRoutinePageName);
-  //         setSelectedRoutine({
-  //           trackId: currentRoutinePageId,
-  //           name: currentRoutinePageName,
-  //         });
-  //       }
-  //       setFireRoutineChecker(false);
-  //     }
-  //   }, [fireRoutineChecker]);
+      {
+        strategy: recurringStrategy,
+        component: recurringSpan,
+      },
+      // {
+      //   strategy: dateAndTimeStrategy,
+      //   component: dateAndTimeSpan,
+      // },
+    ]);
+  // since Javascript doesn't support if|then|else regex, this is nested positive lookahead and reverse lookaheads
+  const TIME_REGEX =
+    /(?:(=?(at\s)(?:(=?\d\d?)|(?!\d\d?)(twelve))(?:(=?\s?pm?)|(?!\s?pm?)\s?am?)?)|(?!(at\s)(?:(=?\d\d?)|(?!\d\d?)(twelve))(?:(=?\s?pm?)|(?!\s?pm?)\s?am?)?)(?:(=?\d\d?)|(?!\d\d?)(twelve))(?:(=?\s?pm?)|(?!\s?pm?)\s?am?))/i;
+  const DURATION_REGEX =
+    /(for)(\s)(\d\d?\d?\s)(?:(=?hours?)|(?!hours?)minutes?)/i;
+  const RECURRING_REGEX = /(?:(=?everyday)|(?!everyday)recurring)/i;
+  const [editorState, setEditorState] = React.useState(
+    EditorState.createEmpty(createDecorator())
+  );
+  const [internalModalInitialState, setInternalModalInitialState] =
+    React.useState("");
+  const editor = React.useRef(null);
+
+  function focusEditor() {
+    editor.current.focus();
+  }
+  let individualKeywordsPath1 = ["today", "tomorrow", "weekend", "yesterday"];
+  // regex for any type of date
+  let DAYKeywordsPath1 = [
+    "monday",
+    "mon",
+    "tuesday",
+    "tues",
+    "wednesday",
+    "wed",
+    "thursday",
+    "thurs",
+    "thu",
+    "friday",
+    "fri",
+    "saturday",
+    "sat",
+    "sunday",
+    "sun",
+  ];
+  let NEXTKeywordsPath1 = ["week", "weekend", "month", "year", "weekday"];
+  let ATKeywordsPath1 = ["getTime"];
+  let DATEKeywordsPath1 = [
+    "jan",
+    "january",
+    "feb",
+    "february",
+    "mar",
+    "march",
+    "apr",
+    "april",
+    "may",
+    "jun",
+    "june",
+    "jul",
+    "july",
+    "aug",
+    "august",
+    "sep",
+    "september",
+    "oct",
+    "october",
+    "nov",
+    "november",
+    "dec",
+    "december",
+  ];
+
+  // PATH 2: Recurring
+  let EVERYKeywordsPath2 = ["week", "weekend", "month", "year", "weekday"];
+  let individualKeywordsPath2 = ["everyday", "recurring"];
+
+  // PATH 3: Duration
+  let individualKeywordsPath3 = ["for"];
+
+  function findWithRegex(
+    regex,
+    contentBlock,
+    callback,
+    typeOfRegex,
+    modalInitialStateSetter,
+    modalEndStateSetter,
+    calendarInitialStateSetter,
+    calendarEndStateSetter,
+    initialEventTime,
+    setEventAsRecurring
+  ) {
+    const text = contentBlock.getText();
+    let matchArr, start;
+    // while there is a match and we have not seen this match before
+    while (
+      (matchArr = regex.exec(text)) !== null &&
+      start !== matchArr.index &&
+      start !== matchArr.index + matchArr[0].length - 1
+    ) {
+      start = matchArr.index;
+      if (typeOfRegex === "TIME") {
+        let hours;
+        let minutes = "0";
+        // make a copy of matchArr[0]
+        let match = matchArr[0];
+        // remove "at" from matchArr[0]
+        match = match.replace("at", "");
+        // if "pm or "am" is in the string remove it
+        if (match.includes("pm")) {
+          match = match.replace("pm", "");
+          // match to number
+          hours = (parseInt(match) + 12).toString();
+          match = moment().hours(hours).minutes(minutes);
+          let matchEndTime = moment().hours(hours).minutes(minutes);
+          matchEndTime.add(1, "hours");
+          modalInitialStateSetter(match.format("h:mm A"));
+          setInternalModalInitialState(match.format("h:mm A"));
+          modalEndStateSetter(matchEndTime.format("h:mm A"));
+          calendarInitialStateSetter(match);
+          calendarEndStateSetter(matchEndTime);
+        } else if (match.includes("am")) {
+          match = match.replace("am", "");
+          // match to number
+          hours = match;
+          match = moment().hours(hours).minutes(minutes);
+          let matchEndTime = moment().hours(hours).minutes(minutes);
+          matchEndTime.add(1, "hours");
+          modalInitialStateSetter(match.format("h:mm A"));
+          setInternalModalInitialState(match.format("h:mm A"));
+          modalEndStateSetter(matchEndTime.format("h:mm A"));
+          calendarInitialStateSetter(match);
+          calendarEndStateSetter(matchEndTime);
+        } else {
+          // if no "pm or "am" is in the string
+          // remove p or a in the string
+
+          match = match.replace("p", "");
+          match = match.replace("a", "");
+          hours = match;
+          match = moment().hours(hours).minutes(minutes);
+          let matchEndTime = moment().hours(hours).minutes(minutes);
+          matchEndTime.add(1, "hours");
+          modalInitialStateSetter(match.format("h:mm A"));
+          setInternalModalInitialState(match.format("h:mm A"));
+          modalEndStateSetter(matchEndTime.format("h:mm A"));
+          calendarInitialStateSetter(match);
+          calendarEndStateSetter(matchEndTime);
+        }
+      } else if (typeOfRegex === "DURATION") {
+        // kind of a hack, this may be unnecessary after bug fixes, but im lazy to check
+        let initialTimeString =
+          document.getElementById("time-suggestion").innerHTML;
+
+        let hours;
+        let minutes = 0;
+        // make a copy of matchArr[0]
+        let match = matchArr[0];
+        // remove "for" from matchArr[0]
+        match = match.replace("for", "");
+        if (match.includes("hours") || match.includes("hour")) {
+          let matchCopy = match;
+          matchCopy = matchCopy.replace("hours", "");
+          hours = matchCopy;
+          // remove whitespace from hours
+          hours = hours.replace(/\s/g, "");
+          let matchEndTime = moment(initialTimeString, "LT").add(
+            hours,
+            "hours"
+          );
+
+          modalEndStateSetter(matchEndTime.format("h:mm A"));
+          calendarEndStateSetter(matchEndTime);
+        }
+      } else if (typeOfRegex === "RECURRING") {
+        setRecurring(true);
+      }
+      callback(start, start + matchArr[0].length);
+    }
+  }
+
+  const styles = {
+    editor: {
+      borderBottom: "1px solid gray",
+      paddingTop: "0.2rem",
+      paddingBottom: "0.2rem",
+      paddingLeft: "0.2rem",
+      paddingRight: "0.2rem",
+    },
+  };
+
+  function dayStrategy(contentBlock, callback) {
+    findWithRegex(DAYKeywordsPath1, contentBlock, callback);
+  }
+
+  function timeStrategy(contentBlock, callback, contentState) {
+    let typeOfRegex = "TIME";
+    findWithRegex(
+      TIME_REGEX,
+      contentBlock,
+      callback,
+      typeOfRegex,
+      setModalInitialTimeValue,
+      setModalEndTimeValue,
+      setEventStartTime,
+      setEventEndTime,
+      modalInitialTimeValue,
+      setRecurring
+    );
+  }
+
+  function durationStrategy(contentBlock, callback, contentState) {
+    let typeOfRegex = "DURATION";
+    findWithRegex(
+      DURATION_REGEX,
+      contentBlock,
+      callback,
+      typeOfRegex,
+      setModalInitialTimeValue,
+      setModalEndTimeValue,
+      setEventStartTime,
+      setEventEndTime,
+      modalInitialTimeValue,
+      setRecurring
+    );
+  }
+
+  function recurringStrategy(contentBlock, callback, contentState) {
+    let typeOfRegex = "RECURRING";
+    findWithRegex(
+      RECURRING_REGEX,
+      contentBlock,
+      callback,
+      typeOfRegex,
+      setModalInitialTimeValue,
+      setModalEndTimeValue,
+      setEventStartTime,
+      setEventEndTime,
+      modalInitialTimeValue,
+      setRecurring
+    );
+  }
+
+  function dateAndTimeStrategy(contentBlock, callback, contentState) {
+    findWithRegex(DATE_AND_TIME_REGEX, contentBlock, callback);
+  }
+
+  // React.useEffect(() => {
+  //   if (isOpenEventModal) {
+  //     focusEditor();
+  //   }
+  // }, [isOpenEventModal]);
+
   return (
     <Transition appear show={isOpenEventModal} as={Fragment}>
       <Dialog
@@ -112,12 +444,12 @@ export function ModalAdd({
           New Event
         </Dialog.Title> */}
               <div className="flex flex-col mb-4 gap-3 content-between">
-                <TextField
+                {/* <TextField
                   className="mt-3 w-full  text-gray-900 placeholder-gray-500 focus:rounded-md focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out border-0 border-b border-gray-300"
                   type="text"
                   value={eventName}
                   onChange={(e) => setEventName(e.target.value)}
-                  placeholder="Add title"
+                  placeholder={'"Study everyday at 12pm for 2 hours"'}
                   onKeyDown={(e) => handleKeypress(e)}
                   variant="standard"
                   id="event-name"
@@ -129,7 +461,28 @@ export function ModalAdd({
                       },
                     },
                   }}
-                />
+                /> */}
+                <div style={styles.editor}>
+                  <Editor
+                    ref={editor}
+                    editorState={editorState}
+                    onChange={(editorState) => {
+                      setEditorState(editorState);
+                      setEventName(
+                        // remove all words from the words array
+                        editorState
+                          .getCurrentContent()
+                          .getPlainText()
+                          .replace(
+                            /\b(everyday|morning|afternoon|evening|2 hours|for)\b/g,
+                            ""
+                          )
+                      );
+                    }}
+                    placeholder="Study everyday at 12pm for 2 hours"
+                  />
+                </div>
+
                 <div className="flex flex-col gap-3">
                   <div className="cursor-pointer flex flex-row items-center gap-2 border-b border-b-gray-300 w-32 hover:bg-gray-100 hover:rounded-md hover:border-b-gray-100">
                     <svg

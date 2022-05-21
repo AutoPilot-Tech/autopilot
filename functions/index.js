@@ -25,13 +25,17 @@ admin.initializeApp({
   databaseURL: "https://autopilot-7ab12.firebaseio.com",
 });
 
-// const app = express();
+// const api = express();
 const db = admin.firestore();
 
 /*
 EXPRESS SERVER ROUTES
 */
 
+// test server
+// api.get("/", (req, res) => {
+//   res.status(200).send("CONNECTED");
+// });
 // // Get the tasks for the Tasks Component to show
 // app.get("/app/**", async (req, res) => {
 //   res.status(200).send("KYS LOL");
@@ -56,7 +60,7 @@ EXPRESS SERVER ROUTES
 //   res.status(200).send(tasks);
 // });
 
-// exports.app = functions.https.onRequest(app);
+// exports.api = functions.https.onRequest(api);
 
 /*
 FUNCTIONS

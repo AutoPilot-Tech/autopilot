@@ -58,6 +58,7 @@ export function CalendarHome({
   );
   const [eventStartTime, setEventStartTime] = useState(moment());
   const [eventEndTime, setEventEndTime] = useState(moment().add(1, "hour"));
+  const [recurring, setRecurring] = useState(false);
 
   useEffect(() => {
     // if year month or day are -1, set to today
@@ -115,6 +116,7 @@ export function CalendarHome({
   }
 
   function addEvent() {
+    console.log("Recurring?", recurring);
     const userId = auth.currentUser.uid;
     const taskId = generatePushId();
     const eventId = generatePushId();
@@ -137,62 +139,150 @@ export function CalendarHome({
       routineNameForEvent = "Inbox";
     }
 
-    db.collection("users")
-      .doc(auth.currentUser.uid)
-      .collection("events")
-      .doc(eventId)
-      .set({
-        archived: false,
-        routineId: routineIdForEvent,
-        title: eventName,
-        start: moment(eventStartTime).format("YYYY-MM-DDTHH:mm:ss"),
-        end: moment(eventEndTime).format("YYYY-MM-DDTHH:mm:ss"),
-        userId: userId,
-        maintenanceRequired: false,
-        gridRow: gridRowForCalendar,
-        span: gridSpanForCalendar,
-        textColor: "text-blue-500",
-        bgColor: "bg-blue-50",
-        key: generateKey(),
-        routineName: routineNameForEvent,
-        taskId: taskId,
-      })
-      .then((docRef) => {
-        db.collection("tasks")
-          .where("trackId", "==", routineIdForEvent)
-          .get()
-          .then(function (querySnapshot) {
-            return querySnapshot.size;
+    // if the event is recurring
+    if (recurring) {
+      // create a copy of start and endtimes
+      let recurringStartTimeCopy = moment(eventStartTime);
+      let recurringEndTimeCopy = moment(eventEndTime);
+      // for 7 iterations
+      for (let i = 0; i < 7; i++) {
+        let newEventId = generatePushId();
+        let newTaskId = generatePushId();
+        console.log(`${i} iteration, new event id: ${newEventId}`);
+        console.log(`${i} iteration, new task id: ${newTaskId}`);
+        // create a new event
+        let maintenanceRequired = false;
+        if (i >= 5) {
+          maintenanceRequired = true;
+        }
+        db.collection("users")
+          .doc(auth.currentUser.uid)
+          .collection("events")
+          .doc(newEventId)
+          .set({
+            archived: false,
+            routineId: routineIdForEvent,
+            title: eventName,
+            start: moment(recurringStartTimeCopy)
+              .add(i, "days")
+              .format("YYYY-MM-DDTHH:mm:ss"),
+            end: moment(recurringEndTimeCopy)
+              .add(i, "days")
+              .format("YYYY-MM-DDTHH:mm:ss"),
+            userId: userId,
+            maintenanceRequired: maintenanceRequired,
+            gridRow: gridRowForCalendar,
+            span: gridSpanForCalendar,
+            textColor: "text-blue-500",
+            bgColor: "bg-blue-50",
+            key: generateKey(),
+            routineName: routineNameForEvent,
+            taskId: newTaskId,
           })
-          .then((tasksLength) => {
-            let taskStartTime;
-            let taskEndTime;
-            let taskDate;
-            if (routineIdForEvent === "INBOX") {
-              taskStartTime = "";
-              taskEndTime = "";
-              taskDate = "";
-            } else {
-              taskStartTime = moment(eventStartTime).format(
-                "YYYY-MM-DDTHH:mm:ss"
-              );
-              taskEndTime = moment(eventEndTime).format("YYYY-MM-DDTHH:mm:ss");
-              taskDate = selectedDate;
-            }
-            db.collection("tasks").doc(taskId).set({
-              archived: false,
-              trackId: routineIdForEvent,
-              title: eventName,
-              task: eventName,
-              date: taskDate,
-              start: taskStartTime,
-              end: taskEndTime,
-              index: tasksLength,
-              userId: auth.currentUser.uid,
-              eventId: eventId,
-            });
+          .then((docRef) => {
+            db.collection("tasks")
+              .where("trackId", "==", routineIdForEvent)
+              .get()
+              .then(function (querySnapshot) {
+                return querySnapshot.size;
+              })
+              .then((tasksLength) => {
+                let taskRecurringStartTime;
+                let taskRecurringEndTime;
+                let taskRecurringDate;
+                let eventStartTimeClone = eventStartTime;
+                let eventEndTimeClone = eventEndTime;
+                let taskDateClone = selectedDate;
+                if (routineIdForEvent === "INBOX") {
+                  taskRecurringStartTime = "";
+                  taskRecurringEndTime = "";
+                  taskRecurringDate = "";
+                } else {
+                  taskRecurringStartTime = moment(eventStartTimeClone)
+                    .add(i, "days")
+                    .format("YYYY-MM-DDTHH:mm:ss");
+                  taskRecurringEndTime = moment(eventEndTimeClone)
+                    .add(i, "days")
+                    .format("YYYY-MM-DDTHH:mm:ss");
+                  taskRecurringDate = moment(taskDateClone)
+                    .add(i, "days")
+                    .format("YYYY-MM-DDTHH:mm:ss");
+                }
+                db.collection("tasks").doc(newTaskId).set({
+                  archived: false,
+                  trackId: routineIdForEvent,
+                  title: eventName,
+                  task: eventName,
+                  date: taskRecurringDate,
+                  start: taskRecurringStartTime,
+                  end: taskRecurringStartTime,
+                  index: tasksLength,
+                  userId: auth.currentUser.uid,
+                  eventId: newEventId,
+                });
+              });
           });
-      });
+      }
+    } else {
+      db.collection("users")
+        .doc(auth.currentUser.uid)
+        .collection("events")
+        .doc(eventId)
+        .set({
+          archived: false,
+          routineId: routineIdForEvent,
+          title: eventName,
+          start: moment(eventStartTime).format("YYYY-MM-DDTHH:mm:ss"),
+          end: moment(eventEndTime).format("YYYY-MM-DDTHH:mm:ss"),
+          userId: userId,
+          maintenanceRequired: false,
+          gridRow: gridRowForCalendar,
+          span: gridSpanForCalendar,
+          textColor: "text-blue-500",
+          bgColor: "bg-blue-50",
+          key: generateKey(),
+          routineName: routineNameForEvent,
+          taskId: taskId,
+        })
+        .then((docRef) => {
+          db.collection("tasks")
+            .where("trackId", "==", routineIdForEvent)
+            .get()
+            .then(function (querySnapshot) {
+              return querySnapshot.size;
+            })
+            .then((tasksLength) => {
+              let taskStartTime;
+              let taskEndTime;
+              let taskDate;
+              if (routineIdForEvent === "INBOX") {
+                taskStartTime = "";
+                taskEndTime = "";
+                taskDate = "";
+              } else {
+                taskStartTime = moment(eventStartTime).format(
+                  "YYYY-MM-DDTHH:mm:ss"
+                );
+                taskEndTime = moment(eventEndTime).format(
+                  "YYYY-MM-DDTHH:mm:ss"
+                );
+                taskDate = selectedDate;
+              }
+              db.collection("tasks").doc(taskId).set({
+                archived: false,
+                trackId: routineIdForEvent,
+                title: eventName,
+                task: eventName,
+                date: taskDate,
+                start: taskStartTime,
+                end: taskEndTime,
+                index: tasksLength,
+                userId: auth.currentUser.uid,
+                eventId: eventId,
+              });
+            });
+        });
+    }
   }
 
   return (
@@ -243,6 +333,8 @@ export function CalendarHome({
             setEventEndTime={setEventEndTime}
             addEvent={addEvent}
             currentRoutinePage={false}
+            recurring={recurring}
+            setRecurring={setRecurring}
           />
           <div className="flex flex-auto flex-col overflow-auto">
             <div className="flex w-full flex-auto">
