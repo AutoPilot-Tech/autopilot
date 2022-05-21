@@ -127,6 +127,8 @@ export function ModalAdd({
   currentRoutinePage,
   currentRoutinePageName,
   currentRoutinePageId,
+  recurring,
+  setRecurring,
 }) {
   const createDecorator = () =>
     new CompositeDecorator([
@@ -153,7 +155,8 @@ export function ModalAdd({
       // },
     ]);
   // since Javascript doesn't support if|then|else regex, this is nested positive lookahead and reverse lookaheads
-  const TIME_REGEX = /(?:(=?(at\s)(?:(=?\d\d?)|(?!\d\d?)(twelve))(?:(=?\s?pm?)|(?!\s?pm?)\s?am?)?)|(?!(at\s)(?:(=?\d\d?)|(?!\d\d?)(twelve))(?:(=?\s?pm?)|(?!\s?pm?)\s?am?)?)(?:(=?\d\d?)|(?!\d\d?)(twelve))(?:(=?\s?pm?)|(?!\s?pm?)\s?am?))/i
+  const TIME_REGEX =
+    /(?:(=?(at\s)(?:(=?\d\d?)|(?!\d\d?)(twelve))(?:(=?\s?pm?)|(?!\s?pm?)\s?am?)?)|(?!(at\s)(?:(=?\d\d?)|(?!\d\d?)(twelve))(?:(=?\s?pm?)|(?!\s?pm?)\s?am?)?)(?:(=?\d\d?)|(?!\d\d?)(twelve))(?:(=?\s?pm?)|(?!\s?pm?)\s?am?))/i;
   const DURATION_REGEX =
     /(for)(\s)(\d\d?\d?\s)(?:(=?hours?)|(?!hours?)minutes?)/i;
   const RECURRING_REGEX = /(?:(=?everyday)|(?!everyday)recurring)/i;
@@ -230,7 +233,8 @@ export function ModalAdd({
     modalEndStateSetter,
     calendarInitialStateSetter,
     calendarEndStateSetter,
-    initialEventTime
+    initialEventTime,
+    setEventAsRecurring
   ) {
     const text = contentBlock.getText();
     let matchArr, start;
@@ -314,6 +318,8 @@ export function ModalAdd({
           modalEndStateSetter(matchEndTime.format("h:mm A"));
           calendarEndStateSetter(matchEndTime);
         }
+      } else if (typeOfRegex === "RECURRING") {
+        setRecurring(true);
       }
       callback(start, start + matchArr[0].length);
     }
@@ -344,7 +350,8 @@ export function ModalAdd({
       setModalEndTimeValue,
       setEventStartTime,
       setEventEndTime,
-      modalInitialTimeValue
+      modalInitialTimeValue,
+      setRecurring
     );
   }
 
@@ -359,20 +366,25 @@ export function ModalAdd({
       setModalEndTimeValue,
       setEventStartTime,
       setEventEndTime,
-      modalInitialTimeValue
+      modalInitialTimeValue,
+      setRecurring
     );
   }
 
   function recurringStrategy(contentBlock, callback, contentState) {
     let typeOfRegex = "RECURRING";
-    findWithRegex(RECURRING_REGEX, contentBlock, callback,
+    findWithRegex(
+      RECURRING_REGEX,
+      contentBlock,
+      callback,
       typeOfRegex,
       setModalInitialTimeValue,
       setModalEndTimeValue,
       setEventStartTime,
       setEventEndTime,
-      modalInitialTimeValue
-      );
+      modalInitialTimeValue,
+      setRecurring
+    );
   }
 
   function dateAndTimeStrategy(contentBlock, callback, contentState) {
