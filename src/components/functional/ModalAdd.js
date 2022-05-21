@@ -153,8 +153,7 @@ export function ModalAdd({
       // },
     ]);
   // since Javascript doesn't support if|then|else regex, this is nested positive lookahead and reverse lookaheads
-  const TIME_REGEX =
-    /(?:(=?(at\s)(\d\d?)(?:(=?\s?pm?)|(?!\s?pm?)\s?am?)?)|(?!(at\s)(\d\d?)(?:(=?\s?pm?)|(?!\s?pm?)\s?am?)?)\d\d?(?:(=?\s?pm?)|(?!\s?pm?)\s?am?))/i;
+  const TIME_REGEX = /(?:(=?(at\s)(?:(=?\d\d?)|(?!\d\d?)(twelve))(?:(=?\s?pm?)|(?!\s?pm?)\s?am?)?)|(?!(at\s)(?:(=?\d\d?)|(?!\d\d?)(twelve))(?:(=?\s?pm?)|(?!\s?pm?)\s?am?)?)(?:(=?\d\d?)|(?!\d\d?)(twelve))(?:(=?\s?pm?)|(?!\s?pm?)\s?am?))/i
   const DURATION_REGEX =
     /(for)(\s)(\d\d?\d?\s)(?:(=?hours?)|(?!hours?)minutes?)/i;
   const RECURRING_REGEX = /(?:(=?everyday)|(?!everyday)recurring)/i;
@@ -365,7 +364,15 @@ export function ModalAdd({
   }
 
   function recurringStrategy(contentBlock, callback, contentState) {
-    findWithRegex(RECURRING_REGEX, contentBlock, callback);
+    let typeOfRegex = "RECURRING";
+    findWithRegex(RECURRING_REGEX, contentBlock, callback,
+      typeOfRegex,
+      setModalInitialTimeValue,
+      setModalEndTimeValue,
+      setEventStartTime,
+      setEventEndTime,
+      modalInitialTimeValue
+      );
   }
 
   function dateAndTimeStrategy(contentBlock, callback, contentState) {
