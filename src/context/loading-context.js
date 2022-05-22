@@ -7,6 +7,7 @@ export const LoadingProvider = ({children}) => {
   const [displayName, setDisplayName] = useState("");
   const [photoUrl, setPhotoUrl] = useState("");
   const [tracksLoading, setTracksLoading] = useState(true);
+  const [openSideBar, setOpenSideBar] = useState(false);
   return (
     <LoadingContext.Provider
       value={{
@@ -18,6 +19,8 @@ export const LoadingProvider = ({children}) => {
         setPhotoUrl,
         tracksLoading,
         setTracksLoading,
+        openSideBar,
+        setOpenSideBar,
       }}
     >
       {children}

@@ -12,6 +12,7 @@ import {CircularButton} from "../CircularButton";
 import {useLoadingValue} from "../../context/loading-context";
 import {useTracksValue} from "../../context/tracks-context";
 import moment from "moment";
+import {useNavigate} from "react-router-dom";
 
 const logOut = () => {
   auth
@@ -42,8 +43,11 @@ function classNames(...classes) {
 }
 
 export function Header() {
+  let navigate = useNavigate();
+
   // const {photoUrl} = useLoadingValue();
-  const {openSideBar, setOpenSideBar, nowValue, setNowValue} = useTracksValue();
+  const {nowValue, setNowValue} = useTracksValue();
+  const {openSideBar, setOpenSideBar} = useLoadingValue();
 
   return (
     <header className="relative z-20 flex flex-none items-center justify-between border-b border-gray-200 py-1 px-6">
@@ -55,13 +59,18 @@ export function Header() {
             setOpenSideBar(!openSideBar);
           }}
         />
-        <a className="hidden lg:block" href="/app/calendar/home">
+        <div
+          className="hidden lg:block lg:cursor-pointer"
+          onClick={() => {
+            navigate("/app/calendar/home");
+          }}
+        >
           <img
             className="select-none block w-auto h-14 sm:w-32 sm:h-10 lg:w-auto lg:h-14"
             src="../../../../images/autopilot_alpha.png"
             alt="Autopilot"
           />
-        </a>
+        </div>
       </div>
       <div className="flex">
         <h1 className="text-lg font-semibold text-gray-900 mr-2">

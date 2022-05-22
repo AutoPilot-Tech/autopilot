@@ -1,13 +1,18 @@
 import React, {useState} from "react";
 import {Routines} from "../Routines";
 import {useTracksValue} from "../../context/tracks-context";
+import {useLoadingValue} from "../../context/loading-context";
 import {amplitude} from "../../utilities/amplitude";
 import {auth} from "../../firebase";
 import {AddRoutine} from "../AddRoutine";
+import {Link, Navigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 export const Sidebar = () => {
-  const {setSelectedTrack, setIsRoutine, openSideBar, setOpenSideBar} =
-    useTracksValue();
+  let navigate = useNavigate();
+
+  const {setSelectedTrack, setIsRoutine} = useTracksValue();
+  const {openSideBar, setOpenSideBar} = useLoadingValue();
   const [showTracks, setShowTracks] = useState(true);
   const [active, setActive] = useState("calendar");
 
@@ -42,7 +47,7 @@ export const Sidebar = () => {
             setSelectedTrack("CALENDAR");
             setIsRoutine(false);
             // navigate to /app/calendar/home
-            window.location.assign(`/app/calendar/home`);
+            navigate("/app/calendar/home");
           }}
         >
           <span className="mr-2">
@@ -77,7 +82,7 @@ export const Sidebar = () => {
             setIsRoutine(false);
             // if the current route does not contain tasks, navigate
             // to /app/inbox/home
-            window.location.assign(`/app/tasks/INBOX`);
+            navigate(`/app/tasks/INBOX`);
           }}
         >
           <span className="mr-2">

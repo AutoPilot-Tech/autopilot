@@ -5,6 +5,7 @@ import {useTasks} from "../hooks";
 import {collatedTasks} from "../constants";
 import {getTitle, getCollatedTitle, collatedTasksExist} from "../helpers";
 import {useTracksValue} from "../context/tracks-context";
+import {useLoadingValue} from "../context/loading-context";
 import {Calendar} from "../../src/components/Calendar";
 
 import {RoutineSettings} from "./RoutineSettings";
@@ -33,8 +34,8 @@ function generateKey() {
 
 // this just gets the tasks and renders them
 export const Tasks = ({trackId, isOpenEventModal, setIsOpenEventModal}) => {
-  const {tracks, selectedTrack, setSelectedTrack, isRoutine, openSideBar} =
-    useTracksValue();
+  const {tracks, selectedTrack, setSelectedTrack, isRoutine} = useTracksValue();
+  const {openSideBar, setOpenSideBar} = useLoadingValue();
   let {tasks, setTasks} = useTasks(trackId);
   const tasksRef = useRef(tasks);
   const [eventName, setEventName] = useState("");

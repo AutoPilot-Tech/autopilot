@@ -21,7 +21,7 @@ export const CalendarHomeView = () => {
   let {year, month, day} = useParams();
   // This is a global state provided by loading Context
   const {loading, setLoading} = useLoadingValue();
-  const [userLoading, setUserLoading] = useState(true);
+  const [userLoading, setUserLoading] = useState(false);
   const {setDisplayName, setPhotoUrl} = useLoadingValue();
   const [showBanner, setShowBanner] = useState(false);
   const [isOpenEventModal, setIsOpenEventModal] = useState(false);
@@ -60,9 +60,10 @@ export const CalendarHomeView = () => {
       <TracksProvider>
         <Header />
         <div className="overflow-x-hidden">
-          {showBanner ? <Banner setShowBanner={setShowBanner} /> : null}
           <div className="relative" id="content">
             <Sidebar />
+            {/* routes */}
+            
             <CalendarHome
               year={year}
               month={month}

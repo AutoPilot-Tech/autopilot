@@ -5,6 +5,7 @@ import moment from "moment";
 
 import {auth, db} from "../../firebase";
 import {useTracksValue} from "../../context/tracks-context";
+import {useLoadingValue} from "../../context/loading-context";
 
 import {getGridRowFromTime} from "../../helpers/index";
 import {getGridSpanFromTime} from "../../helpers/index";
@@ -30,7 +31,8 @@ export function CalendarHome({
   isOpenEventModal,
   setIsOpenEventModal,
 }) {
-  const {openSideBar, setOpenSideBar, nowValue, setNowValue} = useTracksValue();
+  const { nowValue, setNowValue} = useTracksValue();
+  const {openSideBar, setOpenSideBar} = useLoadingValue();
   const [eventName, setEventName] = useState("");
   const [showSmallCalendar, setShowSmallCalendar] = useState(false);
   const [modalSettingOpen, setModalSettingOpen] = useState(false);

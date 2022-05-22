@@ -1,6 +1,7 @@
 import React from "react";
 import {useTracksValue} from "../context/tracks-context";
 import {IndividualRoutine} from "./IndividualRoutine";
+import {useNavigate} from "react-router-dom";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -12,6 +13,8 @@ async function setState(setter, value) {
 }
 
 export const Routines = ({active, setActive}) => {
+  let navigate = useNavigate();
+
   const {tracks, setSelectedTrack, isRoutine, setIsRoutine} = useTracksValue();
   return (
     <div className="space-y-1 pr-1">
@@ -38,7 +41,7 @@ export const Routines = ({active, setActive}) => {
                 setActive(track.trackId);
                 setSelectedTrack(track.trackId);
                 setIsRoutine(false);
-                window.location.assign(`/app/tasks/${track.trackId}`);
+                navigate(`/app/tasks/${track.trackId}`);
               }}
             >
               <IndividualRoutine track={track} />
