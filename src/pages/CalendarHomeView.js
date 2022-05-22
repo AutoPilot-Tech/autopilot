@@ -1,4 +1,6 @@
 import React, {useState, useEffect} from "react";
+import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
+
 import AdapterMoment from "@mui/lab/AdapterMoment";
 import {LocalizationProvider} from "@mui/lab";
 import {Header} from "../components/layout/Header";
@@ -13,6 +15,8 @@ import {CalendarHome} from "../components/layout/CalendarHome";
 import {useParams} from "react-router-dom";
 import {PlusSmIcon as PlusSmIconOutline} from "@heroicons/react/outline";
 import {AddEvent} from "../components/functional/AddEvent";
+import {TaskView} from "./TaskView";
+import {Tasks} from "../components/Tasks";
 
 // note: see src/context. Since we want to use tracksprovider at the
 // top level, we are using it here in App. This can be replaced
@@ -21,7 +25,7 @@ export const CalendarHomeView = () => {
   let {year, month, day} = useParams();
   // This is a global state provided by loading Context
   const {loading, setLoading} = useLoadingValue();
-  const [userLoading, setUserLoading] = useState(true);
+  const [userLoading, setUserLoading] = useState(false);
   const {setDisplayName, setPhotoUrl} = useLoadingValue();
   const [showBanner, setShowBanner] = useState(false);
   const [isOpenEventModal, setIsOpenEventModal] = useState(false);
@@ -60,16 +64,33 @@ export const CalendarHomeView = () => {
       <TracksProvider>
         <Header />
         <div className="overflow-x-hidden">
-          {showBanner ? <Banner setShowBanner={setShowBanner} /> : null}
           <div className="relative" id="content">
             <Sidebar />
-            <CalendarHome
-              year={year}
-              month={month}
-              day={day}
-              isOpenEventModal={isOpenEventModal}
-              setIsOpenEventModal={setIsOpenEventModal}
-            />
+            {/* routes */}
+            <Routes>
+              <Route
+                path="calendar/home"
+                element={
+                  <CalendarHome
+                    year={year}
+                    month={month}
+                    day={day}
+                    isOpenEventModal={isOpenEventModal}
+                    setIsOpenEventModal={setIsOpenEventModal}
+                  />
+                }
+              />
+              <Route
+                path="tasks/:trackId"
+                element={
+                  <Tasks
+                    isOpenEventModal={isOpenEventModal}
+                    setIsOpenEventModal={setIsOpenEventModal}
+                  />
+                }
+              />
+            </Routes>
+
             <AddEvent
               isOpenEventModal={isOpenEventModal}
               setIsOpenEventModal={setIsOpenEventModal}

@@ -1,10 +1,12 @@
 import React, {useEffect, useState, useRef, useCallback} from "react";
 import update from "immutability-helper";
+import {useParams} from "react-router-dom";
 
 import {useTasks} from "../hooks";
 import {collatedTasks} from "../constants";
 import {getTitle, getCollatedTitle, collatedTasksExist} from "../helpers";
 import {useTracksValue} from "../context/tracks-context";
+import {useLoadingValue} from "../context/loading-context";
 import {Calendar} from "../../src/components/Calendar";
 
 import {RoutineSettings} from "./RoutineSettings";
@@ -32,10 +34,12 @@ function generateKey() {
 }
 
 // this just gets the tasks and renders them
-export const Tasks = ({trackId, isOpenEventModal, setIsOpenEventModal}) => {
-  const {tracks, selectedTrack, setSelectedTrack, isRoutine, openSideBar} =
+export const Tasks = ({isOpenEventModal, setIsOpenEventModal}) => {
+  const {trackId} = useParams();
+
+  const {tasks, setTasks, tracks, selectedTrack, setSelectedTrack, isRoutine} =
     useTracksValue();
-  let {tasks, setTasks} = useTasks(trackId);
+  const {openSideBar, setOpenSideBar} = useLoadingValue();
   const tasksRef = useRef(tasks);
   const [eventName, setEventName] = useState("");
   const [showSmallCalendar, setShowSmallCalendar] = useState(false);

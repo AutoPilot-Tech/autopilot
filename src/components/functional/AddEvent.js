@@ -1,8 +1,8 @@
 import {PlusSmIcon as PlusSmIconOutline} from "@heroicons/react/outline";
-import {useTracksValue} from "../../context/tracks-context";
+import {useLoadingValue} from "../../context/loading-context";
 
 export function AddEvent({setIsOpenEventModal, isOpenEventModal}) {
-  const {openSideBar, setOpenSideBar} = useTracksValue();
+  const {openSideBar, setOpenSideBar} = useLoadingValue();
   return (
     <>
       <button

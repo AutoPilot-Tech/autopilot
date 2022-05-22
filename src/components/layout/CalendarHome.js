@@ -1,10 +1,12 @@
 import React, {useEffect, useRef, useState} from "react";
+import {useNavigate} from "react-router-dom";
 
 import {IndividualCalendarRow} from "../functional/IndividualCalendarRow";
 import moment from "moment";
 
 import {auth, db} from "../../firebase";
 import {useTracksValue} from "../../context/tracks-context";
+import {useLoadingValue} from "../../context/loading-context";
 
 import {getGridRowFromTime} from "../../helpers/index";
 import {getGridSpanFromTime} from "../../helpers/index";
@@ -30,7 +32,10 @@ export function CalendarHome({
   isOpenEventModal,
   setIsOpenEventModal,
 }) {
-  const {openSideBar, setOpenSideBar, nowValue, setNowValue} = useTracksValue();
+  let navigate = useNavigate();
+
+  const {nowValue, setNowValue} = useTracksValue();
+  const {openSideBar, setOpenSideBar} = useLoadingValue();
   const [eventName, setEventName] = useState("");
   const [showSmallCalendar, setShowSmallCalendar] = useState(false);
   const [modalSettingOpen, setModalSettingOpen] = useState(false);
@@ -430,8 +435,10 @@ export function CalendarHome({
                       }}
                       key={block.key}
                     >
-                      <a
-                        href={`/app/tasks/${block.routineId}`}
+                      <div
+                        onClick={() => {
+                          navigate(`/app/tasks/${block.routineId}`);
+                        }}
                         className="group absolute inset-1 flex flex-col overflow-y-auto rounded-lg bg-blue-50 pl-2 pt-1 text-xs leading-4 hover:bg-blue-100"
                       >
                         <div className="flex flex-row content-end">
@@ -447,7 +454,7 @@ export function CalendarHome({
                             block.start
                           ).format("h:mm A")}`}</time>
                         </p>
-                      </a>
+                      </div>
                     </li>
                   ))}
                 </ol>
