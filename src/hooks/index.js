@@ -171,6 +171,7 @@ export const useTracks = () => {
   const [tracks, setTracks] = useState([]);
   const {setTracksLoading} = useLoadingValue();
   useEffect(() => {
+    console.log("useTracks just ran");
     let userId = auth.currentUser.uid;
     db.collection("tracks")
       .where("userId", "==", userId)

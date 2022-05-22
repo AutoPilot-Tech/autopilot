@@ -36,7 +36,9 @@ function generateKey() {
 export const Tasks = ({trackId, isOpenEventModal, setIsOpenEventModal}) => {
   const {tasks, setTasks, tracks, selectedTrack, setSelectedTrack, isRoutine} =
     useTracksValue();
-  const {openSideBar, setOpenSideBar} = useLoadingValue();
+
+  const {userData, openSideBar, setOpenSideBar} = useLoadingValue();
+
   const tasksRef = useRef(tasks);
   const [eventName, setEventName] = useState("");
   const [showSmallCalendar, setShowSmallCalendar] = useState(false);
@@ -217,6 +219,7 @@ export const Tasks = ({trackId, isOpenEventModal, setIsOpenEventModal}) => {
 
   useEffect(() => {
     setSelectedTrack(trackId);
+    console.log(userData);
   }, []);
 
   useEffect(() => {
@@ -284,12 +287,16 @@ export const Tasks = ({trackId, isOpenEventModal, setIsOpenEventModal}) => {
         {/* {isRoutine ? <RoutineSettings /> : <></>} */}
 
         {/* if there are no tasks, show the emptystate component, otherwise render them */}
-        {tasks.length === 0 ? (
+        {!userData[trackId] || userData[trackId].length === 0 ? (
           <EmptyStateTasks />
         ) : (
           <>
             <div className="flex flex-col shadow ring-2 p-1 bg-white ring-black ring-opacity-5 md:rounded-lg ">
-              <ul>{tasks.map((task) => renderTask(task, tasks))}</ul>
+              {/* Get the tasks from userData using this TrackId */}
+              <ul>
+                {userData[trackId] &&
+                  userData[trackId].map((task) => renderTask(task, tasks))}
+              </ul>
             </div>
           </>
         )}

@@ -22,7 +22,8 @@ export const CalendarHomeView = () => {
   // This is a global state provided by loading Context
   const {loading, setLoading} = useLoadingValue();
   const [userLoading, setUserLoading] = useState(false);
-  const {setDisplayName, setPhotoUrl} = useLoadingValue();
+  const {userData, setUserData, setDisplayName, setPhotoUrl} =
+    useLoadingValue();
   const [showBanner, setShowBanner] = useState(false);
   const [isOpenEventModal, setIsOpenEventModal] = useState(false);
   // const {tracksLoading, setTracksLoading} = useLoadingValue();
@@ -36,16 +37,30 @@ export const CalendarHomeView = () => {
     });
   }, []);
 
+  // PRE LOADING USER DATA
   useEffect(() => {
+    let tasksMapToTrackId = {};
+
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
-        // get the user's name from db
-        setDisplayName(user.displayName);
-        setPhotoUrl(user.photoURL);
-        // check to see if the user's tracks are loaded
-        setLoading(false);
-      } else {
-        console.log("User is not signed in");
+        db.collection("tasks")
+          .where("userId", "==", auth.currentUser.uid)
+          .get()
+          .then((snapshot) => {
+            snapshot.forEach((doc) => {
+              let task = doc.data();
+              // if the trackId doesnt have any tasks, add it to the map
+              if (!tasksMapToTrackId[task.trackId]) {
+                tasksMapToTrackId[task.trackId] = [];
+              }
+              tasksMapToTrackId[task.trackId].push(task);
+            });
+          })
+          .then(() => {
+            setUserData(tasksMapToTrackId);
+            setLoading(false);
+            console.log("Finished pre-loading.", tasksMapToTrackId);
+          });
       }
     });
     return unsubscribe;
@@ -63,7 +78,7 @@ export const CalendarHomeView = () => {
           <div className="relative" id="content">
             <Sidebar />
             {/* routes */}
-            
+
             <CalendarHome
               year={year}
               month={month}
