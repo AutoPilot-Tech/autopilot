@@ -12,7 +12,7 @@ export const LoadingProvider = ({children}) => {
   const [openSideBar, setOpenSideBar] = useState(false);
 
   useEffect(() => {
-    const mql = window.matchMedia("(max-width: 812px");
+    const mql = window.matchMedia("(max-width: 812px)");
     if (!mql.matches) {
       setOpenSideBar(true);
     }
