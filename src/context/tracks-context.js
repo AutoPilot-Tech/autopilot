@@ -2,6 +2,7 @@ import React, {createContext, useContext, useState} from "react";
 import {useTracks} from "../hooks";
 import {useEvents} from "../hooks";
 import {useActive} from "../hooks";
+import {useTasks} from "../hooks";
 import moment from "moment";
 
 // allows us to pass data down the component, without props.
@@ -19,6 +20,7 @@ export const TracksProvider = ({children}) => {
   const [displayName, setDisplayName] = useState("");
   const [openSideBar, setOpenSideBar] = useState(false);
   const [nowValue, setNowValue] = useState(moment());
+  const {tasks, setTasks} = useTasks(selectedTrack);
   // 1. Whenever u need to do something, just rmember to make a custom hook,
   // 2. import it, and then destructure it in the tracks provider
   // 3. create a state in the provider, and then use it in the consumer
@@ -41,7 +43,9 @@ export const TracksProvider = ({children}) => {
         openSideBar,
         setOpenSideBar,
         nowValue,
-        setNowValue
+        setNowValue,
+        tasks,
+        setTasks,
       }}
     >
       {children}

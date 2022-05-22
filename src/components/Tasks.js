@@ -34,9 +34,9 @@ function generateKey() {
 
 // this just gets the tasks and renders them
 export const Tasks = ({trackId, isOpenEventModal, setIsOpenEventModal}) => {
-  const {tracks, selectedTrack, setSelectedTrack, isRoutine} = useTracksValue();
+  const {tasks, setTasks, tracks, selectedTrack, setSelectedTrack, isRoutine} =
+    useTracksValue();
   const {openSideBar, setOpenSideBar} = useLoadingValue();
-  let {tasks, setTasks} = useTasks(trackId);
   const tasksRef = useRef(tasks);
   const [eventName, setEventName] = useState("");
   const [showSmallCalendar, setShowSmallCalendar] = useState(false);
