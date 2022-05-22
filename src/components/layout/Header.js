@@ -32,11 +32,6 @@ const navigation = [
   {name: "Teams", href: "#", current: false},
   {name: "Directory", href: "#", current: false},
 ];
-const userNavigation = [
-  // {name: "Your Profile", href: "#", onClick: ""},
-  // {name: "Settings", href: "/settings", onClick: ""},
-  {name: "Sign out", href: "#", onClick: logOut},
-];
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -47,13 +42,41 @@ export function Header() {
 
   // const {photoUrl} = useLoadingValue();
   const {nowValue, setNowValue} = useTracksValue();
-  const {openSideBar, setOpenSideBar} = useLoadingValue();
-
+  const {openSideBar, setOpenSideBar, darkMode, setDarkMode} =
+    useLoadingValue();
+  const [bg, setBg] = useState("");
+  const [mainColor, setMainColor] = useState("");
+  const [secondaryColor, setSecondaryColor] = useState("");
+  const [border, setBorder] = useState("border-gray-200");
+  const userNavigation = [
+    // {name: "Your Profile", href: "#", onClick: ""},
+    // {name: "Settings", href: "/settings", onClick: ""},
+    {name: "Sign out", href: "#", onClick: logOut},
+    {
+      name: "Toggle Darkmode",
+      href: "#",
+      onClick: () => {
+        setDarkMode(!darkMode);
+      },
+    },
+  ];
+  useEffect(() => {
+    setBg(darkMode ? "bg-neutral-800" : "");
+    setMainColor(darkMode ? "text-neutral-200" : "");
+    setSecondaryColor(darkMode ? "text-neutral-400" : "text-gray-500");
+    setBorder(darkMode ? "border-neutral-900" : "border-gray-200");
+  }, [darkMode]);
   return (
-    <header className="relative z-20 flex flex-none items-center justify-between border-b border-gray-200 py-1 px-6">
+    <header
+      className={`relative ${bg} z-20 flex flex-none items-center justify-between border-b ${border} py-1 px-6`}
+    >
       <div className="flex items-center gap-x-3">
         <MenuIcon
-          className="h-6 w-8 rounded-md hover:bg-gray-100 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 hover:cursor-pointer"
+          className={
+            darkMode
+              ? "h-6 w-8 rounded-md hover:bg-neutral-700 text-neutral-600 hover:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 hover:cursor-pointer"
+              : "h-6 w-8 rounded-md hover:bg-gray-100 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 hover:cursor-pointer"
+          }
           aria-hidden="true"
           onClick={() => {
             setOpenSideBar(!openSideBar);
@@ -74,17 +97,21 @@ export function Header() {
       </div>
       <div className="flex">
         <h1 className="text-lg font-semibold text-gray-900 mr-2">
-          <time className="select-none sm:hidden">
+          <time className={`${mainColor} select-none sm:hidden`}>
             {moment(nowValue).format("MMM Do")}
           </time>
-          <time className="select-none hidden sm:inline">
+          <time className={`${mainColor} select-none hidden sm:inline`}>
             {moment(nowValue).format("MMMM Do, YYYY")}
           </time>
         </h1>
-        <p className="select-none mt-1 text-sm text-gray-500 hidden md:inline">
+        <p
+          className={`select-none mt-1 text-sm ${secondaryColor} hidden md:inline`}
+        >
           {moment(nowValue).format("dddd")}
         </p>
-        <p className="select-none mt-1 text-sm font-light text-gray-500 md:hidden">
+        <p
+          className={`select-none mt-1 text-sm font-light ${secondaryColor} md:hidden`}
+        >
           {moment(nowValue).format("ddd")}
         </p>
       </div>
@@ -92,7 +119,11 @@ export function Header() {
         <div className="flex items-center rounded-md shadow-sm md:items-stretch">
           <button
             type="button"
-            className="flex items-center justify-center rounded-l-md border border-r-0 border-gray-300 bg-white py-2 pl-3 pr-4 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-gray-50"
+            className={
+              darkMode
+                ? "flex items-center justify-center rounded-l-md border border-r-0 border-neutral-800 bg-neutral-700 py-2 pl-3 pr-4 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-neutral-600"
+                : "flex items-center justify-center rounded-l-md border border-r-0 border-gray-300 bg-white py-2 pl-3 pr-4 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-gray-50"
+            }
             onClick={() => {
               // subtract 1 day from the nowValue
               setNowValue(moment(nowValue).subtract(1, "day").toDate());
@@ -103,7 +134,11 @@ export function Header() {
           </button>
           <button
             type="button"
-            className="hidden border-t border-b border-gray-300 bg-white px-3.5 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900 focus:relative md:block"
+            className={
+              darkMode
+                ? "hidden border-t border-b border-neutral-800 bg-neutral-700 px-3.5 text-sm font-medium text-gray-400 hover:bg-neutral-600 hover:text-gray-500 focus:relative md:block"
+                : "hidden border-t border-b border-gray-300 bg-white px-3.5 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900 focus:relative md:block"
+            }
             onClick={() => {
               setNowValue(moment().toDate());
             }}
@@ -113,7 +148,11 @@ export function Header() {
           <span className="relative -mx-px h-5 w-px bg-gray-300 md:hidden" />
           <button
             type="button"
-            className="flex items-center justify-center rounded-r-md border border-l-0 border-gray-300 bg-white py-2 pl-4 pr-3 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-gray-50"
+            className={
+              darkMode
+                ? "flex items-center justify-center rounded-r-md border border-l-0 border-neutral-800 bg-neutral-700 py-2 pl-4 pr-3 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-neutral-600"
+                : "flex items-center justify-center rounded-r-md border border-l-0 border-gray-300 bg-white py-2 pl-4 pr-3 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-gray-50"
+            }
             onClick={() => {
               // add 1 day from the nowValue
               setNowValue(moment(nowValue).add(1, "day").toDate());

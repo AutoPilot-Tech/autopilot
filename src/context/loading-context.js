@@ -10,6 +10,7 @@ export const LoadingProvider = ({children}) => {
   const [photoUrl, setPhotoUrl] = useState("");
   const [tracksLoading, setTracksLoading] = useState(true);
   const [openSideBar, setOpenSideBar] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
 
   useEffect(() => {
     const mql = window.matchMedia("(max-width: 812px)");
@@ -31,6 +32,8 @@ export const LoadingProvider = ({children}) => {
         setTracksLoading,
         openSideBar,
         setOpenSideBar,
+        darkMode,
+        setDarkMode,
       }}
     >
       {children}

@@ -236,7 +236,7 @@ export const Tasks = ({isOpenEventModal, setIsOpenEventModal}) => {
     <div
       className={
         openSideBar
-          ? "transform transition ease-in-out absolute w-full h-screen bg-white translate-x-72 pr-72"
+          ? "transform transition ease-in-out absolute w-full h-screen bg-neutral-900 translate-x-72 pr-72"
           : "transform transition ease-in-out h-screen flex flex-col bg-white"
       }
     >

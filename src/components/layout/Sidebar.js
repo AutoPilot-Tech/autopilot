@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Routines} from "../Routines";
 import {useTracksValue} from "../../context/tracks-context";
 import {useLoadingValue} from "../../context/loading-context";
@@ -7,14 +7,17 @@ import {auth} from "../../firebase";
 import {AddRoutine} from "../AddRoutine";
 import {Link, Navigate} from "react-router-dom";
 import {useNavigate} from "react-router-dom";
+import { border } from "@mui/system";
 
 export const Sidebar = () => {
   let navigate = useNavigate();
 
   const {setSelectedTrack, setIsRoutine} = useTracksValue();
-  const {openSideBar, setOpenSideBar} = useLoadingValue();
+  const {openSideBar, setOpenSideBar, darkMode} = useLoadingValue();
   const [showTracks, setShowTracks] = useState(true);
   const [active, setActive] = useState("calendar");
+  const [bg, setBg] = useState("bg-white");
+  const [border, setBorder] = useState("border-slate-100");
 
   const logClick = (event) => {
     let userId = auth.currentUser.uid;
@@ -25,11 +28,16 @@ export const Sidebar = () => {
     return classes.filter(Boolean).join(" ");
   }
 
+  useEffect(() => {
+    setBg(darkMode ? "bg-neutral-800" : "bg-white");
+    
+  }, [darkMode]);
+
   return (
     <nav
       className={
         openSideBar
-          ? "transform transition ease-in-out duration-75 space-y-1 float-left flex flex-col pl-6 pt-2 h-screen w-72 bg-white border-r-2 border-slate-100 "
+          ? `transform transition ease-in-out duration-75 space-y-1 float-left flex flex-col pl-6 pt-2 h-screen w-72 ${bg} border-r-2 ${border}`
           : "flex flex-col float-left space-y-1 absolute pl-6 pt-2 h-screen w-72 bg-white border-r-2 border-slate-100 "
       }
     >
