@@ -1,5 +1,6 @@
 import React, {useEffect, useState, useRef, useCallback} from "react";
 import update from "immutability-helper";
+import {useParams} from "react-router-dom";
 
 import {useTasks} from "../hooks";
 import {collatedTasks} from "../constants";
@@ -33,7 +34,9 @@ function generateKey() {
 }
 
 // this just gets the tasks and renders them
-export const Tasks = ({trackId, isOpenEventModal, setIsOpenEventModal}) => {
+export const Tasks = ({isOpenEventModal, setIsOpenEventModal}) => {
+  const {trackId} = useParams();
+
   const {tasks, setTasks, tracks, selectedTrack, setSelectedTrack, isRoutine} =
     useTracksValue();
   const {openSideBar, setOpenSideBar} = useLoadingValue();
@@ -233,7 +236,7 @@ export const Tasks = ({trackId, isOpenEventModal, setIsOpenEventModal}) => {
     <div
       className={
         openSideBar
-          ? "transform transition ease-in-out absolute w-full h-screen bg-white translate-x-72 pr-72"
+          ? "transform transition ease-in-out absolute w-full h-screen bg-white translate-x-72"
           : "transform transition ease-in-out h-screen flex flex-col bg-white"
       }
     >

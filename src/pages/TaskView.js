@@ -57,20 +57,18 @@ export const TaskView = () => {
   ) : (
     <LocalizationProvider dateAdapter={AdapterMoment}>
       <TracksProvider>
-        <Header />
         <div className="overflow-x-hidden">
           {showBanner ? <Banner setShowBanner={setShowBanner} /> : null}
           <div className="relative" id="content">
-            <Sidebar />
             <Tasks
               trackId={id}
               isOpenEventModal={isOpenEventModal}
               setIsOpenEventModal={setIsOpenEventModal}
             />
-            <AddEvent
+            {/* <AddEvent
               isOpenEventModal={isOpenEventModal}
               setIsOpenEventModal={setIsOpenEventModal}
-            />
+            /> */}
           </div>
         </div>
       </TracksProvider>

@@ -1,4 +1,6 @@
 import React, {useState, useEffect} from "react";
+import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
+
 import AdapterMoment from "@mui/lab/AdapterMoment";
 import {LocalizationProvider} from "@mui/lab";
 import {Header} from "../components/layout/Header";
@@ -13,6 +15,8 @@ import {CalendarHome} from "../components/layout/CalendarHome";
 import {useParams} from "react-router-dom";
 import {PlusSmIcon as PlusSmIconOutline} from "@heroicons/react/outline";
 import {AddEvent} from "../components/functional/AddEvent";
+import {TaskView} from "./TaskView";
+import {Tasks} from "../components/Tasks";
 
 // note: see src/context. Since we want to use tracksprovider at the
 // top level, we are using it here in App. This can be replaced
@@ -63,14 +67,30 @@ export const CalendarHomeView = () => {
           <div className="relative" id="content">
             <Sidebar />
             {/* routes */}
-            
-            <CalendarHome
-              year={year}
-              month={month}
-              day={day}
-              isOpenEventModal={isOpenEventModal}
-              setIsOpenEventModal={setIsOpenEventModal}
-            />
+            <Routes>
+              <Route
+                path="calendar/home"
+                element={
+                  <CalendarHome
+                    year={year}
+                    month={month}
+                    day={day}
+                    isOpenEventModal={isOpenEventModal}
+                    setIsOpenEventModal={setIsOpenEventModal}
+                  />
+                }
+              />
+              <Route
+                path="tasks/:trackId"
+                element={
+                  <Tasks
+                    isOpenEventModal={isOpenEventModal}
+                    setIsOpenEventModal={setIsOpenEventModal}
+                  />
+                }
+              />
+            </Routes>
+
             <AddEvent
               isOpenEventModal={isOpenEventModal}
               setIsOpenEventModal={setIsOpenEventModal}
