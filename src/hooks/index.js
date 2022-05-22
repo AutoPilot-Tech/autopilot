@@ -106,52 +106,56 @@ export const useTasks = (selectedTrack) => {
   const [tasksLength, setTasksLength] = useState(0);
 
   useEffect(() => {
-    let userId = auth.currentUser.uid;
-    let unsubscribe = db.collection("tasks").where("userId", "==", userId);
+    try {
+      let userId = auth.currentUser.uid;
+      let unsubscribe = db.collection("tasks").where("userId", "==", userId);
 
-    unsubscribe =
-      selectedTrack && !collatedTasksExist(selectedTrack)
-        ? (unsubscribe = unsubscribe.where("trackId", "==", selectedTrack))
-        : selectedTrack === "TODAY"
-        ? (unsubscribe = unsubscribe.where(
-            "date",
-            "==",
-            moment().format("YYYY-MM-DD")
-          ))
-        : selectedTrack === "INBOX" || selectedTrack === 0
-        ? (unsubscribe = unsubscribe.where("date", "==", ""))
-        : unsubscribe;
+      unsubscribe =
+        selectedTrack && !collatedTasksExist(selectedTrack)
+          ? (unsubscribe = unsubscribe.where("trackId", "==", selectedTrack))
+          : selectedTrack === "TODAY"
+          ? (unsubscribe = unsubscribe.where(
+              "date",
+              "==",
+              moment().format("YYYY-MM-DD")
+            ))
+          : selectedTrack === "INBOX" || selectedTrack === 0
+          ? (unsubscribe = unsubscribe.where("date", "==", ""))
+          : unsubscribe;
 
-    unsubscribe = unsubscribe.onSnapshot((snapshot) => {
-      const newTasks = snapshot.docs.map((task) => ({
-        id: task.id,
-        ...task.data(),
-      }));
+      unsubscribe = unsubscribe.onSnapshot((snapshot) => {
+        const newTasks = snapshot.docs.map((task) => ({
+          id: task.id,
+          ...task.data(),
+        }));
 
-      // go through newTasks and sort them by index property
-      const sortedTasksByIndex = sortArrayOfObjects(newTasks);
+        // go through newTasks and sort them by index property
+        const sortedTasksByIndex = sortArrayOfObjects(newTasks);
 
-      setTasks(
-        selectedTrack === "NEXT_7"
-          ? sortedTasksByIndex.filter(
-              (task) =>
-                moment(task.date, "YYYY-MM-DD").diff(moment(), "days") <= 7 &&
-                task.archived !== true
-            )
-          : sortedTasksByIndex.filter((task) => task.archived !== true)
-      );
+        setTasks(
+          selectedTrack === "NEXT_7"
+            ? sortedTasksByIndex.filter(
+                (task) =>
+                  moment(task.date, "YYYY-MM-DD").diff(moment(), "days") <= 7 &&
+                  task.archived !== true
+              )
+            : sortedTasksByIndex.filter((task) => task.archived !== true)
+        );
 
-      // Set all tasks that are archived
-      setArchivedTasks(
-        sortedTasksByIndex.filter((task) => task.archived !== false)
-      );
-      // See how many tasks are in the tasks array
-      setTasksLength(newTasks.length);
-    });
+        // Set all tasks that are archived
+        setArchivedTasks(
+          sortedTasksByIndex.filter((task) => task.archived !== false)
+        );
+        // See how many tasks are in the tasks array
+        setTasksLength(newTasks.length);
+      });
 
-    // don't want to be checking for tracks all the time, only when there is a new
-    // track
-    return () => unsubscribe();
+      // don't want to be checking for tracks all the time, only when there is a new
+      // track
+      return () => unsubscribe();
+    } catch {
+      return;
+    }
   }, [selectedTrack]);
 
   return {tasks, archivedTasks, tasksLength, setTasks};
@@ -210,4 +214,8 @@ export const useTracks = () => {
   }, [tracks]);
 
   return {tracks, setTracks};
+};
+
+export const useUserData = () => {
+  const {userData, setUserData} = useLoadingValue();
 };

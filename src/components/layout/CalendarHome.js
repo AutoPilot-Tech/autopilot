@@ -103,8 +103,6 @@ export function CalendarHome({
     });
   }, [nowValue]);
 
-  
-
   const handleKeypress = (e) => {
     //it triggers by pressing the enter key
     if (e.keyCode === 13) {
@@ -226,6 +224,7 @@ export function CalendarHome({
                   index: tasksLength,
                   userId: auth.currentUser.uid,
                   eventId: newEventId,
+                  routineName: routineNameForEvent,
                 });
               });
           });
@@ -286,6 +285,7 @@ export function CalendarHome({
                 index: tasksLength,
                 userId: auth.currentUser.uid,
                 eventId: eventId,
+                routineName: routineNameForEvent,
               });
             });
         });

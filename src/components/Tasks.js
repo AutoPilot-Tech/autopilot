@@ -182,6 +182,7 @@ export const Tasks = ({trackId, isOpenEventModal, setIsOpenEventModal}) => {
               index: tasksLength,
               userId: auth.currentUser.uid,
               eventId: eventId,
+              routineName: routineNameForEvent,
             });
           });
       });
@@ -287,15 +288,18 @@ export const Tasks = ({trackId, isOpenEventModal, setIsOpenEventModal}) => {
         {/* {isRoutine ? <RoutineSettings /> : <></>} */}
 
         {/* if there are no tasks, show the emptystate component, otherwise render them */}
-        {!userData[trackId] || userData[trackId].length === 0 ? (
+        {!userData["tasksMapToTrackId"][trackId] ||
+        userData["tasksMapToTrackId"][trackId].length === 0 ? (
           <EmptyStateTasks />
         ) : (
           <>
             <div className="flex flex-col shadow ring-2 p-1 bg-white ring-black ring-opacity-5 md:rounded-lg ">
               {/* Get the tasks from userData using this TrackId */}
               <ul>
-                {userData[trackId] &&
-                  userData[trackId].map((task) => renderTask(task, tasks))}
+                {userData["tasksMapToTrackId"][trackId] &&
+                  userData["tasksMapToTrackId"][trackId].map((task) =>
+                    renderTask(task, tasks)
+                  )}
               </ul>
             </div>
           </>

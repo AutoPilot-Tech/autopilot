@@ -21,6 +21,7 @@ export const TaskView = () => {
   const {setDisplayName, setPhotoUrl} = useLoadingValue();
   const [showBanner, setShowBanner] = useState(false);
   const [isOpenEventModal, setIsOpenEventModal] = useState(false);
+  const {userData, setUserData} = useLoadingValue();
 
   const {id} = useParams();
   // const {tracksLoading, setTracksLoading} = useLoadingValue();
@@ -35,16 +36,41 @@ export const TaskView = () => {
     });
   }, []);
 
+  // PRE LOADING USER DATA IF THE COMPONENT MOUNTS FOR THE FIRST TIME
   useEffect(() => {
+    let tasksMapToTrackId = {};
+    let trackIdsMapToTrackNames = {};
     const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (user) {
-        // get the user's name from db
-        setDisplayName(user.displayName);
-        setPhotoUrl(user.photoURL);
-        // check to see if the user's tracks are loaded
-        setLoading(false);
-      } else {
-        console.log("User is not signed in");
+      // if the user is logged in and has no data
+      if (user && userData.length === 0) {
+        db.collection("tasks")
+          .where("userId", "==", auth.currentUser.uid)
+          .get()
+          .then((snapshot) => {
+            snapshot.forEach((doc) => {
+              let task = doc.data();
+              // if the trackId doesnt have any tasks, add it to the map
+              if (!tasksMapToTrackId[task.trackId]) {
+                tasksMapToTrackId[task.trackId] = [];
+              }
+              if (!trackIdsMapToTrackNames[task.trackId]) {
+                trackIdsMapToTrackNames[task.trackId] = [];
+              }
+              tasksMapToTrackId[task.trackId].push(task);
+              trackIdsMapToTrackNames[task.trackId].push(task.routineName);
+            });
+          })
+          .then(() => {
+            setUserData({
+              tasksMapToTrackId: tasksMapToTrackId,
+              trackIdsMapToTrackNames: trackIdsMapToTrackNames,
+            });
+            setLoading(false);
+            console.log("Finished pre-loading.", {
+              tasksMapToTrackId: tasksMapToTrackId,
+              trackIdsMapToTrackNames: trackIdsMapToTrackNames,
+            });
+          });
       }
     });
     return unsubscribe;

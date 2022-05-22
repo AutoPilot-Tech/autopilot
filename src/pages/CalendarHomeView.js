@@ -37,12 +37,13 @@ export const CalendarHomeView = () => {
     });
   }, []);
 
-  // PRE LOADING USER DATA
+  // PRE LOADING USER DATA IF THE COMPONENT MOUNTS FOR THE FIRST TIME
   useEffect(() => {
     let tasksMapToTrackId = {};
-
+    let trackIdsMapToTrackNames = {};
     const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (user) {
+      // if the user is logged in and has no data
+      if (user && userData.length === 0) {
         db.collection("tasks")
           .where("userId", "==", auth.currentUser.uid)
           .get()
@@ -53,13 +54,23 @@ export const CalendarHomeView = () => {
               if (!tasksMapToTrackId[task.trackId]) {
                 tasksMapToTrackId[task.trackId] = [];
               }
+              if (!trackIdsMapToTrackNames[task.trackId]) {
+                trackIdsMapToTrackNames[task.trackId] = [];
+              }
               tasksMapToTrackId[task.trackId].push(task);
+              trackIdsMapToTrackNames[task.trackId].push(task.routineName);
             });
           })
           .then(() => {
-            setUserData(tasksMapToTrackId);
+            setUserData({
+              tasksMapToTrackId: tasksMapToTrackId,
+              trackIdsMapToTrackNames: trackIdsMapToTrackNames,
+            });
             setLoading(false);
-            console.log("Finished pre-loading.", tasksMapToTrackId);
+            console.log("Finished pre-loading.", {
+              tasksMapToTrackId: tasksMapToTrackId,
+              trackIdsMapToTrackNames: trackIdsMapToTrackNames,
+            });
           });
       }
     });
