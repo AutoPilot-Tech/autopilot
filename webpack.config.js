@@ -2,6 +2,8 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CompressionPlugin = require("compression-webpack-plugin");
 const BrotliPlugin = require("brotli-webpack-plugin"); //brotli
+const BundleAnalyzerPlugin =
+  require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 
 module.exports = {
   entry: path.join(__dirname, "src", "index.js"),
@@ -54,5 +56,6 @@ module.exports = {
       threshold: 10240,
       minRatio: 0.8,
     }),
+    new BundleAnalyzerPlugin(),
   ],
 };
