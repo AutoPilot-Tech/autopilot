@@ -252,5 +252,5 @@ export const useUserData = (setLoading) => {
         setLoading(false);
       });
   }, []);
-  return userData;
+  return {userData, setUserData};
 };

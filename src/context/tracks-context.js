@@ -51,6 +51,8 @@ export const TracksProvider = ({children}) => {
         setTasks,
         userData,
         setUserData,
+        loadingUserData,
+        setLoadingUserData,
       }}
     >
       {children}

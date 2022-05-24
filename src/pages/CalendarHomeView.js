@@ -21,10 +21,11 @@ import {PlusSmIcon as PlusSmIconOutline} from "@heroicons/react/outline";
 import {AddEvent} from "../components/functional/AddEvent";
 import {TaskView} from "./TaskView";
 import {Tasks} from "../components/Tasks";
-
-
+import {useTracksValue} from "../context/tracks-context";
 
 export const CalendarHomeView = () => {
+  const {loadingUserData} = useTracksValue();
+
   let {year, month, day} = useParams();
   // This is a global state provided by loading Context
   const {loading, setLoading} = useLoadingValue();
@@ -70,29 +71,29 @@ export const CalendarHomeView = () => {
           <div className="relative" id="content">
             <Sidebar />
             {/* routes */}
-              <Routes>
-                <Route
-                  path="calendar/home"
-                  element={
-                    <CalendarHome
-                      year={year}
-                      month={month}
-                      day={day}
-                      isOpenEventModal={isOpenEventModal}
-                      setIsOpenEventModal={setIsOpenEventModal}
-                    />
-                  }
-                />
-                <Route
-                  path="tasks/:trackId"
-                  element={
-                    <Tasks
-                      isOpenEventModal={isOpenEventModal}
-                      setIsOpenEventModal={setIsOpenEventModal}
-                    />
-                  }
-                />
-              </Routes>
+            <Routes>
+              <Route
+                path="calendar/home"
+                element={
+                  <CalendarHome
+                    year={year}
+                    month={month}
+                    day={day}
+                    isOpenEventModal={isOpenEventModal}
+                    setIsOpenEventModal={setIsOpenEventModal}
+                  />
+                }
+              />
+              <Route
+                path="tasks/:trackId"
+                element={
+                  <Tasks
+                    isOpenEventModal={isOpenEventModal}
+                    setIsOpenEventModal={setIsOpenEventModal}
+                  />
+                }
+              />
+            </Routes>
 
             <AddEvent
               isOpenEventModal={isOpenEventModal}
