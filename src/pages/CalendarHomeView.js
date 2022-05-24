@@ -29,6 +29,8 @@ export const CalendarHomeView = () => {
   const {setDisplayName, setPhotoUrl} = useLoadingValue();
   const [showBanner, setShowBanner] = useState(false);
   const [isOpenEventModal, setIsOpenEventModal] = useState(false);
+  const [active, setActive] = useState("calendar");
+
   // const {tracksLoading, setTracksLoading} = useLoadingValue();
 
   // if the user isnt signed in send them back to login page
@@ -62,10 +64,10 @@ export const CalendarHomeView = () => {
   ) : (
     <LocalizationProvider dateAdapter={AdapterMoment}>
       <TracksProvider>
-        <Header />
+        <Header setActive={setActive} />
         <div className="overflow-x-hidden">
           <div className="relative" id="content">
-            <Sidebar />
+            <Sidebar active={active} setActive={setActive} />
             {/* routes */}
             <Routes>
               <Route

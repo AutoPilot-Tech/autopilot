@@ -42,7 +42,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export function Header() {
+export function Header({setActive}) {
   let navigate = useNavigate();
 
   // const {photoUrl} = useLoadingValue();
@@ -62,6 +62,7 @@ export function Header() {
         <div
           className="hidden lg:block lg:cursor-pointer"
           onClick={() => {
+            setActive("calendar");
             navigate("/app/calendar/home");
           }}
         >
