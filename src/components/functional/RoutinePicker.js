@@ -187,8 +187,9 @@ export function RoutinePicker({
             </div>
           ) : (
             tracks.map((track) => (
-              <div key={track.id}>
+              <div>
                 <div
+                  key={track.id}
                   className="cursor-pointer flex p-2 justify-between rounded-md hover:bg-gray-100"
                   onClick={() => {
                     setSelectedRoutine(track);
