@@ -4,6 +4,8 @@ import {useTracksValue} from "../context/tracks-context";
 import {db} from "../firebase";
 import {Menu, Transition, Dialog} from "@headlessui/react";
 import {useLoadingValue} from "../context/loading-context";
+import {useNavigate} from "react-router-dom";
+// import {preloadRouteComponent} from "../pages/CalendarHomeView";
 
 /**
  * Hook that alerts clicks outside of the passed ref
@@ -48,6 +50,7 @@ export const IndividualRoutine = ({track}) => {
   const [openSettings, setOpenSettings] = useState(false);
   const [showSettingsIcon, setShowSettingsIcon] = useState(false);
   const {userLoading, setUserLoading} = useLoadingValue();
+  let navigate = useNavigate();
 
   function closeModal() {
     setIsOpen(false);
@@ -224,6 +227,7 @@ export const IndividualRoutine = ({track}) => {
                     onClick={() => {
                       deleteTrack(track.docId);
                       closeModal();
+                      navigate("/app/tasks/INBOX");
                     }}
                   >
                     Delete

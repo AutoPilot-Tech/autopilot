@@ -7,7 +7,6 @@ import {auth} from "../../firebase";
 import {AddRoutine} from "../AddRoutine";
 import {Link, Navigate} from "react-router-dom";
 import {useNavigate} from "react-router-dom";
-
 export const Sidebar = () => {
   let navigate = useNavigate();
 
