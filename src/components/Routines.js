@@ -24,6 +24,7 @@ export const Routines = ({active, setActive}) => {
           .filter((track) => !track.routine)
           .map((track) => (
             <li
+              
               key={track.trackId}
               data-doc-id={track.docId}
               data-testid="track-action"
