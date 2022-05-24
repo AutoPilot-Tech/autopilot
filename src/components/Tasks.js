@@ -37,8 +37,8 @@ function generateKey() {
 export const Tasks = ({isOpenEventModal, setIsOpenEventModal}) => {
   const {trackId} = useParams();
 
-  const {tracks, selectedTrack, setSelectedTrack, isRoutine} = useTracksValue();
-  const [tasks, setTasks] = useState([]);
+  const {tasks, setTasks, tracks, selectedTrack, setSelectedTrack, isRoutine} =
+    useTracksValue();
   const {openSideBar, setOpenSideBar} = useLoadingValue();
   const tasksRef = useRef(tasks);
   const [eventName, setEventName] = useState("");
@@ -219,22 +219,7 @@ export const Tasks = ({isOpenEventModal, setIsOpenEventModal}) => {
   }
 
   useEffect(() => {
-    let tasks = [];
-    let unsubscribe = db
-      .collection("tasks")
-      .where("trackId", "==", trackId)
-      .get()
-      .then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          tasks.push(doc.data());
-        });
-
-        setTasks(tasks);
-      });
-
-    return () => {
-      unsubscribe();
-    };
+    setSelectedTrack(trackId);
   }, []);
 
   useEffect(() => {
