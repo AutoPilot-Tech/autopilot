@@ -210,3 +210,16 @@ export const useTracks = () => {
 
   return {tracks, setTracks};
 };
+
+export const useUserData = () => {
+  const [userData, setUserData] = useState(null);
+  let userDataObject = {
+    tasksMapToTrackId: [],
+    trackNameMapToTrackId: [],
+  };
+  useEffect(() => {
+    let userId = auth.currentUser.uid;
+    db.collection("tasks")
+  }, []);
+  return userData;
+}
