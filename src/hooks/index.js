@@ -211,15 +211,46 @@ export const useTracks = () => {
   return {tracks, setTracks};
 };
 
-export const useUserData = () => {
+// TODO: resolve all promises at same time then set UserData
+export const useUserData = (setLoading) => {
   const [userData, setUserData] = useState(null);
-  let userDataObject = {
-    tasksMapToTrackId: [],
-    trackNameMapToTrackId: [],
-  };
+  let tasksMapToTrackId = [];
+  let trackNameMapToTrackId = [];
+  let userTracks = [];
   useEffect(() => {
     let userId = auth.currentUser.uid;
     db.collection("tasks")
+      .where("userId", "==", userId)
+      .onSnapshot((snapshot) => {
+        snapshot.forEach((doc) => {
+          let task = doc.data();
+
+          // if the trackId doesnt have any tasks add it to the map
+          if (!tasksMapToTrackId[task.trackId]) {
+            tasksMapToTrackId[task.trackId] = [];
+          }
+          if (!trackNameMapToTrackId[task.trackId]) {
+            trackNameMapToTrackId[task.trackId] = [];
+          }
+          if (!userTracks[task.trackId]) {
+            userTracks.push(task.trackName);
+          }
+          // add the task to the tasksMapToTrackId
+          tasksMapToTrackId[task.trackId].push(task);
+          // add the trackName to the trackNameMapToTrackId
+          trackNameMapToTrackId[task.trackId].push(task.trackName);
+        });
+      })
+      .then(() => {
+        setUserData({
+          tasksMapToTrackId: tasksMapToTrackId,
+          trackNameMapToTrackId: trackNameMapToTrackId,
+          userTracks: userTracks,
+        });
+      })
+      .then(() => {
+        setLoading(false);
+      });
   }, []);
   return userData;
-}
+};
