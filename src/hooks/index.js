@@ -83,18 +83,23 @@ export const useEvents = () => {
   const [events, setEvents] = useState([]);
   // listen for changes to tasks collection in firebase
   useEffect(() => {
-    let userId = auth.currentUser.uid;
-    // when there is a new document in collection
-    let unsubscribe = db.collection("events").where("userId", "==", userId);
-    // set events with tasks
-    unsubscribe = unsubscribe.onSnapshot((snapshot) => {
-      const newEvents = snapshot.docs.map((event) => ({
-        id: event.id,
-        ...event.data(),
-      }));
-      setEvents(newEvents);
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        let userId = auth.currentUser.uid;
+        // when there is a new document in collection
+        let unsubscribe = db.collection("events").where("userId", "==", userId);
+        // set events with tasks
+        unsubscribe = unsubscribe.onSnapshot((snapshot) => {
+          const newEvents = snapshot.docs.map((event) => ({
+            id: event.id,
+            ...event.data(),
+          }));
+          setEvents(newEvents);
+        });
+        return () => unsubscribe();
+      } else {
+      }
     });
-    return () => unsubscribe();
   }, []);
   return {events, setEvents};
 };
@@ -106,52 +111,57 @@ export const useTasks = (selectedTrack) => {
   const [tasksLength, setTasksLength] = useState(0);
 
   useEffect(() => {
-    let userId = auth.currentUser.uid;
-    let unsubscribe = db.collection("tasks").where("userId", "==", userId);
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        let userId = auth.currentUser.uid;
+        let unsubscribe = db.collection("tasks").where("userId", "==", userId);
 
-    unsubscribe =
-      selectedTrack && !collatedTasksExist(selectedTrack)
-        ? (unsubscribe = unsubscribe.where("trackId", "==", selectedTrack))
-        : selectedTrack === "TODAY"
-        ? (unsubscribe = unsubscribe.where(
-            "date",
-            "==",
-            moment().format("YYYY-MM-DD")
-          ))
-        : selectedTrack === "INBOX" || selectedTrack === 0
-        ? (unsubscribe = unsubscribe.where("date", "==", ""))
-        : unsubscribe;
+        unsubscribe =
+          selectedTrack && !collatedTasksExist(selectedTrack)
+            ? (unsubscribe = unsubscribe.where("trackId", "==", selectedTrack))
+            : selectedTrack === "TODAY"
+            ? (unsubscribe = unsubscribe.where(
+                "date",
+                "==",
+                moment().format("YYYY-MM-DD")
+              ))
+            : selectedTrack === "INBOX" || selectedTrack === 0
+            ? (unsubscribe = unsubscribe.where("date", "==", ""))
+            : unsubscribe;
 
-    unsubscribe = unsubscribe.onSnapshot((snapshot) => {
-      const newTasks = snapshot.docs.map((task) => ({
-        id: task.id,
-        ...task.data(),
-      }));
+        unsubscribe = unsubscribe.onSnapshot((snapshot) => {
+          const newTasks = snapshot.docs.map((task) => ({
+            id: task.id,
+            ...task.data(),
+          }));
 
-      // go through newTasks and sort them by index property
-      const sortedTasksByIndex = sortArrayOfObjects(newTasks);
+          // go through newTasks and sort them by index property
+          const sortedTasksByIndex = sortArrayOfObjects(newTasks);
 
-      setTasks(
-        selectedTrack === "NEXT_7"
-          ? sortedTasksByIndex.filter(
-              (task) =>
-                moment(task.date, "YYYY-MM-DD").diff(moment(), "days") <= 7 &&
-                task.archived !== true
-            )
-          : sortedTasksByIndex.filter((task) => task.archived !== true)
-      );
+          setTasks(
+            selectedTrack === "NEXT_7"
+              ? sortedTasksByIndex.filter(
+                  (task) =>
+                    moment(task.date, "YYYY-MM-DD").diff(moment(), "days") <=
+                      7 && task.archived !== true
+                )
+              : sortedTasksByIndex.filter((task) => task.archived !== true)
+          );
 
-      // Set all tasks that are archived
-      setArchivedTasks(
-        sortedTasksByIndex.filter((task) => task.archived !== false)
-      );
-      // See how many tasks are in the tasks array
-      setTasksLength(newTasks.length);
+          // Set all tasks that are archived
+          setArchivedTasks(
+            sortedTasksByIndex.filter((task) => task.archived !== false)
+          );
+          // See how many tasks are in the tasks array
+          setTasksLength(newTasks.length);
+        });
+
+        // don't want to be checking for tracks all the time, only when there is a new
+        // track
+        return () => unsubscribe();
+      } else {
+      }
     });
-
-    // don't want to be checking for tracks all the time, only when there is a new
-    // track
-    return () => unsubscribe();
   }, [selectedTrack]);
 
   return {tasks, archivedTasks, tasksLength, setTasks};
@@ -169,43 +179,49 @@ export const useActive = () => {
 // when there is new tracks
 export const useTracks = () => {
   const [tracks, setTracks] = useState([]);
-  const {setTracksLoading} = useLoadingValue();
   useEffect(() => {
-    let userId = auth.currentUser.uid;
-    db.collection("tracks")
-      .where("userId", "==", userId)
-      .orderBy("trackId")
-      // this required an index in firebase
-      .onSnapshot((snapshot) => {
-        const allTracks = snapshot.docs.map((track) => ({
-          ...track.data(),
-          docId: track.id,
-        }));
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        let userId = auth.currentUser.uid;
+        db.collection("tracks")
+          .where("userId", "==", userId)
+          .orderBy("trackId")
+          // this required an index in firebase
+          .onSnapshot((snapshot) => {
+            const allTracks = snapshot.docs.map((track) => ({
+              ...track.data(),
+              docId: track.id,
+            }));
 
-        // if all tracks length is more than 0, set loading to false
+            // if all tracks length is more than 0, set loading to false
 
-        // firebase is weird about giving us the same order fields in objects, so we
-        // need to sort it first.
+            // firebase is weird about giving us the same order fields in objects, so we
+            // need to sort it first.
 
-        let sortedTracks = [];
-        let sortedAllTracks = [];
+            let sortedTracks = [];
+            let sortedAllTracks = [];
 
-        // go through allTracks and sort them
-        for (let i = 0; i < allTracks.length; i++) {
-          sortedTracks.push(sortedObject(allTracks[i]));
-        }
+            // go through allTracks and sort them
+            for (let i = 0; i < allTracks.length; i++) {
+              sortedTracks.push(sortedObject(allTracks[i]));
+            }
 
-        // go through tracks and sort them
+            // go through tracks and sort them
 
-        for (let i = 0; i < tracks.length; i++) {
-          sortedAllTracks.push(sortedObject(tracks[i]));
-        }
+            for (let i = 0; i < tracks.length; i++) {
+              sortedAllTracks.push(sortedObject(tracks[i]));
+            }
 
-        // this keeps the useEffect from running infinitely.
-        if (JSON.stringify(sortedAllTracks) !== JSON.stringify(sortedTracks)) {
-          setTracks(allTracks);
-        }
-      });
+            // this keeps the useEffect from running infinitely.
+            if (
+              JSON.stringify(sortedAllTracks) !== JSON.stringify(sortedTracks)
+            ) {
+              setTracks(allTracks);
+            }
+          });
+      } else {
+      }
+    });
   }, [tracks]);
 
   return {tracks, setTracks};
@@ -218,39 +234,46 @@ export const useUserData = (setLoading) => {
   let trackNameMapToTrackId = [];
   let userTracks = [];
   useEffect(() => {
-    let userId = auth.currentUser.uid;
-    db.collection("tasks")
-      .where("userId", "==", userId)
-      .onSnapshot((snapshot) => {
-        snapshot.forEach((doc) => {
-          let task = doc.data();
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        let userId = auth.currentUser.uid;
+        db.collection("tasks")
+          .where("userId", "==", userId)
+          .onSnapshot((snapshot) => {
+            snapshot.forEach((doc) => {
+              let task = doc.data();
 
-          // if the trackId doesnt have any tasks add it to the map
-          if (!tasksMapToTrackId[task.trackId]) {
-            tasksMapToTrackId[task.trackId] = [];
-          }
-          if (!trackNameMapToTrackId[task.trackId]) {
-            trackNameMapToTrackId[task.trackId] = [];
-          }
-          if (!userTracks[task.trackId]) {
-            userTracks.push(task.trackName);
-          }
-          // add the task to the tasksMapToTrackId
-          tasksMapToTrackId[task.trackId].push(task);
-          // add the trackName to the trackNameMapToTrackId
-          trackNameMapToTrackId[task.trackId].push(task.trackName);
-        });
-      })
-      .then(() => {
+              // if the trackId doesnt have any tasks add it to the map
+              if (!tasksMapToTrackId[task.trackId]) {
+                tasksMapToTrackId[task.trackId] = [];
+              }
+              if (!trackNameMapToTrackId[task.trackId]) {
+                trackNameMapToTrackId[task.trackId] = [];
+              }
+              if (!userTracks[task.trackId]) {
+                userTracks.push(task.trackName);
+              }
+              // add the task to the tasksMapToTrackId
+              tasksMapToTrackId[task.trackId].push(task);
+              // add the trackName to the trackNameMapToTrackId
+              trackNameMapToTrackId[task.trackId].push(task.trackName);
+            });
+          });
+
         setUserData({
           tasksMapToTrackId: tasksMapToTrackId,
           trackNameMapToTrackId: trackNameMapToTrackId,
           userTracks: userTracks,
         });
-      })
-      .then(() => {
-        setLoading(false);
-      });
+      } else {
+      }
+    });
   }, []);
+
+  useEffect(() => {
+    if (userData !== null) {
+      setLoading(false);
+    }
+  }, [userData]);
   return {userData, setUserData};
 };

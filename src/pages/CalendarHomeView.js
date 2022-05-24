@@ -59,7 +59,7 @@ export const CalendarHomeView = () => {
     return unsubscribe;
   }, []);
 
-  return loading ? (
+  return loading || loadingUserData ? (
     <div className="grid place-items-center h-screen">
       <SyncLoader loading={true} size={15} speedMultiplier={2} />
     </div>
