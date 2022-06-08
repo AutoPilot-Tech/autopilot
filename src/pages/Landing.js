@@ -390,7 +390,7 @@ export function Landing() {
               </p>
               <a
                 href="/signup"
-                className="mt-10 inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
+                className="mt-10 inline-flex items-center justify-center px-5 py-3 border border-transparent text-xl font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
               >
                 Sign up for free
               </a>
