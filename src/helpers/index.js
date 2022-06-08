@@ -31,7 +31,6 @@ export const findRoutineName = (routines, trackName) => {
   return routine.name;
 };
 
-// this is just taken from online, its similar to how firebase does it
 export const generatePushId = (function () {
   // Modeled after base64 web-safe chars, but ordered by ASCII.
   var PUSH_CHARS =
