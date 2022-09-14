@@ -22,7 +22,6 @@ export const App = () => {
       <LoadingProvider>
         <Router>
           <Routes>
-            <Route path="/" element={<Landing />} />
             <Route path="/signup" element={<SignupNew />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/login" element={<LoginNew />} />
