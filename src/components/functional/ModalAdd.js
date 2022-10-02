@@ -444,7 +444,24 @@ export function ModalAdd({
           New Event
         </Dialog.Title> */}
               <div className="flex flex-col mb-4 gap-3 content-between">
-                
+                {/* <TextField
+                  className="mt-3 w-full  text-gray-900 placeholder-gray-500 focus:rounded-md focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out border-0 border-b border-gray-300"
+                  type="text"
+                  value={eventName}
+                  onChange={(e) => setEventName(e.target.value)}
+                  placeholder={'"Study everyday at 12pm for 2 hours"'}
+                  onKeyDown={(e) => handleKeypress(e)}
+                  variant="standard"
+                  id="event-name"
+                  inputProps={{
+                    style: {
+                      padding: "0.5rem",
+                      ":focus": {
+                        outline: "none",
+                      },
+                    },
+                  }}
+                /> */}
                 <div style={styles.editor}>
                   <Editor
                     ref={editor}

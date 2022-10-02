@@ -188,7 +188,7 @@ export const useTracks = () => {
         // need to sort it first.
 
         let sortedTracks = [];
-        let sortedAllTracks = []; 
+        let sortedAllTracks = [];
 
         // go through allTracks and sort them
         for (let i = 0; i < allTracks.length; i++) {

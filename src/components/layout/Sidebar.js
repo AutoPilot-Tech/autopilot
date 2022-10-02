@@ -8,12 +8,13 @@ import {AddRoutine} from "../AddRoutine";
 import {Link, Navigate} from "react-router-dom";
 import {useNavigate} from "react-router-dom";
 
-export const Sidebar = ({active, setActive}) => {
+export const Sidebar = () => {
   let navigate = useNavigate();
 
   const {setSelectedTrack, setIsRoutine} = useTracksValue();
   const {openSideBar, setOpenSideBar} = useLoadingValue();
   const [showTracks, setShowTracks] = useState(true);
+  const [active, setActive] = useState("calendar");
 
   const logClick = (event) => {
     let userId = auth.currentUser.uid;

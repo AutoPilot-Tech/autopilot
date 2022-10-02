@@ -36,9 +36,9 @@ function generateKey() {
 // this just gets the tasks and renders them
 export const Tasks = ({isOpenEventModal, setIsOpenEventModal}) => {
   const {trackId} = useParams();
-  const {tasks} = useTasks(trackId);
 
-  const {tracks, selectedTrack, setSelectedTrack, isRoutine} = useTracksValue();
+  const {tasks, setTasks, tracks, selectedTrack, setSelectedTrack, isRoutine} =
+    useTracksValue();
   const {openSideBar, setOpenSideBar} = useLoadingValue();
   const tasksRef = useRef(tasks);
   const [eventName, setEventName] = useState("");

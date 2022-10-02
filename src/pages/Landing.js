@@ -363,7 +363,8 @@ export function Landing() {
                       </Popover.Button>
                     </div>
                   </div>
-
+                  
+                  
                   <a
                     href="/login"
                     className="block w-full px-5 py-3 text-center font-medium text-indigo-600 bg-gray-50 hover:bg-gray-100 hover:text-indigo-700"
@@ -384,16 +385,10 @@ export function Landing() {
                 <span className="block text-indigo-600">the rich.</span>
               </h1>
               <p className="mt-3 max-w-md mx-auto text-base text-gray-500 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
-                We're on a mission to democratize self-improvement. Get an
-                assistant that will save you weeks of time when your life
-                changes.
+                We're on a mission to democratize self-improvement. Get a real
+                assistant in your pocket every second of the day that will save
+                you weeks of downtime when your life changes.
               </p>
-              <a
-                href="/signup"
-                className="mt-10 inline-flex items-center justify-center px-5 py-3 border border-transparent text-xl font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
-              >
-                Sign up for free
-              </a>
             </div>
           </div>
         </div>

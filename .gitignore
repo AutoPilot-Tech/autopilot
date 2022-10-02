@@ -26,6 +26,3 @@ yarn-error.log*
 /functions/firebase-debug.log
 
 /firebase-debug.log
-
-#reports
-/reports
