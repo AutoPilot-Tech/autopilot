@@ -121,7 +121,6 @@ export function CalendarHome({
   }
 
   function addEvent() {
-    console.log("Recurring?", recurring);
     const userId = auth.currentUser.uid;
     const taskId = generatePushId();
     const eventId = generatePushId();
@@ -153,8 +152,6 @@ export function CalendarHome({
       for (let i = 0; i < 7; i++) {
         let newEventId = generatePushId();
         let newTaskId = generatePushId();
-        console.log(`${i} iteration, new event id: ${newEventId}`);
-        console.log(`${i} iteration, new task id: ${newTaskId}`);
         // create a new event
         let maintenanceRequired = false;
         if (i >= 5) {
@@ -229,6 +226,27 @@ export function CalendarHome({
           });
       }
     } else {
+      // Add the event to google calendar as well
+      let event = {
+        summary: eventName,
+        description: routineNameForEvent,
+        start: {
+          dateTime: moment(eventStartTime).format("YYYY-MM-DDTHH:mm:ss"),
+          timeZone: "America/New_York",
+        },
+        end: {
+          dateTime: moment(eventEndTime).format("YYYY-MM-DDTHH:mm:ss"),
+          timeZone: "America/New_York",
+        },
+      };
+      let request = gapi.client.calendar.events.insert({
+        calendarId: "primary",
+        resource: event,
+      });
+      request.execute((event) => {
+        console.log(event);
+      });
+      
       db.collection("users")
         .doc(auth.currentUser.uid)
         .collection("events")

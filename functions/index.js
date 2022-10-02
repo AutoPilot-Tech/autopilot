@@ -1,7 +1,18 @@
 const functions = require("firebase-functions");
 const express = require("express");
 const cors = require("cors");
+const {google} = require("googleapis");
+const OAuth2 = google.auth.OAuth2;
+const calendar = google.calendar("v3");
 
+const googleCredentials = require("./credentials.json");
+
+const ERROR_RESPONSE = {
+  status: "500",
+  message: "Error adding event to Google Calendar",
+};
+
+const TIME_ZONE = "CST";
 const admin = require("firebase-admin");
 const moment = require("moment");
 const {v4: uuidv4} = require("uuid");
@@ -25,46 +36,65 @@ admin.initializeApp({
   databaseURL: "https://autopilot-7ab12.firebaseio.com",
 });
 
+// this is what a google event looks like
+
+var event = {
+  summary: "Hello World",
+  location: "",
+  start: {
+    dateTime: "2022-08-28T09:00:00-07:00",
+    timeZone: "America/Los_Angeles",
+  },
+  end: {
+    dateTime: "2022-08-28T17:00:00-07:00",
+    timeZone: "America/Los_Angeles",
+  },
+  recurrence: ["RRULE:FREQ=DAILY;COUNT=2"],
+  attendees: [],
+  reminders: {
+    useDefault: false,
+    overrides: [
+      {method: "email", minutes: 24 * 60},
+      {method: "popup", minutes: 10},
+    ],
+  },
+};
+
 // const api = express();
 const db = admin.firestore();
 
-/*
-EXPRESS SERVER ROUTES
-*/
 
-// test server
-// api.get("/", (req, res) => {
-//   res.status(200).send("CONNECTED");
-// });
-// // Get the tasks for the Tasks Component to show
-// app.get("/app/**", async (req, res) => {
-//   res.status(200).send("KYS LOL");
-// });
 
-// app.get("/app/calculator/xd/gottem", (req, res) => {
-//   const date = new Date();
-//   const hours = (date.getHours() % 12) + 1; // London is UTC + 1hr;
-//   res.json({bongs: "BONG ".repeat(hours)});
-// });
-
-// app.get("/tasks/:id", async (req, res) => {
-//   const trackId = req.params.id;
-//   const querySnapshot = await db
-//     .collection("tasks")
-//     .where("trackId", "==", trackId)
-//     .get();
-//   let tasks = [];
-//   querySnapshot.forEach((task) => {
-//     tasks.push(task.data());
-//   });
-//   res.status(200).send(tasks);
-// });
-
-// exports.api = functions.https.onRequest(api);
-
-/*
-FUNCTIONS
-*/
+function addEvent(event, auth) {
+  return new Promise(function (resolve, reject) {
+    calendar.events.insert(
+      {
+        auth: auth,
+        calendarId: "primary",
+        resource: {
+          summary: event.eventName,
+          description: event.description,
+          start: {
+            dateTime: event.startTime,
+            timeZone: TIME_ZONE,
+          },
+          end: {
+            dateTime: event.endTime,
+            timeZone: TIME_ZONE,
+          },
+        },
+      },
+      (err, res) => {
+        if (err) {
+          console.log("Rejecting because of error");
+          reject(err);
+        }
+        console.log("Request successful");
+        resolve(res.data);
+      }
+    );
+  });
+}
 
 // Stores element and its priority
 class QElement {
@@ -143,6 +173,56 @@ class PriorityQueue {
     return str;
   }
 }
+
+exports.getGoogleCalendar = functions.https.onRequest(async (req, res) => {
+  const oAuth2Client = new OAuth2(
+    googleCredentials.web.client_id,
+    googleCredentials.web.client_secret,
+    googleCredentials.web.redirect_uris[0]
+  );
+
+  oAuth2Client.setCredentials({
+    refresh_token: googleCredentials.refresh_token,
+  });
+
+  const events = await calendar.events.list({
+    calendarId: "primary",
+    timeMin: new Date().toISOString(),
+    maxResults: 10,
+    singleEvents: true,
+    orderBy: "startTime",
+  });
+  
+
+
+exports.addEventToCalendar = functions.https.onRequest((request, response) => {
+  const eventData = {
+    eventName: request.body.eventName,
+    description: request.body.description,
+    startTime: request.body.startTime,
+    endTime: request.body.endTime,
+  };
+  const oAuth2Client = new OAuth2(
+    googleCredentials.web.client_id,
+    googleCredentials.web.client_secret,
+    googleCredentials.web.redirect_uris[0]
+  );
+
+  oAuth2Client.setCredentials({
+    refresh_token: googleCredentials.refresh_token,
+  });
+
+  addEvent(eventData, oAuth2Client)
+    .then((data) => {
+      response.status(200).send(data);
+      return;
+    })
+    .catch((err) => {
+      console.error("Error adding event: " + err.message);
+      response.status(500).send(ERROR_RESPONSE);
+      return;
+    });
+});
 
 exports.onCreateUser = functions.auth.user().onCreate((user) => {
   const scheduleArray = Array(288).fill(null);
