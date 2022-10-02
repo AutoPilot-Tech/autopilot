@@ -13,6 +13,17 @@ import {getGridSpanFromTime} from "../../helpers/index";
 import {ModalAdd} from "../functional/ModalAdd";
 import {generatePushId} from "../../helpers/index";
 
+// gapi
+const CLIENT_ID =
+  "YOUR_CLIENT_ID";
+const API_KEY = "YOUR_API_KEY";
+const DISCOVERY_DOCS = [
+  "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+];
+const SCOPES = "https://www.googleapis.com/auth/calendar.events";
+
+
+
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
