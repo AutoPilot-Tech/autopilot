@@ -23,7 +23,7 @@ const auth = firebase.auth();
 
 if (location.hostname === "localhost") {
   db.useEmulator("localhost", 8080);
-  auth.useEmulator("http://localhost:9099/", {disableWarnings: true});
+  // auth.useEmulator("http://localhost:9099/", {disableWarnings: true});
 }
 
 const googleProvider = new firebase.auth.GoogleAuthProvider();
@@ -41,4 +41,4 @@ const signInWithGoogle = () => {
 // initialize functions
 var functions = firebase.functions();
 
-export {db, signInWithGoogle, auth, functions};
+export {firebase, db, signInWithGoogle, auth, functions};

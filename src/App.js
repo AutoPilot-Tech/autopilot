@@ -15,21 +15,11 @@ import {CalendarMonthView} from "./pages/CalendarMonthView";
 import {TaskView} from "./pages/TaskView";
 import SyncLoader from "react-spinners/SyncLoader";
 import {auth} from "./firebase";
-import {gapi} from "gapi-script";
 
-const clientId =
-  "39033041323-td4qpdmn6t5765rvdev51v68f7qof0pv.apps.googleusercontent.com";
+
 
 export const App = () => {
-  useEffect(() => {
-    const initClient = () => {
-      gapi.client.init({
-        clientId: clientId,
-        scope: "",
-      });
-    };
-    gapi.load("client:auth2", initClient);
-  });
+  
   return (
     <DndProvider backend={HTML5Backend}>
       <LoadingProvider>

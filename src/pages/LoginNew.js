@@ -1,19 +1,47 @@
 import React, {useState, useEffect} from "react";
-import {auth, signInWithGoogle} from "../firebase";
+import {auth, signInWithGoogle, firebase} from "../firebase";
 import {GoogleLogin} from "react-google-login";
+import {gapi} from "gapi-script";
 
 export function LoginNew() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  // use context for authResponse ???
   const clientId =
     "39033041323-td4qpdmn6t5765rvdev51v68f7qof0pv.apps.googleusercontent.com";
 
   const onSuccess = (res) => {
-    console.log("success:", res);
+    console.log("success");
+
+    const auth2 = gapi.auth2.getAuthInstance();
+    const currentUser = auth2.currentUser.get();
+
+    const authResponse = currentUser.getAuthResponse(true);
+    const id_token = authResponse.id_token;
+    const access_token = authResponse.access_token;
+    // create credential
+    const credential = firebase.auth.GoogleAuthProvider.credential(
+      id_token,
+      access_token
+    );
+    auth.signInWithCredential(credential);
   };
+  // window.location.href = "/app/calendar/home";
+
   const onFailure = (err) => {
-    console.log("failed:", err);
+    console.log("failed");
   };
+
+  useEffect(() => {
+    const initClient = () => {
+      gapi.client.init({
+        clientId: clientId,
+        // scope for google calendar
+        scope: "https://www.googleapis.com/auth/calendar",
+      });
+    };
+    gapi.load("client:auth2", initClient);
+  }, []);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
