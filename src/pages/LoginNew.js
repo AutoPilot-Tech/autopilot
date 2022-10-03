@@ -1,9 +1,16 @@
 import React, {useState, useEffect} from "react";
 import {auth, signInWithGoogle} from "../firebase";
+import {useGoogleApi} from "react-gapi";
 
 export function LoginNew() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const gapi = useGoogleApi({
+    scopes: ["profile"],
+  });
+
+  const auth2 = gapi?.auth2.getAuthInstance();
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {

@@ -13,6 +13,8 @@ import {getGridSpanFromTime} from "../../helpers/index";
 import {ModalAdd} from "../functional/ModalAdd";
 import {generatePushId} from "../../helpers/index";
 
+
+
 // gapi
 const CLIENT_ID =
   "YOUR_CLIENT_ID";
@@ -44,7 +46,7 @@ export function CalendarHome({
   setIsOpenEventModal,
 }) {
   let navigate = useNavigate();
-
+  
   const {nowValue, setNowValue} = useTracksValue();
   const {openSideBar, setOpenSideBar} = useLoadingValue();
   const [eventName, setEventName] = useState("");
@@ -75,6 +77,8 @@ export function CalendarHome({
   const [eventStartTime, setEventStartTime] = useState(moment());
   const [eventEndTime, setEventEndTime] = useState(moment().add(1, "hour"));
   const [recurring, setRecurring] = useState(false);
+
+  
 
   useEffect(() => {
     // if year month or day are -1, set to today

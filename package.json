@@ -37,6 +37,7 @@
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^16.14.0",
+    "react-gapi": "^1.0.2",
     "react-highlight-within-textarea": "^2.1.4",
     "react-icons": "^4.3.1",
     "react-popper": "^2.2.5",

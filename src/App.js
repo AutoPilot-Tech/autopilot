@@ -15,32 +15,38 @@ import {CalendarMonthView} from "./pages/CalendarMonthView";
 import {TaskView} from "./pages/TaskView";
 import SyncLoader from "react-spinners/SyncLoader";
 import {auth} from "./firebase";
+import {GoogleApiProvider} from "react-gapi";
 
 export const App = () => {
   return (
-    <DndProvider backend={HTML5Backend}>
-      <LoadingProvider>
-        <Router>
-          <Routes>
-            <Route path="/" element={<Landing />} />
-            <Route path="/signup" element={<SignupNew />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/login" element={<LoginNew />} />
-            {/* React Router V6 and above doesn't support optional paths so we have to make several.. */}
-            <Route path="/app/*" element={<CalendarHomeView />} />
-            <Route
-              path="/app/calendar/home/:year/:month/:day"
-              element={<CalendarHomeView />}
-            />
-            <Route path="/app/calendar/week" element={<CalendarWeekView />} />
-            <Route
-              path="/app/calendar/week/:year/:month/:day"
-              element={<CalendarWeekView />}
-            />
-            <Route path="/app/calendar/month" element={<CalendarMonthView />} />
-          </Routes>
-        </Router>
-      </LoadingProvider>
-    </DndProvider>
+    <GoogleApiProvider>
+      <DndProvider backend={HTML5Backend}>
+        <LoadingProvider>
+          <Router>
+            <Routes>
+              {/* <Route path="/" element={<Landing />} /> */}
+              <Route path="/signup" element={<SignupNew />} />
+              <Route path="/settings" element={<Settings />} />
+              <Route path="/login" element={<LoginNew />} />
+              {/* React Router V6 and above doesn't support optional paths so we have to make several.. */}
+              <Route path="/app/*" element={<CalendarHomeView />} />
+              <Route
+                path="/app/calendar/home/:year/:month/:day"
+                element={<CalendarHomeView />}
+              />
+              <Route path="/app/calendar/week" element={<CalendarWeekView />} />
+              <Route
+                path="/app/calendar/week/:year/:month/:day"
+                element={<CalendarWeekView />}
+              />
+              <Route
+                path="/app/calendar/month"
+                element={<CalendarMonthView />}
+              />
+            </Routes>
+          </Router>
+        </LoadingProvider>
+      </DndProvider>
+    </GoogleApiProvider>
   );
 };
