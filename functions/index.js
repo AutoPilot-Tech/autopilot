@@ -584,9 +584,9 @@ async function createNewTask(userId, taskName, trackId) {
 /**
  * Add event to user's events
  */
-async function addEventToUserEvents(event) {
-  // add the event to the user's event collection
-  const userEventsRef = db.collection("users").doc(event.userId);
-  await userEventsRef.collection("events").add(event);
-  return;
-}
+// async function addEventToUserEvents(event) {
+//   // add the event to the user's event collection
+//   const userEventsRef = db.collection("users").doc(event.userId);
+//   await userEventsRef.collection("events").add(event);
+//   return;
+// }

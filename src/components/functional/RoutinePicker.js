@@ -171,7 +171,7 @@ export function RoutinePicker({
                 </>
               ) : (
                 <div className="text-gray-500">
-                  <p>You don't have any routines yet.</p>
+                  <p>You don't have any projects yet.</p>
                   <br />
                   <button
                     type="button"
@@ -180,7 +180,7 @@ export function RoutinePicker({
                       setRoutineCreator(true);
                     }}
                   >
-                    Add one
+                    Create one
                   </button>
                 </div>
               )}

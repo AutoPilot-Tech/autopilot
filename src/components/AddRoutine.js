@@ -129,7 +129,7 @@ export const AddRoutine = ({shouldShow = false}) => {
                   as="h3"
                   className="text-lg font-medium leading-6 text-gray-900"
                 >
-                  Add New Routine
+                  Name your new project
                 </Dialog.Title>
 
                 <div className="flex flex-col">
@@ -139,7 +139,7 @@ export const AddRoutine = ({shouldShow = false}) => {
                     type="text"
                     value={projectName}
                     onChange={(e) => setProjectName(e.target.value)}
-                    placeholder="Routine Name"
+                    placeholder="Project Name"
                     onKeyDown={(e) => handleKeypress(e)}
                   />
                 </div>
@@ -157,7 +157,7 @@ export const AddRoutine = ({shouldShow = false}) => {
                     className="m-auto inline-flex justify-center px-4 py-2 text-sm font-medium text-green-900 bg-green-100 border border-transparent rounded-md hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-green-500"
                     onClick={() => addTrack()}
                   >
-                    Add Routine
+                    Create Project
                   </button>
                 </div>
               </div>

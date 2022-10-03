@@ -172,7 +172,7 @@ export const Sidebar = () => {
       </ul>
       <div>
         <div className="grid grid-cols-2 mt-5 mb-2 pr-1">
-          <p className="pl-2 float-left text-gray-400 font-medium">Routines</p>
+          <p className="pl-2 float-left text-gray-400 font-medium">Projects</p>
           <AddRoutine />
         </div>
       </div>
