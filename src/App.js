@@ -15,7 +15,6 @@ import {CalendarMonthView} from "./pages/CalendarMonthView";
 import {TaskView} from "./pages/TaskView";
 import SyncLoader from "react-spinners/SyncLoader";
 import {auth} from "./firebase";
-import {GoogleLogin} from "react-google-login";
 import {gapi} from "gapi-script";
 
 const clientId =

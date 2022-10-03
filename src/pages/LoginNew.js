@@ -1,9 +1,19 @@
 import React, {useState, useEffect} from "react";
 import {auth, signInWithGoogle} from "../firebase";
+import {GoogleLogin} from "react-google-login";
 
 export function LoginNew() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const clientId =
+    "39033041323-td4qpdmn6t5765rvdev51v68f7qof0pv.apps.googleusercontent.com";
+
+  const onSuccess = (res) => {
+    console.log("success:", res);
+  };
+  const onFailure = (err) => {
+    console.log("failed:", err);
+  };
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -53,7 +63,7 @@ export function LoginNew() {
                 <div>
                   <div className="mt-1 justify-center ">
                     <div className="justify-center grid">
-                      <button
+                      {/* <button
                         className="w-full justify-center h-full"
                         onClick={signInWithGoogle}
                         type="button"
@@ -64,7 +74,15 @@ export function LoginNew() {
                           src="../../google_signin_buttons/web/1x/btn_google_signin_dark_normal_web.png"
                           alt="google signin"
                         />
-                      </button>
+                      </button> */}
+                      <GoogleLogin
+                        clientId={clientId}
+                        buttonText="Sign in with Google"
+                        onSuccess={onSuccess}
+                        onFailure={onFailure}
+                        cookiePolicy={"single_host_origin"}
+                        isSignedIn={true}
+                      />
                     </div>
                   </div>
                 </div>
