@@ -17,7 +17,7 @@ import {generatePushId} from "../../helpers/index";
 
 // gapi
 const CLIENT_ID =
-  "YOUR_CLIENT_ID";
+  "39033041323-td4qpdmn6t5765rvdev51v68f7qof0pv.apps.googleusercontent.com";
 const API_KEY = "YOUR_API_KEY";
 const DISCOVERY_DOCS = [
   "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
@@ -77,6 +77,7 @@ export function CalendarHome({
   const [eventStartTime, setEventStartTime] = useState(moment());
   const [eventEndTime, setEventEndTime] = useState(moment().add(1, "hour"));
   const [recurring, setRecurring] = useState(false);
+  const [noGoogleEvents, setNoGoogleEvents] = useState(false);
 
   
 

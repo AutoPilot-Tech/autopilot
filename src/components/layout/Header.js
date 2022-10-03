@@ -13,17 +13,22 @@ import {useLoadingValue} from "../../context/loading-context";
 import {useTracksValue} from "../../context/tracks-context";
 import moment from "moment";
 import {useNavigate} from "react-router-dom";
+import {gapi} from "gapi-script";
+import {clientId} from "../../pages/LoginNew";
 
 const logOut = () => {
-  auth
-    .signOut()
-    .then(() => {
-      // send user back to log in page
-      window.location.href = "/login";
-    })
-    .catch((error) => {
-      console.log(error.message);
-    });
+  const auth2 = gapi.auth2.getAuthInstance();
+  auth2.signOut().then(function () {
+    auth
+      .signOut()
+      .then(() => {
+        // send user back to log in page
+        window.location.href = "/login";
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+  });
 };
 
 const navigation = [
@@ -44,6 +49,17 @@ function classNames(...classes) {
 
 export function Header() {
   let navigate = useNavigate();
+
+  useEffect(() => {
+    const initClient = () => {
+      gapi.client.init({
+        clientId: clientId,
+        // scope for google calendar
+        scope: "https://www.googleapis.com/auth/calendar",
+      });
+    };
+    gapi.load("client:auth2", initClient);
+  }, []);
 
   // const {photoUrl} = useLoadingValue();
   const {nowValue, setNowValue} = useTracksValue();

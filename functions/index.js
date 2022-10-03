@@ -63,8 +63,6 @@ var event = {
 // const api = express();
 const db = admin.firestore();
 
-
-
 function addEvent(event, auth) {
   return new Promise(function (resolve, reject) {
     calendar.events.insert(
@@ -196,18 +194,6 @@ exports.getGoogleCalendar = functions.https.onRequest(async (req, res) => {
   res.send(events.data.items);
 });
 
-  
-
-
-  
-// sync user's google calendar
-exports.syncGoogleCalendar = functions.http.onRequest((request, response) => {
-  // load the sync token stored from last execution
-  const syncToken = functions.config().sync.token;
-  
-  
-});
-
 exports.addEventToCalendar = functions.https.onRequest((request, response) => {
   const eventData = {
     eventName: request.body.eventName,
@@ -263,6 +249,7 @@ exports.onCreateUser = functions.auth.user().onCreate((user) => {
     dayStart: 86,
     dayEnd: 254,
     createdAt: admin.firestore.FieldValue.serverTimestamp(),
+    noGoogleEvents: true,
   });
 });
 

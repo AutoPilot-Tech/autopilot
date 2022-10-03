@@ -3,13 +3,14 @@ import {auth, signInWithGoogle, firebase} from "../firebase";
 import {GoogleLogin} from "react-google-login";
 import {gapi} from "gapi-script";
 
+export const clientId =
+    "39033041323-td4qpdmn6t5765rvdev51v68f7qof0pv.apps.googleusercontent.com";
+
 export function LoginNew() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   // use context for authResponse ???
-  const clientId =
-    "39033041323-td4qpdmn6t5765rvdev51v68f7qof0pv.apps.googleusercontent.com";
-
+  
   const onSuccess = (res) => {
     console.log("success");
 

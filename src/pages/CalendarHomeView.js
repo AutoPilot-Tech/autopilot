@@ -29,6 +29,7 @@ export const CalendarHomeView = () => {
   const {setDisplayName, setPhotoUrl} = useLoadingValue();
   const [showBanner, setShowBanner] = useState(false);
   const [isOpenEventModal, setIsOpenEventModal] = useState(false);
+  const [firtTimeUser, setFirstTimeUser] = useState(false);
   // const {tracksLoading, setTracksLoading} = useLoadingValue();
 
   // if the user isnt signed in send them back to login page
@@ -43,6 +44,14 @@ export const CalendarHomeView = () => {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
+        db.collection("users")
+          .doc(user.uid)
+          .get()
+          .then((doc) => {
+            if (doc.exists) {
+              setFirstTimeUser(doc.data.noGoogleEvents);
+            }
+          });
         // get the user's name from db
         setDisplayName(user.displayName);
         setPhotoUrl(user.photoURL);
@@ -55,11 +64,10 @@ export const CalendarHomeView = () => {
     return unsubscribe;
   }, []);
 
-  
-
   return loading ? (
     <div className="grid place-items-center h-screen">
       <SyncLoader loading={true} size={15} speedMultiplier={2} />
+      First time user: {firtTimeUser}
     </div>
   ) : (
     <LocalizationProvider dateAdapter={AdapterMoment}>
