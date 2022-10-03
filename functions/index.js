@@ -192,8 +192,21 @@ exports.getGoogleCalendar = functions.https.onRequest(async (req, res) => {
     singleEvents: true,
     orderBy: "startTime",
   });
+
+  res.send(events.data.items);
+});
+
   
 
+
+  
+// sync user's google calendar
+exports.syncGoogleCalendar = functions.http.onRequest((request, response) => {
+  // load the sync token stored from last execution
+  const syncToken = functions.config().sync.token;
+  
+  
+});
 
 exports.addEventToCalendar = functions.https.onRequest((request, response) => {
   const eventData = {
