@@ -83,36 +83,50 @@ export function CalendarHome({
     }
   }, []);
 
+  // useEffect(() => {
+  //   // if the user is signed in
+  //   auth.onAuthStateChanged((user) => {
+  //     if (user) {
+  //       let unsubscribe = db
+  //         .collection("users")
+  //         .doc(auth.currentUser.uid)
+  //         .collection("events")
+  //         .onSnapshot((snapshot) => {
+  //           let eventsArray = [];
+  //           snapshot.forEach((doc) => {
+  //             let event = doc.data();
+  //             event.id = doc.id;
+  //             // if the event is scheduled for today push it
+  //             if (
+  //               moment(event.start).format("MM-DD-YYYY") ===
+  //                 moment(nowValue).format("MM-DD-YYYY") &&
+  //               !event.archived
+  //             ) {
+  //               eventsArray.push(event);
+  //             }
+  //           });
+  //           setTodaysEvents(eventsArray);
+  //         });
+  //       return () => {
+  //         unsubscribe();
+  //       };
+  //     }
+  //   });
+  // }, [nowValue]);
   useEffect(() => {
-    // if the user is signed in
-    auth.onAuthStateChanged((user) => {
-      if (user) {
-        let unsubscribe = db
-          .collection("users")
-          .doc(auth.currentUser.uid)
-          .collection("events")
-          .onSnapshot((snapshot) => {
-            let eventsArray = [];
-            snapshot.forEach((doc) => {
-              let event = doc.data();
-              event.id = doc.id;
-              // if the event is scheduled for today push it
-              if (
-                moment(event.start).format("MM-DD-YYYY") ===
-                  moment(nowValue).format("MM-DD-YYYY") &&
-                !event.archived
-              ) {
-                eventsArray.push(event);
-              }
-            });
-            setTodaysEvents(eventsArray);
-          });
-        return () => {
-          unsubscribe();
-        };
-      }
-    });
-  }, [nowValue]);
+    let eventsArray = [];
+    if (googleEvents) {
+      googleEvents.forEach((event) => {
+        if (
+          moment(event.start).format("MM-DD-YYYY") ===
+          moment(nowValue).format("MM-DD-YYYY")
+        ) {
+          eventsArray.push(event);
+        }
+      });
+      setTodaysEvents(eventsArray);
+    }
+  }, [googleEvents, nowValue]);
 
   const handleKeypress = (e) => {
     //it triggers by pressing the enter key
@@ -459,28 +473,33 @@ export function CalendarHome({
                     <li
                       className="relative mt-px flex z-40 w-52 sm:w-auto"
                       style={{
-                        gridRow: `${block.gridRow} / span ${block.span}`,
+                        gridRow: `${getGridRowFromTime(
+                          block.start.dateTime
+                        )} / span ${getGridSpanFromTime(
+                          block.start.dateTime,
+                          block.end.dateTime
+                        )}`,
                         gridColumn: "1 / span 1",
                       }}
-                      key={block.key}
+                      key={block.id}
                     >
-                      <div
-                        onClick={() => {
-                          navigate(`/app/tasks/${block.routineId}`);
-                        }}
+                      <div 
+                        // onClick={() => {
+                        //   navigate(`/app/tasks/${block.routineId}`);
+                        // }}
                         className="group absolute inset-1 flex flex-col overflow-y-auto rounded-lg bg-blue-50 pl-2 pt-1 text-xs leading-4 hover:bg-blue-100"
                       >
                         <div className="flex flex-row content-end">
-                          <p className=" font-semibold text-blue-700 w-fit">{`${block.title}`}</p>
+                          <p className=" font-semibold text-blue-700 w-fit">{`${block.summary}`}</p>
                           <p className="ml-3 mr-2 text-gray-400">|</p>
-                          <p className="ml-2 font-normal text-gray-600">
-                            {` ${block.routineName}`}
-                          </p>
+                          {/* <p className="ml-2 font-normal text-gray-600">
+                            {` ${block.description}`}
+                          </p> */}
                         </div>
 
                         <p className="text-blue-500 group-hover:text-blue-700">
                           <time dateTime="2022-01-22T06:00">{`${moment(
-                            block.start
+                            block.start.dateTime
                           ).format("h:mm A")}`}</time>
                         </p>
                       </div>

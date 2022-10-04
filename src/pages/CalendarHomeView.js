@@ -28,7 +28,8 @@ export const CalendarHomeView = () => {
   // This is a global state provided by loading Context
   const {loading, setLoading} = useLoadingValue();
   const [userLoading, setUserLoading] = useState(false);
-  const {googleEvents, setGoogleEvents, setDisplayName, setPhotoUrl} = useLoadingValue();
+  const {googleEvents, setGoogleEvents, setDisplayName, setPhotoUrl} =
+    useLoadingValue();
   const [showBanner, setShowBanner] = useState(false);
   const [isOpenEventModal, setIsOpenEventModal] = useState(false);
   const [firstTimeUser, setFirstTimeUser] = useState(false);
@@ -44,8 +45,9 @@ export const CalendarHomeView = () => {
         })
         .then(() => {
           gapi.client.load("calendar", "v3", () => console.log("loaded"));
+          gapi.auth2.getAuthInstance().signIn(); 
           gapi.client.calendar.events
-
+          
             .list({
               calendarId: "primary",
               timeMin: new Date().toISOString(),
