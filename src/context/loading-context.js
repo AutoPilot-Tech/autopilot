@@ -10,7 +10,7 @@ export const LoadingProvider = ({children}) => {
   const [photoUrl, setPhotoUrl] = useState("");
   const [tracksLoading, setTracksLoading] = useState(true);
   const [openSideBar, setOpenSideBar] = useState(false);
-
+  const [googleEvents, setGoogleEvents] = useState([]);
   useEffect(() => {
     const mql = window.matchMedia("(max-width: 812px)");
     if (!mql.matches) {
@@ -31,6 +31,8 @@ export const LoadingProvider = ({children}) => {
         setTracksLoading,
         openSideBar,
         setOpenSideBar,
+        googleEvents,
+        setGoogleEvents,
       }}
     >
       {children}

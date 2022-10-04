@@ -7,13 +7,11 @@ import moment from "moment";
 import {auth, db} from "../../firebase";
 import {useTracksValue} from "../../context/tracks-context";
 import {useLoadingValue} from "../../context/loading-context";
-
+import {useCalendarValue} from "../../context/calendar-context";
 import {getGridRowFromTime} from "../../helpers/index";
 import {getGridSpanFromTime} from "../../helpers/index";
 import {ModalAdd} from "../functional/ModalAdd";
 import {generatePushId} from "../../helpers/index";
-
-
 
 // gapi
 const CLIENT_ID =
@@ -23,8 +21,6 @@ const DISCOVERY_DOCS = [
   "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
 ];
 const SCOPES = "https://www.googleapis.com/auth/calendar.events";
-
-
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -46,9 +42,10 @@ export function CalendarHome({
   setIsOpenEventModal,
 }) {
   let navigate = useNavigate();
-  
+
   const {nowValue, setNowValue} = useTracksValue();
-  const {openSideBar, setOpenSideBar} = useLoadingValue();
+  const {openSideBar, setOpenSideBar, googleEvents, setGoogleEvents} =
+    useLoadingValue();
   const [eventName, setEventName] = useState("");
   const [showSmallCalendar, setShowSmallCalendar] = useState(false);
   const [modalSettingOpen, setModalSettingOpen] = useState(false);
@@ -78,8 +75,6 @@ export function CalendarHome({
   const [eventEndTime, setEventEndTime] = useState(moment().add(1, "hour"));
   const [recurring, setRecurring] = useState(false);
   const [noGoogleEvents, setNoGoogleEvents] = useState(false);
-
-  
 
   useEffect(() => {
     // if year month or day are -1, set to today
@@ -262,7 +257,7 @@ export function CalendarHome({
       request.execute((event) => {
         console.log(event);
       });
-      
+
       db.collection("users")
         .doc(auth.currentUser.uid)
         .collection("events")

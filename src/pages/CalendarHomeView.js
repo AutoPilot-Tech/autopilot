@@ -9,6 +9,7 @@ import {TracksProvider} from "../context/tracks-context";
 import {auth, db} from "../firebase";
 import SyncLoader from "react-spinners/SyncLoader";
 import {useLoadingValue} from "../context/loading-context";
+import {useCalendarValue} from "../context/calendar-context";
 import {Banner} from "../components/layout/Banner";
 import {Sidebar} from "../components/layout/Sidebar";
 import {CalendarHome} from "../components/layout/CalendarHome";
@@ -17,7 +18,8 @@ import {PlusSmIcon as PlusSmIconOutline} from "@heroicons/react/outline";
 import {AddEvent} from "../components/functional/AddEvent";
 import {TaskView} from "./TaskView";
 import {Tasks} from "../components/Tasks";
-
+import {gapi} from "gapi-script";
+import {clientId} from "../pages/LoginNew";
 // note: see src/context. Since we want to use tracksprovider at the
 // top level, we are using it here in App. This can be replaced
 // with Redux, later.
@@ -26,11 +28,40 @@ export const CalendarHomeView = () => {
   // This is a global state provided by loading Context
   const {loading, setLoading} = useLoadingValue();
   const [userLoading, setUserLoading] = useState(false);
-  const {setDisplayName, setPhotoUrl} = useLoadingValue();
+  const {googleEvents, setGoogleEvents, setDisplayName, setPhotoUrl} = useLoadingValue();
   const [showBanner, setShowBanner] = useState(false);
   const [isOpenEventModal, setIsOpenEventModal] = useState(false);
-  const [firtTimeUser, setFirstTimeUser] = useState(false);
+  const [firstTimeUser, setFirstTimeUser] = useState(false);
   // const {tracksLoading, setTracksLoading} = useLoadingValue();
+
+  // get google events for signed in user
+  const getGoogleEvents = () => {
+    gapi.load("client:auth2", () => {
+      gapi.client
+        .init({
+          clientId: clientId,
+          scope: "https://www.googleapis.com/auth/calendar.events",
+        })
+        .then(() => {
+          gapi.client.load("calendar", "v3", () => console.log("loaded"));
+          gapi.client.calendar.events
+
+            .list({
+              calendarId: "primary",
+              timeMin: new Date().toISOString(),
+              showDeleted: false,
+              singleEvents: true,
+              maxResults: 10,
+              orderBy: "startTime",
+            })
+            .then((response) => {
+              console.log(response.result.items);
+              const googleEvents = response.result.items;
+              setGoogleEvents(googleEvents);
+            });
+        });
+    });
+  };
 
   // if the user isnt signed in send them back to login page
   useEffect(() => {
@@ -44,19 +75,14 @@ export const CalendarHomeView = () => {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
-        db.collection("users")
-          .doc(user.uid)
-          .get()
-          .then((doc) => {
-            if (doc.exists) {
-              setFirstTimeUser(doc.data.noGoogleEvents);
-            }
-          });
+        console.log("user is signed in");
+        // get the user's document from firestore
+        getGoogleEvents();
         // get the user's name from db
         setDisplayName(user.displayName);
         setPhotoUrl(user.photoURL);
-        // check to see if the user's tracks are loaded
         setLoading(false);
+        // check to see if the user's tracks are loaded
       } else {
         console.log("User is not signed in");
       }
@@ -67,7 +93,7 @@ export const CalendarHomeView = () => {
   return loading ? (
     <div className="grid place-items-center h-screen">
       <SyncLoader loading={true} size={15} speedMultiplier={2} />
-      First time user: {firtTimeUser}
+      Syncing your Google Calendar...
     </div>
   ) : (
     <LocalizationProvider dateAdapter={AdapterMoment}>

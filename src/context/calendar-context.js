@@ -11,6 +11,7 @@ export const CalendarProvider = ({children}) => {
       value={{
         nowValue,
         setNowValue,
+        
       }}
     >
       {children}

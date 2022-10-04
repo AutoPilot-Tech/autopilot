@@ -92,7 +92,7 @@ export function LoginNew() {
                 <div>
                   <div className="mt-1 justify-center ">
                     <div className="justify-center grid">
-                      {/* <button
+                      <button
                         className="w-full justify-center h-full"
                         onClick={signInWithGoogle}
                         type="button"
@@ -103,7 +103,7 @@ export function LoginNew() {
                           src="../../google_signin_buttons/web/1x/btn_google_signin_dark_normal_web.png"
                           alt="google signin"
                         />
-                      </button> */}
+                      </button>
                       <GoogleLogin
                         clientId={clientId}
                         buttonText="Sign in with Google"
