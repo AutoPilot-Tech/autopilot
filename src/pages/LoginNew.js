@@ -30,7 +30,7 @@ export function LoginNew() {
   // window.location.href = "/app/calendar/home";
 
   const onFailure = (err) => {
-    console.log("failed");
+    console.log(err);
   };
 
   useEffect(() => {
