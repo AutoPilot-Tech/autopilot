@@ -4,13 +4,13 @@ import {GoogleLogin} from "react-google-login";
 import {gapi} from "gapi-script";
 
 export const clientId =
-    "39033041323-td4qpdmn6t5765rvdev51v68f7qof0pv.apps.googleusercontent.com";
+  "39033041323-td4qpdmn6t5765rvdev51v68f7qof0pv.apps.googleusercontent.com";
 
 export function LoginNew() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   // use context for authResponse ???
-  
+
   const onSuccess = (res) => {
     console.log("success");
 
@@ -76,7 +76,7 @@ export function LoginNew() {
               <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
                 Sign in to your account
               </h2>
-              <p className="mt-2 text-sm text-gray-600">
+              {/* <p className="mt-2 text-sm text-gray-600">
                 Or{" "}
                 <a
                   href="/signup"
@@ -84,7 +84,7 @@ export function LoginNew() {
                 >
                   sign up
                 </a>
-              </p>
+              </p> */}
             </div>
 
             <div className="mt-8">
@@ -92,7 +92,7 @@ export function LoginNew() {
                 <div>
                   <div className="mt-1 justify-center ">
                     <div className="justify-center grid">
-                      <button
+                      {/* <button
                         className="w-full justify-center h-full"
                         onClick={signInWithGoogle}
                         type="button"
@@ -103,7 +103,7 @@ export function LoginNew() {
                           src="../../google_signin_buttons/web/1x/btn_google_signin_dark_normal_web.png"
                           alt="google signin"
                         />
-                      </button>
+                      </button> */}
                       <GoogleLogin
                         clientId={clientId}
                         buttonText="Sign in with Google"
@@ -121,17 +121,17 @@ export function LoginNew() {
                     className="absolute inset-0 flex items-center"
                     aria-hidden="true"
                   >
-                    <div className="w-full border-t border-gray-300" />
+                    {/* <div className="w-full border-t border-gray-300" /> */}
                   </div>
-                  <div className="relative flex justify-center text-sm">
+                  {/* <div className="relative flex justify-center text-sm">
                     <span className="px-2 bg-white text-gray-500">
                       Or continue with
                     </span>
-                  </div>
+                  </div> */}
                 </div>
               </div>
 
-              <div className="mt-6">
+              {/* <div className="mt-6">
                 <form action="#" method="POST" className="space-y-6">
                   <div>
                     <label
@@ -142,6 +142,7 @@ export function LoginNew() {
                     </label>
                     <div className="mt-1">
                       <input
+                        disabled={true}
                         id="email"
                         name="email"
                         type="email"
@@ -163,6 +164,7 @@ export function LoginNew() {
                     </label>
                     <div className="mt-1">
                       <input
+                        disabled={true}
                         id="password"
                         name="password"
                         type="password"
@@ -196,7 +198,7 @@ export function LoginNew() {
                     </button>
                   </div>
                 </form>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

@@ -124,7 +124,7 @@ export function CalendarHome({
     if (googleEvents) {
       googleEvents.forEach((event) => {
         if (
-          moment(event.start).format("MM-DD-YYYY") ===
+          moment(event.start.dateTime).format("MM-DD-YYYY") ===
           moment(nowValue).format("MM-DD-YYYY")
         ) {
           eventsArray.push(event);

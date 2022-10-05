@@ -60,17 +60,27 @@ export const CalendarHomeView = () => {
 
   // get google events for signed in user
   const getGoogleEvents = async () => {
+    // get an iso string for midnight today
+    const today = new Date();
+    const todayMidnight = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate()
+    );
+    const todayMidnightIso = todayMidnight.toISOString();
+
     gapi.load("client:auth2", () => {
       getGoogleAccessToken().then((accessToken) => {
         // get events
         gapi.client.load("calendar", "v3", () => {
-          gapi.client.calendar.events
-            .list({
-              calendarId: "primary",
-              timeMin: new Date().toISOString(),
-              showDeleted: false,
-              singleEvents: true,
-              maxResults: 100,
+          gapi.client
+            .request({
+              path: `https://www.googleapis.com/calendar/v3/calendars/primary/events`,
+              params: {
+                timeMin: todayMidnightIso,
+                maxResults: 2500,
+                showDeleted: true,
+              },
             })
             .then((response) => {
               const events = response.result.items;
@@ -93,7 +103,6 @@ export const CalendarHomeView = () => {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
-        console.log("user is signed in");
         // get the user's document from firestore
         getGoogleEvents().then(() => {
           setLoading(false);
