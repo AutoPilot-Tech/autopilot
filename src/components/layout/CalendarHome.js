@@ -44,8 +44,14 @@ export function CalendarHome({
   let navigate = useNavigate();
 
   const {nowValue, setNowValue} = useTracksValue();
-  const {openSideBar, setOpenSideBar, googleEvents, setGoogleEvents} =
-    useLoadingValue();
+  const {
+    loading,
+    setLoading,
+    openSideBar,
+    setOpenSideBar,
+    googleEvents,
+    setGoogleEvents,
+  } = useLoadingValue();
   const [eventName, setEventName] = useState("");
   const [showSmallCalendar, setShowSmallCalendar] = useState(false);
   const [modalSettingOpen, setModalSettingOpen] = useState(false);
@@ -483,7 +489,7 @@ export function CalendarHome({
                       }}
                       key={block.id}
                     >
-                      <div 
+                      <div
                         // onClick={() => {
                         //   navigate(`/app/tasks/${block.routineId}`);
                         // }}

@@ -34,34 +34,50 @@ export const CalendarHomeView = () => {
   const [isOpenEventModal, setIsOpenEventModal] = useState(false);
   const [firstTimeUser, setFirstTimeUser] = useState(false);
   // const {tracksLoading, setTracksLoading} = useLoadingValue();
+  const apiKey = "AIzaSyC09WkXXSc0lzKkMull883xpokGi7ZrhGc";
+
+  const getGoogleAccessToken = async () => {
+    gapi.client.init({
+      apiKey: apiKey,
+      clientId: clientId,
+      scope: "https://www.googleapis.com/auth/calendar",
+    });
+    const authInstance = await gapi.auth2
+      .getAuthInstance()
+      .then((authInstance) => {
+        // make api call to calendar
+        if (authInstance.isSignedIn.get()) {
+          const googleUser = authInstance.currentUser.get();
+          const accessToken = googleUser.getAuthResponse().access_token;
+          return accessToken;
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    return authInstance;
+  };
 
   // get google events for signed in user
-  const getGoogleEvents = () => {
+  const getGoogleEvents = async () => {
     gapi.load("client:auth2", () => {
-      gapi.client
-        .init({
-          clientId: clientId,
-          scope: "https://www.googleapis.com/auth/calendar.events",
-        })
-        .then(() => {
-          gapi.client.load("calendar", "v3", () => console.log("loaded"));
-          gapi.auth2.getAuthInstance().signIn(); 
+      getGoogleAccessToken().then((accessToken) => {
+        // get events
+        gapi.client.load("calendar", "v3", () => {
           gapi.client.calendar.events
-          
             .list({
               calendarId: "primary",
               timeMin: new Date().toISOString(),
               showDeleted: false,
               singleEvents: true,
-              maxResults: 10,
-              orderBy: "startTime",
+              maxResults: 100,
             })
             .then((response) => {
-              console.log(response.result.items);
-              const googleEvents = response.result.items;
-              setGoogleEvents(googleEvents);
+              const events = response.result.items;
+              setGoogleEvents(events);
             });
         });
+      });
     });
   };
 
@@ -79,11 +95,12 @@ export const CalendarHomeView = () => {
       if (user) {
         console.log("user is signed in");
         // get the user's document from firestore
-        getGoogleEvents();
+        getGoogleEvents().then(() => {
+          setLoading(false);
+        });
         // get the user's name from db
         setDisplayName(user.displayName);
         setPhotoUrl(user.photoURL);
-        setLoading(false);
         // check to see if the user's tracks are loaded
       } else {
         console.log("User is not signed in");
