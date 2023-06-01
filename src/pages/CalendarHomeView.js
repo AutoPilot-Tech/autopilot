@@ -1,32 +1,32 @@
-import React, {useState, useEffect} from "react";
-import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import AdapterMoment from "@mui/lab/AdapterMoment";
-import {LocalizationProvider} from "@mui/lab";
-import {Header} from "../components/layout/Header";
-import {Content} from "../components/layout/Content";
-import {TracksProvider} from "../context/tracks-context";
-import {auth, db} from "../firebase";
+import { LocalizationProvider } from "@mui/lab";
+import { Header } from "../components/layout/Header";
+import { Content } from "../components/layout/Content";
+import { TracksProvider } from "../context/tracks-context";
+import { auth, db } from "../firebase";
 import SyncLoader from "react-spinners/SyncLoader";
-import {useLoadingValue} from "../context/loading-context";
-import {Banner} from "../components/layout/Banner";
-import {Sidebar} from "../components/layout/Sidebar";
-import {CalendarHome} from "../components/layout/CalendarHome";
-import {useParams} from "react-router-dom";
-import {PlusSmIcon as PlusSmIconOutline} from "@heroicons/react/outline";
-import {AddEvent} from "../components/functional/AddEvent";
-import {TaskView} from "./TaskView";
-import {Tasks} from "../components/Tasks";
+import { useLoadingValue } from "../context/loading-context";
+import { Banner } from "../components/layout/Banner";
+import { Sidebar } from "../components/layout/Sidebar";
+import { CalendarHome } from "../components/layout/CalendarHome";
+import { useParams } from "react-router-dom";
+import { PlusSmIcon as PlusSmIconOutline } from "@heroicons/react/outline";
+import { AddEvent } from "../components/functional/AddEvent";
+import { TaskView } from "./TaskView";
+import { Tasks } from "../components/Tasks";
 
 // note: see src/context. Since we want to use tracksprovider at the
 // top level, we are using it here in App. This can be replaced
 // with Redux, later.
 export const CalendarHomeView = () => {
-  let {year, month, day} = useParams();
+  let { year, month, day } = useParams();
   // This is a global state provided by loading Context
-  const {loading, setLoading} = useLoadingValue();
+  const { loading, setLoading } = useLoadingValue();
   const [userLoading, setUserLoading] = useState(false);
-  const {setDisplayName, setPhotoUrl} = useLoadingValue();
+  const { setDisplayName, setPhotoUrl } = useLoadingValue();
   const [showBanner, setShowBanner] = useState(false);
   const [isOpenEventModal, setIsOpenEventModal] = useState(false);
   const [active, setActive] = useState("calendar");
@@ -59,7 +59,11 @@ export const CalendarHomeView = () => {
 
   return loading ? (
     <div className="grid place-items-center h-screen">
-      <SyncLoader loading={true} size={15} speedMultiplier={2} />
+      {/* <SyncLoader loading={true} size={15} speedMultiplier={2} /> */}
+      {/* loading text */}
+      <div className="text-center">
+        <h1 className="text-2xl font-semibold">Loading...</h1>
+      </div>
     </div>
   ) : (
     <LocalizationProvider dateAdapter={AdapterMoment}>
