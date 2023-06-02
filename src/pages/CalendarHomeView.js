@@ -34,7 +34,7 @@ export const CalendarHomeView = () => {
   const [isOpenEventModal, setIsOpenEventModal] = useState(false);
   const [firstTimeUser, setFirstTimeUser] = useState(false);
   // const {tracksLoading, setTracksLoading} = useLoadingValue();
-  const apiKey = "AIzaSyC09WkXXSc0lzKkMull883xpokGi7ZrhGc";
+  const apiKey = "AIzaSyDgeB70s4EEeGHH7z9qGc8KJTRye5ou1HI";
 
   const getGoogleAccessToken = async () => {
     gapi.client.init({
@@ -120,7 +120,7 @@ export const CalendarHomeView = () => {
 
   return loading ? (
     <div className="grid place-items-center h-screen">
-      <SyncLoader loading={true} size={15} speedMultiplier={2} />
+      
       Syncing your Google Calendar...
     </div>
   ) : (

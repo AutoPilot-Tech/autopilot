@@ -4,7 +4,7 @@ import {GoogleLogin} from "react-google-login";
 import {gapi} from "gapi-script";
 
 export const clientId =
-  "39033041323-td4qpdmn6t5765rvdev51v68f7qof0pv.apps.googleusercontent.com";
+  "309253222901-2stntuhepsb50rhcuoil3ugmvfubbl0r.apps.googleusercontent.com";
 
 export function LoginNew() {
   const [email, setEmail] = useState("");

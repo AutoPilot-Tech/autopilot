@@ -6,13 +6,13 @@ import "firebase/functions";
 
 // Your web app's Firebase configuration
 firebase.initializeApp({
-  apiKey: "AIzaSyByQ9uymQz0xR06INhjGTIQPFlYAaE-Rgg",
-  authDomain: "autopilot-7ab12.firebaseapp.com",
-  projectId: "autopilot-7ab12",
-  storageBucket: "autopilot-7ab12.appspot.com",
-  messagingSenderId: "39033041323",
-  appId: "1:39033041323:web:e9ab1b2b69a46ce91b62ee",
-  measurementId: "G-TG33L88W6V",
+  apiKey: "AIzaSyAFah7wL3-fzSF37WthR2fhsuPU-JWl4yE",
+  authDomain: "autopilot-a6c9a.firebaseapp.com",
+  projectId: "autopilot-a6c9a",
+  storageBucket: "autopilot-a6c9a.appspot.com",
+  messagingSenderId: "309253222901",
+  appId: "1:309253222901:web:bd906754eb3f03e457f0bc",
+  measurementId: "G-97LRL0H2X9"
 });
 
 // Initialize Firebase
